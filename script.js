@@ -657,6 +657,9 @@ function hideAds() {
 function showCreateStep() {
   show(adMidRow);
   show(createBlock);
+  if (mobilePracticeQuery.matches) {
+    return;
+  }
   const wide = window.matchMedia("(min-width: 1400px)").matches;
   scrollToNext(wide ? createBlock : adMidRow);
 }
