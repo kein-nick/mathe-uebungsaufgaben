@@ -26,6 +26,36 @@ const countdownMinutesInput = document.getElementById("countdown-minutes");
 const countdownEl = document.getElementById("countdown");
 const pdfBtn = document.getElementById("pdf-btn");
 const printHeader = document.getElementById("print-header");
+const pageCorner = document.getElementById("page-corner");
+const practiceStartSlot = document.getElementById("practice-start-slot");
+const practiceCheckSlot = document.getElementById("practice-check-slot");
+const practiceFooterSlot = document.getElementById("practice-footer-slot");
+const mobilePracticeQuery = window.matchMedia("(max-width: 640px)");
+
+function layoutPracticeControls() {
+  if (!pageCorner || !practiceStartSlot || !practiceCheckSlot || !practiceFooterSlot) {
+    return;
+  }
+  if (mobilePracticeQuery.matches) {
+    practiceStartSlot.append(countdownEl, startBtn);
+    practiceCheckSlot.append(checkBtn);
+    practiceFooterSlot.append(document.getElementById("reset-best-btn"));
+    return;
+  }
+  pageCorner.append(
+    countdownEl,
+    startBtn,
+    checkBtn,
+    document.getElementById("reset-best-btn")
+  );
+}
+
+layoutPracticeControls();
+if (typeof mobilePracticeQuery.addEventListener === "function") {
+  mobilePracticeQuery.addEventListener("change", layoutPracticeControls);
+} else {
+  mobilePracticeQuery.addListener(layoutPracticeControls);
+}
 
 const difficulty = {
   1: {

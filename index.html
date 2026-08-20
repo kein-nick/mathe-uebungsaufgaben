@@ -38,7 +38,7 @@
           auf einer Seite passen bis zu acht Blöcke (vier nebeneinander, zwei Reihen).
           Rechenweg-Felder erscheinen im PDF nicht. Optional kannst du ein
           <strong>Zeitlimit</strong> setzen.
-          Wenn du soweit bist, klicke unten links auf
+          Wenn du soweit bist, klicke auf
           <strong>Aufgaben beginnen</strong> — erst dann läuft die Zeit.
           Trage die Ergebnisse ein und klicke auf <strong>Prüfen</strong>. Richtige Antworten
           werden festgehalten, falsche bleiben rot markiert und können neu
@@ -164,7 +164,9 @@
         aria-label="Übungsblatt"
       >
         <div class="print-header" id="print-header"></div>
+        <div class="practice-slot practice-slot-start" id="practice-start-slot"></div>
         <div class="blocks" id="blocks"></div>
+        <div class="practice-slot practice-slot-check" id="practice-check-slot"></div>
         <div class="check-bar">
           <p class="status" id="status"></p>
           <button type="button" class="pdf-btn is-hidden" id="pdf-btn">Als PDF herunterladen</button>
@@ -193,7 +195,7 @@
       </div>
     </dialog>
 
-    <div class="page-corner">
+    <div class="page-corner" id="page-corner">
       <p class="countdown is-hidden" id="countdown" aria-live="polite" aria-label="Verbleibende Zeit">0:00</p>
       <button type="button" class="start-btn is-hidden" id="start-btn">Aufgaben beginnen</button>
       <button type="button" class="check-btn is-hidden" id="check-btn">Prüfen</button>
@@ -201,6 +203,7 @@
         Bestzeiten löschen
       </button>
     </div>
+    <div class="practice-slot practice-slot-footer" id="practice-footer-slot"></div>
 
     <dialog class="success-dialog" id="reset-best-dialog" aria-labelledby="reset-best-title">
       <div class="success-card">

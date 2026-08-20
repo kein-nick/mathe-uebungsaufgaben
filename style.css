@@ -1089,6 +1089,19 @@ option:disabled {
   max-width: calc(100vw - 32px);
 }
 
+.practice-slot:empty {
+  display: none;
+}
+
+.practice-slot-start,
+.practice-slot-check {
+  display: none;
+}
+
+.practice-slot-footer {
+  display: none;
+}
+
 .countdown {
   margin: 0;
   width: 100%;
@@ -1227,6 +1240,64 @@ option:disabled {
 
   .timer {
     text-align: left;
+  }
+
+  .page-corner {
+    display: none;
+  }
+
+  .practice-slot-start {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0 0 16px;
+  }
+
+  .practice-slot-start:empty {
+    display: none;
+  }
+
+  .practice-slot-check {
+    display: block;
+    margin: 18px 0 0;
+  }
+
+  .practice-slot-check:empty {
+    display: none;
+  }
+
+  .practice-slot-footer {
+    display: block;
+    width: min(720px, calc(100% - 32px));
+    margin: 28px auto 24px;
+    padding: 0 0 12px;
+  }
+
+  .practice-slot-footer:empty {
+    display: none;
+  }
+
+  .practice-slot-start .countdown {
+    width: 100%;
+    box-shadow: none;
+  }
+
+  .practice-slot-start .start-btn,
+  .practice-slot-check .check-btn {
+    width: 100%;
+    aspect-ratio: auto;
+    min-height: 3.4rem;
+    padding: 12px 16px;
+    font-size: 1.05rem;
+  }
+
+  .practice-slot-footer .reset-best-btn {
+    width: 100%;
+    box-shadow: none;
+  }
+
+  .worksheet .blocks {
+    margin-top: 0;
   }
 }
 
@@ -1514,6 +1585,7 @@ option:disabled {
   .ad-mid-row,
   .check-bar,
   .page-corner,
+  .practice-slot,
   .success-dialog,
   .pdf-sheet {
     display: none !important;
