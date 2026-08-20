@@ -1,0 +1,10 @@
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
+.vercel
+node_modules/
+_audit-*.js
+_debug-*.js
+_gen-test.js

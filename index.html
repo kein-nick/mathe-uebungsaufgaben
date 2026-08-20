@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mathematik Übungsaufgaben</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <aside class="ad-slot ad-slot-side" id="ad-slot-left" aria-label="Beispiel für Werbung links">
+        <p class="ad-kicker">Anzeige</p>
+        <div class="ad-body">
+          <p class="ad-title">Links</p>
+          <p class="ad-text">Zusatzanzeige. Nur bei breitem Bildschirm.</p>
+        </div>
+      </aside>
+
+      <div class="page">
+      <header class="intro">
+        <p class="kicker">Klassen 1 bis 6</p>
+        <h1>Mathematik Übungsaufgaben</h1>
+        <p class="description">
+          Wähle zuerst die Klasse und danach das Halbjahr. Im
+          <strong>1. Halbjahr</strong> sind die Aufgaben etwas leichter, im
+          <strong>2. Halbjahr</strong> etwas anspruchsvoller. Anschließend
+          bestimmst du, wie viele Aufgaben du üben möchtest und welche
+          Themen. Unter jedem Thema steht ein kurzes Beispiel. Ab Klasse 3 kannst du <strong>Rechenweg notieren</strong>
+          einschalten, ab Klasse 5 zusätzlich <strong>negative Zahlen</strong>.
+          Mit <strong>Aufgaben erstellen</strong> erscheinen die Rechnungen in
+          Zehnerblöcken. Danach kannst du das Blatt als <strong>PDF herunterladen</strong> —
+          auf einer Seite passen bis zu acht Blöcke (vier nebeneinander, zwei Reihen).
+          Rechenweg-Felder erscheinen im PDF nicht. Optional kannst du ein
+          <strong>Zeitlimit</strong> setzen.
+          Wenn du soweit bist, klicke unten links auf
+          <strong>Aufgaben beginnen</strong> — erst dann läuft die Zeit.
+          Trage die Ergebnisse ein und klicke auf <strong>Prüfen</strong>. Richtige Antworten
+          werden festgehalten, falsche bleiben rot markiert und können neu
+          berechnet werden.
+        </p>
+      </header>
+
+      <aside class="ad-slot" id="ad-slot" aria-label="Beispiel für Werbung">
+        <p class="ad-kicker">Anzeige</p>
+        <div class="ad-body">
+          <p class="ad-title">Hier könnte Werbung stehen</p>
+          <p class="ad-text">
+            Nur ein Platzhalter zum Ausprobieren. Sobald du auf
+            <strong>Aufgaben erstellen</strong> klickst, verschwindet dieser
+            Bereich. Beim nächsten Einstellen der Aufgaben kommt er wieder.
+          </p>
+        </div>
+      </aside>
+
+      <section class="setup" aria-label="Aufgaben einstellen">
+        <div class="setup-block">
+          <h2>1. Klasse wählen</h2>
+          <div class="grade-grid" role="group" aria-label="Klassenstufe wählen">
+            <button type="button" class="grade-btn" data-grade="1">Klasse 1</button>
+            <button type="button" class="grade-btn" data-grade="2">Klasse 2</button>
+            <button type="button" class="grade-btn" data-grade="3">Klasse 3</button>
+            <button type="button" class="grade-btn" data-grade="4">Klasse 4</button>
+            <button type="button" class="grade-btn" data-grade="5">Klasse 5</button>
+            <button type="button" class="grade-btn" data-grade="6">Klasse 6</button>
+          </div>
+        </div>
+
+        <div class="setup-block is-hidden" id="term-block">
+          <h2>2. Halbjahr wählen</h2>
+          <div class="term-grid" role="group" aria-label="Halbjahr wählen">
+            <div class="term-option">
+              <button type="button" class="grade-btn term-btn" data-term="1">
+                1. Halbjahr
+              </button>
+              <p class="hint" id="term-hint-1"></p>
+            </div>
+            <div class="term-option">
+              <button type="button" class="grade-btn term-btn" data-term="2">
+                2. Halbjahr
+              </button>
+              <p class="hint" id="term-hint-2"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="setup-block is-hidden" id="count-block">
+          <label for="count-select">
+            <h2>3. Anzahl der Aufgaben</h2>
+          </label>
+          <select id="count-select">
+            <option value="" selected disabled>Bitte wählen</option>
+            <option value="10">10 Aufgaben</option>
+            <option value="20">20 Aufgaben</option>
+            <option value="30">30 Aufgaben</option>
+            <option value="40">40 Aufgaben</option>
+            <option value="50">50 Aufgaben</option>
+            <option value="60">60 Aufgaben</option>
+            <option value="70">70 Aufgaben</option>
+            <option value="80">80 Aufgaben</option>
+          </select>
+        </div>
+
+        <div class="setup-block is-hidden" id="operation-block">
+          <h2>4. Was möchtest du üben?</h2>
+          <div class="topic-toolbar">
+            <label class="neg-switch is-hidden" id="neg-switch">
+              <input type="checkbox" id="neg-toggle" />
+              <span class="neg-slider" aria-hidden="true"></span>
+              <span>Negative Zahlen</span>
+            </label>
+          </div>
+          <div class="topic-groups" id="operation-list" role="group" aria-label="Übungsarten"></div>
+          <p class="hint" id="operation-hint"></p>
+        </div>
+
+        <div class="ad-mid-row is-hidden" id="ad-mid-row">
+          <aside class="ad-slot ad-slot-mid" aria-label="Beispiel für Werbung links">
+            <p class="ad-kicker">Anzeige</p>
+            <div class="ad-body">
+              <p class="ad-title">Links</p>
+              <p class="ad-text">Zusatzanzeige A. Entspricht der Anzeige links bei breitem Bildschirm.</p>
+            </div>
+          </aside>
+          <aside class="ad-slot ad-slot-mid" aria-label="Beispiel für Werbung rechts">
+            <p class="ad-kicker">Anzeige</p>
+            <div class="ad-body">
+              <p class="ad-title">Rechts</p>
+              <p class="ad-text">Zusatzanzeige B. Entspricht der Anzeige rechts bei breitem Bildschirm.</p>
+            </div>
+          </aside>
+        </div>
+
+        <div class="setup-block is-hidden" id="create-block">
+          <label class="neg-switch is-hidden" id="notes-switch">
+            <input type="checkbox" id="notes-toggle" />
+            <span class="neg-slider" aria-hidden="true"></span>
+            <span>Rechenweg notieren</span>
+          </label>
+          <button type="button" class="create-btn" id="create-btn">
+            Aufgaben erstellen
+          </button>
+          <label class="neg-switch" id="countdown-switch">
+            <input type="checkbox" id="countdown-toggle" />
+            <span class="neg-slider" aria-hidden="true"></span>
+            <span>Zeitlimit</span>
+          </label>
+          <label class="countdown-setup is-hidden" id="countdown-setup">
+            <span>Minuten</span>
+            <input type="number" id="countdown-minutes" min="1" max="90" step="1" inputmode="numeric" />
+          </label>
+        </div>
+      </section>
+
+      <section
+        class="worksheet is-hidden"
+        id="worksheet"
+        aria-live="polite"
+        aria-label="Übungsblatt"
+      >
+        <div class="print-header" id="print-header"></div>
+        <div class="blocks" id="blocks"></div>
+        <div class="check-bar">
+          <p class="status" id="status"></p>
+          <button type="button" class="pdf-btn is-hidden" id="pdf-btn">Als PDF herunterladen</button>
+          <p class="timer" id="timer" aria-label="Bearbeitungszeit">0:00</p>
+        </div>
+      </section>
+      </div>
+
+      <aside class="ad-slot ad-slot-side" id="ad-slot-right" aria-label="Beispiel für Werbung rechts">
+        <p class="ad-kicker">Anzeige</p>
+        <div class="ad-body">
+          <p class="ad-title">Rechts</p>
+          <p class="ad-text">Zusatzanzeige. Nur bei breitem Bildschirm.</p>
+        </div>
+      </aside>
+    </div>
+
+    <dialog class="success-dialog" id="success-dialog" aria-labelledby="success-title">
+      <canvas class="fireworks" id="fireworks" aria-hidden="true"></canvas>
+      <div class="success-card">
+        <h2 id="success-title">Prima!</h2>
+        <p id="success-text">Du hast es geschafft. Alle Aufgaben sind richtig.</p>
+        <p id="success-time"></p>
+        <p id="success-best"></p>
+        <button type="button" class="create-btn" id="success-close">Weiter</button>
+      </div>
+    </dialog>
+
+    <div class="page-corner">
+      <p class="countdown is-hidden" id="countdown" aria-live="polite" aria-label="Verbleibende Zeit">0:00</p>
+      <button type="button" class="start-btn is-hidden" id="start-btn">Aufgaben beginnen</button>
+      <button type="button" class="check-btn is-hidden" id="check-btn">Prüfen</button>
+      <button type="button" class="reset-best-btn" id="reset-best-btn">
+        Bestzeiten löschen
+      </button>
+    </div>
+
+    <dialog class="success-dialog" id="reset-best-dialog" aria-labelledby="reset-best-title">
+      <div class="success-card">
+        <h2 id="reset-best-title">Bestzeiten löschen?</h2>
+        <p>Dann kannst du später wieder neue Bestzeiten setzen. Die gespeicherten Zeiten für alle Klassen und Halbjahre werden entfernt.</p>
+        <div class="dialog-actions">
+          <button type="button" class="grade-btn" id="reset-best-cancel">Lieber nicht</button>
+          <button type="button" class="create-btn" id="reset-best-confirm">Löschen</button>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="topics.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
