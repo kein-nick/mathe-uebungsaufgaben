@@ -624,6 +624,14 @@ function scrollToNext(element, align = "reveal") {
       element.scrollIntoView({ behavior, block: "start" });
       return;
     }
+    if (align === "center-top") {
+      const rect = element.getBoundingClientRect();
+      const delta = rect.top - window.innerHeight / 2;
+      if (Math.abs(delta) > 1) {
+        window.scrollBy({ top: delta, behavior });
+      }
+      return;
+    }
 
     const padding = 32;
     const rect = element.getBoundingClientRect();
@@ -729,7 +737,7 @@ countSelect.addEventListener("change", () => {
     showCreateStep();
   } else {
     hideCreateStep();
-    scrollToNext(operationBlock);
+    scrollToNext(operationBlock, "center-top");
   }
 });
 
