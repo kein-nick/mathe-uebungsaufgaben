@@ -80,6 +80,12 @@ body {
   line-height: 1.65;
 }
 
+/* Ads aus: body-Klasse "ads-off" entfernen (und SHOW_ADS in script.js) */
+body.ads-off .ad-slot,
+body.ads-off .ad-mid-row {
+  display: none !important;
+}
+
 .ad-slot {
   margin-top: 28px;
   display: grid;
@@ -172,6 +178,17 @@ body {
 
   .ad-mid-row:not(.is-hidden) {
     display: none;
+  }
+
+  body.ads-off .page-shell {
+    display: block;
+    padding: 0;
+  }
+
+  body.ads-off .page {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+    grid-column: auto;
   }
 }
 

@@ -32,6 +32,9 @@ const practiceCheckSlot = document.getElementById("practice-check-slot");
 const practiceFooterSlot = document.getElementById("practice-footer-slot");
 const mobilePracticeQuery = window.matchMedia("(max-width: 640px)");
 
+/* Werbung: auf true setzen und body-Klasse "ads-off" in index.html entfernen */
+const SHOW_ADS = false;
+
 function layoutPracticeControls() {
   if (!pageCorner || !practiceStartSlot || !practiceCheckSlot || !practiceFooterSlot) {
     return;
@@ -652,24 +655,34 @@ function scrollToNext(element, align = "reveal") {
 }
 
 function showAds() {
+  if (!SHOW_ADS) {
+    pageShell.classList.remove("is-practicing");
+    return;
+  }
   adSlots.forEach(show);
   pageShell.classList.remove("is-practicing");
 }
 
 function hideAds() {
+  if (!SHOW_ADS) {
+    pageShell.classList.add("is-practicing");
+    return;
+  }
   adSlots.forEach(hide);
   hide(adMidRow);
   pageShell.classList.add("is-practicing");
 }
 
 function showCreateStep() {
-  show(adMidRow);
+  if (SHOW_ADS) {
+    show(adMidRow);
+  }
   show(createBlock);
   if (mobilePracticeQuery.matches) {
     return;
   }
   const wide = window.matchMedia("(min-width: 1400px)").matches;
-  scrollToNext(wide ? createBlock : adMidRow);
+  scrollToNext(SHOW_ADS && !wide ? adMidRow : createBlock);
 }
 
 function hideCreateStep() {
