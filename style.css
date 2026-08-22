@@ -1561,8 +1561,58 @@ a.grade-btn-nav[aria-current="page"] {
   max-width: 42rem;
 }
 
-.home-page-body .home-class-actions {
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
+  gap: 10px;
+  margin: 1.25rem 0 0;
+}
+
+.btn-secondary,
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  text-decoration: none;
+  text-align: center;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.btn-secondary {
+  background: var(--card);
+  color: var(--grade);
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 0 rgba(28, 36, 48, 0.04);
+}
+
+.btn-secondary:hover {
+  border-color: var(--grade);
+  background: #f3eee3;
+  color: var(--grade-hover);
+}
+
+.btn-primary {
+  background: var(--grade);
+  color: #fff;
+  border: 1px solid var(--grade);
+  box-shadow: 0 2px 8px rgba(47, 93, 80, 0.18);
+}
+
+.btn-primary:hover {
+  background: var(--grade-hover);
+  border-color: var(--grade-hover);
+  color: #fff;
 }
 
 .landing-page .landing-lead {
@@ -1583,17 +1633,11 @@ a.grade-btn-nav[aria-current="page"] {
 
 .landing-cta-row {
   margin: 2rem 0 0.75rem;
-  text-align: center;
 }
 
 .landing-cta-hint {
   text-align: center;
   margin-bottom: 0;
-}
-
-.landing-cta {
-  display: inline-block;
-  text-decoration: none;
 }
 
 .landing-parent-intro {
@@ -1704,21 +1748,6 @@ a.grade-btn-nav[aria-current="page"] {
 .home-category p {
   margin: 0;
   font-size: 0.95rem;
-}
-
-.home-class-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px 20px;
-  margin: 0;
-}
-
-.home-practice-btn {
-  display: inline-block;
-  text-decoration: none;
-  font-size: 0.95rem;
-  padding: 10px 18px;
 }
 
 @media (min-width: 720px) {

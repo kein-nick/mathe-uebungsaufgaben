@@ -110,9 +110,9 @@ function renderHomeClassSummaries() {
       <h3><a href="/klasse-${grade}">Klasse ${grade}</a></h3>
       <p class="home-class-intro">${escapeHtml(classIntros[grade])}</p>
       <div class="home-categories">${categories}</div>
-      <p class="home-class-actions">
-        <a class="text-link" href="/klasse-${grade}">Rechenarten im Detail</a>
-        <a class="create-btn home-practice-btn" href="${practiceUrl(grade)}">Zu den Übungsaufgaben</a>
+      <p class="page-actions">
+        <a class="btn-secondary" href="/klasse-${grade}">Rechenarten im Detail</a>
+        <a class="btn-primary" href="${practiceUrl(grade)}">Zu den Übungsaufgaben</a>
       </p>
     </section>`;
     })
@@ -281,8 +281,8 @@ function renderClassPage(grade) {
             ${topicOverview}
           </section>
 
-          <p class="landing-cta-row">
-            <a class="create-btn landing-cta" href="${practiceUrl(grade)}">Zu den Übungsaufgaben</a>
+          <p class="page-actions landing-cta-row">
+            <a class="btn-primary" href="${practiceUrl(grade)}">Zu den Übungsaufgaben</a>
           </p>
           <p class="hint landing-cta-hint">
             Dort erstellst du ein Übungsblatt für Klasse ${grade}: Halbjahr, Anzahl und Themen wählst du selbst.
