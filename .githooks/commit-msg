@@ -1,16 +1,23 @@
 #!/bin/sh
-# Commit-Nachrichten in diesem Projekt auf Deutsch.
+# Commit-Nachrichten in diesem Projekt auf Deutsch. Siehe AGENTS.md
 
 msg=$(head -n 1 "$1")
 
 # Englische Conventional-Commit-Prefixes
 if printf '%s' "$msg" | grep -qiE '^(feat|fix|chore|docs|style|refactor|test|build|ci|perf|revert)(\([^)]+\))?:[[:space:]]'; then
-  echo "Commit-Nachricht bitte auf Deutsch (ohne feat:/fix:/chore: usw.)." >&2
+  echo "Commit-Nachricht bitte auf Deutsch (ohne feat:/fix:/chore: usw.). Siehe AGENTS.md" >&2
   exit 1
 fi
 
-# Haeufige englische Anfaenge (wie in frueheren Commits)
-if printf '%s' "$msg" | grep -qiE '^(add|added|update|updated|fix|fixed|remove|removed|implement|implemented|improve|improved|refactor|refactored|toggle|skip|introduce|introduced|adjust|adjusted|ignore|ignored|change|changed|create|created|move|moved|enable|enabled|disable|disabled)[[:space:]]'; then
+# Typischer englischer Commit-Satzbau
+if printf '%s' "$msg" | grep -qiE ' by (adding|introducing|updating|removing|fixing|improving|enhancing|creating) '; then
+  echo "Commit-Nachricht bitte auf Deutsch formulieren (kein englischer Satzbau)." >&2
+  echo "Beispiel: Fortschrittsanzeige und Neues-Blatt-Button ergaenzen." >&2
+  exit 1
+fi
+
+# Haeufige englische Anfaenge
+if printf '%s' "$msg" | grep -qiE '^(add|added|update|updated|fix|fixed|remove|removed|implement|implemented|improve|improved|enhance|enhanced|refactor|refactored|toggle|skip|introduce|introduced|adjust|adjusted|ignore|ignored|change|changed|create|created|move|moved|enable|enabled|disable|disabled)[[:space:]]'; then
   echo "Commit-Nachricht bitte auf Deutsch formulieren." >&2
   echo "Beispiel: Werbeplaetze vorerst ausblenden." >&2
   exit 1

@@ -1,38 +1,24 @@
 ---
-description: Commit-Nachrichten immer auf Deutsch schreiben — verbindlich für jeden git commit
+description: Commit-Nachrichten immer auf Deutsch — siehe auch AGENTS.md
 alwaysApply: true
 ---
 
-# Commit-Nachrichten (verbindlich)
+# Commit-Nachrichten
 
-Bei **jedem** `git commit` in diesem Projekt gilt:
+**Vollständige Regeln: `AGENTS.md` im Projektroot.**
 
-- Nachricht **immer auf Deutsch** — keine Ausnahme.
-- Kurz und klar: was geändert wurde und warum (1–2 Sätze).
-- **Keine** englischen Conventional-Commit-Prefixes: `feat:`, `fix:`, `chore:`, `docs:` usw.
-- **Keine** englischen Verben am Anfang: `Add`, `Update`, `Fix`, `Improve`, `Toggle`, `Skip`, `Introduce`.
+Bei jedem `git commit` in diesem Projekt:
 
-Ein Git-Hook in `.githooks/commit-msg` lehnt typische englische Muster ab. Aktivierung einmalig:
-
-```text
-git config core.hooksPath .githooks
-```
-
-## Richtig
+- Nachricht **immer auf Deutsch**
+- Keine englischen Prefixes (`feat:`, `fix:` …)
+- Kein englischer Satzbau („Enhance X by adding Y“)
 
 ```text
-Vercel Web Analytics für Besucherstatistik einbinden.
-Werbeplätze vorerst ausblenden; Schalter zum Wiedereinschalten belassen.
-Mobile Layout für Start- und Prüfen-Button anpassen.
-Fortschrittsanzeige und Neues-Blatt-Button ergänzen; Anleitung einklappbar.
-Favicon als modernes App-Icon neu gestalten.
+# Richtig
+Open-Graph-Tags und Vorschaubild fuer Link-Sharing hinzufuegen.
+
+# Falsch
+Enhance user experience by adding Open Graph tags
 ```
 
-## Falsch
-
-```text
-Toggle ad visibility by introducing SHOW_ADS variable
-Improve mobile layout for practice controls
-feat: add countdown timer
-Fix PDF export layout
-```
+Git-Hook `.githooks/commit-msg` blockiert typisches Englisch.
