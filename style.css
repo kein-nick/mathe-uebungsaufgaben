@@ -1572,8 +1572,40 @@ a.grade-btn-nav[aria-current="page"] {
   border-color: var(--grade);
 }
 
+.class-page-body {
+  --class-page-cta-height: 5.5rem;
+}
+
 .class-page-body .page {
-  padding-bottom: 48px;
+  padding-bottom: calc(var(--class-page-cta-height) + env(safe-area-inset-bottom, 0) + 16px);
+}
+
+.class-page-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 35;
+  display: flex;
+  justify-content: center;
+  padding:
+    12px
+    calc(16px + env(safe-area-inset-right, 0))
+    calc(12px + env(safe-area-inset-bottom, 0))
+    calc(16px + env(safe-area-inset-left, 0));
+  background: rgba(255, 253, 248, 0.97);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -4px 20px rgba(28, 36, 48, 0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.class-page-cta-btn {
+  width: min(100%, var(--content-width));
+}
+
+.class-page-body .install-banner:not(.is-hidden) {
+  bottom: calc(var(--class-page-cta-height) + env(safe-area-inset-bottom, 0) + 8px);
 }
 
 .home-page-body .intro,

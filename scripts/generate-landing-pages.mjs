@@ -319,13 +319,6 @@ function renderClassPage(grade) {
             </p>
             ${topicOverview}
           </section>
-
-          <p class="page-actions landing-cta-row">
-            <a class="btn-primary" href="${practiceUrl(grade)}">Zu den Übungsaufgaben</a>
-          </p>
-          <p class="hint landing-cta-hint">
-            Dort erstellst du ein Übungsblatt für Klasse ${grade}: Halbjahr, Anzahl und Themen wählst du selbst.
-          </p>
         </main>
 
         <footer class="site-footer">
@@ -339,6 +332,10 @@ function renderClassPage(grade) {
         </footer>
       </div>
     </div>
+
+    <aside class="class-page-cta" aria-label="Übungen starten">
+      <a class="btn-primary class-page-cta-btn" href="${practiceUrl(grade)}">Zu den Übungsaufgaben</a>
+    </aside>
 
     ${installPromptHtml}
     ${pwaScripts}
