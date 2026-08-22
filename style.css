@@ -1567,6 +1567,65 @@ a.grade-btn-nav[aria-current="page"] {
   text-decoration: none;
 }
 
+.landing-parent-intro {
+  font-style: italic;
+  color: var(--muted);
+}
+
+.landing-overview-hint {
+  margin-bottom: 1.5rem;
+}
+
+.landing-category {
+  margin-bottom: 2.25rem;
+}
+
+.landing-category > h3 {
+  font-family: "Fraunces", serif;
+  color: var(--ink);
+  font-size: 1.3rem;
+  margin: 0 0 0.75rem;
+}
+
+.landing-category-intro {
+  margin: 0 0 1rem;
+  color: var(--ink);
+}
+
+.landing-topic-details {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.landing-topic-detail {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.landing-topic-detail:last-child {
+  border-bottom: 0;
+}
+
+.landing-topic-detail h4 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0 0 0.35rem;
+}
+
+.landing-topic-detail p {
+  margin: 0 0 0.35rem;
+}
+
+.landing-topic-note {
+  margin: 0;
+}
+
+.practice-page-body .page {
+  padding-bottom: 48px;
+}
+
 .landing-group {
   margin-bottom: 1.75rem;
 }

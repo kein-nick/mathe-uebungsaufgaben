@@ -1,10 +1,12 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { parentIntro, groupDescriptions, topicDescriptions } from "./landing-content.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const topicsSrc = fs.readFileSync(path.join(root, "topics.js"), "utf8");
+const indexHtml = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const block = topicsSrc.slice(topicsSrc.indexOf("const topics = ["));
 
 const topics = [];
@@ -41,12 +43,12 @@ const classIntros = {
 };
 
 const classDetails = {
-  1: "Typisch für Klasse 1 sind Aufgaben im Zahlenraum bis 20: Plus- und Minusrechnungen ohne Zehnerübergang, später mit. Dazu kommen Vergleichen von Zahlen, Zerlegen in Zehner und Einer sowie einfache Sachaufgaben mit kurzen Texten.",
-  2: "In Klasse 2 werden Plus und Minus bis 100 sicherer, das Einmaleins wird eingeführt und geübt. Außerdem gibt es Aufgaben zu Geld und Uhr, zum Verdoppeln und Halbieren sowie erste Übungen mit Tabellen und einfachen Mustern.",
-  3: "Klasse 3 bedeutet größere Zahlen und schriftliches Rechnen. Du übst Addition, Subtraktion, Multiplikation und Division mit mehrstelligen Zahlen, Punkt-vor-Strich-Aufgaben, Sachaufgaben, Runden und erste Größen wie Länge, Gewicht und Umfang.",
-  4: "In Klasse 4 kommen schriftliche Rechenverfahren, Bruchanteile und anspruchsvollere Sachaufgaben hinzu. Geometrie umfasst Formen, Spiegeln und Flächen, dazu Größen umrechnen und Arbeiten mit Tabellen und Diagrammen.",
-  5: "Klasse 5 vertieft Brüche, Dezimalzahlen und Prozent. Du rechnest mit größeren Zahlen, löst Gleichungen und Dreisatzaufgaben und übst Geometrie mit Winkeln, Koordinaten und Maßstab.",
-  6: "In Klasse 6 wiederholst und festigst du die wichtigsten Themen für die weiterführende Schule: Brüche, Dezimalzahlen, Prozent, Dreisatz, negative Zahlen und anspruchsvolle Sachaufgaben aus allen Bereichen.",
+  1: "Typisch für Klasse 1 sind Aufgaben im Zahlenraum bis 20. Kinder rechnen Plus und Minus, vergleichen Zahlen und lösen erste kurze Textaufgaben. Viele Übungen sind bewusst kleinschrittig — so wie es heute in den meisten Grundschulen eingeführt wird.",
+  2: "In Klasse 2 wächst der Zahlenraum bis 100, das Einmaleins wird aufgebaut und erste Sachaufgaben werden länger. Eltern merken oft: Die Aufgaben sehen noch vertraut aus, aber die Reihenfolge der Themen und die Begriffe können anders sein als früher.",
+  3: "Klasse 3 bedeutet größere Zahlen, schriftliches Rechnen und mehr Schritte pro Aufgabe. Punkt vor Strich, Tabellen lesen und Größen wie Länge oder Gewicht kommen dazu — Themen, bei denen eine Übersicht besonders hilft.",
+  4: "In Klasse 4 stehen schriftliche Verfahren, Bruchanteile und anspruchsvollere Sachaufgaben im Fokus. Geometrie und Größen werden präziser; Kinder sollen nicht nur rechnen, sondern auch begründen, warum ein Ergebnis passt.",
+  5: "Klasse 5 bringt Brüche, Dezimalzahlen und Prozent zusammen — oft in gemischten Aufgaben. Gleichungen, Dreisatz und Winkel sind typische Themen, die Eltern manchmal erst wieder mit dem Kind neu lernen.",
+  6: "In Klasse 6 wird vieles wiederholt und vertieft, was für die weiterführende Schule wichtig ist. Die Aufgaben werden länger, die Zahlen größer, und Sachaufgaben verlangen mehrere Rechenschritte und gutes Lesen.",
 };
 
 const groupOrder = ["rechnen", "zahlen", "groessen", "geometrie"];
@@ -88,7 +90,7 @@ function escapeHtml(text) {
 }
 
 function practiceUrl(grade) {
-  return `/?klasse=${grade}`;
+  return `/klasse-${grade}/uebungen`;
 }
 
 function renderClassNav(currentGrade = 0) {
@@ -101,6 +103,22 @@ function renderClassNav(currentGrade = 0) {
     )
     .join("\n");
   return `<nav class="class-nav-grid" aria-label="Klassenstufen">${items}</nav>`;
+}
+
+function topicAvailabilityNote(topic, grade) {
+  const term1 = isTopicAllowed(topic, grade, 1);
+  const term2 = isTopicAllowed(topic, grade, 2);
+
+  if (!term1 && !term2) {
+    return `Vorschau — ab Klasse ${topic.fromGrade}`;
+  }
+  if (term1 && !term2) {
+    return "Typisch im 1. Halbjahr";
+  }
+  if (!term1 && term2) {
+    return "Ab dem 2. Halbjahr";
+  }
+  return "";
 }
 
 function renderTopicOverview(grade) {
@@ -116,43 +134,54 @@ function renderTopicOverview(grade) {
         return "";
       }
 
-      let html = `<section class="landing-group">
-          <h3>${escapeHtml(GROUPS[groupId])}</h3>`;
+      const groupIntro = groupDescriptions[grade]?.[groupId] || "";
+      const topicItems = [...active, ...preview]
+        .map((topic) => {
+          const description = topicDescriptions[topic.id] || "Übungen zu diesem Thema im passenden Schwierigkeitsgrad.";
+          const note = topicAvailabilityNote(topic, grade);
+          return `<li class="landing-topic-detail">
+              <h4>${escapeHtml(topic.label)}</h4>
+              <p>${escapeHtml(description)}</p>
+              ${note ? `<p class="hint landing-topic-note">${escapeHtml(note)}</p>` : ""}
+            </li>`;
+        })
+        .join("\n");
 
-      if (active.length) {
-        const term1Labels = active
-          .filter((topic) => isTopicAllowed(topic, grade, 1))
-          .map((topic) => topic.label);
-        const term2Labels = active
-          .filter((topic) => isTopicAllowed(topic, grade, 2))
-          .map((topic) => topic.label);
-        const sameTerms =
-          term1Labels.length === term2Labels.length &&
-          term1Labels.every((label, index) => label === term2Labels[index]);
-
-        if (sameTerms && term1Labels.length) {
-          html += `<p>${escapeHtml(term1Labels.join(", "))}.</p>`;
-        } else {
-          if (term1Labels.length) {
-            html += `<p><strong>1. Halbjahr:</strong> ${escapeHtml(term1Labels.join(", "))}.</p>`;
-          }
-          if (term2Labels.length) {
-            html += `<p><strong>2. Halbjahr:</strong> ${escapeHtml(term2Labels.join(", "))}.</p>`;
-          }
-        }
-      }
-
-      if (preview.length) {
-        const previewLabels = preview.map((topic) => `${topic.label} (ab Klasse ${topic.fromGrade})`);
-        html += `<p class="hint">Vorschau: ${escapeHtml(previewLabels.join(", "))}.</p>`;
-      }
-
-      html += "</section>";
-      return html;
+      return `<section class="landing-category">
+          <h3>${escapeHtml(GROUPS[groupId])}</h3>
+          <p class="landing-category-intro">${escapeHtml(groupIntro)}</p>
+          <ul class="landing-topic-details">${topicItems}</ul>
+        </section>`;
     })
     .filter(Boolean)
     .join("\n");
 }
+
+function extractAppFragments() {
+  const setupStart = indexHtml.indexOf('<section class="setup"');
+  const footerStart = indexHtml.indexOf('<footer class="site-footer">');
+  const appMain = indexHtml.slice(setupStart, footerStart);
+
+  const dialogStart = indexHtml.indexOf('<dialog class="success-dialog"');
+  const scriptStart = indexHtml.indexOf('<script src="topics.js">');
+  const appDialogs = indexHtml.slice(dialogStart, scriptStart);
+
+  const scripts = `    <script src="/topics.js"></script>
+    <script src="/script.js"></script>
+    <script src="/pwa.js"></script>
+    <script>
+      window.va =
+        window.va ||
+        function () {
+          (window.vaq = window.vaq || []).push(arguments);
+        };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>`;
+
+  return { appMain, appDialogs, scripts };
+}
+
+const { appMain, appDialogs, scripts } = extractAppFragments();
 
 function renderClassPage(grade) {
   const topicOverview = renderTopicOverview(grade);
@@ -164,10 +193,10 @@ function renderClassPage(grade) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Mathe-Übungen für Klasse ${grade}: Themenübersicht zu Rechnen, Zahlen, Größen und Geometrie — kostenlos online üben oder als PDF."
+      content="Mathe Klasse ${grade} erklärt: Themen, Rechenarten und Kategorien für Eltern — plus kostenlose Übungsaufgaben online und als PDF."
     />
     <link rel="canonical" href="https://mathe-testen.de/klasse-${grade}" />
-    <title>Mathe Klasse ${grade} – Themen &amp; Übungen</title>
+    <title>Mathe Klasse ${grade} – Themen erklärt &amp; üben</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -188,17 +217,24 @@ function renderClassPage(grade) {
         </header>
 
         <main class="legal-page landing-page">
+          <p class="landing-lead landing-parent-intro">${escapeHtml(parentIntro)}</p>
           <p class="landing-lead">${classDetails[grade]}</p>
 
           <section class="landing-topics-overview" aria-labelledby="topics-heading-${grade}">
-            <h2 id="topics-heading-${grade}">Diese Rechenarten und Themen gibt es</h2>
+            <h2 id="topics-heading-${grade}">Kategorien und Rechenarten in Klasse ${grade}</h2>
+            <p class="landing-overview-hint">
+              In der Grundschule wird Mathe oft in vier Bereiche gegliedert. Hier siehst du,
+              was dahinter steckt — und welche konkreten Übungstypen es für diese Klasse gibt.
+            </p>
             ${topicOverview}
           </section>
 
           <p class="landing-cta-row">
             <a class="create-btn landing-cta" href="${practiceUrl(grade)}">Zu den Übungsaufgaben</a>
           </p>
-          <p class="hint landing-cta-hint">Dort wählst du Halbjahr, Anzahl und genaue Themen — die Klasse ${grade} ist schon vorausgewählt.</p>
+          <p class="hint landing-cta-hint">
+            Dort erstellst du ein Übungsblatt für Klasse ${grade}: Halbjahr, Anzahl und Themen wählst du selbst.
+          </p>
         </main>
 
         <footer class="site-footer">
@@ -216,10 +252,106 @@ function renderClassPage(grade) {
 </html>`;
 }
 
-for (let grade = 1; grade <= 6; grade += 1) {
-  const filePath = path.join(root, `klasse-${grade}.html`);
-  fs.writeFileSync(filePath, renderClassPage(grade), "utf8");
-  console.log("wrote", filePath);
+function renderPracticePage(grade) {
+  return `<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Mathe-Übungen für Klasse ${grade}: Halbjahr, Anzahl und Themen wählen — online üben oder Arbeitsblatt als PDF."
+    />
+    <link rel="canonical" href="https://mathe-testen.de/klasse-${grade}/uebungen" />
+    <title>Übungsaufgaben Klasse ${grade} – online &amp; als PDF</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#2f5d50" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body class="ads-off practice-page-body" data-locked-grade="${grade}">
+    <div class="page-shell">
+      <div class="page">
+        <header class="intro">
+          <p class="kicker">
+            <a class="text-link" href="/klasse-${grade}">Zurück zur Übersicht Klasse ${grade}</a>
+          </p>
+          <h1>Übungsaufgaben – Klasse ${grade}</h1>
+          <p class="description">
+            Wähle Halbjahr, Anzahl und Themen — dann erstellst du dein Übungsblatt.
+            Kostenlos online üben oder als PDF drucken.
+          </p>
+          ${renderClassNav(grade)}
+        </header>
+
+        ${appMain}
+
+        <footer class="site-footer">
+          <nav aria-label="Rechtliches">
+            <a href="/">Startseite</a>
+            <span aria-hidden="true">·</span>
+            <a href="/klasse-${grade}">Klasse ${grade}</a>
+            <span aria-hidden="true">·</span>
+            <a href="/impressum">Impressum</a>
+            <span aria-hidden="true">·</span>
+            <a href="/datenschutz">Datenschutz</a>
+          </nav>
+        </footer>
+      </div>
+    </div>
+
+    ${appDialogs}
+    ${scripts}
+  </body>
+</html>`;
 }
 
+function updateSitemap() {
+  const sitemapPath = path.join(root, "sitemap.xml");
+  let sitemap = fs.readFileSync(sitemapPath, "utf8");
+
+  for (let grade = 1; grade <= 6; grade += 1) {
+    const classEntry = `  <url>
+    <loc>https://mathe-testen.de/klasse-${grade}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>`;
+    const practiceEntry = `  <url>
+    <loc>https://mathe-testen.de/klasse-${grade}/uebungen</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`;
+
+    if (!sitemap.includes(`/klasse-${grade}</loc>`)) {
+      sitemap = sitemap.replace("</urlset>", `${classEntry}\n</urlset>`);
+    }
+    if (!sitemap.includes(`/klasse-${grade}/uebungen</loc>`)) {
+      sitemap = sitemap.replace("</urlset>", `${practiceEntry}\n</urlset>`);
+    }
+  }
+
+  fs.writeFileSync(sitemapPath, sitemap, "utf8");
+}
+
+for (let grade = 1; grade <= 6; grade += 1) {
+  const landingPath = path.join(root, `klasse-${grade}.html`);
+  fs.writeFileSync(landingPath, renderClassPage(grade), "utf8");
+  console.log("wrote", landingPath);
+
+  const practiceDir = path.join(root, `klasse-${grade}`);
+  fs.mkdirSync(practiceDir, { recursive: true });
+  const practicePath = path.join(practiceDir, "uebungen.html");
+  fs.writeFileSync(practicePath, renderPracticePage(grade), "utf8");
+  console.log("wrote", practicePath);
+}
+
+updateSitemap();
+console.log("updated sitemap.xml");
 console.log("done");

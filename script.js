@@ -754,9 +754,13 @@ function selectTerm(term, options = {}) {
 }
 
 function getLockedGrade() {
-  const grade = Number(document.body.dataset.lockedGrade);
-  if (grade >= 1 && grade <= 6) {
-    return grade;
+  const fromBody = Number(document.body.dataset.lockedGrade);
+  if (fromBody >= 1 && fromBody <= 6) {
+    return fromBody;
+  }
+  const match = window.location.pathname.match(/\/klasse-(\d+)\/uebungen\/?$/);
+  if (match) {
+    return Number(match[1]);
   }
   return 0;
 }
@@ -797,20 +801,20 @@ function initPageEntry() {
   const termParam = Number(params.get("halbjahr"));
   const topicIds = parseTopicIds(params.get("themen"));
   const hasTerm = termParam === 1 || termParam === 2;
-  const entryGrade = lockedGrade || (gradeFromUrl >= 1 && gradeFromUrl <= 6 ? gradeFromUrl : 0);
 
-  if (!entryGrade) {
+  if (!lockedGrade && gradeFromUrl >= 1 && gradeFromUrl <= 6) {
+    params.delete("klasse");
+    const query = params.toString();
+    window.location.replace(`/klasse-${gradeFromUrl}/uebungen${query ? `?${query}` : ""}`);
     return;
   }
 
-  if (lockedGrade || gradeFromUrl) {
-    applyCompactSetupLayout();
+  if (!lockedGrade) {
+    return;
   }
-  if (lockedGrade) {
-    selectGrade(lockedGrade, { scroll: false });
-  } else {
-    selectGrade(gradeFromUrl, { scroll: false });
-  }
+
+  applyCompactSetupLayout();
+  selectGrade(lockedGrade, { scroll: false });
 
   if (hasTerm || topicIds.length) {
     if (topicIds.length) {
