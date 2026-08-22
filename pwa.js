@@ -1,5 +1,6 @@
 (function () {
   const DISMISS_KEY = "mathe-pwa-install-dismissed";
+  const DISMISS_DAYS = 5;
   const SHOW_DELAY_MS = 2500;
 
   const banner = document.getElementById("install-banner");
@@ -32,7 +33,24 @@
 
   function wasDismissed() {
     try {
-      return localStorage.getItem(DISMISS_KEY) === "1";
+      const raw = localStorage.getItem(DISMISS_KEY);
+      if (!raw) {
+        return false;
+      }
+      if (raw === "1") {
+        localStorage.removeItem(DISMISS_KEY);
+        return false;
+      }
+      const dismissedAt = Number(raw);
+      if (!Number.isFinite(dismissedAt)) {
+        return false;
+      }
+      const dismissMs = DISMISS_DAYS * 24 * 60 * 60 * 1000;
+      if (Date.now() - dismissedAt >= dismissMs) {
+        localStorage.removeItem(DISMISS_KEY);
+        return false;
+      }
+      return true;
     } catch {
       return false;
     }
@@ -40,7 +58,7 @@
 
   function rememberDismissed() {
     try {
-      localStorage.setItem(DISMISS_KEY, "1");
+      localStorage.setItem(DISMISS_KEY, String(Date.now()));
     } catch {
       /* ignore */
     }
