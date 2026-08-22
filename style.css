@@ -1421,7 +1421,8 @@ option:disabled {
 }
 
 .legal-page {
-  max-width: 68ch;
+  max-width: 42rem;
+  margin-inline: auto;
   color: var(--muted);
   line-height: 1.65;
 }
@@ -1534,6 +1535,34 @@ a.grade-btn-nav[aria-current="page"] {
 
 .class-page-body .page {
   padding-bottom: 48px;
+}
+
+.home-page-body .intro,
+.class-page-body .intro,
+.legal-page-body .intro,
+.practice-page-body .intro {
+  text-align: center;
+  max-width: 42rem;
+  margin-inline: auto;
+}
+
+.home-page-body .description,
+.class-page-body .description,
+.legal-page-body .description,
+.practice-page-body .description {
+  margin-inline: auto;
+}
+
+.home-page-body .home-page {
+  max-width: 52rem;
+}
+
+.class-page-body .landing-page {
+  max-width: 42rem;
+}
+
+.home-page-body .home-class-actions {
+  justify-content: center;
 }
 
 .landing-page .landing-lead {
