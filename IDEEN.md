@@ -58,7 +58,7 @@ Stand: August 2026
 
 | Idee | Kurzbeschreibung | Aufwand |
 |------|------------------|---------|
-| **Sitemap / robots.txt** | Bessere Auffindbarkeit bei Google | gering |
+| **Sitemap / robots.txt** | Bessere Auffindbarkeit bei Google | ~~gering~~ erledigt |
 | **Seitenladezeit** | Schriften lokal hosten statt Google Fonts — weniger Abhängigkeit | gering |
 
 ---
