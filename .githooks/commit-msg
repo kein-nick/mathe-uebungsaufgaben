@@ -1,0 +1,19 @@
+#!/bin/sh
+# Commit-Nachrichten in diesem Projekt auf Deutsch.
+
+msg=$(head -n 1 "$1")
+
+# Englische Conventional-Commit-Prefixes
+if printf '%s' "$msg" | grep -qiE '^(feat|fix|chore|docs|style|refactor|test|build|ci|perf|revert)(\([^)]+\))?:[[:space:]]'; then
+  echo "Commit-Nachricht bitte auf Deutsch (ohne feat:/fix:/chore: usw.)." >&2
+  exit 1
+fi
+
+# Haeufige englische Anfaenge (wie in frueheren Commits)
+if printf '%s' "$msg" | grep -qiE '^(add|added|update|updated|fix|fixed|remove|removed|implement|implemented|improve|improved|refactor|refactored|toggle|skip|introduce|introduced|adjust|adjusted|ignore|ignored|change|changed|create|created|move|moved|enable|enabled|disable|disabled)[[:space:]]'; then
+  echo "Commit-Nachricht bitte auf Deutsch formulieren." >&2
+  echo "Beispiel: Werbeplaetze vorerst ausblenden." >&2
+  exit 1
+fi
+
+exit 0

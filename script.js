@@ -25,6 +25,8 @@ const countdownSetup = document.getElementById("countdown-setup");
 const countdownMinutesInput = document.getElementById("countdown-minutes");
 const countdownEl = document.getElementById("countdown");
 const pdfBtn = document.getElementById("pdf-btn");
+const newSheetBtn = document.getElementById("new-sheet-btn");
+const progressEl = document.getElementById("progress");
 const printHeader = document.getElementById("print-header");
 const pageCorner = document.getElementById("page-corner");
 const practiceStartSlot = document.getElementById("practice-start-slot");
@@ -700,6 +702,9 @@ function resetLaterSteps() {
   hide(worksheet);
   hide(checkBtn);
   hide(pdfBtn);
+  hide(newSheetBtn);
+  hide(progressEl);
+  progressEl.textContent = "";
   hide(startBtn);
   startBtn.disabled = false;
   hide(countdownEl);
@@ -1137,10 +1142,32 @@ negToggle.addEventListener("change", () => {
 });
 
 createBtn.addEventListener("click", () => {
+  if (!buildWorksheet()) {
+    return;
+  }
+  scrollToNext(worksheet, "start");
+});
+
+function countCorrectTasks() {
+  return document.querySelectorAll(".task.is-correct").length;
+}
+
+function updateProgress() {
+  if (!tasks.length || !timerStarted) {
+    hide(progressEl);
+    progressEl.textContent = "";
+    return;
+  }
+  const correct = countCorrectTasks();
+  show(progressEl);
+  progressEl.textContent = `${correct} von ${tasks.length} richtig`;
+}
+
+function buildWorksheet() {
   const count = Number(countSelect.value);
   const selectedOps = selectedTopics();
   if (!count || !selectedTerm || !selectedOps.length) {
-    return;
+    return false;
   }
   tasks = generateTasks(selectedGrade, selectedTerm, count, selectedOps, negativesAllowed());
   activeTopicIds = [...selectedOps];
@@ -1156,10 +1183,24 @@ createBtn.addEventListener("click", () => {
   startBtn.disabled = false;
   show(checkBtn);
   show(pdfBtn);
+  show(newSheetBtn);
+  hide(progressEl);
+  progressEl.textContent = "";
   if (countdownActive) {
     show(countdownEl);
   } else {
     hide(countdownEl);
+  }
+  return true;
+}
+
+newSheetBtn.addEventListener("click", () => {
+  stopFireworks();
+  if (successDialog.open) {
+    successDialog.close();
+  }
+  if (!buildWorksheet()) {
+    return;
   }
   scrollToNext(worksheet, "start");
 });
@@ -1174,6 +1215,7 @@ startBtn.addEventListener("click", () => {
   if (statusEl.textContent === "Klicke auf Aufgaben beginnen, wenn du soweit bist.") {
     statusEl.textContent = "";
   }
+  updateProgress();
 });
 
 function worksheetMeta() {
@@ -1526,6 +1568,7 @@ checkBtn.addEventListener("click", () => {
   if (correct === tasks.length) {
     statusEl.textContent = `Sehr gut! Alle Aufgaben sind richtig.${lateHint}`;
     freezeTimer();
+    updateProgress();
     if (!celebrated) {
       celebrated = true;
       openSuccess();
@@ -1534,6 +1577,7 @@ checkBtn.addEventListener("click", () => {
   }
 
   statusEl.textContent = `${correct} von ${tasks.length} richtig.${lateHint} Falsche oder leere Felder kannst du noch ausfüllen.`;
+  updateProgress();
 });
 
 function markLateIfNeeded(row, target) {

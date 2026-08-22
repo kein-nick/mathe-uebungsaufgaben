@@ -1,0 +1,38 @@
+---
+description: Commit-Nachrichten immer auf Deutsch schreiben — verbindlich für jeden git commit
+alwaysApply: true
+---
+
+# Commit-Nachrichten (verbindlich)
+
+Bei **jedem** `git commit` in diesem Projekt gilt:
+
+- Nachricht **immer auf Deutsch** — keine Ausnahme.
+- Kurz und klar: was geändert wurde und warum (1–2 Sätze).
+- **Keine** englischen Conventional-Commit-Prefixes: `feat:`, `fix:`, `chore:`, `docs:` usw.
+- **Keine** englischen Verben am Anfang: `Add`, `Update`, `Fix`, `Improve`, `Toggle`, `Skip`, `Introduce`.
+
+Ein Git-Hook in `.githooks/commit-msg` lehnt typische englische Muster ab. Aktivierung einmalig:
+
+```text
+git config core.hooksPath .githooks
+```
+
+## Richtig
+
+```text
+Vercel Web Analytics für Besucherstatistik einbinden.
+Werbeplätze vorerst ausblenden; Schalter zum Wiedereinschalten belassen.
+Mobile Layout für Start- und Prüfen-Button anpassen.
+Fortschrittsanzeige und Neues-Blatt-Button ergänzen; Anleitung einklappbar.
+Favicon als modernes App-Icon neu gestalten.
+```
+
+## Falsch
+
+```text
+Toggle ad visibility by introducing SHOW_ADS variable
+Improve mobile layout for practice controls
+feat: add countdown timer
+Fix PDF export layout
+```

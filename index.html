@@ -3,7 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Mathe-Übungen für Klasse 1 bis 6: kostenlos online üben, optional mit Zeitlimit und Bestzeiten — oder als PDF zum Ausdrucken."
+    />
     <title>Mathematik Übungsaufgaben</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -28,23 +33,42 @@
         <p class="kicker">Klassen 1 bis 6</p>
         <h1>Mathematik Übungsaufgaben</h1>
         <p class="description">
-          Wähle zuerst die Klasse und danach das Halbjahr. Im
-          <strong>1. Halbjahr</strong> sind die Aufgaben etwas leichter, im
-          <strong>2. Halbjahr</strong> etwas anspruchsvoller. Anschließend
-          bestimmst du, wie viele Aufgaben du üben möchtest und welche
-          Themen. Unter jedem Thema steht ein kurzes Beispiel. Ab Klasse 3 kannst du <strong>Rechenweg notieren</strong>
-          einschalten, ab Klasse 5 zusätzlich <strong>negative Zahlen</strong>.
-          Mit <strong>Aufgaben erstellen</strong> erscheinen die Rechnungen in
-          Zehnerblöcken. Danach kannst du das Blatt als <strong>PDF herunterladen</strong> —
-          auf einer Seite passen bis zu acht Blöcke (vier nebeneinander, zwei Reihen).
-          Rechenweg-Felder erscheinen im PDF nicht. Optional kannst du ein
-          <strong>Zeitlimit</strong> setzen.
-          Wenn du soweit bist, klicke auf
-          <strong>Aufgaben beginnen</strong> — erst dann läuft die Zeit.
-          Trage die Ergebnisse ein und klicke auf <strong>Prüfen</strong>. Richtige Antworten
-          werden festgehalten, falsche bleiben rot markiert und können neu
-          berechnet werden.
+          Wähle Klasse, Halbjahr, Anzahl und Themen — dann erstellst du dein
+          Übungsblatt. Kostenlos online üben oder als PDF drucken.
         </p>
+        <details class="how-it-works">
+          <summary>So funktioniert's</summary>
+          <div class="how-it-works-content">
+            <ol>
+              <li>
+                <strong>Klasse und Halbjahr wählen.</strong> Im 1. Halbjahr sind
+                die Aufgaben etwas leichter, im 2. etwas anspruchsvoller.
+              </li>
+              <li>
+                <strong>Anzahl und Themen festlegen.</strong> Unter jedem Thema
+                steht ein kurzes Beispiel. Ab Klasse 3 kannst du
+                <strong>Rechenweg notieren</strong> einschalten, ab Klasse 5
+                zusätzlich <strong>negative Zahlen</strong>.
+              </li>
+              <li>
+                <strong>Aufgaben erstellen.</strong> Die Rechnungen erscheinen in
+                Zehnerblöcken. Optional setzt du ein <strong>Zeitlimit</strong>.
+              </li>
+              <li>
+                <strong>Aufgaben beginnen</strong> — erst dann läuft die Zeit.
+                Trage die Ergebnisse ein und klicke auf <strong>Prüfen</strong>.
+                Richtige Antworten bleiben grün, falsche rot und können neu
+                berechnet werden.
+              </li>
+              <li>
+                <strong>PDF oder neues Blatt.</strong> Das Blatt kannst du
+                herunterladen (bis zu acht Blöcke pro Seite, ohne
+                Rechenweg-Felder). Mit <strong>Neues Blatt</strong> bekommst du
+                frische Aufgaben mit denselben Einstellungen.
+              </li>
+            </ol>
+          </div>
+        </details>
       </header>
 
       <aside class="ad-slot" id="ad-slot" aria-label="Beispiel für Werbung">
@@ -169,9 +193,17 @@
         <div class="blocks" id="blocks"></div>
         <div class="practice-slot practice-slot-check" id="practice-check-slot"></div>
         <div class="check-bar">
-          <p class="status" id="status"></p>
-          <button type="button" class="pdf-btn is-hidden" id="pdf-btn">Als PDF herunterladen</button>
-          <p class="timer" id="timer" aria-label="Bearbeitungszeit">0:00</p>
+          <div class="check-bar-main">
+            <p class="status" id="status"></p>
+            <p class="progress is-hidden" id="progress" aria-live="polite"></p>
+          </div>
+          <div class="check-bar-actions">
+            <button type="button" class="new-sheet-btn is-hidden" id="new-sheet-btn">
+              Neues Blatt
+            </button>
+            <button type="button" class="pdf-btn is-hidden" id="pdf-btn">Als PDF herunterladen</button>
+            <p class="timer" id="timer" aria-label="Bearbeitungszeit">0:00</p>
+          </div>
         </div>
       </section>
       </div>
