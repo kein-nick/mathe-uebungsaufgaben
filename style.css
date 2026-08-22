@@ -1496,6 +1496,35 @@ option:disabled {
   text-decoration: underline;
 }
 
+.is-grade-locked #grade-block {
+  display: none;
+}
+
+.class-page-body .page {
+  padding-bottom: 48px;
+}
+
+.landing-seo-topics {
+  margin-top: 40px;
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+}
+
+.landing-seo-topics > summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--grade);
+  list-style: none;
+}
+
+.landing-seo-topics > summary::-webkit-details-marker {
+  display: none;
+}
+
+.landing-seo-content {
+  margin-top: 20px;
+}
+
 .landing-class-nav {
   margin: 16px 0 0;
   font-size: 0.95rem;

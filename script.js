@@ -1,3 +1,4 @@
+const gradeBlock = document.getElementById("grade-block");
 const gradeButtons = document.querySelectorAll(".grade-btn:not(.term-btn)");
 const termButtons = document.querySelectorAll(".term-btn");
 const termBlock = document.getElementById("term-block");
@@ -752,42 +753,83 @@ function selectTerm(term, options = {}) {
   }
 }
 
-function parseDeepLinkParams() {
-  const params = new URLSearchParams(window.location.search);
-  const grade = Number(params.get("klasse"));
-  const term = Number(params.get("halbjahr"));
-  const themen = params.get("themen");
-  if (!grade || grade < 1 || grade > 6) {
-    return null;
+function getLockedGrade() {
+  const grade = Number(document.body.dataset.lockedGrade);
+  if (grade >= 1 && grade <= 6) {
+    return grade;
   }
-  const topicIds = themen
-    ? themen
-        .split(",")
-        .map((item) => item.trim())
-        .filter((item) => topics.some((topic) => topic.id === item))
-    : [];
-  return {
-    grade,
-    term: term === 1 || term === 2 ? term : 2,
-    topicIds,
-  };
+  return 0;
 }
 
-function applyDeepLink() {
-  const link = parseDeepLinkParams();
-  if (!link) {
+function applyLockedGradeLayout() {
+  const grade = getLockedGrade();
+  if (!grade) {
     return;
   }
-  selectGrade(link.grade, { scroll: false });
-  if (link.topicIds.length) {
-    pendingTopicIds = new Set(link.topicIds);
+  if (gradeBlock) {
+    hide(gradeBlock);
   }
-  selectTerm(link.term, { scroll: false });
-  if (link.topicIds.length) {
-    scrollToNext(operationBlock, "center-top");
+  document.body.classList.add("is-grade-locked");
+  const termTitle = termBlock.querySelector("h2");
+  const countTitle = countBlock.querySelector("label h2") || countBlock.querySelector("h2");
+  const operationTitle = operationBlock.querySelector("h2");
+  if (termTitle) {
+    termTitle.textContent = "1. Halbjahr wählen";
+  }
+  if (countTitle) {
+    countTitle.textContent = "2. Anzahl der Aufgaben";
+  }
+  if (operationTitle) {
+    operationTitle.textContent = "3. Was möchtest du üben?";
+  }
+}
+
+function parseTopicIds(themen) {
+  if (!themen) {
+    return [];
+  }
+  return themen
+    .split(",")
+    .map((item) => item.trim())
+    .filter((item) => topics.some((topic) => topic.id === item));
+}
+
+function initPageEntry() {
+  const lockedGrade = getLockedGrade();
+  const params = new URLSearchParams(window.location.search);
+  const gradeFromUrl = Number(params.get("klasse"));
+  const termParam = Number(params.get("halbjahr"));
+  const topicIds = parseTopicIds(params.get("themen"));
+  const hasTerm = termParam === 1 || termParam === 2;
+
+  if (!lockedGrade && gradeFromUrl >= 1 && gradeFromUrl <= 6) {
+    params.delete("klasse");
+    const query = params.toString();
+    window.location.replace(`/klasse-${gradeFromUrl}${query ? `?${query}` : ""}`);
+    return;
+  }
+
+  if (lockedGrade) {
+    applyLockedGradeLayout();
+    selectGrade(lockedGrade, { scroll: false });
   } else {
-    scrollToNext(termBlock);
+    return;
   }
+
+  if (hasTerm || topicIds.length) {
+    if (topicIds.length) {
+      pendingTopicIds = new Set(topicIds);
+    }
+    selectTerm(hasTerm ? termParam : 2, { scroll: false });
+    if (topicIds.length) {
+      scrollToNext(operationBlock, "center-top");
+    } else if (hasTerm) {
+      scrollToNext(countBlock);
+    }
+    return;
+  }
+
+  scrollToNext(termBlock);
 }
 
 gradeButtons.forEach((button) => {
@@ -802,7 +844,7 @@ termButtons.forEach((button) => {
   });
 });
 
-applyDeepLink();
+initPageEntry();
 
 countSelect.addEventListener("change", () => {
   if (!countSelect.value) {
