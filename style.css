@@ -1447,7 +1447,7 @@ option:disabled {
   padding-left: 1.25rem;
 }
 
-.legal-page a {
+.legal-page a:not(.btn-primary):not(.btn-secondary) {
   color: var(--grade);
   font-weight: 700;
 }
@@ -1609,7 +1609,8 @@ a.grade-btn-nav[aria-current="page"] {
   box-shadow: 0 2px 8px rgba(47, 93, 80, 0.18);
 }
 
-.btn-primary:hover {
+.btn-primary:hover,
+.btn-primary:focus-visible {
   background: var(--grade-hover);
   border-color: var(--grade-hover);
   color: #fff;
