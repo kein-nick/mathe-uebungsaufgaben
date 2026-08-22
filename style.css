@@ -1622,6 +1622,82 @@ a.grade-btn-nav[aria-current="page"] {
   margin: 0;
 }
 
+.home-page-body .page {
+  padding-bottom: 48px;
+}
+
+.home-page > h2 {
+  font-family: "Fraunces", serif;
+  color: var(--ink);
+  font-size: 1.35rem;
+  margin: 2rem 0 0.75rem;
+}
+
+.home-class-card {
+  margin: 2rem 0;
+  padding: 1.5rem 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.home-class-card h3 {
+  font-family: "Fraunces", serif;
+  font-size: 1.25rem;
+  margin: 0 0 0.5rem;
+}
+
+.home-class-card h3 a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.home-class-card h3 a:hover {
+  color: var(--grade);
+}
+
+.home-class-intro {
+  margin: 0 0 1rem;
+  color: var(--ink);
+}
+
+.home-categories {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.home-category h4 {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--grade);
+}
+
+.home-category p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.home-class-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin: 0;
+}
+
+.home-practice-btn {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 10px 18px;
+}
+
+@media (min-width: 720px) {
+  .home-categories {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .practice-page-body .page {
   padding-bottom: 48px;
 }

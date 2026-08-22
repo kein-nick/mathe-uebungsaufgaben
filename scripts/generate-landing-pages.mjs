@@ -6,7 +6,8 @@ import { parentIntro, groupDescriptions, topicDescriptions } from "./landing-con
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const topicsSrc = fs.readFileSync(path.join(root, "topics.js"), "utf8");
-const indexHtml = fs.readFileSync(path.join(root, "index.html"), "utf8");
+const practiceTemplatePath = path.join(root, "klasse-1", "uebungen.html");
+const practiceTemplate = fs.readFileSync(practiceTemplatePath, "utf8");
 const block = topicsSrc.slice(topicsSrc.indexOf("const topics = ["));
 
 const topics = [];
@@ -93,6 +94,58 @@ function practiceUrl(grade) {
   return `/klasse-${grade}/uebungen`;
 }
 
+function renderHomeClassSummaries() {
+  return [1, 2, 3, 4, 5, 6]
+    .map((grade) => {
+      const categories = groupOrder
+        .map(
+          (groupId) => `<div class="home-category">
+        <h4>${escapeHtml(GROUPS[groupId])}</h4>
+        <p>${escapeHtml(groupDescriptions[grade][groupId])}</p>
+      </div>`
+        )
+        .join("\n");
+
+      return `<section class="home-class-card" id="home-klasse-${grade}">
+      <h3><a href="/klasse-${grade}">Klasse ${grade}</a></h3>
+      <p class="home-class-intro">${escapeHtml(classIntros[grade])}</p>
+      <div class="home-categories">${categories}</div>
+      <p class="home-class-actions">
+        <a class="text-link" href="/klasse-${grade}">Rechenarten im Detail</a>
+        <a class="create-btn home-practice-btn" href="${practiceUrl(grade)}">Zu den Übungsaufgaben</a>
+      </p>
+    </section>`;
+    })
+    .join("\n");
+}
+
+function renderHomeMain() {
+  return `<main class="legal-page landing-page home-page">
+          <p class="landing-lead landing-parent-intro">${escapeHtml(parentIntro)}</p>
+
+          <section aria-labelledby="home-classes-heading">
+            <h2 id="home-classes-heading">Was in den einzelnen Klassen geübt wird</h2>
+            <p class="landing-overview-hint">
+              Mathe in der Grundschule ist in vier Bereiche gegliedert: Rechnen, Zahlen, Größen und Geometrie.
+              Unten siehst du für jede Klassenstufe, welche Schwerpunkte typisch sind — ausführliche Erklärungen
+              zu jeder Rechenart findest du auf der jeweiligen Klassenseite.
+            </p>
+            ${renderHomeClassSummaries()}
+          </section>
+        </main>`;
+}
+
+function updateHomePage() {
+  const indexPath = path.join(root, "index.html");
+  let html = fs.readFileSync(indexPath, "utf8");
+  const start = "<!-- home-main:start -->";
+  const end = "<!-- home-main:end -->";
+  const replacement = `<!-- home-main:start -->\n        ${renderHomeMain().trim()}\n        <!-- home-main:end -->`;
+  html = html.replace(new RegExp(`${start}[\\s\\S]*?${end}`), replacement);
+  fs.writeFileSync(indexPath, html, "utf8");
+  console.log("updated index.html");
+}
+
 function renderClassNav(currentGrade = 0) {
   const items = [1, 2, 3, 4, 5, 6]
     .map(
@@ -158,13 +211,13 @@ function renderTopicOverview(grade) {
 }
 
 function extractAppFragments() {
-  const setupStart = indexHtml.indexOf('<section class="setup"');
-  const footerStart = indexHtml.indexOf('<footer class="site-footer">');
-  const appMain = indexHtml.slice(setupStart, footerStart);
+  const setupStart = practiceTemplate.indexOf('<section class="setup"');
+  const footerStart = practiceTemplate.indexOf("<footer class=\"site-footer\">");
+  const appMain = practiceTemplate.slice(setupStart, footerStart);
 
-  const dialogStart = indexHtml.indexOf('<dialog class="success-dialog"');
-  const scriptStart = indexHtml.indexOf('<script src="topics.js">');
-  const appDialogs = indexHtml.slice(dialogStart, scriptStart);
+  const dialogStart = practiceTemplate.indexOf('<dialog class="success-dialog"');
+  const scriptStart = practiceTemplate.indexOf('<script src="/topics.js">');
+  const appDialogs = practiceTemplate.slice(dialogStart, scriptStart);
 
   const scripts = `    <script src="/topics.js"></script>
     <script src="/script.js"></script>
@@ -217,7 +270,6 @@ function renderClassPage(grade) {
         </header>
 
         <main class="legal-page landing-page">
-          <p class="landing-lead landing-parent-intro">${escapeHtml(parentIntro)}</p>
           <p class="landing-lead">${classDetails[grade]}</p>
 
           <section class="landing-topics-overview" aria-labelledby="topics-heading-${grade}">
@@ -352,6 +404,6 @@ for (let grade = 1; grade <= 6; grade += 1) {
   console.log("wrote", practicePath);
 }
 
+updateHomePage();
 updateSitemap();
-console.log("updated sitemap.xml");
 console.log("done");
