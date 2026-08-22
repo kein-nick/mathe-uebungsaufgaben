@@ -282,7 +282,7 @@ function renderClassPage(grade) {
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
-    ${renderDeviceMeta()}
+    ${renderDeviceMeta({ withManifest: true })}
     <meta
       name="description"
       content="Mathe Klasse ${grade} erklärt: Themen, Rechenarten und Kategorien für Eltern — plus kostenlose Übungsaufgaben online und als PDF."

@@ -46,17 +46,15 @@
     }
   }
 
+  function hasInstallManifest() {
+    return document.querySelector('link[rel="manifest"]') !== null;
+  }
+
   function canShowInstallHint() {
     if (isStandalone() || wasDismissed()) {
       return false;
     }
-    if (deferredPrompt) {
-      return true;
-    }
-    if (isIOS()) {
-      return true;
-    }
-    return false;
+    return Boolean(deferredPrompt || isIOS() || hasInstallManifest());
   }
 
   function showBanner() {
@@ -86,17 +84,22 @@
     iosDialog.close();
   }
 
+  function scheduleInstallHint() {
+    if (wasDismissed() || isStandalone()) {
+      return;
+    }
+    window.setTimeout(showBanner, SHOW_DELAY_MS);
+  }
+
   window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
     deferredPrompt = event;
     if (!wasDismissed() && !isStandalone()) {
-      window.setTimeout(showBanner, SHOW_DELAY_MS);
+      scheduleInstallHint();
     }
   });
 
-  if (isIOS() && !wasDismissed() && !isStandalone()) {
-    window.setTimeout(showBanner, SHOW_DELAY_MS);
-  }
+  scheduleInstallHint();
 
   installAction.addEventListener("click", async () => {
     if (deferredPrompt) {
