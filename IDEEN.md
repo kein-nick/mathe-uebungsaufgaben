@@ -42,7 +42,7 @@ Stand: August 2026
 
 | Idee | Kurzbeschreibung | Aufwand |
 |------|------------------|---------|
-| **PWA / Offline** | Seite auf dem Tablet installierbar, auch ohne Internet nutzbar | mittel |
+| **PWA / Offline** | Seite auf dem Tablet installierbar, auch ohne Internet nutzbar | ~~mittel~~ erledigt |
 | **Apple-Touch-Icon** | Icon beim „Zum Home-Bildschirm hinzufügen“ auf dem Handy | gering |
 | **Open-Graph-Tags** | Schöne Vorschau, wenn jemand den Link teilt (WhatsApp, iMessage) | ~~gering~~ erledigt |
 | **Sitemap / robots.txt** | Bessere Auffindbarkeit bei Google | gering |
