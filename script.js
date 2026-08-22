@@ -190,6 +190,7 @@ const symbols = {
 
 let selectedGrade = null;
 let selectedTerm = null;
+let pendingTopicIds = null;
 let tasks = [];
 let activeTopicIds = [];
 let celebrated = false;
@@ -547,7 +548,8 @@ function syncGroupToggle(groupEl) {
 }
 
 function fillOperations(grade, term) {
-  const previous = new Set(selectedTopics());
+  const previous = pendingTopicIds ?? new Set(selectedTopics());
+  pendingTopicIds = null;
   const hint = document.getElementById("operation-hint");
   operationList.innerHTML = "";
 
@@ -717,32 +719,90 @@ function resetLaterSteps() {
   syncCountdownPreset();
 }
 
+function selectGrade(grade, options = {}) {
+  const { scroll = true } = options;
+  selectedGrade = grade;
+  selectedTerm = null;
+  gradeButtons.forEach((item) =>
+    item.classList.toggle("is-active", Number(item.dataset.grade) === grade)
+  );
+  termButtons.forEach((item) => item.classList.remove("is-active"));
+  fillTermHints(selectedGrade);
+  updateNegSwitch(selectedGrade);
+  updateNotesSwitch(selectedGrade);
+  show(termBlock);
+  hide(countBlock);
+  resetLaterSteps();
+  if (scroll) {
+    scrollToNext(termBlock);
+  }
+}
+
+function selectTerm(term, options = {}) {
+  const { scroll = true } = options;
+  selectedTerm = term;
+  termButtons.forEach((item) =>
+    item.classList.toggle("is-active", Number(item.dataset.term) === term)
+  );
+  fillOperations(selectedGrade, selectedTerm);
+  show(countBlock);
+  resetLaterSteps();
+  if (scroll) {
+    scrollToNext(countBlock);
+  }
+}
+
+function parseDeepLinkParams() {
+  const params = new URLSearchParams(window.location.search);
+  const grade = Number(params.get("klasse"));
+  const term = Number(params.get("halbjahr"));
+  const themen = params.get("themen");
+  if (!grade || grade < 1 || grade > 6) {
+    return null;
+  }
+  const topicIds = themen
+    ? themen
+        .split(",")
+        .map((item) => item.trim())
+        .filter((item) => topics.some((topic) => topic.id === item))
+    : [];
+  return {
+    grade,
+    term: term === 1 || term === 2 ? term : 2,
+    topicIds,
+  };
+}
+
+function applyDeepLink() {
+  const link = parseDeepLinkParams();
+  if (!link) {
+    return;
+  }
+  selectGrade(link.grade, { scroll: false });
+  if (link.topicIds.length) {
+    pendingTopicIds = new Set(link.topicIds);
+  }
+  selectTerm(link.term, { scroll: false });
+  if (link.topicIds.length) {
+    scrollToNext(operationBlock, "center-top");
+  } else {
+    scrollToNext(termBlock);
+  }
+}
+
 gradeButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    selectedGrade = Number(button.dataset.grade);
-    selectedTerm = null;
-    gradeButtons.forEach((item) => item.classList.toggle("is-active", item === button));
-    termButtons.forEach((item) => item.classList.remove("is-active"));
-    fillTermHints(selectedGrade);
-    updateNegSwitch(selectedGrade);
-    updateNotesSwitch(selectedGrade);
-    show(termBlock);
-    hide(countBlock);
-    resetLaterSteps();
-    scrollToNext(termBlock);
+    selectGrade(Number(button.dataset.grade));
   });
 });
 
 termButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    selectedTerm = Number(button.dataset.term);
-    termButtons.forEach((item) => item.classList.toggle("is-active", item === button));
-    fillOperations(selectedGrade, selectedTerm);
-    show(countBlock);
-    resetLaterSteps();
-    scrollToNext(countBlock);
+    selectTerm(Number(button.dataset.term));
   });
 });
+
+applyDeepLink();
 
 countSelect.addEventListener("change", () => {
   if (!countSelect.value) {

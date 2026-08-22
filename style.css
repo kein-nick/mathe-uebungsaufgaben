@@ -1496,6 +1496,91 @@ option:disabled {
   text-decoration: underline;
 }
 
+.landing-class-nav {
+  margin: 16px 0 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.landing-class-nav a {
+  color: var(--grade);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.landing-class-nav a:hover,
+.landing-class-nav a[aria-current="page"] {
+  text-decoration: underline;
+}
+
+.landing-page .landing-lead {
+  font-size: 1.05rem;
+  color: var(--ink);
+}
+
+.landing-cta-row {
+  margin: 0 0 2rem;
+}
+
+.landing-cta {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.landing-group {
+  margin-bottom: 2.5rem;
+}
+
+.landing-topic-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+}
+
+.landing-topic-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.landing-topic-label {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.landing-topic-note {
+  font-weight: 400;
+  color: var(--muted);
+  font-size: 0.9em;
+}
+
+.landing-topic-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.landing-practice-link {
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.landing-group-link {
+  font-size: 0.95rem;
+}
+
+@media (max-width: 640px) {
+  .landing-topic-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fireworks {
     display: none;
