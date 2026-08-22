@@ -1,9 +1,27 @@
 # Ideen für die Mathe-Übungsseite
 
-Offene Verbesserungsvorschläge — **ohne** das, was schon umgesetzt ist
-(Countdown, PDF-Layout, Mobile-Layout, Fortschritt, Neues Blatt, Favicon, Analytics usw.).
-
+Offene Verbesserungsvorschläge für die Seite.  
 Stand: August 2026
+
+---
+
+## Bereits umgesetzt
+
+- Countdown mit Zeitlimit, Start-Button und Markierung verspäteter Antworten
+- PDF-Export (4×2 Blöcke pro Seite, ohne Rechenweg-Felder)
+- Mobile-Layout (Start/Prüfen/Bestzeiten an passenden Stellen)
+- Gleichmäßige Verteilung gemischter Rechenarten
+- Werbeplätze ausblendbar (`SHOW_ADS` / `ads-off`)
+- Vercel Web Analytics
+- Kürzerer Einstieg mit aufklappbarer Anleitung „So funktioniert's“
+- Fortschrittsanzeige beim Üben („X von Y richtig“)
+- Button „Neues Blatt“ (gleiche Einstellungen, neue Aufgaben)
+- Favicon und Meta-Beschreibung
+- Open-Graph- und Twitter-Tags inkl. Vorschaubild
+- PWA mit Offline-Unterstützung (Service Worker, Manifest)
+- Installations-Hinweis („Als App installieren?“) — auf iOS mit Schritt-für-Schritt-Anleitung
+- App-Icons und Apple-Touch-Icon
+- Impressum und Datenschutzerklärung
 
 ---
 
@@ -11,8 +29,6 @@ Stand: August 2026
 
 | Idee | Kurzbeschreibung | Aufwand |
 |------|------------------|---------|
-| **Impressum** | Pflichtseite für den Betreiber, Link im Footer | gering |
-| **Datenschutzerklärung** | Beschreibung von Analytics, LocalStorage (Bestzeiten), ggf. Werbung | gering |
 | **Cookie-/Einwilligungs-Hinweis** | Falls Analytics oder Werbung aktiv sind — in DE oft nötig | mittel |
 
 ---
@@ -42,9 +58,6 @@ Stand: August 2026
 
 | Idee | Kurzbeschreibung | Aufwand |
 |------|------------------|---------|
-| **PWA / Offline** | Seite auf dem Tablet installierbar, auch ohne Internet nutzbar | ~~mittel~~ erledigt |
-| **Apple-Touch-Icon** | Icon beim „Zum Home-Bildschirm hinzufügen“ auf dem Handy | gering |
-| **Open-Graph-Tags** | Schöne Vorschau, wenn jemand den Link teilt (WhatsApp, iMessage) | ~~gering~~ erledigt |
 | **Sitemap / robots.txt** | Bessere Auffindbarkeit bei Google | gering |
 | **Seitenladezeit** | Schriften lokal hosten statt Google Fonts — weniger Abhängigkeit | gering |
 
@@ -56,7 +69,7 @@ Stand: August 2026
 |------|------------------|---------|
 | **Weitere Themen** | Lücken im Lehrplan schließen, wo noch nichts angeboten wird | je nach Thema |
 | **Schwierigkeits-Stufe** | Zusätzlich zum Halbjahr: „leicht / normal / schwer“ pro Übung | hoch |
-| **Gemischte Übungsblätter speichern** | Letzte Einstellungen merken (LocalStorage) | gering |
+| **Letzte Einstellungen merken** | Klasse, Themen und Anzahl beim nächsten Besuch vorauswählen (LocalStorage) | gering |
 
 ---
 
@@ -83,8 +96,8 @@ Diese Ideen passen eher nicht zum Konzept der Seite:
 
 ## Empfohlene Reihenfolge
 
-1. Impressum + Datenschutz (rechtlich, schnell erledigt)
-2. Schnellstart-Vorlagen + Open-Graph (viel Nutzen, wenig Aufwand)
+1. Cookie-Hinweis prüfen (falls Analytics/Werbung aktiv)
+2. Schnellstart-Vorlagen (viel Nutzen, wenig Aufwand)
 3. Lösungsblatt-PDF (stark für Eltern)
 4. Link mit Einstellungen (gut zum Teilen in der Klasse)
-5. PWA (nice to have für Tablets)
+5. Letzte Einstellungen merken (komfortabel für Wiederholungsbesuche)
