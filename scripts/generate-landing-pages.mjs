@@ -203,6 +203,13 @@ function renderClassJsonLd(grade) {
   };
 }
 
+function renderHeadAssets(cssPath = "/style.css") {
+  return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="${cssPath}" as="style" />
+    <link rel="stylesheet" href="${cssPath}" />`;
+}
+
 const VIEWPORT_META =
   '<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />';
 
@@ -281,6 +288,16 @@ function updateHomePage() {
     );
   } else {
     html = html.replace("</head>", `${jsonLdStart}\n${jsonLdBlock}    ${jsonLdEnd}\n  </head>`);
+  }
+
+  const headAssetsStart = "<!-- head-assets:start -->";
+  const headAssetsEnd = "<!-- head-assets:end -->";
+  const headAssetsBlock = `${renderHeadAssets("style.css")}\n`;
+  if (html.includes(headAssetsStart)) {
+    html = html.replace(
+      new RegExp(`${headAssetsStart}[\\s\\S]*?${headAssetsEnd}`),
+      `${headAssetsStart}\n${headAssetsBlock}    ${headAssetsEnd}`
+    );
   }
 
   fs.writeFileSync(indexPath, html, "utf8");
@@ -365,7 +382,7 @@ function extractInstallPrompt() {
 
 const installPromptHtml = extractInstallPrompt();
 
-const pwaScripts = `    <script src="/pwa.js"></script>
+const pwaScripts = `    <script defer src="/pwa.js"></script>
     <script>
       window.va =
         window.va ||
@@ -386,7 +403,7 @@ function extractAppFragments() {
 
   const scripts = `    <script src="/topics.js"></script>
     <script src="/script.js"></script>
-    <script src="/pwa.js"></script>
+    <script defer src="/pwa.js"></script>
     <script>
       window.va =
         window.va ||
@@ -419,13 +436,7 @@ ${renderOpenGraph(meta)}
     <title>${escapeHtml(meta.title)}</title>
     ${renderJsonLdScript(renderClassJsonLd(grade))}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito:wght@400;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/style.css" />
+    ${renderHeadAssets()}
   </head>
   <body class="ads-off class-page-body">
     <div class="page-shell">
@@ -485,13 +496,7 @@ function renderPracticePage(grade) {
     <link rel="canonical" href="https://mathe-testen.de/klasse-${grade}/uebungen" />
     <title>Übungsaufgaben Klasse ${grade} – online &amp; als PDF</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito:wght@400;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/style.css" />
+    ${renderHeadAssets()}
   </head>
   <body class="ads-off practice-page-body" data-locked-grade="${grade}">
     <div class="page-shell">
