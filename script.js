@@ -761,11 +761,7 @@ function getLockedGrade() {
   return 0;
 }
 
-function applyLockedGradeLayout() {
-  const grade = getLockedGrade();
-  if (!grade) {
-    return;
-  }
+function applyCompactSetupLayout() {
   if (gradeBlock) {
     hide(gradeBlock);
   }
@@ -801,19 +797,19 @@ function initPageEntry() {
   const termParam = Number(params.get("halbjahr"));
   const topicIds = parseTopicIds(params.get("themen"));
   const hasTerm = termParam === 1 || termParam === 2;
+  const entryGrade = lockedGrade || (gradeFromUrl >= 1 && gradeFromUrl <= 6 ? gradeFromUrl : 0);
 
-  if (!lockedGrade && gradeFromUrl >= 1 && gradeFromUrl <= 6) {
-    params.delete("klasse");
-    const query = params.toString();
-    window.location.replace(`/klasse-${gradeFromUrl}${query ? `?${query}` : ""}`);
+  if (!entryGrade) {
     return;
   }
 
+  if (lockedGrade || gradeFromUrl) {
+    applyCompactSetupLayout();
+  }
   if (lockedGrade) {
-    applyLockedGradeLayout();
     selectGrade(lockedGrade, { scroll: false });
   } else {
-    return;
+    selectGrade(gradeFromUrl, { scroll: false });
   }
 
   if (hasTerm || topicIds.length) {
