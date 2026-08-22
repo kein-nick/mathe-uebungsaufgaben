@@ -2,7 +2,13 @@
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#2f5d50" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Mathe" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <meta
       name="description"
       content="Mathe Klasse 2 erklärt: Themen, Rechenarten und Kategorien für Eltern — plus kostenlose Übungsaufgaben online und als PDF."
@@ -219,5 +225,43 @@
         </footer>
       </div>
     </div>
+
+    <aside class="install-banner is-hidden" id="install-banner" aria-label="App installieren">
+      <div class="install-banner-inner">
+        <p class="install-banner-text">
+          <strong>Als App installieren?</strong>
+          Schneller starten und auch offline üben.
+        </p>
+        <div class="install-banner-actions">
+          <button type="button" class="install-banner-btn install-banner-btn-primary" id="install-action">
+            Installieren
+          </button>
+          <button type="button" class="install-banner-btn" id="install-dismiss">Später</button>
+        </div>
+      </div>
+    </aside>
+
+    <dialog class="success-dialog install-ios-dialog" id="install-ios-dialog" aria-labelledby="install-ios-title">
+      <div class="success-card install-ios-card">
+        <h2 id="install-ios-title">Auf dem Home-Bildschirm speichern</h2>
+        <p>So installierst du die Übungsseite auf deinem Gerät:</p>
+        <ol class="install-ios-steps">
+          <li>Tippe unten auf <strong>Teilen</strong> <span class="install-ios-icon" aria-hidden="true">&#x2197;</span></li>
+          <li>Scrolle und wähle <strong>Zum Home-Bildschirm</strong></li>
+          <li>Tippe oben rechts auf <strong>Hinzufügen</strong></li>
+        </ol>
+        <p class="hint">Der Button <strong>Teilen</strong> sieht aus wie ein Quadrat mit einem Pfeil nach oben.</p>
+        <button type="button" class="create-btn" id="install-ios-close">Alles klar</button>
+      </div>
+    </dialog>
+        <script src="/pwa.js"></script>
+    <script>
+      window.va =
+        window.va ||
+        function () {
+          (window.vaq = window.vaq || []).push(arguments);
+        };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
   </body>
 </html>

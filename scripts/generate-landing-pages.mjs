@@ -90,6 +90,21 @@ function escapeHtml(text) {
     .replace(/"/g, "&quot;");
 }
 
+const VIEWPORT_META =
+  '<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />';
+
+function renderDeviceMeta({ withManifest = false } = {}) {
+  return `${VIEWPORT_META}
+    <meta name="theme-color" content="#2f5d50" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Mathe" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />${
+      withManifest ? '\n    <link rel="manifest" href="/manifest.webmanifest" />' : ""
+    }`;
+}
+
 function practiceUrl(grade) {
   return `/klasse-${grade}/uebungen`;
 }
@@ -210,6 +225,30 @@ function renderTopicOverview(grade) {
     .join("\n");
 }
 
+function extractInstallPrompt() {
+  const start = practiceTemplate.indexOf('<aside class="install-banner');
+  if (start === -1) {
+    throw new Error("Install-Banner nicht in Übungsvorlage gefunden.");
+  }
+  const iosDialogStart = practiceTemplate.indexOf(
+    '<dialog class="success-dialog install-ios-dialog"'
+  );
+  const end = practiceTemplate.indexOf("</dialog>", iosDialogStart) + "</dialog>".length;
+  return practiceTemplate.slice(start, end);
+}
+
+const installPromptHtml = extractInstallPrompt();
+
+const pwaScripts = `    <script src="/pwa.js"></script>
+    <script>
+      window.va =
+        window.va ||
+        function () {
+          (window.vaq = window.vaq || []).push(arguments);
+        };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>`;
+
 function extractAppFragments() {
   const setupStart = practiceTemplate.indexOf('<section class="setup"');
   const footerStart = practiceTemplate.indexOf("<footer class=\"site-footer\">");
@@ -243,7 +282,7 @@ function renderClassPage(grade) {
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    ${renderDeviceMeta()}
     <meta
       name="description"
       content="Mathe Klasse ${grade} erklärt: Themen, Rechenarten und Kategorien für Eltern — plus kostenlose Übungsaufgaben online und als PDF."
@@ -300,6 +339,9 @@ function renderClassPage(grade) {
         </footer>
       </div>
     </div>
+
+    ${installPromptHtml}
+    ${pwaScripts}
   </body>
 </html>`;
 }
@@ -309,7 +351,7 @@ function renderPracticePage(grade) {
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    ${renderDeviceMeta({ withManifest: true })}
     <meta
       name="description"
       content="Mathe-Übungen für Klasse ${grade}: Halbjahr, Anzahl und Themen wählen — online üben oder Arbeitsblatt als PDF."
@@ -317,9 +359,6 @@ function renderPracticePage(grade) {
     <link rel="canonical" href="https://mathe-testen.de/klasse-${grade}/uebungen" />
     <title>Übungsaufgaben Klasse ${grade} – online &amp; als PDF</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="manifest" href="/manifest.webmanifest" />
-    <meta name="theme-color" content="#2f5d50" />
-    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

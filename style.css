@@ -24,6 +24,13 @@
 
 html {
   overflow-y: scroll;
+  -webkit-text-size-adjust: 100%;
+}
+
+@supports (-webkit-touch-callout: none) {
+  html {
+    min-height: -webkit-fill-available;
+  }
 }
 
 @supports (scrollbar-gutter: stable) {
@@ -39,12 +46,34 @@ body {
   min-height: 100%;
 }
 
+@supports (-webkit-touch-callout: none) {
+  body {
+    min-height: -webkit-fill-available;
+  }
+}
+
 body {
   font-family: "Nunito", sans-serif;
   color: var(--ink);
   background:
     radial-gradient(circle at top left, rgba(196, 92, 38, 0.08), transparent 28%),
     linear-gradient(180deg, #efe6d4 0%, var(--paper) 220px);
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
+}
+
+button,
+a,
+input,
+select,
+textarea,
+label[for] {
+  touch-action: manipulation;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: rgba(47, 93, 80, 0.18);
 }
 
 .page-shell {
@@ -322,6 +351,7 @@ select {
   width: 100%;
   max-width: 360px;
   font: inherit;
+  font-size: 16px;
   padding: 11px 12px;
   border-radius: 12px;
   border: 1px solid var(--line);
@@ -808,6 +838,7 @@ option:disabled {
   width: 6.5rem;
   max-width: 100%;
   font: inherit;
+  font-size: 16px;
   font-weight: 800;
   text-align: center;
   padding: 7px 8px;
@@ -1134,6 +1165,11 @@ option:disabled {
 .success-dialog[open] {
   display: grid;
   place-items: center;
+  padding:
+    env(safe-area-inset-top, 0)
+    env(safe-area-inset-right, 0)
+    env(safe-area-inset-bottom, 0)
+    env(safe-area-inset-left, 0);
 }
 
 .success-dialog::backdrop {
@@ -1189,8 +1225,8 @@ option:disabled {
 
 .page-corner {
   position: fixed;
-  left: 16px;
-  bottom: 16px;
+  left: calc(16px + env(safe-area-inset-left, 0));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0));
   z-index: 30;
   display: flex;
   flex-direction: column;
@@ -1325,9 +1361,9 @@ option:disabled {
 
 .install-banner {
   position: fixed;
-  left: 16px;
-  right: 16px;
-  bottom: 16px;
+  left: calc(16px + env(safe-area-inset-left, 0));
+  right: calc(16px + env(safe-area-inset-right, 0));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0));
   z-index: 40;
   max-width: 520px;
   margin: 0 auto;
@@ -1344,6 +1380,7 @@ option:disabled {
   background: rgba(255, 253, 248, 0.97);
   box-shadow: var(--shadow);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .install-banner-text {
@@ -1797,9 +1834,9 @@ a.grade-btn-nav[aria-current="page"] {
 
 @media (max-width: 640px) {
   .install-banner {
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
+    left: calc(12px + env(safe-area-inset-left, 0));
+    right: calc(12px + env(safe-area-inset-right, 0));
+    bottom: calc(12px + env(safe-area-inset-bottom, 0));
   }
 
   .install-banner-inner {
