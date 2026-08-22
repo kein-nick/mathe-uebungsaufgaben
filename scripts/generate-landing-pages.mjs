@@ -90,6 +90,119 @@ function escapeHtml(text) {
     .replace(/"/g, "&quot;");
 }
 
+const SITE_URL = "https://mathe-testen.de";
+const SITE_NAME = "Mathematik Übungsaufgaben";
+const OG_IMAGE = `${SITE_URL}/og-image.png`;
+
+function renderOpenGraph({ title, description, url, imageAlt }) {
+  const safeTitle = escapeHtml(title);
+  const safeDescription = escapeHtml(description);
+  const safeImageAlt = escapeHtml(imageAlt);
+  return `    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:site_name" content="${SITE_NAME}" />
+    <meta property="og:title" content="${safeTitle}" />
+    <meta property="og:description" content="${safeDescription}" />
+    <meta property="og:url" content="${url}" />
+    <meta property="og:image" content="${OG_IMAGE}" />
+    <meta property="og:image:width" content="1536" />
+    <meta property="og:image:height" content="1024" />
+    <meta property="og:image:alt" content="${safeImageAlt}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${safeTitle}" />
+    <meta name="twitter:description" content="${safeDescription}" />
+    <meta name="twitter:image" content="${OG_IMAGE}" />
+    <meta name="twitter:image:alt" content="${safeImageAlt}" />`;
+}
+
+function renderJsonLdScript(data) {
+  const json = JSON.stringify(data, null, 2)
+    .split("\n")
+    .map((line) => `      ${line}`)
+    .join("\n");
+  return `    <script type="application/ld+json">
+${json}
+    </script>`;
+}
+
+function classPageMeta(grade) {
+  return {
+    title: `Mathe Klasse ${grade} – Themen erklärt & üben`,
+    description: `Mathe Klasse ${grade} erklärt: Themen, Rechenarten und Kategorien für Eltern — plus kostenlose Übungsaufgaben online und als PDF.`,
+    url: `${SITE_URL}/klasse-${grade}`,
+    imageAlt: `Mathe Klasse ${grade} – Themen und Übungsaufgaben`,
+  };
+}
+
+function renderHomeJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        url: SITE_URL,
+        name: SITE_NAME,
+        description:
+          "Mathe-Übungen für Klasse 1 bis 6: Orientierung für Eltern, Themen nach Klassenstufe — kostenlos online üben oder als PDF.",
+        inLanguage: "de-DE",
+      },
+      {
+        "@type": "WebApplication",
+        "@id": `${SITE_URL}/#app`,
+        name: SITE_NAME,
+        url: SITE_URL,
+        applicationCategory: "EducationalApplication",
+        operatingSystem: "Any",
+        browserRequirements: "Requires JavaScript",
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "EUR",
+        },
+      },
+    ],
+  };
+}
+
+function renderClassJsonLd(grade) {
+  const meta = classPageMeta(grade);
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${meta.url}/#webpage`,
+        url: meta.url,
+        name: meta.title,
+        description: meta.description,
+        inLanguage: "de-DE",
+        isPartOf: {
+          "@id": `${SITE_URL}/#website`,
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${meta.url}/#breadcrumb`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Startseite",
+            item: `${SITE_URL}/`,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: `Klasse ${grade}`,
+            item: meta.url,
+          },
+        ],
+      },
+    ],
+  };
+}
+
 const VIEWPORT_META =
   '<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />';
 
@@ -157,6 +270,19 @@ function updateHomePage() {
   const end = "<!-- home-main:end -->";
   const replacement = `<!-- home-main:start -->\n        ${renderHomeMain().trim()}\n        <!-- home-main:end -->`;
   html = html.replace(new RegExp(`${start}[\\s\\S]*?${end}`), replacement);
+
+  const jsonLdBlock = `${renderJsonLdScript(renderHomeJsonLd())}\n`;
+  const jsonLdStart = "<!-- seo-json-ld:start -->";
+  const jsonLdEnd = "<!-- seo-json-ld:end -->";
+  if (html.includes(jsonLdStart)) {
+    html = html.replace(
+      new RegExp(`${jsonLdStart}[\\s\\S]*?${jsonLdEnd}`),
+      `${jsonLdStart}\n${jsonLdBlock}    ${jsonLdEnd}`
+    );
+  } else {
+    html = html.replace("</head>", `${jsonLdStart}\n${jsonLdBlock}    ${jsonLdEnd}\n  </head>`);
+  }
+
   fs.writeFileSync(indexPath, html, "utf8");
   console.log("updated index.html");
 }
@@ -277,6 +403,7 @@ const { appMain, appDialogs, scripts } = extractAppFragments();
 
 function renderClassPage(grade) {
   const topicOverview = renderTopicOverview(grade);
+  const meta = classPageMeta(grade);
 
   return `<!DOCTYPE html>
 <html lang="de">
@@ -285,10 +412,12 @@ function renderClassPage(grade) {
     ${renderDeviceMeta({ withManifest: true })}
     <meta
       name="description"
-      content="Mathe Klasse ${grade} erklärt: Themen, Rechenarten und Kategorien für Eltern — plus kostenlose Übungsaufgaben online und als PDF."
+      content="${escapeHtml(meta.description)}"
     />
-    <link rel="canonical" href="https://mathe-testen.de/klasse-${grade}" />
-    <title>Mathe Klasse ${grade} – Themen erklärt &amp; üben</title>
+    <link rel="canonical" href="${meta.url}" />
+${renderOpenGraph(meta)}
+    <title>${escapeHtml(meta.title)}</title>
+    ${renderJsonLdScript(renderClassJsonLd(grade))}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
