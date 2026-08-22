@@ -15,6 +15,7 @@
   --late: #9a6700;
   --late-bg: #fef7e3;
   --shadow: 0 10px 30px rgba(28, 36, 48, 0.08);
+  --content-width: 48rem;
 }
 
 * {
@@ -1421,7 +1422,7 @@ option:disabled {
 }
 
 .legal-page {
-  max-width: 42rem;
+  max-width: var(--content-width);
   margin-inline: auto;
   color: var(--muted);
   line-height: 1.65;
@@ -1512,7 +1513,8 @@ option:disabled {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 8px;
-  max-width: 560px;
+  width: 100%;
+  max-width: var(--content-width);
   margin: 0 auto;
 }
 
@@ -1542,7 +1544,7 @@ a.grade-btn-nav[aria-current="page"] {
 .legal-page-body .intro,
 .practice-page-body .intro {
   text-align: center;
-  max-width: 42rem;
+  max-width: var(--content-width);
   margin-inline: auto;
 }
 
@@ -1553,12 +1555,11 @@ a.grade-btn-nav[aria-current="page"] {
   margin-inline: auto;
 }
 
-.home-page-body .home-page {
-  max-width: 52rem;
-}
-
-.class-page-body .landing-page {
-  max-width: 42rem;
+.practice-page-body .setup,
+.practice-page-body .worksheet {
+  width: 100%;
+  max-width: var(--content-width);
+  margin-inline: auto;
 }
 
 .page-actions {
