@@ -1593,11 +1593,15 @@ a.grade-btn-nav[aria-current="page"] {
 }
 
 .class-page-body {
-  --class-page-cta-height: 5.5rem;
+  --class-page-cta-height: 6.75rem;
 }
 
 .class-page-body .page {
-  padding-bottom: calc(var(--class-page-cta-height) + env(safe-area-inset-bottom, 0) + 16px);
+  padding-bottom: calc(var(--class-page-cta-height) + env(safe-area-inset-bottom, 0) + 32px);
+}
+
+.class-page-body .site-footer {
+  margin-bottom: 8px;
 }
 
 .class-page-cta {
@@ -1630,6 +1634,7 @@ a.grade-btn-nav[aria-current="page"] {
 
 .home-page-body .intro,
 .class-page-body .intro,
+.hub-page-body .intro,
 .legal-page-body .intro,
 .practice-page-body .intro {
   text-align: center;
@@ -1639,6 +1644,7 @@ a.grade-btn-nav[aria-current="page"] {
 
 .home-page-body .description,
 .class-page-body .description,
+.hub-page-body .description,
 .legal-page-body .description,
 .practice-page-body .description {
   margin-inline: auto;
@@ -1791,18 +1797,19 @@ a.grade-btn-nav[aria-current="page"] {
 }
 
 .hub-page-body {
-  --class-page-cta-height: 5.5rem;
+  --class-page-cta-height: 6.75rem;
 }
 
 .hub-page-body .page {
-  padding-bottom: calc(var(--class-page-cta-height) + env(safe-area-inset-bottom, 0) + 16px);
+  padding-bottom: calc(var(--class-page-cta-height) + env(safe-area-inset-bottom, 0) + 32px);
 }
 
-.hub-page-body .intro,
-.hub-page-body .description {
-  text-align: center;
-  max-width: var(--content-width);
-  margin-inline: auto;
+.hub-page-body .site-footer {
+  margin-bottom: 8px;
+}
+
+.hub-page-body .install-banner:not(.is-hidden) {
+  bottom: calc(var(--class-page-cta-height) + env(safe-area-inset-bottom, 0) + 8px);
 }
 
 .hub-page .hub-answer {

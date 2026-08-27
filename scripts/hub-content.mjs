@@ -9,6 +9,7 @@ export const topicHubs = [
     title: "Einmaleins üben online – kostenlos & als PDF",
     h1: "Einmaleins üben",
     shortName: "Einmaleins",
+    whatHeading: "Was ist das Einmaleins?",
     metaDescription:
       "Einmaleins üben online: kostenlose Malaufgaben für die Grundschule — Klasse wählen, online rechnen oder als PDF ausdrucken. Ohne Anmeldung.",
     topicIds: ["multiplication"],
@@ -42,6 +43,7 @@ export const topicHubs = [
     title: "Brüche üben online – Anteile, erkennen & rechnen",
     h1: "Brüche üben",
     shortName: "Brüche",
+    whatHeading: "Was sind Brüche?",
     metaDescription:
       "Brüche üben online: Anteile, Brüche erkennen und rechnen — kostenlos für Klasse 4 bis 6. Online oder als PDF, ohne Anmeldung.",
     topicIds: ["fractions_share", "fractions_read", "fractions"],
@@ -75,6 +77,7 @@ export const topicHubs = [
     title: "Plus und Minus üben – Addition & Subtraktion online",
     h1: "Plus und Minus üben",
     shortName: "Plus & Minus",
+    whatHeading: "Was sind Plus und Minus?",
     metaDescription:
       "Plus und Minus üben online: Addition und Subtraktion für Klasse 1 bis 6 — kostenlos, online oder als PDF, ohne Anmeldung.",
     topicIds: ["addition", "subtraction"],
@@ -108,6 +111,7 @@ export const topicHubs = [
     title: "Sachaufgaben Mathe üben – Textaufgaben online & PDF",
     h1: "Sachaufgaben üben",
     shortName: "Sachaufgaben",
+    whatHeading: "Was sind Sachaufgaben?",
     metaDescription:
       "Sachaufgaben üben online: Mathe-Textaufgaben für die Grundschule — lesen, rechnen, prüfen. Kostenlos, online oder als PDF.",
     topicIds: ["word"],
@@ -141,6 +145,7 @@ export const topicHubs = [
     title: "Uhrzeiten üben online – Uhr lesen & rechnen",
     h1: "Uhr üben",
     shortName: "Uhr",
+    whatHeading: "Was bedeutet Uhr üben?",
     metaDescription:
       "Uhrzeiten üben online: Uhr lesen und Zeitspannen rechnen — kostenlos für die Grundschule. Online oder als PDF, ohne Anmeldung.",
     topicIds: ["clock"],
@@ -174,6 +179,7 @@ export const topicHubs = [
     title: "Geld rechnen üben – Euro & Cent online",
     h1: "Geld rechnen üben",
     shortName: "Geld",
+    whatHeading: "Was ist Geld rechnen?",
     metaDescription:
       "Geld rechnen üben: Euro und Cent, Wechselgeld und Preise — kostenlose Mathe-Übungen online oder als PDF für die Grundschule.",
     topicIds: ["money"],
@@ -207,6 +213,7 @@ export const topicHubs = [
     title: "Prozent rechnen üben – online & als PDF",
     h1: "Prozent üben",
     shortName: "Prozent",
+    whatHeading: "Was ist Prozentrechnen?",
     metaDescription:
       "Prozent rechnen üben online: Anteile von Hundert, Rabatte und einfache Prozentaufgaben — kostenlos, ohne Anmeldung, auch als PDF.",
     topicIds: ["percent"],
@@ -240,6 +247,7 @@ export const topicHubs = [
     title: "Schriftlich rechnen üben – Addition bis Division",
     h1: "Schriftlich rechnen üben",
     shortName: "Schriftlich rechnen",
+    whatHeading: "Was ist schriftliches Rechnen?",
     metaDescription:
       "Schriftlich rechnen üben: schriftliche Addition, Subtraktion, Multiplikation und Division — kostenlos online oder als PDF für Klasse 3 und 4.",
     topicIds: ["addition", "subtraction", "multiplication", "division"],
@@ -273,6 +281,7 @@ export const topicHubs = [
     title: "Dezimalzahlen üben – Kommazahlen online & PDF",
     h1: "Dezimalzahlen üben",
     shortName: "Dezimalzahlen",
+    whatHeading: "Was sind Dezimalzahlen?",
     metaDescription:
       "Dezimalzahlen üben online: Kommazahlen lesen, schreiben und rechnen — kostenlos für Klasse 6, auch als PDF, ohne Anmeldung.",
     topicIds: ["decimals"],
@@ -306,6 +315,7 @@ export const topicHubs = [
     title: "Geometrie Grundschule üben – Formen, Lage & mehr",
     h1: "Geometrie in der Grundschule üben",
     shortName: "Geometrie",
+    whatHeading: "Was ist Geometrie?",
     metaDescription:
       "Geometrie üben für die Grundschule: Formen, Lage, Muster, Spiegeln — kostenlos online oder als PDF, Klasse wählen, ohne Anmeldung.",
     topicIds: ["shapes", "position", "pattern", "mirror", "number_line"],

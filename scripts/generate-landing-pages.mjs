@@ -205,10 +205,13 @@ function renderClassJsonLd(grade) {
 }
 
 function renderHeadAssets(cssPath = "/style.css") {
+  const versionedCss = cssPath.includes("?")
+    ? cssPath
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=21" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="${cssPath}" as="style" />
-    <link rel="stylesheet" href="${cssPath}" />`;
+    <link rel="preload" href="${versionedCss}" as="style" />
+    <link rel="stylesheet" href="${versionedCss}" />`;
 }
 
 const VIEWPORT_META =
@@ -702,7 +705,7 @@ ${renderOpenGraph(meta)}
           </p>
 
           <section aria-labelledby="hub-what-${hub.slug}">
-            <h2 id="hub-what-${hub.slug}">Was ist ${escapeHtml(hub.shortName)}?</h2>
+            <h2 id="hub-what-${hub.slug}">${escapeHtml(hub.whatHeading)}</h2>
             <p>${escapeHtml(hub.whatIs)}</p>
           </section>
 
