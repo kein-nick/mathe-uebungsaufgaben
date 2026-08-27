@@ -695,11 +695,14 @@ function hideCreateStep() {
   hide(createBlock);
 }
 
-function resetLaterSteps() {
+function resetLaterSteps({ preserveTopics = false } = {}) {
   countSelect.value = "";
-  operationList.querySelectorAll("input").forEach((input) => {
-    input.checked = false;
-  });
+  if (!preserveTopics) {
+    operationList.querySelectorAll("input").forEach((input) => {
+      input.checked = false;
+      input.indeterminate = false;
+    });
+  }
   hide(operationBlock);
   hideCreateStep();
   hide(worksheet);
@@ -747,7 +750,7 @@ function selectTerm(term, options = {}) {
   );
   fillOperations(selectedGrade, selectedTerm);
   show(countBlock);
-  resetLaterSteps();
+  resetLaterSteps({ preserveTopics: true });
   if (scroll) {
     scrollToNext(countBlock);
   }

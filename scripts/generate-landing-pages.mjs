@@ -207,7 +207,7 @@ function renderClassJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=21" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=22" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -427,12 +427,15 @@ function extractAppFragments() {
   const appMain = practiceTemplate.slice(setupStart, footerStart);
 
   const dialogStart = practiceTemplate.indexOf('<dialog class="success-dialog"');
-  const scriptStart = practiceTemplate.indexOf('<script src="/topics.js">');
+  const scriptStart = practiceTemplate.search(/<script src="\/topics\.js[^"]*">/);
+  if (scriptStart < 0) {
+    throw new Error("topics.js script tag not found in practice template");
+  }
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart);
 
-  const scripts = `    <script src="/topics.js"></script>
-    <script src="/script.js"></script>
-    <script defer src="/pwa.js"></script>
+  const scripts = `    <script src="/topics.js?v=23"></script>
+    <script src="/script.js?v=23"></script>
+    <script defer src="/pwa.js?v=23"></script>
     <script>
       window.va =
         window.va ||

@@ -443,6 +443,17 @@ select {
   background: #f8f4ea;
   cursor: pointer;
   user-select: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.topic-choice:hover:not(.is-disabled) {
+  border-color: var(--grade);
+  background: #f0ebe0;
+}
+
+.topic-choice:has(input[data-topic]:checked) {
+  border-color: var(--grade);
+  background: #e8f0ec;
 }
 
 .topic-choice input[data-topic] {
@@ -1505,9 +1516,16 @@ option:disabled {
   padding-left: 1.25rem;
 }
 
-.legal-page a:not(.btn-primary):not(.btn-secondary) {
+.legal-page a:not(.btn-primary):not(.btn-secondary):not(.grade-btn) {
   color: var(--grade);
   font-weight: 700;
+}
+
+.legal-page a.grade-btn:hover,
+.legal-page a.grade-btn.is-active,
+.hub-page a.grade-btn:hover,
+.hub-page a.grade-btn.is-active {
+  color: #fff;
 }
 
 .legal-note {
