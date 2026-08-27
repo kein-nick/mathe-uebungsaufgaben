@@ -1,5 +1,5 @@
 export const parentIntro =
-  "Als Elternteil kennt man das: Das Kind soll zu Hause üben, aber welche Aufgaben passen gerade? Man möchte helfen, ohne stundenlang selbst Aufgaben auszudenken — und ehrlich gesagt kennt man längst nicht mehr alles, wie es heute in der Schule gemacht wird. Begriffe, Reihenfolgen und Methoden haben sich verändert. Diese Übersicht soll dir Orientierung geben: Was wird in der Klasse erwartet, welche Bereiche gibt es — und wo du direkt passende Übungen starten kannst.";
+  "Als Elternteil kennt man das: Das Kind soll zu Hause üben, aber welche Aufgaben passen gerade? Man möchte helfen, ohne stundenlang selbst Aufgaben auszudenken — und ehrlich gesagt kennt man längst nicht mehr alles, wie es heute in der Schule gemacht wird. Begriffe, Reihenfolgen und Methoden haben sich verändert. Diese Übersicht soll dir Orientierung geben: was in der Klasse erwartet wird, welche Bereiche es gibt und wo du direkt passende Übungen starten kannst.";
 
 export const groupDescriptions = {
   1: {
@@ -16,7 +16,7 @@ export const groupDescriptions = {
     rechnen:
       "Plus und Minus werden bis 100 sicherer, dazu kommen erste Mal- und Geteiltaufgaben im kleinen Einmaleins. Sachaufgaben werden etwas länger. Viele Schulen üben schrittweise: erst einfache Zahlen, dann größere.",
     zahlen:
-      "Kinder vergleichen Zahlen, runden erste Male, arbeiten mit geraden und ungeraden Zahlen und üben Verdoppeln und Halbieren. Tabellen und einfache Übersichten helfen, Zahlen zu ordnen.",
+      "Kinder vergleichen Zahlen, runden zum ersten Mal, arbeiten mit geraden und ungeraden Zahlen und üben Verdoppeln und Halbieren. Tabellen und einfache Übersichten helfen, Zahlen zu ordnen.",
     groessen:
       "Geld und Uhr sind zentrale Themen: Wechselgeld, Uhrzeiten auf der vollen Stunde oder halben Stunde, einfache Längen und Gewichte. Der Bezug zum echten Leben macht das Üben sinnvoll.",
     geometrie:
@@ -38,7 +38,7 @@ export const groupDescriptions = {
     zahlen:
       "Zahlenräume wachsen weiter, Tabellen und Diagramme werden gelesen und ausgewertet. Kinder lernen, Informationen aus Übersichten zu entnehmen — eine Fähigkeit, die auch in anderen Fächern wichtig wird.",
     groessen:
-      "Größen umrechnen wird anspruchsvoller: Maßstab, Volumen von Würfeln und Quader, Flächen und Umfang. Viele Aufgaben sind an realen Situationen orientiert, etwa Pläne oder Packungen.",
+      "Größen umrechnen wird anspruchsvoller: Maßstab, Volumen von Würfeln und Quadern, Flächen und Umfang. Viele Aufgaben sind an realen Situationen orientiert, etwa Pläne oder Packungen.",
     geometrie:
       "Formen, Lagebeziehungen, Spiegelachsen und Koordinaten kommen hinzu. Kinder arbeiten genauer mit Zeichnungen und lernen, geometrische Begriffe präzise zu verwenden.",
   },
@@ -94,7 +94,7 @@ export const topicDescriptions = {
   percent:
     "Prozent verstehen als „von hundert“ — Rabatte, Anteile und einfache Prozentaufgaben. In Klasse 5 und 6 eng mit Brüchen und Dezimalzahlen verknüpft.",
   proportion:
-    "Dreisatz und proportionale Zuordnungen — zum Beispiel: 3 Packungen kosten …, was kosten 7? Ein Klassiker, der logisches Denken und Strukturieren übt.",
+    "Dreisatz und proportionale Zuordnungen — zum Beispiel: 3 Packungen kosten …, was kosten 7 Packungen? Ein Klassiker, der logisches Denken und Strukturieren übt.",
   mean:
     "Mittelwert berechnen aus mehreren Werten. Oft im Kontext von Tabellen, Umfragen oder Sport — praxisnah und prüfungsrelevant.",
   word:

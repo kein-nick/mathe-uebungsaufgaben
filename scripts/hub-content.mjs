@@ -40,7 +40,7 @@ export const topicHubs = [
   },
   {
     slug: "brueche",
-    title: "Brüche üben online – Anteile, erkennen & rechnen",
+    title: "Brüche üben online – Anteile erkennen & rechnen",
     h1: "Brüche üben",
     shortName: "Brüche",
     whatHeading: "Was sind Brüche?",
@@ -63,8 +63,8 @@ export const topicHubs = [
         a: "Erste Bruchanteile oft ab Klasse 4, Erkennen und Einordnen verstärkt in Klasse 5, sicheres Rechnen mit Brüchen typisch in Klasse 5 und 6 — je nach Lehrplan etwas früher oder später.",
       },
       {
-        q: "Was ist der Unterschied zwischen Anteilen und Brüche rechnen?",
-        a: "Anteile fragen z. B. „Wie viel ist ein Drittel von 12?“. Brüche rechnen meint erweitern, kürzen, addieren oder multiplizieren mit Bruchzahlen.",
+        q: "Was ist der Unterschied zwischen Anteilen und dem Rechnen mit Brüchen?",
+        a: "Anteile fragen z. B. „Wie viel ist ein Drittel von 12?“. Rechnen mit Brüchen meint erweitern, kürzen, addieren oder multiplizieren mit Bruchzahlen.",
       },
       {
         q: "Ist das Üben kostenlos?",
@@ -179,7 +179,7 @@ export const topicHubs = [
     title: "Geld rechnen üben – Euro & Cent online",
     h1: "Geld rechnen üben",
     shortName: "Geld",
-    whatHeading: "Was ist Geld rechnen?",
+    whatHeading: "Was ist Geldrechnen?",
     metaDescription:
       "Geld rechnen üben: Euro und Cent, Wechselgeld und Preise — kostenlose Mathe-Übungen online oder als PDF für die Grundschule.",
     topicIds: ["money"],
@@ -256,7 +256,7 @@ export const topicHubs = [
     whatIs:
       "Schriftlich rechnen meint die klassischen Verfahren für Plus, Minus, Mal und Geteilt mit größeren Zahlen. Die Aufgaben auf mathe-testen.de nutzen denselben Themenbereich; in höheren Klassen werden die Zahlen und Anforderungen anspruchsvoller.",
     whyPractice:
-      "Wer die Verfahren unsicher beherrscht, verliert Zeit und Motivation. Kurze Blätter mit klarer Struktur helfen, Routine aufzubauen — zu Hause oder in der Schule.",
+      "Wer die Verfahren nicht sicher beherrscht, verliert Zeit und Motivation. Kurze Blätter mit klarer Struktur helfen, Routine aufzubauen — zu Hause oder in der Schule.",
     howItWorks:
       "Klasse 3 oder höher wählen. Die vier Grundrechenarten sind vorausgewählt; du kannst z. B. nur schriftliche Multiplikation üben. Online oder als PDF.",
     forWhom:

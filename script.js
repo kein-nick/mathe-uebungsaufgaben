@@ -1276,7 +1276,7 @@ function buildWorksheet() {
   celebrated = false;
   setNotesEnabled(notesToggle.checked, false);
   renderTasks();
-  statusEl.textContent = "Klicke auf Aufgaben beginnen, wenn du soweit bist.";
+  statusEl.textContent = "Klicke auf Aufgaben beginnen, wenn du so weit bist.";
   armTimers();
   setPracticeLocked(true);
   hideAds();
@@ -1314,7 +1314,7 @@ startBtn.addEventListener("click", () => {
   startTimer();
   setPracticeLocked(false);
   startBtn.disabled = true;
-  if (statusEl.textContent === "Klicke auf Aufgaben beginnen, wenn du soweit bist.") {
+  if (statusEl.textContent === "Klicke auf Aufgaben beginnen, wenn du so weit bist.") {
     statusEl.textContent = "";
   }
   updateProgress();
