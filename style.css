@@ -1790,6 +1790,88 @@ a.grade-btn-nav[aria-current="page"] {
   padding-bottom: 48px;
 }
 
+.hub-page-body {
+  --class-page-cta-height: 5.5rem;
+}
+
+.hub-page-body .page {
+  padding-bottom: calc(var(--class-page-cta-height) + env(safe-area-inset-bottom, 0) + 16px);
+}
+
+.hub-page-body .intro,
+.hub-page-body .description {
+  text-align: center;
+  max-width: var(--content-width);
+  margin-inline: auto;
+}
+
+.hub-page .hub-answer {
+  font-size: 1.05rem;
+}
+
+.hub-page section + section {
+  margin-top: 1.75rem;
+}
+
+.hub-page h2 {
+  font-family: "Fraunces", serif;
+  font-size: 1.3rem;
+  margin: 0 0 0.75rem;
+  color: var(--ink);
+}
+
+.hub-grades {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.hub-grade-nav {
+  margin-top: 1rem;
+}
+
+.hub-faq-item {
+  margin: 0 0 1.25rem;
+}
+
+.hub-faq-item h3 {
+  font-size: 1.05rem;
+  margin: 0 0 0.4rem;
+  color: var(--ink);
+}
+
+.hub-faq-item p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.hub-related-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+}
+
+.hub-related-list a {
+  color: var(--grade);
+  font-weight: 700;
+}
+
+.home-topic-hubs {
+  margin: 0 0 1.5rem;
+  padding-left: 1.2rem;
+  line-height: 1.55;
+}
+
+.home-topic-hubs a {
+  color: var(--grade);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.home-topic-hubs a:hover {
+  text-decoration: underline;
+}
+
 .home-page > h2 {
   font-family: "Fraunces", serif;
   color: var(--ink);

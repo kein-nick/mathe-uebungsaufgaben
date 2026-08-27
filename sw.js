@@ -1,4 +1,4 @@
-const CACHE_NAME = "mathe-uebungsaufgaben-v18";
+const CACHE_NAME = "mathe-uebungsaufgaben-v19";
 
 const PRECACHE_URLS = [
   "/",
@@ -26,6 +26,16 @@ const PRECACHE_URLS = [
   "/klasse-4/uebungen.html",
   "/klasse-5/uebungen.html",
   "/klasse-6/uebungen.html",
+  "/einmaleins.html",
+  "/brueche.html",
+  "/plus-minus.html",
+  "/sachaufgaben.html",
+  "/uhr-ueben.html",
+  "/geld-rechnen.html",
+  "/prozent.html",
+  "/schriftlich-rechnen.html",
+  "/dezimalzahlen.html",
+  "/geometrie-grundschule.html",
   "/sitemap.xml",
   "/robots.txt",
   "/icons/icon-192.png",

@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { parentIntro, groupDescriptions, topicDescriptions } from "./landing-content.mjs";
+import { topicHubs } from "./hub-content.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -229,6 +230,11 @@ function practiceUrl(grade) {
   return `/klasse-${grade}/uebungen`;
 }
 
+function practiceUrlWithTopics(grade, topicIds) {
+  const themen = topicIds.join(",");
+  return `/klasse-${grade}/uebungen?themen=${encodeURIComponent(themen)}`;
+}
+
 function renderHomeClassSummaries() {
   return [1, 2, 3, 4, 5, 6]
     .map((grade) => {
@@ -255,8 +261,28 @@ function renderHomeClassSummaries() {
 }
 
 function renderHomeMain() {
+  const hubLinks = topicHubs
+    .map(
+      (hub) =>
+        `<li><a href="/${hub.slug}">${escapeHtml(hub.shortName)}</a> — ${escapeHtml(
+          hub.metaDescription.split("—")[0].trim().replace(/\.$/, "")
+        )}</li>`
+    )
+    .join("\n");
+
   return `<main class="legal-page landing-page home-page">
           <p class="landing-lead landing-parent-intro">${escapeHtml(parentIntro)}</p>
+
+          <section aria-labelledby="home-topics-heading">
+            <h2 id="home-topics-heading">Beliebte Übungsthemen</h2>
+            <p class="landing-overview-hint">
+              Du suchst etwas Bestimmtes — Einmaleins, Brüche, Sachaufgaben?
+              Hier findest du Themen-Seiten mit Erklärung und direkten Übungslinks nach Klasse.
+            </p>
+            <ul class="home-topic-hubs">
+              ${hubLinks}
+            </ul>
+          </section>
 
           <section aria-labelledby="home-classes-heading">
             <h2 id="home-classes-heading">Was in den einzelnen Klassen geübt wird</h2>
@@ -535,6 +561,209 @@ function renderPracticePage(grade) {
 </html>`;
 }
 
+function renderHubJsonLd(hub) {
+  const url = `${SITE_URL}/${hub.slug}`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${url}/#webpage`,
+        url,
+        name: hub.title,
+        description: hub.metaDescription,
+        inLanguage: "de-DE",
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+        about: {
+          "@type": "Thing",
+          name: hub.shortName,
+        },
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${url}/#faq`,
+        mainEntity: hub.faqs.map((item) => ({
+          "@type": "Question",
+          name: item.q,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: item.a,
+          },
+        })),
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${url}/#breadcrumb`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Startseite",
+            item: `${SITE_URL}/`,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: hub.shortName,
+            item: url,
+          },
+        ],
+      },
+      {
+        "@type": "HowTo",
+        "@id": `${url}/#howto`,
+        name: `${hub.shortName} auf mathe-testen.de üben`,
+        description: hub.howItWorks,
+        step: [
+          {
+            "@type": "HowToStep",
+            position: 1,
+            name: "Klasse wählen",
+            text: "Wähle unten die passende Klassenstufe.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 2,
+            name: "Übungsblatt erstellen",
+            text: "Themen sind vorausgewählt. Anzahl festlegen und Blatt erzeugen.",
+          },
+          {
+            "@type": "HowToStep",
+            position: 3,
+            name: "Online üben oder PDF drucken",
+            text: "Aufgaben digital lösen und prüfen oder als PDF ausdrucken — kostenlos und ohne Anmeldung.",
+          },
+        ],
+      },
+    ],
+  };
+}
+
+function renderHubPage(hub) {
+  const url = `${SITE_URL}/${hub.slug}`;
+  const meta = {
+    title: hub.title,
+    description: hub.metaDescription,
+    url,
+    imageAlt: `${hub.shortName} üben – Mathematik Übungsaufgaben`,
+  };
+
+  const gradeButtons = hub.grades
+    .map(
+      (grade) =>
+        `<a class="grade-btn grade-btn-nav" href="${practiceUrlWithTopics(
+          grade,
+          hub.topicIds
+        )}">Klasse ${grade}</a>`
+    )
+    .join("\n");
+
+  const faqItems = hub.faqs
+    .map(
+      (item) => `<div class="hub-faq-item">
+            <h3>${escapeHtml(item.q)}</h3>
+            <p>${escapeHtml(item.a)}</p>
+          </div>`
+    )
+    .join("\n");
+
+  const related = topicHubs
+    .filter((other) => other.slug !== hub.slug)
+    .slice(0, 6)
+    .map((other) => `<li><a href="/${other.slug}">${escapeHtml(other.shortName)}</a></li>`)
+    .join("\n");
+
+  return `<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    ${renderDeviceMeta({ withManifest: true })}
+    <meta name="description" content="${escapeHtml(meta.description)}" />
+    <link rel="canonical" href="${url}" />
+${renderOpenGraph(meta)}
+    <title>${escapeHtml(meta.title)}</title>
+    ${renderJsonLdScript(renderHubJsonLd(hub))}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    ${renderHeadAssets()}
+  </head>
+  <body class="ads-off hub-page-body">
+    <div class="page-shell">
+      <div class="page">
+        <header class="intro">
+          <p class="kicker"><a class="text-link" href="/">Zur Startseite</a></p>
+          <h1>${escapeHtml(hub.h1)}</h1>
+          <p class="description">${escapeHtml(hub.lead)}</p>
+        </header>
+
+        <main class="legal-page landing-page hub-page">
+          <p class="landing-lead hub-answer">
+            <strong>${escapeHtml(hub.shortName)} üben auf mathe-testen.de:</strong>
+            kostenlos, ohne Anmeldung, online oder als PDF — für Eltern, Kinder und Lehrkräfte.
+          </p>
+
+          <section aria-labelledby="hub-what-${hub.slug}">
+            <h2 id="hub-what-${hub.slug}">Was ist ${escapeHtml(hub.shortName)}?</h2>
+            <p>${escapeHtml(hub.whatIs)}</p>
+          </section>
+
+          <section aria-labelledby="hub-why-${hub.slug}">
+            <h2 id="hub-why-${hub.slug}">Warum gezielt üben?</h2>
+            <p>${escapeHtml(hub.whyPractice)}</p>
+          </section>
+
+          <section aria-labelledby="hub-how-${hub.slug}">
+            <h2 id="hub-how-${hub.slug}">So funktioniert’s</h2>
+            <p>${escapeHtml(hub.howItWorks)}</p>
+          </section>
+
+          <section aria-labelledby="hub-who-${hub.slug}">
+            <h2 id="hub-who-${hub.slug}">Für wen ist das gedacht?</h2>
+            <p>${escapeHtml(hub.forWhom)}</p>
+          </section>
+
+          <section class="hub-grades" id="hub-start" aria-labelledby="hub-grades-${hub.slug}">
+            <h2 id="hub-grades-${hub.slug}">${escapeHtml(hub.shortName)} üben — Klasse wählen</h2>
+            <p class="landing-overview-hint">
+              Die Themen sind auf der Übungsseite vorausgewählt. Du kannst sie dort noch anpassen.
+            </p>
+            <nav class="class-nav-grid hub-grade-nav" aria-label="Klassen für ${escapeHtml(hub.shortName)}">
+              ${gradeButtons}
+            </nav>
+          </section>
+
+          <section class="hub-faq" aria-labelledby="hub-faq-${hub.slug}">
+            <h2 id="hub-faq-${hub.slug}">Häufige Fragen</h2>
+            ${faqItems}
+          </section>
+
+          <section aria-labelledby="hub-related-${hub.slug}">
+            <h2 id="hub-related-${hub.slug}">Weitere Themen</h2>
+            <ul class="hub-related-list">${related}</ul>
+          </section>
+        </main>
+
+        <footer class="site-footer">
+          <nav aria-label="Rechtliches">
+            <a href="/">Startseite</a>
+            <span aria-hidden="true">·</span>
+            <a href="/impressum">Impressum</a>
+            <span aria-hidden="true">·</span>
+            <a href="/datenschutz">Datenschutz</a>
+          </nav>
+        </footer>
+      </div>
+    </div>
+
+    <aside class="class-page-cta" aria-label="Zur Klassenwahl">
+      <a class="btn-primary class-page-cta-btn" href="#hub-start">Klasse wählen und üben</a>
+    </aside>
+
+    ${installPromptHtml}
+    ${pwaScripts}
+  </body>
+</html>`;
+}
+
 function updateSitemap() {
   const sitemapPath = path.join(root, "sitemap.xml");
   let sitemap = fs.readFileSync(sitemapPath, "utf8");
@@ -559,6 +788,17 @@ function updateSitemap() {
     }
   }
 
+  for (const hub of topicHubs) {
+    const hubEntry = `  <url>
+    <loc>https://mathe-testen.de/${hub.slug}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>`;
+    if (!sitemap.includes(`/${hub.slug}</loc>`)) {
+      sitemap = sitemap.replace("</urlset>", `${hubEntry}\n</urlset>`);
+    }
+  }
+
   fs.writeFileSync(sitemapPath, sitemap, "utf8");
 }
 
@@ -572,6 +812,12 @@ for (let grade = 1; grade <= 6; grade += 1) {
   const practicePath = path.join(practiceDir, "uebungen.html");
   fs.writeFileSync(practicePath, renderPracticePage(grade), "utf8");
   console.log("wrote", practicePath);
+}
+
+for (const hub of topicHubs) {
+  const hubPath = path.join(root, `${hub.slug}.html`);
+  fs.writeFileSync(hubPath, renderHubPage(hub), "utf8");
+  console.log("wrote", hubPath);
 }
 
 updateHomePage();
