@@ -1493,6 +1493,24 @@ function pdfHeaderHtml() {
   `;
 }
 
+function pdfFooterHtml(pageNum, pageCount) {
+  return `
+    <footer class="pdf-site-footer">
+      <span class="pdf-site-footer-page">Seite ${pageNum} von ${pageCount}</span>
+      <span class="pdf-site-footer-promo">
+        <span class="pdf-site-footer-text">Weitere Aufgaben unter mathe-testen.de</span>
+        <img
+          class="pdf-site-footer-qr"
+          src="/icons/qr-mathe-testen.png"
+          width="52"
+          height="52"
+          alt=""
+        />
+      </span>
+    </footer>
+  `;
+}
+
 function preparePdfAnswerCells(root) {
   root.querySelectorAll(".task > .answer-input").forEach((input) => {
     const cell = document.createElement("span");
@@ -1505,7 +1523,7 @@ function preparePdfAnswerCells(root) {
   });
 }
 
-function buildPdfSheet() {
+async function buildPdfSheet() {
   const sheet = document.createElement("div");
   sheet.className = "pdf-sheet";
   sheet.setAttribute("aria-hidden", "true");
@@ -1514,8 +1532,10 @@ function buildPdfSheet() {
   renderTasks(staging, { forPdf: true });
   const blockEls = [...staging.children];
   const perPage = 8;
+  const pageCount = Math.max(1, Math.ceil(blockEls.length / perPage));
 
   for (let i = 0; i < blockEls.length; i += perPage) {
+    const pageNum = Math.floor(i / perPage) + 1;
     const page = document.createElement("section");
     page.className = "pdf-page pdf-keep";
     if (i === 0) {
@@ -1525,12 +1545,24 @@ function buildPdfSheet() {
     grid.className = "pdf-blocks";
     blockEls.slice(i, i + perPage).forEach((block) => grid.append(block));
     page.append(grid);
+    page.insertAdjacentHTML("beforeend", pdfFooterHtml(pageNum, pageCount));
     sheet.append(page);
   }
 
   clearPdfCloneInputs(sheet);
   preparePdfAnswerCells(sheet);
   document.body.append(sheet);
+  await Promise.all(
+    [...sheet.querySelectorAll("img")].map(
+      (img) =>
+        img.complete
+          ? Promise.resolve()
+          : new Promise((resolve) => {
+              img.addEventListener("load", resolve, { once: true });
+              img.addEventListener("error", resolve, { once: true });
+            })
+    )
+  );
   return sheet;
 }
 
@@ -1568,7 +1600,7 @@ async function downloadWorksheetPdf() {
   try {
     await ensurePdfLibraries();
     await document.fonts?.ready;
-    sheet = buildPdfSheet();
+    sheet = await buildPdfSheet();
     await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 
     const pieces = [...sheet.querySelectorAll(".pdf-keep")];
@@ -1583,7 +1615,7 @@ async function downloadWorksheetPdf() {
     const pageH = doc.internal.pageSize.getHeight();
     const margin = 8;
     const usableW = pageW - margin * 2;
-    const usableH = pageH - margin * 2 - 6;
+    const usableH = pageH - margin * 2;
 
     images.forEach((image, index) => {
       if (index > 0) {
@@ -1591,14 +1623,6 @@ async function downloadWorksheetPdf() {
       }
       doc.addImage(image.dataUrl, "PNG", margin, margin, usableW, usableH, undefined, "FAST");
     });
-
-    const pageCount = doc.getNumberOfPages();
-    for (let page = 1; page <= pageCount; page += 1) {
-      doc.setPage(page);
-      doc.setFontSize(9);
-      doc.setTextColor(91, 101, 115);
-      doc.text(`Seite ${page} von ${pageCount}`, pageW / 2, pageH - 7, { align: "center" });
-    }
 
     doc.save(worksheetMeta().fileName);
   } catch (error) {

@@ -2005,11 +2005,50 @@ a.grade-btn-nav[aria-current="page"] {
   box-sizing: border-box;
   width: 794px;
   height: 1123px;
-  padding: 22px 20px 32px;
+  padding: 22px 20px 14px;
   background: #fff;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+.pdf-site-footer {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #d0d0d0;
+  color: #5b6573;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.pdf-site-footer-page {
+  flex: 0 0 auto;
+}
+
+.pdf-site-footer-promo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  text-align: right;
+}
+
+.pdf-site-footer-text {
+  max-width: 16rem;
+}
+
+.pdf-site-footer-qr {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 auto;
+  display: block;
+  image-rendering: pixelated;
 }
 
 .pdf-sheet .pdf-header {
