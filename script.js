@@ -4,6 +4,9 @@ const termButtons = document.querySelectorAll(".term-btn");
 const termBlock = document.getElementById("term-block");
 const countBlock = document.getElementById("count-block");
 const countSelect = document.getElementById("count-select");
+const countHint = document.getElementById("count-hint");
+const blockModeToggle = document.getElementById("block-mode-toggle");
+const blockModeSummary = document.getElementById("block-mode-summary");
 const operationBlock = document.getElementById("operation-block");
 const operationList = document.getElementById("operation-list");
 const negSwitch = document.getElementById("neg-switch");
@@ -37,6 +40,11 @@ const mobilePracticeQuery = window.matchMedia("(max-width: 1024px), (pointer: co
 
 /* Werbung: auf true setzen und body-Klasse "ads-off" in index.html entfernen */
 const SHOW_ADS = false;
+const TASK_BLOCK_SIZE = 10;
+const MAX_TASK_BLOCKS = 8;
+const MIXED_COUNT_HINT = "Die Rechenarten werden auf dem Blatt gemischt.";
+const BLOCK_MODE_HINT =
+  "Jede Rechenart bekommt eigene 10er-Blöcke, nacheinander. Die Anzahl stellst du bei den Rechenarten ein.";
 
 function layoutPracticeControls() {
   if (!pageCorner || !practiceStartSlot || !practiceCheckSlot || !practiceFooterSlot) {
@@ -194,6 +202,7 @@ let selectedTerm = null;
 let pendingTopicIds = null;
 let tasks = [];
 let activeTopicIds = [];
+let activeBlockMode = false;
 let celebrated = false;
 let fireworksFrame = 0;
 let timerStartedAt = 0;
@@ -271,6 +280,33 @@ function selectedTopics() {
   return [...operationList.querySelectorAll("input[data-topic]:checked:not(:disabled)")].map(
     (input) => input.value
   );
+}
+
+function isBlockMode() {
+  return Boolean(blockModeToggle?.checked);
+}
+
+function topicBlocksOf(input) {
+  const n = Number(input.dataset.blocks);
+  return Number.isFinite(n) && n > 0 ? n : 0;
+}
+
+function selectedTopicQuotas() {
+  return [...operationList.querySelectorAll("input[data-topic]:checked:not(:disabled)")].map((input) => ({
+    id: input.value,
+    blocks: Math.max(1, topicBlocksOf(input) || 1),
+  }));
+}
+
+function totalSelectedBlocks() {
+  return selectedTopicQuotas().reduce((sum, item) => sum + item.blocks, 0);
+}
+
+function selectedTaskCount() {
+  if (isBlockMode()) {
+    return totalSelectedBlocks() * TASK_BLOCK_SIZE;
+  }
+  return Number(countSelect.value) || 0;
 }
 
 function shuffleArray(items) {
@@ -404,7 +440,7 @@ function secondsForTopic(id, grade, term) {
 }
 
 function suggestedCountdownMinutes() {
-  const count = Number(countSelect.value);
+  const count = selectedTaskCount();
   const topicIds = selectedTopics();
   if (!count || !topicIds.length || !selectedGrade || !selectedTerm) {
     return 5;
@@ -495,8 +531,7 @@ function generateTask(grade, term, topicId, allowNegatives) {
   return { ...task, type: topicId };
 }
 
-function generateTasks(grade, term, count, selectedOps, allowNegatives) {
-  const plan = buildTopicPlan(count, selectedOps);
+function createTasksFromPlan(grade, term, plan, allowNegatives) {
   const created = [];
   const seen = new Set();
 
@@ -514,12 +549,26 @@ function generateTasks(grade, term, count, selectedOps, allowNegatives) {
       break;
     }
     if (!added) {
-      const task = generateTask(grade, term, topicId, allowNegatives);
-      created.push(task);
+      created.push(generateTask(grade, term, topicId, allowNegatives));
     }
   }
 
   return created;
+}
+
+function generateTasks(grade, term, count, selectedOps, allowNegatives) {
+  return createTasksFromPlan(grade, term, buildTopicPlan(count, selectedOps), allowNegatives);
+}
+
+function generateTasksFromQuotas(grade, term, quotas, allowNegatives) {
+  const plan = [];
+  for (const { id, blocks } of quotas) {
+    const n = Math.max(0, blocks) * TASK_BLOCK_SIZE;
+    for (let i = 0; i < n; i += 1) {
+      plan.push(id);
+    }
+  }
+  return createTasksFromPlan(grade, term, plan, allowNegatives);
 }
 
 function updateNegSwitch(grade) {
@@ -597,7 +646,15 @@ function fillOperations(grade, term) {
       const example = document.createElement("span");
       example.className = "topic-example";
       example.textContent = item.example(grade, term);
-      label.append(checkbox, name, example);
+      const stepper = document.createElement("div");
+      stepper.className = "topic-blocks";
+      const safeLabel = escapeHtml(item.label);
+      stepper.innerHTML = `
+        <button type="button" class="topic-blocks-btn" data-block-delta="-1" aria-label="Einen 10er-Block weniger für ${safeLabel}">−</button>
+        <span class="topic-blocks-count" aria-live="polite">1 × 10</span>
+        <button type="button" class="topic-blocks-btn" data-block-delta="1" aria-label="Einen 10er-Block mehr für ${safeLabel}">+</button>
+      `;
+      label.append(checkbox, name, example, stepper);
       grid.append(label);
     });
 
@@ -609,6 +666,11 @@ function fillOperations(grade, term) {
   hint.textContent = difficulty[grade][term].hint;
   updateNegSwitch(grade);
   updateNotesSwitch(grade);
+  if (isBlockMode()) {
+    ensureDefaultBlocks();
+    updateBlockModeSummary();
+    updateTopicBlockControls();
+  }
 }
 
 function fillTermHints(grade) {
@@ -622,6 +684,113 @@ function show(element) {
 
 function hide(element) {
   element.classList.add("is-hidden");
+}
+
+function ensureDefaultBlocks() {
+  operationList.querySelectorAll("input[data-topic]:checked:not(:disabled)").forEach((input) => {
+    if (topicBlocksOf(input) < 1) {
+      input.dataset.blocks = "1";
+    }
+  });
+}
+
+function clampBlockBudget() {
+  if (!isBlockMode()) {
+    return;
+  }
+  let used = 0;
+  operationList.querySelectorAll("input[data-topic]:checked:not(:disabled)").forEach((input) => {
+    let blocks = Math.max(1, topicBlocksOf(input) || 1);
+    if (used >= MAX_TASK_BLOCKS) {
+      input.checked = false;
+      delete input.dataset.blocks;
+      return;
+    }
+    if (used + blocks > MAX_TASK_BLOCKS) {
+      blocks = MAX_TASK_BLOCKS - used;
+    }
+    input.dataset.blocks = String(blocks);
+    used += blocks;
+  });
+}
+
+function updateTopicBlockControls() {
+  if (!operationList) {
+    return;
+  }
+  const used = isBlockMode() ? totalSelectedBlocks() : 0;
+  operationList.querySelectorAll(".topic-choice").forEach((choice) => {
+    const input = choice.querySelector("input[data-topic]");
+    const valueEl = choice.querySelector(".topic-blocks-count");
+    const minusBtn = choice.querySelector('[data-block-delta="-1"]');
+    const plusBtn = choice.querySelector('[data-block-delta="1"]');
+    if (!input || !valueEl) {
+      return;
+    }
+    const blocks = Math.max(1, topicBlocksOf(input) || 1);
+    valueEl.textContent = `${blocks} × 10`;
+    if (minusBtn) {
+      minusBtn.disabled = !input.checked || blocks <= 1;
+    }
+    if (plusBtn) {
+      plusBtn.disabled = !input.checked || used >= MAX_TASK_BLOCKS;
+    }
+  });
+}
+
+function updateBlockModeSummary() {
+  if (!blockModeSummary || !isBlockMode()) {
+    return;
+  }
+  const quotas = selectedTopicQuotas();
+  const total = quotas.reduce((sum, item) => sum + item.blocks, 0) * TASK_BLOCK_SIZE;
+  if (!quotas.length) {
+    blockModeSummary.textContent =
+      "Wähle unten die Rechenarten. Jede startet mit einem 10er-Block (höchstens 8 Blöcke).";
+    return;
+  }
+  const parts = quotas.map((item) => {
+    const label = getTopic(item.id)?.label || item.id;
+    return `${label} ${item.blocks}×10`;
+  });
+  const maxNote = total >= MAX_TASK_BLOCKS * TASK_BLOCK_SIZE ? " — Maximum erreicht." : "";
+  blockModeSummary.textContent = `${total} Aufgaben: ${parts.join(", ")}${maxNote}`;
+}
+
+function setBlockModeUi(on) {
+  if (countBlock) {
+    countBlock.classList.toggle("is-block-mode", on);
+  }
+  if (countHint) {
+    countHint.textContent = on ? BLOCK_MODE_HINT : MIXED_COUNT_HINT;
+  }
+  if (blockModeSummary) {
+    blockModeSummary.classList.toggle("is-hidden", !on);
+  }
+  if (on) {
+    ensureDefaultBlocks();
+    clampBlockBudget();
+    updateBlockModeSummary();
+    updateTopicBlockControls();
+    show(operationBlock);
+    if (selectedTopics().length) {
+      showCreateStep();
+    } else {
+      hideCreateStep();
+    }
+    return;
+  }
+  if (countSelect.value) {
+    show(operationBlock);
+    if (selectedTopics().length) {
+      showCreateStep();
+    } else {
+      hideCreateStep();
+    }
+    return;
+  }
+  hide(operationBlock);
+  hideCreateStep();
 }
 
 function scrollToNext(element, align = "reveal") {
@@ -695,12 +864,19 @@ function hideCreateStep() {
 
 function resetLaterSteps({ preserveTopics = false } = {}) {
   countSelect.value = "";
+  if (blockModeToggle) {
+    blockModeToggle.checked = false;
+  }
+  setBlockModeUi(false);
   if (!preserveTopics) {
     operationList.querySelectorAll("input").forEach((input) => {
       input.checked = false;
       input.indeterminate = false;
     });
   }
+  operationList.querySelectorAll("input[data-topic]").forEach((input) => {
+    delete input.dataset.blocks;
+  });
   hide(operationBlock);
   hideCreateStep();
   hide(worksheet);
@@ -772,7 +948,7 @@ function applyCompactSetupLayout() {
   }
   document.body.classList.add("is-grade-locked");
   const termTitle = termBlock.querySelector("h2");
-  const countTitle = countBlock.querySelector("label h2") || countBlock.querySelector("h2");
+  const countTitle = countBlock.querySelector("h2");
   const operationTitle = operationBlock.querySelector("h2");
   if (termTitle) {
     termTitle.textContent = "1. Halbjahr wählen";
@@ -862,13 +1038,76 @@ countSelect.addEventListener("change", () => {
   }
 });
 
+blockModeToggle?.addEventListener("change", () => {
+  setBlockModeUi(isBlockMode());
+  countdownMinutesDirty = false;
+  syncCountdownPreset();
+  if (isBlockMode() && !selectedTopics().length) {
+    scrollToNext(operationBlock, "center-top");
+  }
+});
+
+operationList.addEventListener("mousedown", (event) => {
+  if (event.target.closest("[data-block-delta]")) {
+    event.preventDefault();
+  }
+});
+
+operationList.addEventListener("click", (event) => {
+  const btn = event.target.closest("[data-block-delta]");
+  if (!btn || !isBlockMode()) {
+    return;
+  }
+  event.preventDefault();
+  event.stopPropagation();
+  const choice = btn.closest(".topic-choice");
+  const input = choice?.querySelector("input[data-topic]");
+  if (!input || !input.checked || input.disabled) {
+    return;
+  }
+  const delta = Number(btn.dataset.blockDelta);
+  const current = Math.max(1, topicBlocksOf(input) || 1);
+  let next = current + delta;
+  if (next < 1) {
+    next = 1;
+  }
+  const others = totalSelectedBlocks() - current;
+  if (others + next > MAX_TASK_BLOCKS) {
+    next = MAX_TASK_BLOCKS - others;
+  }
+  input.dataset.blocks = String(Math.max(1, next));
+  updateBlockModeSummary();
+  updateTopicBlockControls();
+  countdownMinutesDirty = false;
+  syncCountdownPreset();
+});
+
 operationList.addEventListener("change", (event) => {
   const target = event.target;
   if (target instanceof HTMLInputElement && target.classList.contains("group-toggle")) {
     const group = target.closest(".topic-group");
     group.querySelectorAll("input[data-topic]:not(:disabled)").forEach((box) => {
       box.checked = target.checked;
+      if (!target.checked) {
+        delete box.dataset.blocks;
+      }
     });
+  }
+  if (isBlockMode() && target instanceof HTMLInputElement && target.matches("input[data-topic]")) {
+    if (target.checked) {
+      if (topicBlocksOf(target) < 1) {
+        target.dataset.blocks = "1";
+      }
+    } else {
+      delete target.dataset.blocks;
+    }
+  }
+  if (isBlockMode()) {
+    clampBlockBudget();
+    ensureDefaultBlocks();
+    updateBlockModeSummary();
+    updateTopicBlockControls();
+    operationList.querySelectorAll(".topic-group").forEach((groupEl) => syncGroupToggle(groupEl));
   }
   const group = target instanceof Element ? target.closest(".topic-group") : null;
   if (group) {
@@ -1278,13 +1517,17 @@ function updateProgress() {
 }
 
 function buildWorksheet() {
-  const count = Number(countSelect.value);
   const selectedOps = selectedTopics();
+  const blockMode = isBlockMode();
+  const count = selectedTaskCount();
   if (!count || !selectedTerm || !selectedOps.length) {
     return false;
   }
-  tasks = generateTasks(selectedGrade, selectedTerm, count, selectedOps, negativesAllowed());
+  tasks = blockMode
+    ? generateTasksFromQuotas(selectedGrade, selectedTerm, selectedTopicQuotas(), negativesAllowed())
+    : generateTasks(selectedGrade, selectedTerm, count, selectedOps, negativesAllowed());
   activeTopicIds = [...selectedOps];
+  activeBlockMode = blockMode;
   celebrated = false;
   setNotesEnabled(notesToggle.checked, false);
   renderTasks();
@@ -1332,14 +1575,29 @@ startBtn.addEventListener("click", () => {
   updateProgress();
 });
 
+function worksheetTopicLine() {
+  if (activeBlockMode) {
+    const counts = new Map();
+    for (const task of tasks) {
+      counts.set(task.type, (counts.get(task.type) || 0) + 1);
+    }
+    const parts = [...counts]
+      .map(([id, n]) => {
+        const label = getTopic(id)?.label;
+        return label ? `${label} ${n}` : null;
+      })
+      .filter(Boolean);
+    return parts.length ? `Themen: ${parts.join(", ")}` : "";
+  }
+  const topicNames = activeTopicIds.map((id) => getTopic(id)?.label).filter(Boolean);
+  return topicNames.length ? `Themen: ${topicNames.join(", ")}` : "";
+}
+
 function worksheetMeta() {
-  const topicNames = activeTopicIds
-    .map((id) => getTopic(id)?.label)
-    .filter(Boolean);
   return {
     title: "Mathematik Übungsaufgaben",
     line: `Klasse ${selectedGrade} · ${selectedTerm}. Halbjahr · ${tasks.length} Aufgaben`,
-    topics: topicNames.length ? `Themen: ${topicNames.join(", ")}` : "",
+    topics: worksheetTopicLine(),
     fileName: `mathe-klasse-${selectedGrade}-${selectedTerm}hj-${tasks.length}-aufgaben.pdf`,
   };
 }
@@ -1358,6 +1616,18 @@ function fillPrintHeader() {
   `;
 }
 
+function blockHeading(slice, start, end) {
+  const range = `${start + 1}–${end}`;
+  if (!activeBlockMode) {
+    return `Aufgaben ${range}`;
+  }
+  const labels = [...new Set(slice.map((task) => getTopic(task.type)?.label).filter(Boolean))];
+  if (labels.length === 1) {
+    return `${labels[0]} · ${range}`;
+  }
+  return `Aufgaben ${range}`;
+}
+
 function renderTasks(target = blocks, options = {}) {
   const forPdf = Boolean(options.forPdf);
   if (target === blocks) {
@@ -1373,9 +1643,10 @@ function renderTasks(target = blocks, options = {}) {
   for (let blockIndex = 0; blockIndex < blockCount; blockIndex += 1) {
     const start = blockIndex * 10;
     const end = Math.min(start + 10, tasks.length);
+    const slice = tasks.slice(start, end);
     const block = document.createElement("article");
     block.className = "block";
-    block.innerHTML = `<h3>Aufgaben ${start + 1}–${end}</h3>`;
+    block.innerHTML = `<h3>${escapeHtml(blockHeading(slice, start, end))}</h3>`;
 
     for (let index = start; index < end; index += 1) {
       const task = tasks[index];

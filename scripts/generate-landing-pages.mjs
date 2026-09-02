@@ -207,7 +207,7 @@ function renderClassJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=26" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=27" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -434,8 +434,8 @@ function extractAppFragments() {
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart);
 
   const scripts = `    <script src="/topics.js?v=25"></script>
-    <script src="/script.js?v=26"></script>
-    <script defer src="/pwa.js?v=26"></script>
+    <script src="/script.js?v=27"></script>
+    <script defer src="/pwa.js?v=27"></script>
     <script>
       window.va =
         window.va ||
