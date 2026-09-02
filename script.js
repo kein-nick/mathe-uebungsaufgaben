@@ -33,7 +33,7 @@ const pageCorner = document.getElementById("page-corner");
 const practiceStartSlot = document.getElementById("practice-start-slot");
 const practiceCheckSlot = document.getElementById("practice-check-slot");
 const practiceFooterSlot = document.getElementById("practice-footer-slot");
-const mobilePracticeQuery = window.matchMedia("(max-width: 640px)");
+const mobilePracticeQuery = window.matchMedia("(max-width: 1024px), (pointer: coarse)");
 
 /* Werbung: auf true setzen und body-Klasse "ads-off" in index.html entfernen */
 const SHOW_ADS = false;

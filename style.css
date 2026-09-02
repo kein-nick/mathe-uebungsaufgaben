@@ -2033,7 +2033,9 @@ a.grade-btn-nav[aria-current="page"] {
   .timer {
     text-align: left;
   }
+}
 
+@media (max-width: 1024px), (pointer: coarse) {
   .page-corner {
     display: none;
   }
