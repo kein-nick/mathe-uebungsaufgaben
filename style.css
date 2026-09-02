@@ -950,7 +950,7 @@ option:disabled {
   justify-items: center;
 }
 
-.sum-row-b {
+.sum-row-last {
   border-bottom: 2px solid var(--ink);
   padding-bottom: 4px;
 }

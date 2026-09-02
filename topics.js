@@ -188,6 +188,91 @@ function buildTopics(u) {
     return { a, b };
   }
 
+  function addendCount(grade) {
+    if (grade < 3) {
+      return 2;
+    }
+    const roll = randomInt(1, 10);
+    if (grade === 3) {
+      if (roll <= 5) {
+        return 2;
+      }
+      if (roll <= 9) {
+        return 3;
+      }
+      return 4;
+    }
+    if (roll <= 4) {
+      return 2;
+    }
+    if (roll <= 8) {
+      return 3;
+    }
+    return 4;
+  }
+
+  function multiAddendMax(grade, addMax, count) {
+    if (count <= 2) {
+      return addMax;
+    }
+    if (count === 4) {
+      if (grade >= 5) {
+        return Math.min(addMax, 999);
+      }
+      if (grade >= 4) {
+        return Math.min(addMax, 499);
+      }
+      return Math.min(addMax, 99);
+    }
+    if (grade >= 5) {
+      return Math.min(addMax, 9999);
+    }
+    if (grade >= 4) {
+      return Math.min(addMax, 999);
+    }
+    return Math.min(addMax, 199);
+  }
+
+  function randomAddendList(min, max, count) {
+    const low = Math.max(0, min);
+    const high = Math.max(low, max);
+    const numbers = [];
+    for (let index = 0; index < count; index += 1) {
+      numbers.push(randomInt(low, high));
+    }
+    return numbers;
+  }
+
+  function randomSubtractChain(min, max, count) {
+    const low = Math.max(0, min);
+    const high = Math.max(low, max);
+    const subtrahends = [];
+    for (let index = 0; index < count - 1; index += 1) {
+      subtrahends.push(randomInt(low, high));
+    }
+    const subSum = subtrahends.reduce((sum, value) => sum + value, 0);
+    const result = randomInt(0, high);
+    return [subSum + result, ...subtrahends];
+  }
+
+  function makeAddSubTask(operation, operands) {
+    const answer =
+      operation === "addition"
+        ? operands.reduce((sum, value) => sum + value, 0)
+        : operands[0] - operands.slice(1).reduce((sum, value) => sum + value, 0);
+    const symbol = operation === "addition" ? "+" : "−";
+    const prompt = operands
+      .map((value, index) => (index === 0 ? fmt(value) : `${symbol} ${fmt(value)}`))
+      .join(" ");
+    return numberTask(operation, prompt, answer, {
+      a: operands[0],
+      b: operands[1],
+      operands,
+      operation,
+      key: `${operation}:${operands.join(":")}`,
+    });
+  }
+
   function genArithmetic(operation, grade, term, allowNegatives) {
     const base = levelOf(grade, term);
     const level = allowNegatives && base.neg ? { ...base, ...base.neg } : base;
@@ -195,12 +280,14 @@ function buildTopics(u) {
 
     if (operation === "addition") {
       if (!allowNegatives) {
-        const pair = randomAddends(addMin, level.addMax);
-        return numberTask("addition", `${fmt(pair.a)} + ${fmt(pair.b)}`, pair.a + pair.b, {
-          ...pair,
-          operation,
-          key: `${operation}:${pair.a}:${pair.b}`,
-        });
+        const count = addendCount(grade);
+        if (count === 2) {
+          const pair = randomAddends(addMin, level.addMax);
+          return makeAddSubTask(operation, [pair.a, pair.b]);
+        }
+        const cap = multiAddendMax(grade, level.addMax, count);
+        const smallMin = Math.min(addMin, Math.max(1, Math.floor(cap / 20)));
+        return makeAddSubTask(operation, randomAddendList(smallMin, cap, count));
       }
       const signed = withSigns(
         randomInt(Math.max(1, addMin), level.addMax),
@@ -217,12 +304,14 @@ function buildTopics(u) {
 
     if (operation === "subtraction") {
       if (!allowNegatives) {
-        const pair = randomSubtractPair(addMin, level.addMax);
-        return numberTask("subtraction", "", pair.a - pair.b, {
-          ...pair,
-          operation,
-          key: `${operation}:${pair.a}:${pair.b}`,
-        });
+        const count = addendCount(grade);
+        if (count === 2) {
+          const pair = randomSubtractPair(addMin, level.addMax);
+          return makeAddSubTask(operation, [pair.a, pair.b]);
+        }
+        const cap = multiAddendMax(grade, level.addMax, count);
+        const smallMin = Math.min(addMin, Math.max(1, Math.floor(cap / 20)));
+        return makeAddSubTask(operation, randomSubtractChain(smallMin, cap, count));
       }
       const signed = withSigns(
         randomInt(Math.max(1, addMin), level.addMax),

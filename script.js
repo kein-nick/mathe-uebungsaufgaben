@@ -307,6 +307,9 @@ function buildTopicPlan(count, selectedOps, blockSize = 10) {
 }
 
 function taskKey(task) {
+  if (task.operation && Array.isArray(task.operands) && task.operands.length >= 2) {
+    return `${task.type}|${task.operation}|${task.operands.join("|")}`;
+  }
   if (task.a != null && task.b != null && task.operation) {
     return `${task.type}|${task.operation}|${task.a}|${task.b}`;
   }
@@ -683,11 +686,6 @@ function showCreateStep() {
     show(adMidRow);
   }
   show(createBlock);
-  if (mobilePracticeQuery.matches) {
-    return;
-  }
-  const wide = window.matchMedia("(min-width: 1400px)").matches;
-  scrollToNext(SHOW_ADS && !wide ? adMidRow : createBlock);
 }
 
 function hideCreateStep() {
@@ -958,10 +956,21 @@ function applySnapshot(snapshot) {
   });
 }
 
+function taskOperands(task) {
+  if (Array.isArray(task.operands) && task.operands.length >= 2) {
+    return task.operands;
+  }
+  if (task.a != null && task.b != null) {
+    return [task.a, task.b];
+  }
+  return [];
+}
+
 function stackColumns(task) {
   const lengthOf = (number) => String(Math.abs(number)).length;
-  let columns = Math.max(lengthOf(task.a), lengthOf(task.b), lengthOf(task.answer), 1);
-  if (task.a < 0 || task.b < 0) {
+  const operands = taskOperands(task);
+  let columns = Math.max(...operands.map(lengthOf), lengthOf(task.answer), 1);
+  if (operands.some((number) => number < 0)) {
     columns += 1;
   }
   return columns;
@@ -1356,7 +1365,10 @@ function renderTasks(target = blocks, options = {}) {
   }
   target.innerHTML = "";
   const blockCount = Math.ceil(tasks.length / 10);
-  const allowMinusInput = tasks.some((task) => task.a < 0 || task.b < 0 || task.answer < 0);
+  const allowMinusInput = tasks.some((task) => {
+    const operands = taskOperands(task);
+    return task.answer < 0 || operands.some((number) => number < 0);
+  });
 
   for (let blockIndex = 0; blockIndex < blockCount; blockIndex += 1) {
     const start = blockIndex * 10;
@@ -1374,18 +1386,26 @@ function renderTasks(target = blocks, options = {}) {
       item.className = "task-item";
       if (!forPdf && usesWrittenStack(task)) {
         const columns = stackColumns(task);
+        const operands = taskOperands(task);
+        const operandRows = operands
+          .map((number, operandIndex) => {
+            const isLast = operandIndex === operands.length - 1;
+            const op =
+              operandIndex === 0
+                ? `<span class="sum-op-space"></span>`
+                : `<span class="sum-op">${symbols[task.operation]}</span>`;
+            return `
+            <div class="sum-row${isLast ? " sum-row-last" : ""}">
+              ${op}
+              ${operandDigitHtml(number, columns)}
+            </div>`;
+          })
+          .join("");
         row.classList.add("is-stack");
         row.innerHTML = `
           <span class="task-num">${index + 1}.</span>
           <div class="sum-stack" style="--cols: ${columns}">
-            <div class="sum-row">
-              <span class="sum-op-space"></span>
-              ${operandDigitHtml(task.a, columns)}
-            </div>
-            <div class="sum-row sum-row-b">
-              <span class="sum-op">${symbols[task.operation]}</span>
-              ${operandDigitHtml(task.b, columns)}
-            </div>
+            ${operandRows}
             <div class="sum-row sum-row-answer">
               <span class="sum-op-space"></span>
               ${answerDigitHtml(index, columns)}
@@ -1394,12 +1414,23 @@ function renderTasks(target = blocks, options = {}) {
         `;
         item.append(row);
       } else if (isArithmeticTask(task)) {
+        const operands = taskOperands(task);
+        const equation =
+          operands.length > 0
+            ? operands
+                .map((number, operandIndex) => {
+                  if (operandIndex === 0) {
+                    return `<span>${formatOperand(number, false)}</span>`;
+                  }
+                  return `<span>${symbols[task.operation]}</span><span>${formatOperand(number, true)}</span>`;
+                })
+                .join("")
+            : "";
         row.innerHTML = `
           <span class="task-num">${index + 1}.</span>
           <span class="task-eq">
-            <span>${formatOperand(task.a, false)}</span>
-            <span>${symbols[task.operation]}</span>
-            <span>${formatOperand(task.b, true)} =</span>
+            ${equation}
+            <span>=</span>
           </span>
           ${answerInput(index, task, allowMinusInput)}
         `;
