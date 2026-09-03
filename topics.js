@@ -1552,23 +1552,38 @@ function buildTopics(u) {
       fromTerm: 1,
       untilGrade: 4,
       example: () => "z. B. Spiegelbild wählen",
-      generate: () => {
-        const original = `<path d="M20 12 h18 v14 h-10 v18 h-8 z" fill="#2f5d50" stroke="#1c2430"/>`;
-        const mirrored = `<g transform="translate(56,0) scale(-1,1)">${original}</g>`;
-        const wrong = `<path d="M20 12 h18 v32 h-18 z" fill="#c45c26" stroke="#1c2430"/>`;
-        const rotated = `<path d="M12 44 h18 v-14 h10 v-18 h-8 v18 h-20 z" fill="#2f5d50" stroke="#1c2430"/>`;
+      generate: (g) => {
+        const figures = [
+          { id: "l", inner: `<path d="M16 10 h20 v14 h-10 v20 h-10 z" fill="#2f5d50" stroke="#1c2430"/>` },
+          { id: "arrow", inner: `<path d="M10 24 h20 v-10 l18 16 -18 16 v-10 h-20 z" fill="#2f5d50" stroke="#1c2430"/>` },
+          { id: "step", inner: `<path d="M12 42 h14 v-12 h14 v-16 h-28 z" fill="#2f5d50" stroke="#1c2430"/>` },
+          { id: "boot", inner: `<path d="M16 10 h16 v20 h14 v14 h-30 z" fill="#2f5d50" stroke="#1c2430"/>` },
+          { id: "tee", inner: `<path d="M12 10 h36 v12 h-12 v26 h-12 v-26 h-12 z" fill="#2f5d50" stroke="#1c2430"/>` },
+          { id: "flag", inner: `<path d="M18 8 v40" fill="none" stroke="#1c2430" stroke-width="3"/><path d="M20 10 h22 l-8 10 8 10 h-22 z" fill="#2f5d50" stroke="#1c2430"/>` },
+          { id: "hook", inner: `<path d="M34 10 v28 h-18 v-10 h8 v-18 z" fill="#2f5d50" stroke="#1c2430"/>` },
+          { id: "chair", inner: `<path d="M16 12 h20 v14 h8 v20 h-10 v-12 h-18 z" fill="#2f5d50" stroke="#1c2430"/>` },
+          { id: "eff", inner: `<path d="M16 10 h24 v10 h-14 v8 h12 v10 h-12 v10 h-10 z" fill="#2f5d50" stroke="#1c2430"/>` },
+          { id: "zag", inner: `<path d="M14 12 h22 l-14 14 h18 v14 h-24 l14 -14 h-16 z" fill="#2f5d50" stroke="#1c2430"/>` },
+        ];
+        const pool = g >= 4 ? figures : g >= 3 ? figures.slice(0, 8) : figures.slice(0, 6);
+        const fig = pick(pool);
+        const faceLeft = Math.random() < 0.5;
+        const flip = `<g transform="translate(56,0) scale(-1,1)">${fig.inner}</g>`;
+        const shown = faceLeft ? flip : fig.inner;
+        const mirrored = faceLeft ? fig.inner : flip;
+        const rotated = `<g transform="rotate(180 28 28)">${fig.inner}</g>`;
         const choices = [
           { value: "spiegel", label: "A", html: svg(mirrored, 60, 56) },
-          { value: "gleich", label: "B", html: svg(original, 60, 56) },
+          { value: "gleich", label: "B", html: svg(shown, 60, 56) },
           { value: "gedreht", label: "C", html: svg(rotated, 60, 56) },
         ];
         return choiceTask("mirror", "Welches Bild ist das Spiegelbild?", "spiegel", choices, {
           visualHtml: svg(
-            `${original}<line x1="70" y1="8" x2="70" y2="80" stroke="#c45c26" stroke-dasharray="4 3"/>`,
+            `${shown}<line x1="70" y1="8" x2="70" y2="80" stroke="#c45c26" stroke-dasharray="4 3"/>`,
             90,
             88
           ),
-          key: "mirror-house",
+          key: `mirror:${fig.id}:${faceLeft ? "l" : "r"}`,
         });
       },
     },

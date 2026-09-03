@@ -214,9 +214,9 @@ export const siteFaqs = [
     html: `<p>Ja. Du brauchst kein Lehrer-Konto. Klasse wählen, üben oder das PDF ausdrucken — zu Hause reicht das. Mehr dazu steht unter <a href="/fuer-eltern">Für Eltern</a>.</p>`,
   },
   {
-    q: "Kann ich Wünsche oder Fehler melden?",
-    a: "Ja. Unter Kontakt reicht eine kurze Mail — zum Beispiel fehlende Themen, ein Fehler im Blatt oder eine Anpassung für den Unterricht.",
-    html: `<p>Ja. Unter <a href="/kontakt">Kontakt</a> reicht eine kurze Mail — zum Beispiel fehlende Themen, ein Fehler im Blatt oder eine Anpassung für den Unterricht.</p>`,
+    q: "Was tun, wenn etwas nicht passt?",
+    a: "Dann einfach schreiben. Unter Kontakt reicht eine kurze Mail — zum Beispiel wenn eine Aufgabe nicht zur Klasse passt, ein Fehler auffällt oder du dir etwas anders wünschst.",
+    html: `<p>Dann einfach schreiben. Unter <a href="/kontakt">Kontakt</a> reicht eine kurze Mail — zum Beispiel wenn eine Aufgabe nicht zur Klasse passt, ein Fehler auffällt oder du dir etwas anders wünschst. Oben rechts in der Kopfzeile geht es direkt dorthin.</p>`,
   },
 ];
 
@@ -270,6 +270,11 @@ export const parentsPage = {
     {
       q: "Funktioniert das auf dem Handy oder Tablet?",
       a: "Ja. Die Seite ist für Handy, Tablet und Computer gemacht. Du kannst sie auch als App auf dem Startbildschirm speichern. Ein Konto brauchst du nicht, und es kostet nichts.",
+    },
+    {
+      q: "Was tun, wenn eine Aufgabe nicht passt?",
+      a: "Dann einfach schreiben. Unter Kontakt reicht eine kurze Mail — zum Beispiel wenn etwas nicht zur Klasse passt oder ein Fehler auffällt.",
+      html: `<p>Dann einfach schreiben. Unter <a href="/kontakt">Kontakt</a> reicht eine kurze Mail — zum Beispiel wenn etwas nicht zur Klasse passt oder ein Fehler auffällt.</p>`,
     },
   ],
 };
