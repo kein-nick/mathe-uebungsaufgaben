@@ -1617,6 +1617,53 @@ option:disabled {
   color: #7a4d00;
 }
 
+.site-header {
+  background: var(--grade);
+  color: #fff;
+}
+
+.site-header-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 11px 0;
+}
+
+.site-header-brand,
+.site-header-nav a {
+  color: #fff;
+  font-weight: 800;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  padding: 4px 0;
+}
+
+.site-header-brand {
+  font-size: 1.08rem;
+}
+
+.site-header-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 22px;
+}
+
+.site-header-nav a {
+  font-size: 1rem;
+}
+
+.site-header-brand:hover,
+.site-header-nav a:hover,
+.site-header-brand[aria-current="page"],
+.site-header-nav a[aria-current="page"] {
+  border-bottom-color: #fff;
+}
+
 .text-link {
   color: var(--grade);
   font-weight: 800;

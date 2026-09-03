@@ -1,10 +1,12 @@
-# Google-Indexierung mathe-testen.de
+# Indexierung mathe-testen.de
 
-Stand der Liste: 30.08.2026  
-Alle URLs unten wurden zur Indexierung beantragt.  
-`[x]` = in Google indexiert · `[ ]` = noch offen
+Google-Stand der Liste: 30.08.2026  
+Alle URLs unten wurden bei Google zur Indexierung beantragt.  
+`[x]` = in Google indexiert · `[ ]` = bei Google noch offen
 
 Zuletzt abgehakt nach `site:mathe-testen.de`-Treffern (30.08.2026).
+
+**Bing** (Webmaster Tools, 3.09.2026): Indexierung läuft. 12 URLs indexiert, keine Fehler/Warnungen. Welche 12 genau, hier nicht einzeln erfasst.
 
 ## Start & Rechtliches
 
@@ -42,3 +44,8 @@ Zuletzt abgehakt nach `site:mathe-testen.de`-Treffern (30.08.2026).
 - [ ] https://mathe-testen.de/schriftlich-rechnen
 - [ ] https://mathe-testen.de/dezimalzahlen
 - [ ] https://mathe-testen.de/geometrie-grundschule
+
+## Info
+
+- [ ] https://mathe-testen.de/faq
+- [ ] https://mathe-testen.de/fuer-lehrkraefte

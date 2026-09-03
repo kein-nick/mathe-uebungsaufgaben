@@ -156,3 +156,68 @@ export const topicDescriptions = {
   angles:
     "Winkel messen und benennen: spitz, recht, stumpf. Ab Klasse 5 ein eigenständiges Thema mit viel Zeichnen und Messen.",
 };
+
+export const siteFaqs = [
+  {
+    q: "Ist mathe-testen.de kostenlos?",
+    a: "Ja. Alle Übungen und PDFs sind kostenlos. Es gibt kein Abo und keine versteckten Kosten.",
+  },
+  {
+    q: "Brauche ich ein Konto?",
+    a: "Nein. Du wählst Klasse und Themen und kannst sofort üben — ohne Anmeldung und ohne E-Mail.",
+  },
+  {
+    q: "Kann ich Arbeitsblätter als PDF ausdrucken?",
+    a: "Ja. Nach dem Erstellen des Übungsblatts kannst du es als PDF herunterladen und ausdrucken — für zu Hause oder den Unterricht.",
+  },
+  {
+    q: "Für welche Klassen ist das gedacht?",
+    a: "Für Klasse 1 bis 6. Die Aufgaben passen sich der Klassenstufe und dem Halbjahr an. Auf den Klassenseiten steht, welche Themen typisch sind.",
+  },
+  {
+    q: "Sind die Aufgaben jedes Mal anders?",
+    a: "Ja. Die Aufgaben werden neu erzeugt. So übst du nicht dasselbe Blatt auswendig.",
+  },
+  {
+    q: "Kann ich mehrere Rechenarten auf einem Blatt mischen?",
+    a: "Ja. Du hakt die gewünschten Themen an. Standardmäßig werden sie gemischt. Mit „Eigene 10er-Blöcke“ bekommt jede Rechenart nacheinander eigene Zehnerblöcke — zum Beispiel erst 20 Plus, dann 10 Minus.",
+  },
+  {
+    q: "Gibt es ein Zeitlimit?",
+    a: "Optional. Vor dem Start kannst du ein Zeitlimit einschalten. Ohne Schalter übst du ohne Druck.",
+  },
+  {
+    q: "Funktioniert das auf dem Tablet?",
+    a: "Ja. Die Seite ist für Handy, Tablet und Computer gemacht. Du kannst sie auch als App auf dem Startbildschirm speichern.",
+  },
+  {
+    q: "Können Lehrkräfte die Seite im Unterricht nutzen?",
+    a: "Ja. Ohne Login, mit PDF und wählbaren Themen. Mehr dazu steht unter Für Lehrkräfte.",
+  },
+];
+
+export const teachersPage = {
+  title: "Mathe üben für Lehrkräfte – kostenlos & als PDF",
+  h1: "Für Lehrkräfte",
+  description:
+    "Kostenlose Mathe-Übungsblätter für Klasse 1 bis 6: Themen wählen, online oder als PDF — ohne Anmeldung, für Unterricht und Hausaufgaben.",
+  lead: "Schnelle Übungsblätter für Klasse 1 bis 6, ohne Konto und ohne Kopiervorlagen-Suche. Online rechnen lassen oder als PDF drucken.",
+  sections: [
+    {
+      heading: "Was du hier machen kannst",
+      text: "Du wählst die Klasse, das Halbjahr und die Rechenarten. Das Blatt wird neu erzeugt — jedes Mal andere Zahlen. Kinder können am Tablet oder Computer rechnen und prüfen lassen, oder du druckst das PDF für die Stunde oder als Hausaufgabe.",
+    },
+    {
+      heading: "Blöcke nach Rechenart",
+      text: "Wenn du mehrere Themen anhakt, kannst du eigene 10er-Blöcke einschalten. Dann steht zum Beispiel erst Addition, dann Subtraktion — nacheinander auf dem Blatt, nicht durcheinander. Pro Rechenart stellst du ein, wie viele Zehnerblöcke du brauchst.",
+    },
+    {
+      heading: "Ohne Anmeldung",
+      text: "Es gibt kein Lehrer-Login, keine Klasse anlegen, keine Schülerkonten. Die Seite ist bewusst schlank: Thema wählen, Blatt erzeugen, fertig. Alles kostenlos.",
+    },
+    {
+      heading: "So startest du",
+      text: "Klasse wählen, auf der Übungsseite Halbjahr und Themen festlegen, dann „Aufgaben erstellen“. Für den Ausdruck: nach dem Erstellen „Als PDF herunterladen“.",
+    },
+  ],
+};

@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { parentIntro, groupDescriptions, topicDescriptions } from "./landing-content.mjs";
+import { parentIntro, groupDescriptions, topicDescriptions, siteFaqs, teachersPage } from "./landing-content.mjs";
 import { topicHubs } from "./hub-content.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -116,6 +116,164 @@ function renderOpenGraph({ title, description, url, imageAlt }) {
     <meta name="twitter:image:alt" content="${safeImageAlt}" />`;
 }
 
+function renderSiteHeader(current = "") {
+  const brandCurrent = current === "home" ? ' aria-current="page"' : "";
+  const faqCurrent = current === "faq" ? ' aria-current="page"' : "";
+  const teachersCurrent = current === "lehrkraefte" ? ' aria-current="page"' : "";
+  return `<header class="site-header">
+    <div class="site-header-inner">
+      <a class="site-header-brand" href="/"${brandCurrent}>Mathe üben</a>
+      <nav class="site-header-nav" aria-label="Weitere Seiten">
+        <a href="/faq"${faqCurrent}>FAQ</a>
+        <a href="/fuer-lehrkraefte"${teachersCurrent}>Für Lehrkräfte</a>
+      </nav>
+    </div>
+  </header>`;
+}
+
+function renderSiteFooter(current = "", extraItems = []) {
+  const items = [
+    { href: "/", id: "home", label: "Startseite" },
+    ...extraItems,
+    { href: "/faq", id: "faq", label: "FAQ" },
+    { href: "/fuer-lehrkraefte", id: "lehrkraefte", label: "Für Lehrkräfte" },
+    { href: "/impressum", id: "impressum", label: "Impressum" },
+    { href: "/datenschutz", id: "datenschutz", label: "Datenschutz" },
+  ];
+  const links = items
+    .map((item, index) => {
+      const currentAttr = item.id === current ? ' aria-current="page"' : "";
+      const sep = index === 0 ? "" : `\n            <span aria-hidden="true">·</span>\n            `;
+      return `${sep}<a href="${item.href}"${currentAttr}>${escapeHtml(item.label)}</a>`;
+    })
+    .join("");
+  return `<footer class="site-footer">
+          <nav aria-label="Weitere Seiten">
+            ${links}
+          </nav>
+        </footer>`;
+}
+
+function faqAnswerHtml(item) {
+  if (item.q.includes("Lehrkräfte")) {
+    return 'Ja. Ohne Login, mit PDF und wählbaren Themen. Mehr dazu steht unter <a href="/fuer-lehrkraefte">Für Lehrkräfte</a>.';
+  }
+  return escapeHtml(item.a);
+}
+
+function renderFaqItems() {
+  return siteFaqs
+    .map(
+      (item) => `<div class="hub-faq-item">
+            <h3>${escapeHtml(item.q)}</h3>
+            <p>${faqAnswerHtml(item)}</p>
+          </div>`
+    )
+    .join("\n");
+}
+
+function renderFaqJsonLd() {
+  const url = `${SITE_URL}/faq`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${url}/#webpage`,
+        url,
+        name: "Häufige Fragen – Mathe üben Klasse 1–6",
+        description:
+          "Antworten zu mathe-testen.de: kostenlos, ohne Anmeldung, PDF-Druck, Klassen 1 bis 6, gemischte Aufgaben und 10er-Blöcke.",
+        inLanguage: "de-DE",
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${url}/#faq`,
+        mainEntity: siteFaqs.map((item) => ({
+          "@type": "Question",
+          name: item.q,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: item.a,
+          },
+        })),
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${url}/#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Startseite", item: `${SITE_URL}/` },
+          { "@type": "ListItem", position: 2, name: "FAQ", item: url },
+        ],
+      },
+    ],
+  };
+}
+
+function renderTeachersJsonLd() {
+  const url = `${SITE_URL}/fuer-lehrkraefte`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${url}/#webpage`,
+        url,
+        name: teachersPage.title,
+        description: teachersPage.description,
+        inLanguage: "de-DE",
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+        audience: {
+          "@type": "Audience",
+          audienceType: "Lehrkräfte",
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${url}/#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Startseite", item: `${SITE_URL}/` },
+          { "@type": "ListItem", position: 2, name: "Für Lehrkräfte", item: url },
+        ],
+      },
+    ],
+  };
+}
+
+function renderInfoPage({ current, title, description, url, h1, lead, jsonLd, mainHtml }) {
+  const meta = { title, description, url, imageAlt: title };
+  return `<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    ${renderDeviceMeta({ withManifest: true })}
+    <meta name="description" content="${escapeHtml(description)}" />
+    <link rel="canonical" href="${url}" />
+${renderOpenGraph(meta)}
+    <title>${escapeHtml(title)}</title>
+    ${renderJsonLdScript(jsonLd)}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    ${renderHeadAssets()}
+  </head>
+  <body class="ads-off legal-page-body">
+    ${renderSiteHeader(current)}
+    <div class="page-shell">
+      <div class="page">
+        <header class="intro">
+          <h1>${escapeHtml(h1)}</h1>
+          <p class="description">${escapeHtml(lead)}</p>
+        </header>
+        ${mainHtml}
+        ${renderSiteFooter(current)}
+      </div>
+    </div>
+    ${installPromptHtml}
+    ${pwaScripts}
+  </body>
+</html>`;
+}
+
 function renderJsonLdScript(data) {
   const json = JSON.stringify(data, null, 2)
     .split("\n")
@@ -207,7 +365,7 @@ function renderClassJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=27" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=28" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -329,8 +487,40 @@ function updateHomePage() {
     );
   }
 
+  html = injectHomeChrome(html);
   fs.writeFileSync(indexPath, html, "utf8");
   console.log("updated index.html");
+}
+
+function injectHomeChrome(html) {
+  const headerBlock = `    <!-- site-header:start -->
+    ${renderSiteHeader("home")}
+    <!-- site-header:end -->`;
+  const headerStart = "<!-- site-header:start -->";
+  const headerEnd = "<!-- site-header:end -->";
+  if (html.includes(headerStart)) {
+    html = html.replace(new RegExp(`${headerStart}[\\s\\S]*?${headerEnd}`), headerBlock.trim());
+  } else {
+    html = html.replace(
+      '<body class="ads-off home-page-body">',
+      `<body class="ads-off home-page-body">\n${headerBlock}`
+    );
+  }
+
+  const footerBlock = `        <!-- site-footer:start -->
+        ${renderSiteFooter("home")}
+        <!-- site-footer:end -->`;
+  const footerStart = "<!-- site-footer:start -->";
+  const footerEnd = "<!-- site-footer:end -->";
+  if (html.includes(footerStart)) {
+    html = html.replace(new RegExp(`${footerStart}[\\s\\S]*?${footerEnd}`), footerBlock.trim());
+  } else {
+    html = html.replace(
+      /<footer class="site-footer">[\s\S]*?<\/footer>/,
+      footerBlock.trim()
+    );
+  }
+  return html;
 }
 
 function renderClassNav(currentGrade = 0) {
@@ -434,8 +624,8 @@ function extractAppFragments() {
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart);
 
   const scripts = `    <script src="/topics.js?v=25"></script>
-    <script src="/script.js?v=27"></script>
-    <script defer src="/pwa.js?v=27"></script>
+    <script src="/script.js?v=28"></script>
+    <script defer src="/pwa.js?v=28"></script>
     <script>
       window.va =
         window.va ||
@@ -471,10 +661,10 @@ ${renderOpenGraph(meta)}
     ${renderHeadAssets()}
   </head>
   <body class="ads-off class-page-body">
+    ${renderSiteHeader()}
     <div class="page-shell">
       <div class="page">
         <header class="intro">
-          <p class="kicker"><a class="text-link" href="/">Zur Startseite</a></p>
           <h1>Mathe üben – Klasse ${grade}</h1>
           <p class="description">${classIntros[grade]}</p>
           ${renderClassNav(grade)}
@@ -493,15 +683,7 @@ ${renderOpenGraph(meta)}
           </section>
         </main>
 
-        <footer class="site-footer">
-          <nav aria-label="Rechtliches">
-            <a href="/">Startseite</a>
-            <span aria-hidden="true">·</span>
-            <a href="/impressum">Impressum</a>
-            <span aria-hidden="true">·</span>
-            <a href="/datenschutz">Datenschutz</a>
-          </nav>
-        </footer>
+        ${renderSiteFooter()}
       </div>
     </div>
 
@@ -531,6 +713,7 @@ function renderPracticePage(grade) {
     ${renderHeadAssets()}
   </head>
   <body class="ads-off practice-page-body" data-locked-grade="${grade}">
+    ${renderSiteHeader()}
     <div class="page-shell">
       <div class="page">
         <header class="intro">
@@ -547,17 +730,7 @@ function renderPracticePage(grade) {
 
         ${appMain}
 
-        <footer class="site-footer">
-          <nav aria-label="Rechtliches">
-            <a href="/">Startseite</a>
-            <span aria-hidden="true">·</span>
-            <a href="/klasse-${grade}">Klasse ${grade}</a>
-            <span aria-hidden="true">·</span>
-            <a href="/impressum">Impressum</a>
-            <span aria-hidden="true">·</span>
-            <a href="/datenschutz">Datenschutz</a>
-          </nav>
-        </footer>
+        ${renderSiteFooter("", [{ href: `/klasse-${grade}`, id: `klasse-${grade}`, label: `Klasse ${grade}` }])}
       </div>
     </div>
 
@@ -693,10 +866,10 @@ ${renderOpenGraph(meta)}
     ${renderHeadAssets()}
   </head>
   <body class="ads-off hub-page-body">
+    ${renderSiteHeader()}
     <div class="page-shell">
       <div class="page">
         <header class="intro">
-          <p class="kicker"><a class="text-link" href="/">Zur Startseite</a></p>
           <h1>${escapeHtml(hub.h1)}</h1>
           <p class="description">${escapeHtml(hub.lead)}</p>
         </header>
@@ -748,15 +921,7 @@ ${renderOpenGraph(meta)}
           </section>
         </main>
 
-        <footer class="site-footer">
-          <nav aria-label="Rechtliches">
-            <a href="/">Startseite</a>
-            <span aria-hidden="true">·</span>
-            <a href="/impressum">Impressum</a>
-            <span aria-hidden="true">·</span>
-            <a href="/datenschutz">Datenschutz</a>
-          </nav>
-        </footer>
+        ${renderSiteFooter()}
       </div>
     </div>
 
@@ -805,6 +970,23 @@ function updateSitemap() {
     }
   }
 
+  const extraPages = [
+    { loc: "https://mathe-testen.de/faq", priority: "0.7" },
+    { loc: "https://mathe-testen.de/fuer-lehrkraefte", priority: "0.7" },
+  ];
+  for (const page of extraPages) {
+    if (!sitemap.includes(`${page.loc}</loc>`)) {
+      sitemap = sitemap.replace(
+        "</urlset>",
+        `  <url>
+    <loc>${page.loc}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>${page.priority}</priority>
+  </url>\n</urlset>`
+      );
+    }
+  }
+
   fs.writeFileSync(sitemapPath, sitemap, "utf8");
 }
 
@@ -825,6 +1007,60 @@ for (const hub of topicHubs) {
   fs.writeFileSync(hubPath, renderHubPage(hub), "utf8");
   console.log("wrote", hubPath);
 }
+
+const faqMain = `<main class="legal-page landing-page">
+          <section class="hub-faq">
+            ${renderFaqItems()}
+          </section>
+        </main>`;
+
+fs.writeFileSync(
+  path.join(root, "faq.html"),
+  renderInfoPage({
+    current: "faq",
+    title: "Häufige Fragen – Mathe üben Klasse 1–6",
+    description:
+      "Ist mathe-testen.de kostenlos? Brauche ich ein Konto? Kann ich PDFs drucken? Antworten zu Übungen für Klasse 1 bis 6.",
+    url: `${SITE_URL}/faq`,
+    h1: "Häufige Fragen",
+    lead: "Kurz und klar: kostenlos, ohne Anmeldung, online oder als PDF — für Klasse 1 bis 6.",
+    jsonLd: renderFaqJsonLd(),
+    mainHtml: faqMain,
+  }),
+  "utf8"
+);
+console.log("wrote faq.html");
+
+const teachersMain = `<main class="legal-page landing-page">
+          ${teachersPage.sections
+            .map(
+              (section, index) => `<section aria-labelledby="teachers-h-${index}">
+            <h2 id="teachers-h-${index}">${escapeHtml(section.heading)}</h2>
+            <p>${escapeHtml(section.text)}</p>
+          </section>`
+            )
+            .join("\n")}
+          <p class="page-actions">
+            <a class="btn-primary" href="/">Klasse wählen und üben</a>
+            <a class="btn-secondary" href="/faq">Zu den häufigen Fragen</a>
+          </p>
+        </main>`;
+
+fs.writeFileSync(
+  path.join(root, "fuer-lehrkraefte.html"),
+  renderInfoPage({
+    current: "lehrkraefte",
+    title: teachersPage.title,
+    description: teachersPage.description,
+    url: `${SITE_URL}/fuer-lehrkraefte`,
+    h1: teachersPage.h1,
+    lead: teachersPage.lead,
+    jsonLd: renderTeachersJsonLd(),
+    mainHtml: teachersMain,
+  }),
+  "utf8"
+);
+console.log("wrote fuer-lehrkraefte.html");
 
 updateHomePage();
 updateSitemap();
