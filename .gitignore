@@ -5,6 +5,7 @@ Thumbs.db
 .env.*
 .vercel
 node_modules/
+scripts/pdf-preview-page.html
 _audit-*.js
 _debug-*.js
 _gen-test.js

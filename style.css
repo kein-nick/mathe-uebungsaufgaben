@@ -1998,6 +1998,36 @@ a.grade-btn-nav[aria-current="page"] {
   color: var(--muted);
 }
 
+.pdf-preview {
+  margin: 0.85rem 0 0;
+  max-width: 22rem;
+}
+
+.pdf-preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  background: #fff;
+}
+
+.pdf-preview figcaption {
+  margin: 0.5rem 0 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.hub-faq-item .pdf-preview {
+  max-width: 18rem;
+}
+
+.landing-page .pdf-preview {
+  max-width: 24rem;
+}
+
 .hub-faq-item .faq-class-links {
   display: flex;
   flex-wrap: wrap;

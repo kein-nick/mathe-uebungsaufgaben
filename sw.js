@@ -1,4 +1,4 @@
-const CACHE_NAME = "mathe-uebungsaufgaben-v29";
+const CACHE_NAME = "mathe-uebungsaufgaben-v30";
 
 const PRECACHE_URLS = [
   "/",
@@ -44,6 +44,7 @@ const PRECACHE_URLS = [
   "/icons/icon-512.png",
   "/icons/apple-touch-icon.png",
   "/icons/qr-mathe-testen.png",
+  "/images/pdf-vorschau.png",
 ];
 
 self.addEventListener("install", (event) => {

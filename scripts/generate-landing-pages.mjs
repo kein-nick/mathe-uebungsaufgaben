@@ -359,7 +359,7 @@ function renderClassJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=29" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=30" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -618,8 +618,8 @@ function extractAppFragments() {
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart);
 
   const scripts = `    <script src="/topics.js?v=25"></script>
-    <script src="/script.js?v=29"></script>
-    <script defer src="/pwa.js?v=29"></script>
+    <script src="/script.js?v=30"></script>
+    <script defer src="/pwa.js?v=30"></script>
     <script>
       window.va =
         window.va ||
@@ -1030,7 +1030,7 @@ const teachersMain = `<main class="legal-page landing-page">
             .map(
               (section, index) => `<section aria-labelledby="teachers-h-${index}">
             <h2 id="teachers-h-${index}">${escapeHtml(section.heading)}</h2>
-            <p>${escapeHtml(section.text)}</p>
+            <p>${escapeHtml(section.text)}</p>${section.html ? `\n            ${section.html}` : ""}
           </section>`
             )
             .join("\n")}

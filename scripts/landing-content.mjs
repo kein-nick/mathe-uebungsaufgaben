@@ -157,6 +157,13 @@ export const topicDescriptions = {
     "Winkel messen und benennen: spitz, recht, stumpf. Ab Klasse 5 ein eigenständiges Thema mit viel Zeichnen und Messen.",
 };
 
+function pdfPreviewFigure(lazy = false) {
+  return `<figure class="pdf-preview">
+              <img src="/images/pdf-vorschau.png" alt="Beispiel-PDF: Übungsblatt Klasse 3 mit 80 Plus- und Minusaufgaben in acht Kästen, Name und Datum oben, QR-Code unten." width="794" height="1123"${lazy ? ' loading="lazy"' : ""} />
+              <figcaption>Beispiel Klasse 3, Plus und Minus — so sieht das PDF aus.</figcaption>
+            </figure>`;
+}
+
 export const siteFaqs = [
   {
     q: "Ist mathe-testen.de kostenlos?",
@@ -170,6 +177,8 @@ export const siteFaqs = [
   {
     q: "Kann ich Arbeitsblätter als PDF ausdrucken?",
     a: "Ja. Nach dem Erstellen des Übungsblatts kannst du es als PDF herunterladen und ausdrucken — für zu Hause oder den Unterricht.",
+    html: `<p>Ja. Nach dem Erstellen des Übungsblatts kannst du es als PDF herunterladen und ausdrucken — für zu Hause oder den Unterricht.</p>
+            ${pdfPreviewFigure(true)}`,
   },
   {
     q: "Für welche Klassen ist das gedacht?",
@@ -211,6 +220,11 @@ export const teachersPage = {
     {
       heading: "Was du hier machen kannst",
       text: "Du wählst die Klasse, das Halbjahr und die Rechenarten. Das Blatt wird neu erzeugt — jedes Mal andere Zahlen. Kinder können am Tablet oder Computer rechnen und prüfen lassen, oder du druckst das PDF für die Stunde oder als Hausaufgabe.",
+    },
+    {
+      heading: "So sieht das PDF aus",
+      text: "Oben Name und Datum, darunter die Aufgaben in Kästen, unten ein QR-Code zur Website. Das Beispiel zeigt Klasse 3 mit Plus und Minus — 80 Aufgaben auf einer Seite.",
+      html: pdfPreviewFigure(false),
     },
     {
       heading: "Blöcke nach Rechenart",
