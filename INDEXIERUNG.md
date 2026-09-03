@@ -1,10 +1,10 @@
 # Indexierung mathe-testen.de
 
-Google-Stand der Liste: 30.08.2026  
-Alle URLs unten wurden bei Google zur Indexierung beantragt.  
+Google (Search Console, 3.09.2026): Sitemap eingereicht, Startseite sichtbar. Nicht alle URLs sind schon im Index — das ist normal und dauert oft Tage bis Wochen.
+
 `[x]` = in Google indexiert · `[ ]` = bei Google noch offen
 
-Zuletzt abgehakt nach `site:mathe-testen.de`-Treffern (30.08.2026).
+Zuletzt einzeln abgehakt nach `site:mathe-testen.de`-Treffern (30.08.2026). Die Haken unten sind also älter als der GSC-Stand; nachziehen, sobald mehr URLs sichtbar sind.
 
 **Bing** (Webmaster Tools, 3.09.2026): Indexierung läuft. 12 URLs indexiert, keine Fehler/Warnungen. Welche 12 genau, hier nicht einzeln erfasst.
 

@@ -14,10 +14,10 @@ Die ursprüngliche Kurz-Liste. Stand geprüft: 3. September 2026.
 
 | Idee | Status | Anmerkung |
 |------|--------|-----------|
-| **Google Search Console + Sitemap** | erledigt | Sitemap eingereicht. Bing Webmaster Tools angemeldet, Indexierung läuft (Stand 3.9.2026: 12 URLs bei Bing, keine Fehler). Offen bei Google: `INDEXIERUNG.md` |
-| **JSON-LD** | erledigt | Start: WebSite + WebApplication. Klassen: WebPage + Breadcrumb. Hubs: zusätzlich FAQ + HowTo |
+| **Google Search Console + Sitemap** | erledigt | Sitemap in GSC eingereicht, Startseite sichtbar. Weitere URLs kommen nach und nach. Bing: Indexierung läuft (Stand 3.9.2026: 12 URLs, keine Fehler). Einzelstand: `INDEXIERUNG.md` |
+| **JSON-LD** | erledigt | Start: WebSite + WebApplication. Klassen: WebPage + Breadcrumb. Hubs: zusätzlich FAQ + HowTo. FAQ-Seite: FAQPage |
 | **Mehr Text auf der Startseite** | erledigt | Eltern-Intro, Themen-Hubs, Klassen-Karten mit Rechnen/Zahlen/Größen/Geometrie |
-| **Canonical auf Impressum/Datenschutz** | offen | Start, Klassen, Hubs, Übungen haben Canonical. Impressum und Datenschutz **nicht** |
+| **Canonical auf Impressum/Datenschutz** | erledigt | Canonical und Meta-Description auf beiden Seiten. Schriften-Hinweis in der Datenschutzerklärung an lokale Fonts angepasst |
 | **Google Fonts lokal** | erledigt | `fonts/fraunces-latin.woff2`, `fonts/nunito-latin.woff2` — kein fonts.googleapis.com |
 
 Mittelfristige Punkte aus derselben Liste:
@@ -27,7 +27,7 @@ Mittelfristige Punkte aus derselben Liste:
 | **Landingpages pro Klasse** | erledigt | `/klasse-1` … `/klasse-6` mit Text und „Jetzt üben“ |
 | **Landingpages pro Thema** | erledigt | Hubs `/einmaleins`, `/brueche`, … — nicht die Kombi `/klasse-2/einmaleins` (bewusst später, nur bei Suchnachfrage) |
 | **URL mit Voreinstellungen** | erledigt | `?themen=` auf den Übungsseiten, Hubs setzen das voraus |
-| **FAQ-Bereich** | eigene Seite | `/faq` mit mehreren Fragen. Hubs behalten Themen-FAQs. Start- und Klassenseiten bleiben kurz. |
+| **FAQ-Bereich** | erledigt | `/faq` mit mehreren Fragen. Hubs behalten Themen-FAQs. Start- und Klassenseiten bleiben kurz |
 
 ---
 
@@ -36,8 +36,8 @@ Mittelfristige Punkte aus derselben Liste:
 - Domain `mathe-testen.de` mit Canonical-URL, HTTPS, `lang="de"`
 - Titel und Meta-Beschreibung (Klasse 1–6, kostenlos, PDF, online üben)
 - Open Graph und Twitter-Tags, gemeinsames `og-image.png`
-- `sitemap.xml` und `robots.txt` — Sitemap in Search Console und Bing; Indexierung bei Bing läuft (12 URLs, Stand 3.9.2026)
-- Impressum und Datenschutz (Seiten da, Canonical auf beiden noch nicht)
+- `sitemap.xml` und `robots.txt` — Sitemap in Search Console und Bing; Startseite bei Google sichtbar, restliche URLs folgen
+- Impressum und Datenschutz mit Canonical
 - PWA, lokale Fonts, schnelle statische Seite
 - JSON-LD (WebSite, WebApplication, Breadcrumb, FAQ, HowTo)
 - Klassen-Übersichten `/klasse-1` … `/klasse-6`
@@ -56,9 +56,9 @@ Reihenfolge nach Hebel, nicht nach Aufwand. Keine neuen Rechenarten.
 
 ### 1. Indexierung (größter Hebel, kein neuer Inhalt)
 
-Klasse 2–6 und alle Hubs waren in Google noch nicht indexiert, die Übungsseiten schon. Bei Bing läuft die Indexierung (12 URLs, keine Crawl-Fehler).
+Search Console und Sitemap sind eingerichtet, die Startseite ist sichtbar. Klasse 2–6 und die Hubs brauchen oft noch etwas Zeit, bis Google sie aufnimmt.
 
-- Search Console: jede Hub- und Klassen-URL prüfen, Indexierung beantragen
+- In der Search Console gelegentlich prüfen, welche URLs schon im Index sind
 - Intern klar verlinken: Startseite → Hubs, Klassen-Seiten → Hubs
 
 ### 2. Zielgruppen-Seiten (GEO)
