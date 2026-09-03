@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { parentIntro, groupDescriptions, topicDescriptions, siteFaqs, teachersPage } from "./landing-content.mjs";
+import { parentIntro, groupDescriptions, topicDescriptions, siteFaqs, teachersPage, parentsPage } from "./landing-content.mjs";
 import { topicHubs } from "./hub-content.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -119,13 +119,15 @@ function renderOpenGraph({ title, description, url, imageAlt }) {
 function renderSiteHeader(current = "") {
   const brandCurrent = current === "home" ? ' aria-current="page"' : "";
   const faqCurrent = current === "faq" ? ' aria-current="page"' : "";
+  const parentsCurrent = current === "eltern" ? ' aria-current="page"' : "";
   const teachersCurrent = current === "lehrkraefte" ? ' aria-current="page"' : "";
   return `<header class="site-header">
     <div class="site-header-inner">
       <a class="site-header-brand" href="/"${brandCurrent}>Mathe üben</a>
       <nav class="site-header-nav" aria-label="Weitere Seiten">
         <a href="/faq"${faqCurrent}>FAQ</a>
-        <a href="/fuer-lehrkraefte"${teachersCurrent}>Für Lehrkräfte</a>
+        <a href="/fuer-eltern"${parentsCurrent}>Eltern</a>
+        <a href="/fuer-lehrkraefte"${teachersCurrent}>Lehrkräfte</a>
       </nav>
     </div>
   </header>`;
@@ -136,6 +138,7 @@ function renderSiteFooter(current = "", extraItems = []) {
     { href: "/", id: "home", label: "Startseite" },
     ...extraItems,
     { href: "/faq", id: "faq", label: "FAQ" },
+    { href: "/fuer-eltern", id: "eltern", label: "Für Eltern" },
     { href: "/fuer-lehrkraefte", id: "lehrkraefte", label: "Für Lehrkräfte" },
     { href: "/impressum", id: "impressum", label: "Impressum" },
     { href: "/datenschutz", id: "datenschutz", label: "Datenschutz" },
@@ -154,8 +157,8 @@ function renderSiteFooter(current = "", extraItems = []) {
         </footer>`;
 }
 
-function renderFaqItems() {
-  return siteFaqs
+function renderFaqItems(items = siteFaqs) {
+  return items
     .map((item) => {
       const body = item.html || `<p>${escapeHtml(item.a)}</p>`;
       return `<div class="hub-faq-item">
@@ -229,6 +232,48 @@ function renderTeachersJsonLd() {
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Startseite", item: `${SITE_URL}/` },
           { "@type": "ListItem", position: 2, name: "Für Lehrkräfte", item: url },
+        ],
+      },
+    ],
+  };
+}
+
+function renderParentsJsonLd() {
+  const url = `${SITE_URL}/fuer-eltern`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${url}/#webpage`,
+        url,
+        name: parentsPage.title,
+        description: parentsPage.description,
+        inLanguage: "de-DE",
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+        audience: {
+          "@type": "Audience",
+          audienceType: "Eltern",
+        },
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${url}/#faq`,
+        mainEntity: parentsPage.faqs.map((item) => ({
+          "@type": "Question",
+          name: item.q,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: item.a,
+          },
+        })),
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${url}/#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Startseite", item: `${SITE_URL}/` },
+          { "@type": "ListItem", position: 2, name: "Für Eltern", item: url },
         ],
       },
     ],
@@ -359,7 +404,7 @@ function renderClassJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=30" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=31" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -618,8 +663,8 @@ function extractAppFragments() {
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart);
 
   const scripts = `    <script src="/topics.js?v=25"></script>
-    <script src="/script.js?v=30"></script>
-    <script defer src="/pwa.js?v=30"></script>
+    <script src="/script.js?v=31"></script>
+    <script defer src="/pwa.js?v=31"></script>
     <script>
       window.va =
         window.va ||
@@ -966,6 +1011,7 @@ function updateSitemap() {
 
   const extraPages = [
     { loc: "https://mathe-testen.de/faq", priority: "0.7" },
+    { loc: "https://mathe-testen.de/fuer-eltern", priority: "0.7" },
     { loc: "https://mathe-testen.de/fuer-lehrkraefte", priority: "0.7" },
   ];
   for (const page of extraPages) {
@@ -1055,6 +1101,32 @@ fs.writeFileSync(
   "utf8"
 );
 console.log("wrote fuer-lehrkraefte.html");
+
+const parentsMain = `<main class="legal-page landing-page">
+          <section class="hub-faq">
+            ${renderFaqItems(parentsPage.faqs)}
+          </section>
+          <p class="page-actions">
+            <a class="btn-primary" href="/">Klasse wählen und üben</a>
+            <a class="btn-secondary" href="/faq">Weitere Fragen</a>
+          </p>
+        </main>`;
+
+fs.writeFileSync(
+  path.join(root, "fuer-eltern.html"),
+  renderInfoPage({
+    current: "eltern",
+    title: parentsPage.title,
+    description: parentsPage.description,
+    url: `${SITE_URL}/fuer-eltern`,
+    h1: parentsPage.h1,
+    lead: parentsPage.lead,
+    jsonLd: renderParentsJsonLd(),
+    mainHtml: parentsMain,
+  }),
+  "utf8"
+);
+console.log("wrote fuer-eltern.html");
 
 updateHomePage();
 updateSitemap();

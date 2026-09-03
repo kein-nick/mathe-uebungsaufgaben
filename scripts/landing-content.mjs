@@ -205,10 +205,61 @@ export const siteFaqs = [
   },
   {
     q: "Können Lehrkräfte die Seite im Unterricht nutzen?",
-    a: "Ja. Ohne Login, mit PDF und wählbaren Themen. Mehr dazu steht unter Für Lehrkräfte.",
-    html: `<p>Ja. Ohne Login, mit PDF und wählbaren Themen. Mehr dazu steht unter <a href="/fuer-lehrkraefte">Für Lehrkräfte</a>.</p>`,
+    a: "Ja. Ohne Login, mit PDF und wählbaren Themen. Mehr dazu steht unter Für Lehrkräfte. Eltern finden Antworten unter Für Eltern.",
+    html: `<p>Ja. Ohne Login, mit PDF und wählbaren Themen. Mehr dazu steht unter <a href="/fuer-lehrkraefte">Für Lehrkräfte</a>. Eltern finden Antworten unter <a href="/fuer-eltern">Für Eltern</a>.</p>`,
+  },
+  {
+    q: "Ist das auch für Eltern gedacht?",
+    a: "Ja. Du brauchst kein Lehrer-Konto. Klasse wählen, üben oder das PDF ausdrucken — zu Hause reicht das. Mehr dazu steht unter Für Eltern.",
+    html: `<p>Ja. Du brauchst kein Lehrer-Konto. Klasse wählen, üben oder das PDF ausdrucken — zu Hause reicht das. Mehr dazu steht unter <a href="/fuer-eltern">Für Eltern</a>.</p>`,
   },
 ];
+
+export const parentsPage = {
+  title: "Mathe üben für Eltern – kostenlos zu Hause",
+  h1: "Für Eltern",
+  description:
+    "Mathe zu Hause üben, Klasse 1 bis 6: ohne Anmeldung, online oder als PDF. Antworten für Eltern — welche Klasse, wie lange, ob die Schule etwas sieht.",
+  lead: "Kurze Antworten, wenn dein Kind zu Hause üben soll — ohne dass du die heutige Schulmethode auswendig kennen musst.",
+  faqs: [
+    {
+      q: "Wie starte ich mit meinem Kind?",
+      a: "Auf der Startseite die Klasse wählen, Halbjahr und Themen festlegen, dann „Aufgaben erstellen“. Online rechnen und prüfen lassen oder das Blatt als PDF drucken.",
+      html: `<p>Auf der <a href="/">Startseite</a> die Klasse wählen, Halbjahr und Themen festlegen, dann „Aufgaben erstellen“. Online rechnen und prüfen lassen oder das Blatt als PDF drucken.</p>`,
+    },
+    {
+      q: "Welche Klasse soll ich nehmen?",
+      a: "Die aktuelle Klassenstufe. Im Zweifel lieber die passende Klasse und das richtige Halbjahr als „zur Sicherheit“ eine Klasse höher. Was typisch ist, steht auf den Klassenseiten.",
+      html: `<p>Die aktuelle Klassenstufe. Im Zweifel lieber die passende Klasse und das richtige Halbjahr als „zur Sicherheit“ eine Klasse höher. Was typisch ist, steht auf den Klassenseiten:</p>
+            <p class="faq-class-links"><a href="/klasse-1">Klasse 1</a><a href="/klasse-2">Klasse 2</a><a href="/klasse-3">Klasse 3</a><a href="/klasse-4">Klasse 4</a><a href="/klasse-5">Klasse 5</a><a href="/klasse-6">Klasse 6</a></p>`,
+    },
+    {
+      q: "Ich kenne die heutige Schulmethode nicht mehr — ist das schlimm?",
+      a: "Nein. Du musst die Aufgaben nicht selbst ausdenken. Das Kind rechnet, die Seite prüft. Begriffe und Reihenfolge können anders sein als früher — die Klassenseiten erklären, was typisch ist.",
+      html: `<p>Nein. Du musst die Aufgaben nicht selbst ausdenken. Das Kind rechnet, die Seite prüft. Begriffe und Reihenfolge können anders sein als früher — die <a href="/klasse-1">Klassenseiten</a> erklären, was typisch ist.</p>`,
+    },
+    {
+      q: "Wie lange soll mein Kind üben?",
+      a: "Lieber kurz und oft: zehn bis fünfzehn Minuten reichen oft. Ein Zeitlimit ist optional. Ohne Schalter übt ihr ohne Druck.",
+    },
+    {
+      q: "Sieht die Schule oder die Lehrkraft die Ergebnisse?",
+      a: "Nein. Es gibt keine Schülerkonten und keine Klassen. Nichts wird an die Schule geschickt. Bestzeiten bleiben nur im Browser auf eurem Gerät.",
+    },
+    {
+      q: "Lieber online rechnen oder ausdrucken?",
+      a: "Beides geht. Online sieht das Kind sofort, ob die Lösung stimmt. Das PDF ist zum Ausfüllen auf Papier — für den Küchentisch oder wenn kein Gerät da ist.",
+    },
+    {
+      q: "Die Aufgaben sind zu schwer oder zu leicht — was tun?",
+      a: "Weniger Themen anwählen, das andere Halbjahr wählen oder die Klasse anpassen. Mit eigenen 10er-Blöcken kommt erst eine Rechenart, dann die nächste — das ist oft übersichtlicher als alles gemischt.",
+    },
+    {
+      q: "Funktioniert das auf dem Handy oder Tablet?",
+      a: "Ja. Die Seite ist für Handy, Tablet und Computer gemacht. Du kannst sie auch als App auf dem Startbildschirm speichern. Ein Konto brauchst du nicht, und es kostet nichts.",
+    },
+  ],
+};
 
 export const teachersPage = {
   title: "Mathe üben für Lehrkräfte – kostenlos & als PDF",

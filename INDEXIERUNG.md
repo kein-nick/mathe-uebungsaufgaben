@@ -48,4 +48,5 @@ Zuletzt einzeln abgehakt nach `site:mathe-testen.de`-Treffern (30.08.2026). Die 
 ## Info
 
 - [ ] https://mathe-testen.de/faq
+- [ ] https://mathe-testen.de/fuer-eltern
 - [ ] https://mathe-testen.de/fuer-lehrkraefte

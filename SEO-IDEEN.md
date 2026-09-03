@@ -45,7 +45,7 @@ Mittelfristige Punkte aus derselben Liste:
 - Übungs-URLs mit `?themen=` (teilbar, Hubs setzen voraus)
 - Startseite verlinkt Hubs und Klassen mit lesbarem Text
 - Kopfzeile mit FAQ und Für Lehrkräfte (nicht festklebend)
-- `/faq` und `/fuer-lehrkraefte`
+- `/faq`, `/fuer-eltern` und `/fuer-lehrkraefte`
 - Bildungsserver / ELIXIER (nicht automatisch auf jedem Landesportal)
 
 ---
@@ -63,7 +63,7 @@ Search Console und Sitemap sind eingerichtet, die Startseite ist sichtbar. Klass
 
 ### 2. Zielgruppen-Seiten (GEO)
 
-`/fuer-lehrkraefte` ist da. Optional später: `/fuer-eltern`.
+`/fuer-lehrkraefte` und `/fuer-eltern` sind da.
 
 ### 3. Reichweite außerhalb von Google
 

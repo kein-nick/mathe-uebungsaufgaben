@@ -1657,6 +1657,16 @@ option:disabled {
   font-size: 1rem;
 }
 
+@media (max-width: 520px) {
+  .site-header-nav {
+    gap: 6px 14px;
+  }
+
+  .site-header-nav a {
+    font-size: 0.92rem;
+  }
+}
+
 .site-header-brand:hover,
 .site-header-nav a:hover,
 .site-header-brand[aria-current="page"],
