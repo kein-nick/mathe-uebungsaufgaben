@@ -1998,6 +1998,14 @@ a.grade-btn-nav[aria-current="page"] {
   color: var(--muted);
 }
 
+.hub-faq-item .faq-class-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.85rem;
+  margin: 0.65rem 0 0;
+  font-weight: 800;
+}
+
 .hub-related-list {
   margin: 0;
   padding-left: 1.2rem;

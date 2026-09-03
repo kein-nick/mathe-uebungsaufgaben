@@ -154,21 +154,15 @@ function renderSiteFooter(current = "", extraItems = []) {
         </footer>`;
 }
 
-function faqAnswerHtml(item) {
-  if (item.q.includes("Lehrkräfte")) {
-    return 'Ja. Ohne Login, mit PDF und wählbaren Themen. Mehr dazu steht unter <a href="/fuer-lehrkraefte">Für Lehrkräfte</a>.';
-  }
-  return escapeHtml(item.a);
-}
-
 function renderFaqItems() {
   return siteFaqs
-    .map(
-      (item) => `<div class="hub-faq-item">
+    .map((item) => {
+      const body = item.html || `<p>${escapeHtml(item.a)}</p>`;
+      return `<div class="hub-faq-item">
             <h3>${escapeHtml(item.q)}</h3>
-            <p>${faqAnswerHtml(item)}</p>
-          </div>`
-    )
+            ${body}
+          </div>`;
+    })
     .join("\n");
 }
 
@@ -365,7 +359,7 @@ function renderClassJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=28" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=29" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -624,8 +618,8 @@ function extractAppFragments() {
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart);
 
   const scripts = `    <script src="/topics.js?v=25"></script>
-    <script src="/script.js?v=28"></script>
-    <script defer src="/pwa.js?v=28"></script>
+    <script src="/script.js?v=29"></script>
+    <script defer src="/pwa.js?v=29"></script>
     <script>
       window.va =
         window.va ||

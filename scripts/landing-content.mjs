@@ -165,6 +165,7 @@ export const siteFaqs = [
   {
     q: "Brauche ich ein Konto?",
     a: "Nein. Du wählst Klasse und Themen und kannst sofort üben — ohne Anmeldung und ohne E-Mail.",
+    html: `<p>Nein. Du wählst auf der <a href="/">Startseite</a> die Klasse und kannst sofort üben — ohne Anmeldung und ohne E-Mail.</p>`,
   },
   {
     q: "Kann ich Arbeitsblätter als PDF ausdrucken?",
@@ -173,6 +174,8 @@ export const siteFaqs = [
   {
     q: "Für welche Klassen ist das gedacht?",
     a: "Für Klasse 1 bis 6. Die Aufgaben passen sich der Klassenstufe und dem Halbjahr an. Auf den Klassenseiten steht, welche Themen typisch sind.",
+    html: `<p>Für Klasse 1 bis 6. Die Aufgaben passen sich der Klassenstufe und dem Halbjahr an. Welche Themen typisch sind, steht auf den Klassenseiten:</p>
+            <p class="faq-class-links"><a href="/klasse-1">Klasse 1</a><a href="/klasse-2">Klasse 2</a><a href="/klasse-3">Klasse 3</a><a href="/klasse-4">Klasse 4</a><a href="/klasse-5">Klasse 5</a><a href="/klasse-6">Klasse 6</a></p>`,
   },
   {
     q: "Sind die Aufgaben jedes Mal anders?",
@@ -181,6 +184,7 @@ export const siteFaqs = [
   {
     q: "Kann ich mehrere Rechenarten auf einem Blatt mischen?",
     a: "Ja. Du hakt die gewünschten Themen an. Standardmäßig werden sie gemischt. Mit „Eigene 10er-Blöcke“ bekommt jede Rechenart nacheinander eigene Zehnerblöcke — zum Beispiel erst 20 Plus, dann 10 Minus.",
+    html: `<p>Ja. Du hakt die gewünschten Themen an. Standardmäßig werden sie gemischt. Mit „Eigene 10er-Blöcke“ bekommt jede Rechenart nacheinander eigene Zehnerblöcke — zum Beispiel erst 20 Plus, dann 10 Minus. Themen-Seiten wie <a href="/plus-minus">Plus und Minus</a> oder <a href="/einmaleins">Einmaleins</a> starten mit passender Vorauswahl.</p>`,
   },
   {
     q: "Gibt es ein Zeitlimit?",
@@ -193,6 +197,7 @@ export const siteFaqs = [
   {
     q: "Können Lehrkräfte die Seite im Unterricht nutzen?",
     a: "Ja. Ohne Login, mit PDF und wählbaren Themen. Mehr dazu steht unter Für Lehrkräfte.",
+    html: `<p>Ja. Ohne Login, mit PDF und wählbaren Themen. Mehr dazu steht unter <a href="/fuer-lehrkraefte">Für Lehrkräfte</a>.</p>`,
   },
 ];
 
