@@ -35,7 +35,7 @@ Mittelfristige Punkte aus derselben Liste:
 
 - Domain `mathe-testen.de` mit Canonical-URL, HTTPS, `lang="de"`
 - Titel und Meta-Beschreibung (Klasse 1–6, kostenlos, PDF, online üben)
-- Open Graph und Twitter-Tags, gemeinsames `og-image.png`
+- Open Graph und Twitter-Tags, gemeinsames `og-image.jpg` (1200×630, klein genug für WhatsApp)
 - `sitemap.xml` und `robots.txt` — Sitemap in Search Console und Bing; Startseite bei Google sichtbar, restliche URLs folgen
 - Impressum und Datenschutz mit Canonical
 - PWA, lokale Fonts, schnelle statische Seite

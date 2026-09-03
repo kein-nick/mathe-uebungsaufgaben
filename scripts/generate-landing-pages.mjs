@@ -93,7 +93,7 @@ function escapeHtml(text) {
 
 const SITE_URL = "https://mathe-testen.de";
 const SITE_NAME = "Mathematik Übungsaufgaben";
-const OG_IMAGE = `${SITE_URL}/og-image.png`;
+const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 
 function renderOpenGraph({ title, description, url, imageAlt }) {
   const safeTitle = escapeHtml(title);
@@ -106,8 +106,9 @@ function renderOpenGraph({ title, description, url, imageAlt }) {
     <meta property="og:description" content="${safeDescription}" />
     <meta property="og:url" content="${url}" />
     <meta property="og:image" content="${OG_IMAGE}" />
-    <meta property="og:image:width" content="1536" />
-    <meta property="og:image:height" content="1024" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="${safeImageAlt}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${safeTitle}" />
