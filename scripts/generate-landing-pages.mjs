@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { parentIntro, groupDescriptions, topicDescriptions, siteFaqs, teachersPage, parentsPage } from "./landing-content.mjs";
+import { parentIntro, groupDescriptions, topicDescriptions, siteFaqs, teachersPage, parentsPage, contactPage } from "./landing-content.mjs";
 import { topicHubs } from "./hub-content.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -122,6 +122,7 @@ function renderSiteHeader(current = "") {
   const faqCurrent = current === "faq" ? ' aria-current="page"' : "";
   const parentsCurrent = current === "eltern" ? ' aria-current="page"' : "";
   const teachersCurrent = current === "lehrkraefte" ? ' aria-current="page"' : "";
+  const contactCurrent = current === "kontakt" ? ' aria-current="page"' : "";
   return `<header class="site-header">
     <div class="site-header-inner">
       <a class="site-header-brand" href="/"${brandCurrent}>Mathe üben</a>
@@ -129,6 +130,7 @@ function renderSiteHeader(current = "") {
         <a href="/faq"${faqCurrent}>FAQ</a>
         <a href="/fuer-eltern"${parentsCurrent}>Eltern</a>
         <a href="/fuer-lehrkraefte"${teachersCurrent}>Lehrkräfte</a>
+        <a class="site-header-cta" href="/kontakt"${contactCurrent}>Kontakt</a>
       </nav>
     </div>
   </header>`;
@@ -141,6 +143,7 @@ function renderSiteFooter(current = "", extraItems = []) {
     { href: "/faq", id: "faq", label: "FAQ" },
     { href: "/fuer-eltern", id: "eltern", label: "Für Eltern" },
     { href: "/fuer-lehrkraefte", id: "lehrkraefte", label: "Für Lehrkräfte" },
+    { href: "/kontakt", id: "kontakt", label: "Kontakt" },
     { href: "/impressum", id: "impressum", label: "Impressum" },
     { href: "/datenschutz", id: "datenschutz", label: "Datenschutz" },
   ];
@@ -281,6 +284,32 @@ function renderParentsJsonLd() {
   };
 }
 
+function renderContactJsonLd() {
+  const url = `${SITE_URL}/kontakt`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ContactPage",
+        "@id": `${url}/#webpage`,
+        url,
+        name: contactPage.title,
+        description: contactPage.description,
+        inLanguage: "de-DE",
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${url}/#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Startseite", item: `${SITE_URL}/` },
+          { "@type": "ListItem", position: 2, name: "Kontakt", item: url },
+        ],
+      },
+    ],
+  };
+}
+
 function renderInfoPage({ current, title, description, url, h1, lead, jsonLd, mainHtml }) {
   const meta = { title, description, url, imageAlt: title };
   return `<!DOCTYPE html>
@@ -309,6 +338,7 @@ ${renderOpenGraph(meta)}
       </div>
     </div>
     ${installPromptHtml}
+    <script src="/email-protect.js"></script>
     ${pwaScripts}
   </body>
 </html>`;
@@ -405,7 +435,7 @@ function renderClassJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=31" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=32" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -664,8 +694,8 @@ function extractAppFragments() {
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart);
 
   const scripts = `    <script src="/topics.js?v=25"></script>
-    <script src="/script.js?v=31"></script>
-    <script defer src="/pwa.js?v=31"></script>
+    <script src="/script.js?v=32"></script>
+    <script defer src="/pwa.js?v=32"></script>
     <script>
       window.va =
         window.va ||
@@ -1014,6 +1044,7 @@ function updateSitemap() {
     { loc: "https://mathe-testen.de/faq", priority: "0.7" },
     { loc: "https://mathe-testen.de/fuer-eltern", priority: "0.7" },
     { loc: "https://mathe-testen.de/fuer-lehrkraefte", priority: "0.7" },
+    { loc: "https://mathe-testen.de/kontakt", priority: "0.5" },
   ];
   for (const page of extraPages) {
     if (!sitemap.includes(`${page.loc}</loc>`)) {
@@ -1128,6 +1159,36 @@ fs.writeFileSync(
   "utf8"
 );
 console.log("wrote fuer-eltern.html");
+
+const contactMain = `<main class="legal-page landing-page">
+          <p>Schreib gern, wenn etwas nicht stimmt oder du dir etwas anders wünschst. Typische Anliegen:</p>
+          <ul>
+            <li>Fehler oder unklare Aufgaben</li>
+            <li>fehlende Themen, andere Klassen oder Anpassungen am PDF</li>
+            <li>Ideen für den Einsatz in der Schule oder zu Hause</li>
+          </ul>
+          <p>Am hilfreichsten sind Klasse, Thema und ein kurzer Satz, was du brauchst. Es gibt kein Formular und kein Konto.</p>
+          <p class="page-actions">
+            <a class="btn-primary email-protected" href="#" data-keep-label data-u="a29udGFrdA==" data-d="bWF0aGUtdGVzdGVuLmRl">E-Mail schreiben</a>
+          </p>
+          <p class="hint">Die Adresse lautet <span class="email-protected" data-u="a29udGFrdA==" data-d="bWF0aGUtdGVzdGVuLmRl">kontakt [at] mathe-testen.de</span>.</p>
+        </main>`;
+
+fs.writeFileSync(
+  path.join(root, "kontakt.html"),
+  renderInfoPage({
+    current: "kontakt",
+    title: contactPage.title,
+    description: contactPage.description,
+    url: `${SITE_URL}/kontakt`,
+    h1: contactPage.h1,
+    lead: contactPage.lead,
+    jsonLd: renderContactJsonLd(),
+    mainHtml: contactMain,
+  }),
+  "utf8"
+);
+console.log("wrote kontakt.html");
 
 updateHomePage();
 updateSitemap();

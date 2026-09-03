@@ -213,7 +213,20 @@ export const siteFaqs = [
     a: "Ja. Du brauchst kein Lehrer-Konto. Klasse wählen, üben oder das PDF ausdrucken — zu Hause reicht das. Mehr dazu steht unter Für Eltern.",
     html: `<p>Ja. Du brauchst kein Lehrer-Konto. Klasse wählen, üben oder das PDF ausdrucken — zu Hause reicht das. Mehr dazu steht unter <a href="/fuer-eltern">Für Eltern</a>.</p>`,
   },
+  {
+    q: "Kann ich Wünsche oder Fehler melden?",
+    a: "Ja. Unter Kontakt reicht eine kurze Mail — zum Beispiel fehlende Themen, ein Fehler im Blatt oder eine Anpassung für den Unterricht.",
+    html: `<p>Ja. Unter <a href="/kontakt">Kontakt</a> reicht eine kurze Mail — zum Beispiel fehlende Themen, ein Fehler im Blatt oder eine Anpassung für den Unterricht.</p>`,
+  },
 ];
+
+export const contactPage = {
+  title: "Kontakt – Wünsche und Hinweise zu mathe-testen.de",
+  h1: "Kontakt",
+  description:
+    "Fehler, Wünsche oder Anpassungen zu den Mathe-Übungen: kurz eine Mail schreiben. Ohne Formular und ohne Konto.",
+  lead: "Wenn dir etwas fehlt, etwas hakt oder du eine Anpassung brauchst — eine kurze Mail reicht.",
+};
 
 export const parentsPage = {
   title: "Mathe üben für Eltern – kostenlos zu Hause",

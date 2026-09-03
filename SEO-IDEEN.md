@@ -45,7 +45,7 @@ Mittelfristige Punkte aus derselben Liste:
 - Übungs-URLs mit `?themen=` (teilbar, Hubs setzen voraus)
 - Startseite verlinkt Hubs und Klassen mit lesbarem Text
 - Kopfzeile mit FAQ und Für Lehrkräfte (nicht festklebend)
-- `/faq`, `/fuer-eltern` und `/fuer-lehrkraefte`
+- `/faq`, `/fuer-eltern`, `/fuer-lehrkraefte` und `/kontakt`
 - Bildungsserver / ELIXIER (nicht automatisch auf jedem Landesportal)
 
 ---

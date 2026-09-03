@@ -17,6 +17,8 @@
     if (el.tagName === "A") {
       el.href = `mailto:${address}`;
     }
-    el.textContent = address;
+    if (!el.hasAttribute("data-keep-label")) {
+      el.textContent = address;
+    }
   });
 })();
