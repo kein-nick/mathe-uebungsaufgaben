@@ -435,7 +435,7 @@ function renderClassJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=32" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=33" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />

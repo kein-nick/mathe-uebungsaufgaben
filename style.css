@@ -43,20 +43,14 @@
 }
 
 html {
-  overflow-y: scroll;
+  background: var(--paper);
+  overflow-y: auto;
   -webkit-text-size-adjust: 100%;
 }
 
 @supports (-webkit-touch-callout: none) {
   html {
     min-height: -webkit-fill-available;
-  }
-}
-
-@supports (scrollbar-gutter: stable) {
-  html {
-    overflow-y: auto;
-    scrollbar-gutter: stable;
   }
 }
 
