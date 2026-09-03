@@ -1115,6 +1115,7 @@ const teachersMain = `<main class="legal-page landing-page">
           <p class="page-actions">
             <a class="btn-primary" href="/">Klasse wählen und üben</a>
             <a class="btn-secondary" href="/faq">Zu den häufigen Fragen</a>
+            <a class="btn-secondary" href="/kontakt">Anpassung wünschen</a>
           </p>
         </main>`;
 

@@ -205,8 +205,8 @@ export const siteFaqs = [
   },
   {
     q: "Können Lehrkräfte die Seite im Unterricht nutzen?",
-    a: "Ja. Ohne Login, mit PDF und wählbaren Themen. Mehr dazu steht unter Für Lehrkräfte. Eltern finden Antworten unter Für Eltern.",
-    html: `<p>Ja. Ohne Login, mit PDF und wählbaren Themen. Mehr dazu steht unter <a href="/fuer-lehrkraefte">Für Lehrkräfte</a>. Eltern finden Antworten unter <a href="/fuer-eltern">Für Eltern</a>.</p>`,
+    a: "Ja. Ohne Login, mit PDF und wählbaren Themen. Mehr dazu steht unter Für Lehrkräfte. Eltern finden Antworten unter Für Eltern. Wenn etwas für den Unterricht angepasst werden sollte, reicht eine Mail unter Kontakt.",
+    html: `<p>Ja. Ohne Login, mit PDF und wählbaren Themen. Mehr dazu steht unter <a href="/fuer-lehrkraefte">Für Lehrkräfte</a>. Eltern finden Antworten unter <a href="/fuer-eltern">Für Eltern</a>. Wenn etwas für den Unterricht angepasst werden sollte, reicht eine Mail unter <a href="/kontakt">Kontakt</a>.</p>`,
   },
   {
     q: "Ist das auch für Eltern gedacht?",
@@ -306,6 +306,11 @@ export const teachersPage = {
     {
       heading: "So startest du",
       text: "Klasse wählen, auf der Übungsseite Halbjahr und Themen festlegen, dann „Aufgaben erstellen“. Für den Ausdruck: nach dem Erstellen „Als PDF herunterladen“.",
+    },
+    {
+      heading: "Wenn etwas angepasst werden sollte",
+      text: "Passt eine Aufgabe nicht zum Unterricht, fehlt ein Thema oder soll das PDF anders aussehen? Kurz schreiben — unter Kontakt reicht eine Mail. Es gibt kein Formular und kein Lehrer-Konto.",
+      html: `<p><a class="text-link" href="/kontakt">Zur Kontaktseite</a></p>`,
     },
   ],
 };
