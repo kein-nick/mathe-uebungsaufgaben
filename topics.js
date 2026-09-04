@@ -1669,29 +1669,46 @@ function buildTopics(u) {
       fromTerm: 1,
       example: () => "z. B. rechter Winkel = 90°",
       generate: (g, t) => {
+        const acute = t === 2 ? [20, 30, 45, 60, 70] : [30, 45, 60];
+        const obtuse = t === 2 ? [100, 120, 135, 150] : [120, 135, 150];
         const kinds = [
-          { id: "spitz", label: "spitzer Winkel", deg: pick(t === 2 ? [20, 30, 45, 60, 70] : [30, 45, 60]) },
+          { id: "spitz", label: "spitzer Winkel", deg: pick(acute) },
           { id: "recht", label: "rechter Winkel", deg: 90 },
-          { id: "stumpf", label: "stumpfer Winkel", deg: pick(t === 2 ? [100, 120, 135, 150] : [120, 135, 150]) },
+          { id: "stumpf", label: "stumpfer Winkel", deg: pick(obtuse) },
         ];
         const kind = pick(kinds);
-        const rad = (kind.deg * Math.PI) / 180;
-        const cx = 42;
-        const cy = 58;
-        const len = 34;
-        const x2 = cx + len * Math.cos(-rad);
-        const y2 = cy + len * Math.sin(-rad);
+        const turn = pick([0, 20, 35, 55, 80, 110, 140, 165, 200, 235, 260, 300, 330]);
+        const cx = 55;
+        const cy = 52;
+        const len = 36;
+        const ray = (deg, radius = len) => {
+          const rad = (deg * Math.PI) / 180;
+          return [cx + radius * Math.cos(rad), cy - radius * Math.sin(rad)];
+        };
+        const [x1, y1] = ray(turn);
+        const [x2, y2] = ray(turn + kind.deg);
+        let mark = "";
+        if (kind.deg === 90) {
+          const s = 8;
+          const [a1x, a1y] = ray(turn, s);
+          const [a3x, a3y] = ray(turn + 90, s);
+          const a2x = a1x + (a3x - cx);
+          const a2y = a1y + (a3y - cy);
+          mark = `<polyline points="${a1x},${a1y} ${a2x},${a2y} ${a3x},${a3y}" fill="none" stroke="#c45c26" stroke-width="1.6"/>`;
+        }
         const visual = svg(
-          `${svgSegment(cx, cy, cx + len, cy, 3, "#1c2430")}
+          `${svgSegment(cx, cy, x1, y1, 3, "#1c2430")}
            ${svgSegment(cx, cy, x2, y2, 3, "#1c2430")}
+           ${mark}
            <circle cx="${cx}" cy="${cy}" r="3" fill="#c45c26"/>`,
           110,
-          72
+          104
         );
-        if (kind.id === "recht" && Math.random() < (t === 2 ? 0.7 : 0.5)) {
-          return numberTask("angles", "Wie groß ist der Winkel in Grad?", 90, {
+        const askDegrees = Math.random() < (t === 2 ? 0.5 : 0.4);
+        if (askDegrees) {
+          return numberTask("angles", "Wie groß ist der Winkel in Grad?", kind.deg, {
             visualHtml: visual,
-            key: `deg-90-${Math.round(x2)}-${Math.round(y2)}`,
+            key: `deg:${kind.deg}:${turn}`,
           });
         }
         return choiceTask(
@@ -1701,8 +1718,7 @@ function buildTopics(u) {
           kinds.map((item) => item.label),
           {
             visualHtml: visual,
-            shuffle: false,
-            key: `${kind.id}-${kind.deg}`,
+            key: `art:${kind.id}:${kind.deg}:${turn}`,
           }
         );
       },
