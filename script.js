@@ -42,7 +42,8 @@ const mobilePracticeQuery = window.matchMedia("(max-width: 1024px), (pointer: co
 const SHOW_ADS = false;
 const TASK_BLOCK_SIZE = 10;
 const MAX_TASK_BLOCKS = 8;
-const MIXED_COUNT_HINT = "Die Rechenarten werden auf dem Blatt gemischt.";
+const MIXED_COUNT_HINT =
+  "Plus, Minus und ähnliche Rechenarten werden gemischt. Koordinaten, Winkel und andere Bilder stehen in eigenen Blöcken.";
 const BLOCK_MODE_HINT =
   "Jede Rechenart bekommt eigene 10er-Blöcke, nacheinander. Die Anzahl stellst du bei den Rechenarten ein.";
 
@@ -1247,7 +1248,7 @@ function operandDigitHtml(number, columns) {
   return html;
 }
 
-function answerDigitHtml(taskIndex, columns) {
+function answerDigitHtml(taskIndex, columns, labelNum = taskIndex + 1) {
   let html = "";
   for (let index = 0; index < columns; index += 1) {
     const isOnes = index === columns - 1;
@@ -1262,7 +1263,7 @@ function answerDigitHtml(taskIndex, columns) {
         autocorrect="off"
         spellcheck="false"
         tabindex="${isOnes ? 0 : -1}"
-        aria-label="Ziffer von rechts ${columns - index}, Aufgabe ${taskIndex + 1}"
+        aria-label="Ziffer von rechts ${columns - index}, Aufgabe ${labelNum}"
       />
     `;
   }
@@ -1459,12 +1460,12 @@ function usesNotesField(task) {
   return workingTypes.has(task.type) || isArithmeticTask(task);
 }
 
-function appendNotesField(item, index) {
+function appendNotesField(item, labelNum) {
   const notes = document.createElement("label");
   notes.className = "task-notes";
   notes.innerHTML = `
     <span>Rechenweg</span>
-    <textarea rows="2" aria-label="Rechenweg Aufgabe ${index + 1}"></textarea>
+    <textarea rows="2" aria-label="Rechenweg Aufgabe ${labelNum}"></textarea>
   `;
   item.append(notes);
 }
@@ -1493,7 +1494,7 @@ function usesWrittenStack(task) {
   );
 }
 
-function answerInput(index, task, allowMinusInput) {
+function answerInput(index, task, allowMinusInput, labelNum = index + 1) {
   const wide = task.wide ? " is-wide" : "";
   const mode = task.kind === "text" || task.kind === "fraction" || task.allowMinus || allowMinusInput ? "text" : "numeric";
   return `
@@ -1502,20 +1503,20 @@ function answerInput(index, task, allowMinusInput) {
       type="text"
       inputmode="${mode}"
       autocomplete="off"
-      aria-label="Ergebnis Aufgabe ${index + 1}"
+      aria-label="Ergebnis Aufgabe ${labelNum}"
     />
   `;
 }
 
-function answerControl(index, task, allowMinusInput) {
-  const input = answerInput(index, task, allowMinusInput);
+function answerControl(index, task, allowMinusInput, labelNum = index + 1) {
+  const input = answerInput(index, task, allowMinusInput, labelNum);
   if (!task.answerLabel) {
     return input;
   }
   return `<div class="answer-wrap"><span class="answer-label">${escapeHtml(task.answerLabel)}</span>${input}</div>`;
 }
 
-function choiceHtml(task, index) {
+function choiceHtml(task, index, labelNum = index + 1) {
   const options = task.choices
     .map(
       (choice) => `
@@ -1525,7 +1526,7 @@ function choiceHtml(task, index) {
         </label>`
     )
     .join("");
-  return `<div class="answer-choices" role="radiogroup" aria-label="Antwort Aufgabe ${index + 1}">${options}</div>`;
+  return `<div class="answer-choices" role="radiogroup" aria-label="Antwort Aufgabe ${labelNum}">${options}</div>`;
 }
 
 function escapeHtml(text) {
@@ -1701,14 +1702,53 @@ function fillPrintHeader() {
   `;
 }
 
-function blockHeading(slice, start, end) {
-  const range = `${start + 1}–${end}`;
-  if (!activeBlockMode) {
-    return `Aufgaben ${range}`;
+function isPictureTask(task) {
+  return Boolean(task.visualHtml) || task.kind === "choice";
+}
+
+function taskLayoutGroup(task) {
+  if (isPictureTask(task)) {
+    return `visual:${task.type}`;
   }
-  const labels = [...new Set(slice.map((task) => getTopic(task.type)?.label).filter(Boolean))];
+  if (task.operation === "addition" || task.operation === "subtraction") {
+    return "addsub";
+  }
+  return "compact";
+}
+
+function taskLayoutSlices(taskList) {
+  const buckets = new Map();
+  const order = [];
+  taskList.forEach((task, index) => {
+    const key = taskLayoutGroup(task);
+    if (!buckets.has(key)) {
+      buckets.set(key, []);
+      order.push(key);
+    }
+    buckets.get(key).push({ task, index });
+  });
+  const slices = [];
+  for (const key of order) {
+    const items = buckets.get(key);
+    for (let offset = 0; offset < items.length; offset += 10) {
+      slices.push({
+        key,
+        family: key.startsWith("visual:") ? "visual" : key,
+        items: items.slice(offset, offset + 10),
+      });
+    }
+  }
+  return slices;
+}
+
+function blockHeading(sliceTasks, startNum, endNum) {
+  const range = `${startNum}–${endNum}`;
+  const labels = [...new Set(sliceTasks.map((task) => getTopic(task.type)?.label).filter(Boolean))];
   if (labels.length === 1) {
     return `${labels[0]} · ${range}`;
+  }
+  if (labels.length === 2) {
+    return `${labels.join(" · ")} · ${range}`;
   }
   return `Aufgaben ${range}`;
 }
@@ -1717,15 +1757,97 @@ function usesWideSheet() {
   if (!tasks.length) {
     return false;
   }
-  if (Math.ceil(tasks.length / 10) <= 1) {
-    return true;
+  const slices = taskLayoutSlices(tasks);
+  if (slices.some((slice) => slice.family === "visual")) {
+    return false;
   }
-  return tasks.some(
-    (task) =>
-      task.visualHtml ||
-      task.kind === "choice" ||
-      taskOperands(task).length > 2
-  );
+  return slices.length <= 1;
+}
+
+function createTaskItem(task, index, displayNum, forPdf, allowMinusInput) {
+  const row = document.createElement("div");
+  row.className = "task";
+  row.dataset.index = String(index);
+  const item = document.createElement("div");
+  item.className = "task-item";
+  if (usesWrittenStack(task)) {
+    const columns = stackColumns(task);
+    const operands = taskOperands(task);
+    const operandRows = operands
+      .map((number, operandIndex) => {
+        const isLast = operandIndex === operands.length - 1;
+        const op =
+          operandIndex === 0
+            ? `<span class="sum-op-space"></span>`
+            : `<span class="sum-op">${symbols[task.operation]}</span>`;
+        return `
+            <div class="sum-row${isLast ? " sum-row-last" : ""}">
+              ${op}
+              ${operandDigitHtml(number, columns)}
+            </div>`;
+      })
+      .join("");
+    row.classList.add("is-stack");
+    row.innerHTML = `
+          <span class="task-num">${displayNum}.</span>
+          <div class="sum-stack" style="--cols: ${columns}">
+            ${operandRows}
+            <div class="sum-row sum-row-answer">
+              <span class="sum-op-space"></span>
+              ${answerDigitHtml(index, columns, displayNum)}
+            </div>
+          </div>
+        `;
+    item.append(row);
+  } else if (isArithmeticTask(task)) {
+    const operands = taskOperands(task);
+    const equation =
+      operands.length > 0
+        ? operands
+            .map((number, operandIndex) => {
+              if (operandIndex === 0) {
+                return `<span>${formatOperand(number, false)}</span>`;
+              }
+              return `<span>${symbols[task.operation]}</span><span>${formatOperand(number, true)}</span>`;
+            })
+            .join("")
+        : "";
+    row.innerHTML = `
+          <span class="task-num">${displayNum}.</span>
+          <span class="task-eq">
+            ${equation}
+            <span>=</span>
+          </span>
+          ${answerInput(index, task, allowMinusInput, displayNum)}
+        `;
+    item.append(row);
+    if (forPdf && usesNotesField(task)) {
+      appendPdfWorkLines(item);
+    } else if (!forPdf && usesNotesField(task)) {
+      appendNotesField(item, displayNum);
+    }
+  } else {
+    const prompt = task.promptHtml || escapeHtml(task.prompt);
+    const control =
+      task.kind === "choice"
+        ? choiceHtml(task, index, displayNum)
+        : answerControl(index, task, Boolean(task.allowMinus), displayNum);
+    row.innerHTML = `
+          <span class="task-num">${displayNum}.</span>
+          <div class="task-main">
+            ${task.visualHtml ? `<div class="task-visual">${task.visualHtml}</div>` : ""}
+            <div class="task-prompt">${prompt}</div>
+            ${control}
+          </div>
+        `;
+    item.append(row);
+    if (forPdf && usesNotesField(task)) {
+      appendPdfWorkLines(item);
+    } else if (!forPdf && usesNotesField(task)) {
+      appendNotesField(item, displayNum);
+    }
+  }
+  return item;
 }
 
 function renderTasks(target = blocks, options = {}) {
@@ -1735,102 +1857,29 @@ function renderTasks(target = blocks, options = {}) {
     blocks.classList.toggle("is-wide", usesWideSheet());
   }
   target.innerHTML = "";
-  const blockCount = Math.ceil(tasks.length / 10);
   const allowMinusInput = tasks.some((task) => {
     const operands = taskOperands(task);
     return task.answer < 0 || operands.some((number) => number < 0);
   });
+  const slices = taskLayoutSlices(tasks);
+  let displayNum = 1;
 
-  for (let blockIndex = 0; blockIndex < blockCount; blockIndex += 1) {
-    const start = blockIndex * 10;
-    const end = Math.min(start + 10, tasks.length);
-    const slice = tasks.slice(start, end);
+  for (const slice of slices) {
+    const sliceTasks = slice.items.map((item) => item.task);
+    const startNum = displayNum;
+    const endNum = displayNum + slice.items.length - 1;
     const block = document.createElement("article");
     block.className = "block";
-    block.innerHTML = `<h3>${escapeHtml(blockHeading(slice, start, end))}</h3>`;
+    if (slice.family === "visual") {
+      block.classList.add("is-visual");
+    } else if (slice.family === "addsub" && slice.items.some((item) => usesWrittenStack(item.task))) {
+      block.classList.add("is-written");
+    }
+    block.innerHTML = `<h3>${escapeHtml(blockHeading(sliceTasks, startNum, endNum))}</h3>`;
 
-    for (let index = start; index < end; index += 1) {
-      const task = tasks[index];
-      const row = document.createElement("div");
-      row.className = "task";
-      row.dataset.index = String(index);
-      const item = document.createElement("div");
-      item.className = "task-item";
-      if (usesWrittenStack(task)) {
-        const columns = stackColumns(task);
-        const operands = taskOperands(task);
-        const operandRows = operands
-          .map((number, operandIndex) => {
-            const isLast = operandIndex === operands.length - 1;
-            const op =
-              operandIndex === 0
-                ? `<span class="sum-op-space"></span>`
-                : `<span class="sum-op">${symbols[task.operation]}</span>`;
-            return `
-            <div class="sum-row${isLast ? " sum-row-last" : ""}">
-              ${op}
-              ${operandDigitHtml(number, columns)}
-            </div>`;
-          })
-          .join("");
-        row.classList.add("is-stack");
-        row.innerHTML = `
-          <span class="task-num">${index + 1}.</span>
-          <div class="sum-stack" style="--cols: ${columns}">
-            ${operandRows}
-            <div class="sum-row sum-row-answer">
-              <span class="sum-op-space"></span>
-              ${answerDigitHtml(index, columns)}
-            </div>
-          </div>
-        `;
-        item.append(row);
-      } else if (isArithmeticTask(task)) {
-        const operands = taskOperands(task);
-        const equation =
-          operands.length > 0
-            ? operands
-                .map((number, operandIndex) => {
-                  if (operandIndex === 0) {
-                    return `<span>${formatOperand(number, false)}</span>`;
-                  }
-                  return `<span>${symbols[task.operation]}</span><span>${formatOperand(number, true)}</span>`;
-                })
-                .join("")
-            : "";
-        row.innerHTML = `
-          <span class="task-num">${index + 1}.</span>
-          <span class="task-eq">
-            ${equation}
-            <span>=</span>
-          </span>
-          ${answerInput(index, task, allowMinusInput)}
-        `;
-        item.append(row);
-        if (forPdf && usesNotesField(task)) {
-          appendPdfWorkLines(item);
-        } else if (!forPdf && usesNotesField(task)) {
-          appendNotesField(item, index);
-        }
-      } else {
-        const prompt = task.promptHtml || escapeHtml(task.prompt);
-        const control = task.kind === "choice" ? choiceHtml(task, index) : answerControl(index, task, Boolean(task.allowMinus));
-        row.innerHTML = `
-          <span class="task-num">${index + 1}.</span>
-          <div class="task-main">
-            ${task.visualHtml ? `<div class="task-visual">${task.visualHtml}</div>` : ""}
-            <div class="task-prompt">${prompt}</div>
-            ${control}
-          </div>
-        `;
-        item.append(row);
-        if (forPdf && usesNotesField(task)) {
-          appendPdfWorkLines(item);
-        } else if (!forPdf && usesNotesField(task)) {
-          appendNotesField(item, index);
-        }
-      }
-      block.append(item);
+    for (const { task, index } of slice.items) {
+      block.append(createTaskItem(task, index, displayNum, forPdf, allowMinusInput));
+      displayNum += 1;
     }
 
     target.append(block);
@@ -1955,11 +2004,13 @@ function pdfUsesDenseGrid() {
 }
 
 function pdfBlockIsVisual(block) {
-  return Boolean(block.querySelector(".task-visual, .answer-choices"));
+  const rows = [...block.querySelectorAll(".task")];
+  return rows.length > 0 && rows.every((row) => row.querySelector(".task-visual, .answer-choices"));
 }
 
 function pdfBlockIsWritten(block) {
-  return Boolean(block.querySelector(".task.is-stack"));
+  const rows = [...block.querySelectorAll(".task")];
+  return rows.length > 0 && rows.every((row) => row.classList.contains("is-stack"));
 }
 
 function makePdfPage(inner, pageNum, pageCount, extraClass) {
