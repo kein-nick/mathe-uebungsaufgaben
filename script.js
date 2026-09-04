@@ -1429,8 +1429,18 @@ function usesWrittenStack(task) {
   );
 }
 
+function taskNeedsWideInput(task) {
+  if (task.wide) {
+    return true;
+  }
+  if (task.kind === "choice" || task.answer == null || typeof task.answer === "object") {
+    return false;
+  }
+  return String(task.answer).replace(/[.\s\-]/g, "").length >= 5;
+}
+
 function answerInput(index, task, allowMinusInput, labelNum = index + 1) {
-  const wide = task.wide ? " is-wide" : "";
+  const wide = taskNeedsWideInput(task) ? " is-wide" : "";
   const mode = task.kind === "text" || task.kind === "fraction" || task.allowMinus || allowMinusInput ? "text" : "numeric";
   return `
     <input
@@ -1950,6 +1960,50 @@ function pdfBlockIsWritten(block) {
   return rows.length > 0 && rows.every((row) => row.classList.contains("is-stack"));
 }
 
+function splitPdfVisualBlock(block, perPage = 4) {
+  const items = [...block.querySelectorAll(":scope > .task-item")];
+  if (items.length <= perPage) {
+    return [block];
+  }
+  const heading = block.querySelector(":scope > h3")?.textContent || "";
+  const base = heading.replace(/\s*·\s*\d+[–\-]\d+\s*$/, "").trim();
+  const parts = [];
+  for (let i = 0; i < items.length; i += perPage) {
+    const slice = items.slice(i, i + perPage);
+    const part = document.createElement("article");
+    part.className = block.className;
+    const headingEl = document.createElement("h3");
+    const first = slice[0].querySelector(".task-num")?.textContent.replace(".", "").trim() || "";
+    const last = slice[slice.length - 1].querySelector(".task-num")?.textContent.replace(".", "").trim() || "";
+    headingEl.textContent = first && last ? `${base} · ${first}–${last}` : heading;
+    part.append(headingEl);
+    slice.forEach((item) => part.append(item));
+    parts.push(part);
+  }
+  return parts;
+}
+
+function fitPdfVisualSvgs(root) {
+  root.querySelectorAll("svg.geo-svg, .task-visual svg").forEach((svg) => {
+    const box = svg.viewBox?.baseVal;
+    const viewW = box && box.width ? box.width : Number(svg.getAttribute("width")) || 160;
+    const viewH = box && box.height ? box.height : Number(svg.getAttribute("height")) || 120;
+    const maxW = 300;
+    const maxH = 240;
+    const scale = Math.min(maxW / viewW, maxH / viewH, 1);
+    const width = Math.max(96, Math.round(viewW * scale));
+    const height = Math.max(80, Math.round(viewH * scale));
+    svg.setAttribute("width", String(width));
+    svg.setAttribute("height", String(height));
+    svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+    svg.style.width = `${width}px`;
+    svg.style.height = `${height}px`;
+    svg.style.maxWidth = "100%";
+    svg.style.maxHeight = "none";
+    svg.style.flexShrink = "0";
+  });
+}
+
 function makePdfPage(inner, pageNum, pageCount, extraClass) {
   const page = document.createElement("section");
   page.className = `pdf-page pdf-keep${extraClass ? ` ${extraClass}` : ""}`;
@@ -1997,7 +2051,9 @@ async function buildPdfSheet() {
         continue;
       }
       if (pdfBlockIsVisual(block)) {
-        groups.push({ blocks: [block], kind: "visual" });
+        splitPdfVisualBlock(block, 4).forEach((part) => {
+          groups.push({ blocks: [part], kind: "visual" });
+        });
         i += 1;
         continue;
       }
@@ -2029,6 +2085,7 @@ async function buildPdfSheet() {
   pages.forEach((page) => sheet.append(page));
   clearPdfCloneInputs(sheet);
   preparePdfAnswerCells(sheet);
+  fitPdfVisualSvgs(sheet);
   document.body.append(sheet);
   await Promise.all(
     [...sheet.querySelectorAll("img")].map(
@@ -2077,6 +2134,7 @@ async function capturePdfPiece(element, widthPx, heightPx) {
         cloned.style.height = `${heightPx}px`;
         cloned.style.zIndex = "auto";
         cloned.style.opacity = "1";
+        fitPdfVisualSvgs(cloned);
       },
     });
     return {

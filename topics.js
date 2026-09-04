@@ -124,7 +124,7 @@ function buildTopics(u) {
   }
 
   function svg(inner, w = 140, h = 90) {
-    return `<svg class="geo-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" overflow="visible" aria-hidden="true">${inner}</svg>`;
+    return `<svg class="geo-svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet" overflow="visible" aria-hidden="true">${inner}</svg>`;
   }
 
   function answerKeyPart(answer) {
@@ -274,6 +274,7 @@ function buildTopics(u) {
       b: operands[1],
       operands,
       operation,
+      wide: String(Math.abs(answer)).length >= 5,
       key: `${operation}:${operands.join(":")}`,
     });
   }
@@ -1607,7 +1608,7 @@ function buildTopics(u) {
         const padB = 26;
         const padT = 12;
         const padR = 16;
-        const step = max >= 12 ? 18 : max >= 10 ? 20 : 22;
+        const step = max >= 12 ? 16 : max >= 10 ? 18 : 20;
         const plot = max * step;
         const ox = padL;
         const oy = padT + plot;
@@ -1655,19 +1656,22 @@ function buildTopics(u) {
         ];
         const kind = pick(kinds);
         const rad = (kind.deg * Math.PI) / 180;
-        const x = 70 + 40 * Math.cos(-rad);
-        const y = 70 + 40 * Math.sin(-rad);
+        const cx = 80;
+        const cy = 78;
+        const len = 52;
+        const x2 = cx + len * Math.cos(-rad);
+        const y2 = cy + len * Math.sin(-rad);
         const visual = svg(
-          `<line x1="70" y1="70" x2="120" y2="70" stroke="#1c2430" stroke-width="3"/>
-           <line x1="70" y1="70" x2="${x}" y2="${y}" stroke="#1c2430" stroke-width="3"/>
-           <circle cx="70" cy="70" r="3" fill="#c45c26"/>`,
-          140,
-          100
+          `<line x1="${cx}" y1="${cy}" x2="${cx + len}" y2="${cy}" stroke="#1c2430" stroke-width="3"/>
+           <line x1="${cx}" y1="${cy}" x2="${x2}" y2="${y2}" stroke="#1c2430" stroke-width="3"/>
+           <circle cx="${cx}" cy="${cy}" r="3.5" fill="#c45c26"/>`,
+          160,
+          118
         );
         if (kind.id === "recht" && Math.random() < (t === 2 ? 0.7 : 0.5)) {
           return numberTask("angles", "Wie groß ist der Winkel in Grad?", 90, {
             visualHtml: visual,
-            key: `deg-90-${Math.round(x)}-${Math.round(y)}`,
+            key: `deg-90-${Math.round(x2)}-${Math.round(y2)}`,
           });
         }
         return choiceTask(
