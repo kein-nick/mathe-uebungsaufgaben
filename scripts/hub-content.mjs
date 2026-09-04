@@ -272,7 +272,7 @@ export const topicHubs = [
       },
       {
         q: "Gibt es Lösungen?",
-        a: "Online kannst du die Eingaben prüfen lassen. Beim PDF-Üben eignet sich die Online-Variante parallel zur Kontrolle.",
+        a: "Ja. Online prüfst du die Eingaben. Zum gedruckten Blatt gibt es ein Lösungs-PDF mit denselben Nummern und den richtigen Antworten.",
       },
     ],
   },

@@ -1401,6 +1401,10 @@ option:disabled {
   display: none;
 }
 
+.pdf-solutions-btn {
+  background: #fff;
+}
+
 .status {
   margin: 0 auto 0 0;
   font-weight: 700;
@@ -2421,6 +2425,7 @@ a.grade-btn-nav[aria-current="page"] {
   }
 
   .pdf-btn,
+  .pdf-solutions-btn,
   .new-sheet-btn {
     width: 100%;
   }
@@ -3198,6 +3203,70 @@ a.grade-btn-nav[aria-current="page"] {
 
 .pdf-page-visual-fill .pdf-work-lines {
   display: none;
+}
+
+.pdf-solutions-banner {
+  margin: 8px 0 0;
+  font-weight: 800;
+  color: #c45c26;
+}
+
+.pdf-solutions-banner-continued {
+  flex: 0 0 auto;
+  margin: 0 0 10px;
+}
+
+.pdf-solutions-page {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pdf-solutions-block {
+  padding: 8px 10px 10px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.pdf-solutions-block h3 {
+  margin: 0 0 8px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #333;
+}
+
+.pdf-solutions-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pdf-solutions-list li {
+  display: grid;
+  grid-template-columns: 2.2rem minmax(0, 1fr);
+  column-gap: 8px;
+  align-items: baseline;
+  min-width: 0;
+}
+
+.pdf-sol-num {
+  color: #777;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+.pdf-sol-ans {
+  color: #1c2430;
+  font-size: 0.95rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
 }
 
 @media print {

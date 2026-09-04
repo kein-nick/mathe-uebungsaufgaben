@@ -176,8 +176,8 @@ export const siteFaqs = [
   },
   {
     q: "Kann ich Arbeitsblätter als PDF ausdrucken?",
-    a: "Ja. Nach dem Erstellen des Übungsblatts kannst du es als PDF herunterladen und ausdrucken — für zu Hause oder den Unterricht.",
-    html: `<p>Ja. Nach dem Erstellen des Übungsblatts kannst du es als PDF herunterladen und ausdrucken — für zu Hause oder den Unterricht.</p>
+    a: "Ja. Nach dem Erstellen kannst du das Arbeitsblatt und zusätzlich ein Lösungsblatt als PDF herunterladen — für zu Hause oder den Unterricht.",
+    html: `<p>Ja. Nach dem Erstellen kannst du das Arbeitsblatt und zusätzlich ein Lösungsblatt als PDF herunterladen — für zu Hause oder den Unterricht.</p>
             ${pdfPreviewFigure(true)}`,
   },
   {
@@ -261,7 +261,7 @@ export const parentsPage = {
     },
     {
       q: "Lieber online rechnen oder ausdrucken?",
-      a: "Beides geht. Online sieht das Kind sofort, ob die Lösung stimmt. Das PDF ist zum Ausfüllen auf Papier — für den Küchentisch oder wenn kein Gerät da ist.",
+      a: "Beides geht. Online sieht das Kind sofort, ob die Lösung stimmt. Das PDF ist zum Ausfüllen auf Papier; dazu gibt es ein Lösungsblatt für dich.",
     },
     {
       q: "Die Aufgaben sind zu schwer oder zu leicht — was tun?",
@@ -305,7 +305,7 @@ export const teachersPage = {
     },
     {
       heading: "So startest du",
-      text: "Klasse wählen, auf der Übungsseite Halbjahr und Themen festlegen, dann „Aufgaben erstellen“. Für den Ausdruck: nach dem Erstellen „Als PDF herunterladen“.",
+      text: "Klasse wählen, auf der Übungsseite Halbjahr und Themen festlegen, dann „Aufgaben erstellen“. Für den Ausdruck: „Als PDF herunterladen“ und bei Bedarf „Lösungen als PDF“.",
     },
     {
       heading: "Wenn etwas angepasst werden sollte",

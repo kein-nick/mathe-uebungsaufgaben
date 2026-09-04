@@ -26,6 +26,7 @@ const countdownSetup = document.getElementById("countdown-setup");
 const countdownMinutesInput = document.getElementById("countdown-minutes");
 const countdownEl = document.getElementById("countdown");
 const pdfBtn = document.getElementById("pdf-btn");
+const pdfSolutionsBtn = document.getElementById("pdf-solutions-btn");
 const newSheetBtn = document.getElementById("new-sheet-btn");
 const progressEl = document.getElementById("progress");
 const printHeader = document.getElementById("print-header");
@@ -686,11 +687,11 @@ function fillTermHints(grade) {
 }
 
 function show(element) {
-  element.classList.remove("is-hidden");
+  element?.classList.remove("is-hidden");
 }
 
 function hide(element) {
-  element.classList.add("is-hidden");
+  element?.classList.add("is-hidden");
 }
 
 function ensureDefaultBlocks() {
@@ -864,6 +865,7 @@ function resetLaterSteps({ preserveTopics = false } = {}) {
   hide(worksheet);
   hide(checkBtn);
   hide(pdfBtn);
+  hide(pdfSolutionsBtn);
   hide(newSheetBtn);
   hide(progressEl);
   progressEl.textContent = "";
@@ -1568,6 +1570,7 @@ function buildWorksheet() {
   startBtn.disabled = false;
   show(checkBtn);
   show(pdfBtn);
+  show(pdfSolutionsBtn);
   show(newSheetBtn);
   hide(progressEl);
   progressEl.textContent = "";
@@ -1890,7 +1893,23 @@ function clearPdfCloneInputs(root) {
   });
 }
 
-function pdfHeaderHtml() {
+function formatSolutionAnswer(task) {
+  let text;
+  if (task.kind === "choice") {
+    const match = task.choices?.find((item) => String(item.value) === String(task.answer));
+    text = match?.label || String(task.answer);
+  } else if (task.type === "angles" && typeof task.answer === "number") {
+    text = `${formatDeNumber(task.answer)}°`;
+  } else {
+    text = formatAnswerHint(task);
+  }
+  if (task.answerLabel) {
+    return `${task.answerLabel} ${text}`.replace(/\s+/g, " ").trim();
+  }
+  return text;
+}
+
+function pdfHeaderHtml({ solutions = false } = {}) {
   const meta = worksheetMeta();
   return `
     <header class="pdf-header">
@@ -1898,7 +1917,11 @@ function pdfHeaderHtml() {
       <h1>${escapeHtml(meta.title)}</h1>
       <p>${escapeHtml(meta.line)}</p>
       ${meta.topics ? `<p>${escapeHtml(meta.topics)}</p>` : ""}
-      <p class="print-meta">Name: ______________________ &nbsp; Datum: ______________</p>
+      ${
+        solutions
+          ? `<p class="pdf-solutions-banner">Lösungsblatt · nicht für Kinder</p>`
+          : `<p class="print-meta">Name: ______________________ &nbsp; Datum: ______________</p>`
+      }
     </header>
   `;
 }
@@ -2014,11 +2037,16 @@ function fitPdfVisualSvgs(root) {
   });
 }
 
-function makePdfPage(inner, pageNum, pageCount, extraClass) {
+function makePdfPage(inner, pageNum, pageCount, extraClass, headerOptions) {
   const page = document.createElement("section");
   page.className = `pdf-page pdf-keep${extraClass ? ` ${extraClass}` : ""}`;
   if (pageNum === 1) {
-    page.insertAdjacentHTML("afterbegin", pdfHeaderHtml());
+    page.insertAdjacentHTML("afterbegin", pdfHeaderHtml(headerOptions));
+  } else if (headerOptions?.solutions) {
+    page.insertAdjacentHTML(
+      "afterbegin",
+      `<p class="pdf-solutions-banner pdf-solutions-banner-continued">Lösungsblatt · nicht für Kinder</p>`
+    );
   }
   page.append(inner);
   page.insertAdjacentHTML("beforeend", pdfFooterHtml(pageNum, pageCount));
@@ -2161,59 +2189,158 @@ async function capturePdfPiece(element, widthPx, heightPx) {
   }
 }
 
+async function waitForPdfImages(root) {
+  await Promise.all(
+    [...root.querySelectorAll("img")].map((img) =>
+      img.complete
+        ? Promise.resolve()
+        : new Promise((resolve) => {
+            img.addEventListener("load", resolve, { once: true });
+            img.addEventListener("error", resolve, { once: true });
+          })
+    )
+  );
+}
+
+function buildPdfSolutionsSheet() {
+  const sheet = document.createElement("div");
+  sheet.className = "pdf-sheet";
+  sheet.setAttribute("aria-hidden", "true");
+  const slices = taskLayoutSlices(tasks);
+  const articles = [];
+  let displayNum = 1;
+  for (const slice of slices) {
+    const sliceTasks = slice.items.map((item) => item.task);
+    const startNum = displayNum;
+    const endNum = displayNum + slice.items.length - 1;
+    const article = document.createElement("article");
+    article.className = "pdf-solutions-block";
+    const heading = document.createElement("h3");
+    heading.textContent = blockHeading(sliceTasks, startNum, endNum);
+    article.append(heading);
+    const list = document.createElement("ol");
+    list.className = "pdf-solutions-list";
+    list.start = startNum;
+    for (const { task } of slice.items) {
+      const item = document.createElement("li");
+      item.innerHTML = `<span class="pdf-sol-num">${displayNum}.</span><span class="pdf-sol-ans">${escapeHtml(
+        formatSolutionAnswer(task)
+      )}</span>`;
+      list.append(item);
+      displayNum += 1;
+    }
+    article.append(list);
+    articles.push(article);
+  }
+  const perPage = 5;
+  const pageCount = Math.max(1, Math.ceil(articles.length / perPage));
+  for (let i = 0; i < pageCount; i += 1) {
+    const pageInner = document.createElement("div");
+    pageInner.className = "pdf-solutions-page";
+    articles.slice(i * perPage, i * perPage + perPage).forEach((block) => pageInner.append(block));
+    sheet.append(
+      makePdfPage(pageInner, i + 1, pageCount, "pdf-page-solutions", {
+        solutions: true,
+      })
+    );
+  }
+  document.body.append(sheet);
+  return sheet;
+}
+
+async function exportPdfSheet(sheet, fileName) {
+  const widthPx = 794;
+  const heightPx = 1123;
+  await waitForPdfImages(sheet);
+  await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  const pieces = [...sheet.querySelectorAll(".pdf-keep")];
+  const images = [];
+  for (const piece of pieces) {
+    images.push(await capturePdfPiece(piece, widthPx, heightPx));
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: "mm", format: "a4", compress: true });
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const margin = 8;
+  const usableW = pageW - margin * 2;
+  const usableH = pageH - margin * 2;
+  images.forEach((image, index) => {
+    if (index > 0) {
+      doc.addPage();
+    }
+    doc.addImage(image.dataUrl, "PNG", margin, margin, usableW, usableH, undefined, "FAST");
+  });
+  doc.save(fileName);
+}
+
+function pdfButtonSet() {
+  return [pdfBtn, pdfSolutionsBtn].filter(Boolean);
+}
+
 async function downloadWorksheetPdf() {
   if (!tasks.length) {
     return;
   }
-
   const previousLabel = pdfBtn.textContent;
-  pdfBtn.disabled = true;
+  pdfButtonSet().forEach((btn) => {
+    btn.disabled = true;
+  });
   pdfBtn.textContent = "PDF wird erstellt…";
-
   let sheet = null;
-  const widthPx = 794;
-  const heightPx = 1123;
-
   try {
     await ensurePdfLibraries();
     await document.fonts?.ready;
     sheet = await buildPdfSheet();
-    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-
-    const pieces = [...sheet.querySelectorAll(".pdf-keep")];
-    const images = [];
-    for (const piece of pieces) {
-      images.push(await capturePdfPiece(piece, widthPx, heightPx));
-    }
-
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ unit: "mm", format: "a4", compress: true });
-    const pageW = doc.internal.pageSize.getWidth();
-    const pageH = doc.internal.pageSize.getHeight();
-    const margin = 8;
-    const usableW = pageW - margin * 2;
-    const usableH = pageH - margin * 2;
-
-    images.forEach((image, index) => {
-      if (index > 0) {
-        doc.addPage();
-      }
-      doc.addImage(image.dataUrl, "PNG", margin, margin, usableW, usableH, undefined, "FAST");
-    });
-
-    doc.save(worksheetMeta().fileName);
+    await exportPdfSheet(sheet, worksheetMeta().fileName);
   } catch (error) {
     console.error(error);
     window.print();
   } finally {
     sheet?.remove();
-    pdfBtn.disabled = false;
+    pdfButtonSet().forEach((btn) => {
+      btn.disabled = false;
+    });
     pdfBtn.textContent = previousLabel;
+  }
+}
+
+async function downloadSolutionsPdf() {
+  if (!tasks.length) {
+    return;
+  }
+  const previousLabel = pdfSolutionsBtn.textContent;
+  pdfButtonSet().forEach((btn) => {
+    btn.disabled = true;
+  });
+  pdfSolutionsBtn.textContent = "PDF wird erstellt…";
+  let sheet = null;
+  try {
+    await ensurePdfLibraries();
+    await document.fonts?.ready;
+    sheet = buildPdfSolutionsSheet();
+    await exportPdfSheet(
+      sheet,
+      `mathe-klasse-${selectedGrade}-${selectedTerm}hj-${tasks.length}-loesungen.pdf`
+    );
+  } catch (error) {
+    console.error(error);
+    statusEl.textContent = "Das Lösungsblatt konnte nicht erstellt werden.";
+  } finally {
+    sheet?.remove();
+    pdfButtonSet().forEach((btn) => {
+      btn.disabled = false;
+    });
+    pdfSolutionsBtn.textContent = previousLabel;
   }
 }
 
 pdfBtn.addEventListener("click", () => {
   downloadWorksheetPdf();
+});
+
+pdfSolutionsBtn?.addEventListener("click", () => {
+  downloadSolutionsPdf();
 });
 
 checkBtn.addEventListener("click", () => {
