@@ -364,8 +364,8 @@ ${json}
 
 function classPageMeta(grade) {
   return {
-    title: `Mathe Klasse ${grade} – Themen erklärt & üben`,
-    description: `Mathe Klasse ${grade} erklärt: Themen, Rechenarten und Kategorien für Eltern — plus kostenlose Übungsaufgaben online und als PDF.`,
+    title: `Mathe Klasse ${grade} – Übungen online & als PDF`,
+    description: `Mathe Klasse ${grade}: kostenlose Übungen und Arbeitsblätter — online üben oder als PDF zum Ausdrucken. Ohne Anmeldung.`,
     url: `${SITE_URL}/klasse-${grade}`,
     image: classOgImage(grade),
     imageAlt: `Mathematik Übungsaufgaben Klasse ${grade}`,
@@ -744,8 +744,8 @@ ${renderOpenGraph(meta)}
     <div class="page-shell">
       <div class="page">
         <header class="intro">
-          <h1>Mathe üben – Klasse ${grade}</h1>
-          <p class="description">${classIntros[grade]}</p>
+          <h1>Mathe Übungen – Klasse ${grade}</h1>
+          <p class="description">${classIntros[grade]} Kostenlose Übungen online oder als Arbeitsblatt zum Ausdrucken.</p>
           ${renderClassNav(grade)}
         </header>
 
@@ -784,12 +784,12 @@ function renderPracticePage(grade) {
     ${renderDeviceMeta({ withManifest: true })}
     <meta
       name="description"
-      content="Mathe-Übungen für Klasse ${grade}: Halbjahr, Anzahl und Themen wählen — online üben oder Arbeitsblatt als PDF."
+      content="Mathe-Übungen für Klasse ${grade}: Halbjahr, Anzahl und Themen wählen — online üben oder Arbeitsblatt als PDF zum Ausdrucken."
     />
     <link rel="canonical" href="https://mathe-testen.de/klasse-${grade}/uebungen" />
 ${renderOpenGraph({
     title: `Übungsaufgaben Klasse ${grade} – online & als PDF`,
-    description: `Mathe-Übungen für Klasse ${grade}: Halbjahr, Anzahl und Themen wählen — online üben oder Arbeitsblatt als PDF.`,
+    description: `Mathe-Übungen für Klasse ${grade}: Halbjahr, Anzahl und Themen wählen — online üben oder Arbeitsblatt als PDF zum Ausdrucken.`,
     url: `${SITE_URL}/klasse-${grade}/uebungen`,
     image: classOgImage(grade),
     imageAlt: `Mathematik Übungsaufgaben Klasse ${grade}`,
