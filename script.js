@@ -487,8 +487,20 @@ const { topics, GROUP: topicGroups } = buildTopics({
   symbols,
 });
 
+function formatDeNumber(value) {
+  if (typeof value !== "number" || Number.isNaN(value)) {
+    return String(value).replace("-", "−");
+  }
+  if (!Number.isInteger(value)) {
+    return String(value).replace(".", ",").replace("-", "−");
+  }
+  const sign = value < 0 ? "−" : "";
+  const grouped = String(Math.abs(value)).replace(/\B(?=(\d{3})+(?!\d))/g, "\u202f");
+  return sign + grouped;
+}
+
 function formatOperand(value, wrapNegative) {
-  const text = String(value).replace("-", "−");
+  const text = formatDeNumber(value);
   if (wrapNegative && value < 0) {
     return `(${text})`;
   }
@@ -500,7 +512,11 @@ function parseNumberInput(value) {
   if (trimmed === "" || trimmed === "-") {
     return null;
   }
-  const normalized = trimmed.replace(/\.(?=\d{3}(?:\D|$))/g, "").replace(",", ".");
+  const normalized = trimmed
+    .replace(/\u00a0|\u202f|\u2009/g, "")
+    .replace(/'/g, "")
+    .replace(/\.(?=\d{3}(?:\D|$))/g, "")
+    .replace(",", ".");
   const number = Number(normalized);
   return Number.isFinite(number) ? number : NaN;
 }
@@ -1256,10 +1272,19 @@ function answerDigitHtml(taskIndex, columns) {
 function readTaskAnswer(row) {
   const digits = [...row.querySelectorAll(".sum-digit-input")];
   if (digits.length) {
-    if (digits.every((digit) => digit.value.trim() === "")) {
+    const values = digits.map((digit) => digit.value.trim());
+    if (values.every((value) => value === "")) {
       return null;
     }
-    const joined = digits.map((digit) => (digit.value.trim() === "" ? "0" : digit.value.trim())).join("");
+    const start = values.findIndex((value) => value !== "");
+    let end = values.length - 1;
+    while (end > start && values[end] === "") {
+      end -= 1;
+    }
+    const joined = values
+      .slice(start, end + 1)
+      .map((value) => (value === "" ? "0" : value))
+      .join("");
     const number = Number(joined);
     return Number.isFinite(number) ? number : NaN;
   }
@@ -1284,7 +1309,11 @@ function isAnswerCorrect(task, value) {
     const left = String(value).trim().toLowerCase().replace(/\s/g, "");
     const right = String(task.answer).trim().toLowerCase().replace(/\s/g, "");
     if (task.type === "coordinates") {
-      const normalize = (text) => text.replace(/[()]/g, "").replace(/[|,;]/g, "-");
+      const normalize = (text) =>
+        text
+          .replace(/[()]/g, "")
+          .replace(/[|,;/_]|–|—/g, "-")
+          .replace(/,/g, "-");
       return normalize(left) === normalize(right);
     }
     if (task.type === "clock") {
@@ -1305,10 +1334,57 @@ function isAnswerCorrect(task, value) {
   if (number === null || Number.isNaN(number)) {
     return false;
   }
-  if (task.kind === "decimal") {
-    return Math.abs(number - Number(task.answer)) < 0.001;
+  const expected = Number(task.answer);
+  if (!Number.isFinite(expected)) {
+    return false;
   }
-  return number === task.answer;
+  if (task.kind === "decimal" || !Number.isInteger(expected) || !Number.isInteger(number)) {
+    return Math.abs(number - expected) < 0.001;
+  }
+  return number === expected;
+}
+
+function formatAnswerHint(task) {
+  if (task.kind === "choice") {
+    return String(task.answer);
+  }
+  if (task.kind === "fraction" && task.answer && typeof task.answer === "object") {
+    return `${task.answer.n}/${task.answer.d}`;
+  }
+  if (typeof task.answer === "number") {
+    return formatDeNumber(task.answer);
+  }
+  return String(task.answer).replace("-", "−");
+}
+
+function markChoiceReview(row, task) {
+  row.querySelectorAll(".choice-chip").forEach((chip) => {
+    const input = chip.querySelector("input");
+    if (!input) {
+      return;
+    }
+    chip.classList.toggle("is-picked", input.checked);
+    chip.classList.toggle("is-solution", input.value === String(task.answer));
+  });
+}
+
+function clearTaskReview(row) {
+  row.classList.remove("is-wrong");
+  row.querySelector(".task-answer-hint")?.remove();
+  row.querySelectorAll(".choice-chip").forEach((chip) => {
+    chip.classList.remove("is-picked", "is-solution");
+  });
+}
+
+function setTaskHint(row, task, isCorrect) {
+  row.querySelector(".task-answer-hint")?.remove();
+  if (isCorrect || task.kind === "choice") {
+    return;
+  }
+  const hint = document.createElement("p");
+  hint.className = "task-answer-hint";
+  hint.textContent = `Richtig: ${formatAnswerHint(task)}`;
+  row.append(hint);
 }
 
 function setTaskInputsDisabled(row, disabled) {
@@ -1628,10 +1704,26 @@ function blockHeading(slice, start, end) {
   return `Aufgaben ${range}`;
 }
 
+function usesWideSheet() {
+  if (!tasks.length) {
+    return false;
+  }
+  if (Math.ceil(tasks.length / 10) <= 1) {
+    return true;
+  }
+  return tasks.some(
+    (task) =>
+      task.visualHtml ||
+      task.kind === "choice" ||
+      taskOperands(task).length > 2
+  );
+}
+
 function renderTasks(target = blocks, options = {}) {
   const forPdf = Boolean(options.forPdf);
   if (target === blocks) {
     fillPrintHeader();
+    blocks.classList.toggle("is-wide", usesWideSheet());
   }
   target.innerHTML = "";
   const blockCount = Math.ceil(tasks.length / 10);
@@ -1781,6 +1873,10 @@ function clearPdfCloneInputs(root) {
   });
   root.querySelectorAll(".task").forEach((row) => {
     row.classList.remove("is-correct", "is-wrong", "is-late");
+    row.querySelector(".task-answer-hint")?.remove();
+    row.querySelectorAll(".choice-chip").forEach((chip) => {
+      chip.classList.remove("is-picked", "is-solution");
+    });
     row.removeAttribute("title");
   });
 }
@@ -1828,6 +1924,28 @@ function preparePdfAnswerCells(root) {
   });
 }
 
+function pdfUsesDenseGrid() {
+  const blockCount = Math.ceil(tasks.length / 10);
+  if (blockCount < 6) {
+    return false;
+  }
+  return tasks.every(
+    (task) =>
+      isArithmeticTask(task) &&
+      !task.visualHtml &&
+      task.kind !== "choice" &&
+      taskOperands(task).length <= 2
+  );
+}
+
+function wrapPdfTaskPage(items, heading) {
+  const block = document.createElement("article");
+  block.className = "block";
+  block.innerHTML = `<h3>${escapeHtml(heading)}</h3>`;
+  items.forEach((item) => block.append(item));
+  return block;
+}
+
 async function buildPdfSheet() {
   const sheet = document.createElement("div");
   sheet.className = "pdf-sheet";
@@ -1835,25 +1953,52 @@ async function buildPdfSheet() {
 
   const staging = document.createElement("div");
   renderTasks(staging, { forPdf: true });
-  const blockEls = [...staging.children];
-  const perPage = 8;
-  const pageCount = Math.max(1, Math.ceil(blockEls.length / perPage));
+  const dense = pdfUsesDenseGrid();
+  const pages = [];
 
-  for (let i = 0; i < blockEls.length; i += perPage) {
-    const pageNum = Math.floor(i / perPage) + 1;
-    const page = document.createElement("section");
-    page.className = "pdf-page pdf-keep";
-    if (i === 0) {
-      page.insertAdjacentHTML("afterbegin", pdfHeaderHtml());
+  if (dense) {
+    const blockEls = [...staging.children];
+    const perPage = 8;
+    const pageCount = Math.max(1, Math.ceil(blockEls.length / perPage));
+    for (let i = 0; i < blockEls.length; i += perPage) {
+      const pageNum = Math.floor(i / perPage) + 1;
+      const page = document.createElement("section");
+      page.className = "pdf-page pdf-keep";
+      if (i === 0) {
+        page.insertAdjacentHTML("afterbegin", pdfHeaderHtml());
+      }
+      const grid = document.createElement("div");
+      grid.className = "pdf-blocks";
+      blockEls.slice(i, i + perPage).forEach((block) => grid.append(block));
+      page.append(grid);
+      page.insertAdjacentHTML("beforeend", pdfFooterHtml(pageNum, pageCount));
+      pages.push(page);
     }
-    const grid = document.createElement("div");
-    grid.className = "pdf-blocks";
-    blockEls.slice(i, i + perPage).forEach((block) => grid.append(block));
-    page.append(grid);
-    page.insertAdjacentHTML("beforeend", pdfFooterHtml(pageNum, pageCount));
-    sheet.append(page);
+  } else {
+    const items = [...staging.querySelectorAll(".task-item")];
+    const tall = tasks.some((task) => task.visualHtml || task.kind === "choice");
+    const perPage = tall ? 4 : 8;
+    const pageCount = Math.max(1, Math.ceil(items.length / perPage));
+    for (let i = 0; i < items.length; i += perPage) {
+      const pageNum = Math.floor(i / perPage) + 1;
+      const slice = items.slice(i, i + perPage);
+      const start = i + 1;
+      const end = i + slice.length;
+      const page = document.createElement("section");
+      page.className = "pdf-page pdf-keep pdf-page-stack";
+      if (i === 0) {
+        page.insertAdjacentHTML("afterbegin", pdfHeaderHtml());
+      }
+      const grid = document.createElement("div");
+      grid.className = "pdf-blocks pdf-blocks-stack";
+      grid.append(wrapPdfTaskPage(slice, `Aufgaben ${start}–${end}`));
+      page.append(grid);
+      page.insertAdjacentHTML("beforeend", pdfFooterHtml(pageNum, pageCount));
+      pages.push(page);
+    }
   }
 
+  pages.forEach((page) => sheet.append(page));
   clearPdfCloneInputs(sheet);
   preparePdfAnswerCells(sheet);
   document.body.append(sheet);
@@ -1872,21 +2017,52 @@ async function buildPdfSheet() {
 }
 
 async function capturePdfPiece(element, widthPx, heightPx) {
-  const canvas = await window.html2canvas(element, {
-    backgroundColor: "#ffffff",
-    scale: 2,
-    width: widthPx,
-    height: heightPx,
-    windowWidth: widthPx,
-    windowHeight: heightPx,
-    logging: false,
-    useCORS: true,
-  });
-  return {
-    dataUrl: canvas.toDataURL("image/png"),
-    width: canvas.width,
-    height: canvas.height,
+  const previous = {
+    position: element.style.position,
+    left: element.style.left,
+    top: element.style.top,
+    zIndex: element.style.zIndex,
+    opacity: element.style.opacity,
   };
+  element.style.position = "fixed";
+  element.style.left = "0";
+  element.style.top = "0";
+  element.style.zIndex = "2147483646";
+  element.style.opacity = "1";
+  try {
+    const canvas = await window.html2canvas(element, {
+      backgroundColor: "#ffffff",
+      scale: 2,
+      width: widthPx,
+      height: heightPx,
+      windowWidth: widthPx,
+      windowHeight: heightPx,
+      scrollX: 0,
+      scrollY: 0,
+      logging: false,
+      useCORS: true,
+      onclone: (_doc, cloned) => {
+        cloned.style.position = "static";
+        cloned.style.left = "0";
+        cloned.style.top = "0";
+        cloned.style.width = `${widthPx}px`;
+        cloned.style.height = `${heightPx}px`;
+        cloned.style.zIndex = "auto";
+        cloned.style.opacity = "1";
+      },
+    });
+    return {
+      dataUrl: canvas.toDataURL("image/png"),
+      width: canvas.width,
+      height: canvas.height,
+    };
+  } finally {
+    element.style.position = previous.position;
+    element.style.left = previous.left;
+    element.style.top = previous.top;
+    element.style.zIndex = previous.zIndex;
+    element.style.opacity = previous.opacity;
+  }
 }
 
 async function downloadWorksheetPdf() {
@@ -1950,14 +2126,14 @@ checkBtn.addEventListener("click", () => {
     return;
   }
 
-  const rows = [...document.querySelectorAll(".task")];
+  const rows = [...blocks.querySelectorAll(".task")];
   let correct = 0;
   let checked = 0;
 
   rows.forEach((row) => {
     const value = readTaskAnswer(row);
     if (value === null) {
-      row.classList.remove("is-wrong");
+      clearTaskReview(row);
       return;
     }
 
@@ -1969,6 +2145,8 @@ checkBtn.addEventListener("click", () => {
       correct += 1;
       row.classList.remove("is-wrong");
       row.classList.add("is-correct");
+      markChoiceReview(row, tasks[index]);
+      setTaskHint(row, tasks[index], true);
       setTaskInputsDisabled(row, true);
       row.title = row.classList.contains("is-late")
         ? "Richtig, aber nach der Zeit eingetragen"
@@ -1976,6 +2154,8 @@ checkBtn.addEventListener("click", () => {
     } else {
       row.classList.remove("is-correct");
       row.classList.add("is-wrong");
+      markChoiceReview(row, tasks[index]);
+      setTaskHint(row, tasks[index], false);
       setTaskInputsDisabled(row, false);
       row.title = row.classList.contains("is-late") ? "Nach der Zeit eingetragen" : "";
     }
@@ -2028,6 +2208,7 @@ blocks.addEventListener("change", (event) => {
   const row = event.target.closest(".task");
   if (row && !event.target.disabled) {
     row.classList.remove("is-wrong");
+    clearTaskReview(row);
     markLateIfNeeded(row, event.target);
   }
 });
@@ -2039,6 +2220,7 @@ blocks.addEventListener("input", (event) => {
   const row = event.target.closest(".task");
   if (row && !event.target.disabled) {
     row.classList.remove("is-wrong");
+    clearTaskReview(row);
     markLateIfNeeded(row, event.target);
   }
 

@@ -654,6 +654,10 @@ option:disabled {
   gap: 16px;
 }
 
+.blocks.is-wide {
+  grid-template-columns: minmax(0, 46rem);
+}
+
 .block {
   background: var(--card);
   border: 1px solid var(--line);
@@ -738,7 +742,7 @@ option:disabled {
 
 .task {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px 8px;
   padding: 7px 0;
@@ -748,11 +752,13 @@ option:disabled {
 
 .task-eq {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 6px;
   flex: 1 1 auto;
-  min-width: 0;
-  white-space: nowrap;
+  min-width: min-content;
+  white-space: normal;
+  overflow: visible;
   font-variant-numeric: tabular-nums;
   line-height: 1.4;
   padding-top: 0;
@@ -907,35 +913,36 @@ option:disabled {
   outline: 2px solid var(--grade);
 }
 
-.task.is-correct .choice-chip span {
+.task.is-correct .choice-chip:not(.is-picked):not(.is-solution) span,
+.task.is-wrong .choice-chip:not(.is-picked):not(.is-solution) span {
+  opacity: 0.45;
+}
+
+.task.is-correct .choice-chip.is-picked span,
+.task.is-correct .choice-chip.is-solution span,
+.task.is-wrong .choice-chip.is-solution span {
   background: var(--correct-bg);
   border-color: var(--correct);
   color: var(--correct);
 }
 
-.task.is-wrong .choice-chip span {
+.task.is-wrong .choice-chip.is-picked span {
   background: var(--wrong-bg);
   border-color: var(--wrong);
   color: var(--wrong);
 }
 
-.task.is-late .choice-chip span {
-  background: var(--late-bg);
-  border-color: var(--late);
-  color: var(--late);
-}
-
-.task.is-late.is-correct .choice-chip span {
-  background: var(--correct-bg);
-  border-color: var(--late);
-  color: var(--correct);
+.task.is-late .choice-chip.is-picked span,
+.task.is-late .choice-chip.is-solution span {
   box-shadow: 0 0 0 2px var(--late);
 }
 
-.task.is-late.is-wrong .choice-chip span {
-  background: var(--wrong-bg);
-  border-color: var(--wrong);
-  color: var(--wrong);
+.task-answer-hint {
+  flex: 1 0 100%;
+  margin: 4px 0 0 1.75rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--correct);
 }
 
 .task .answer-input {
@@ -2333,9 +2340,10 @@ a.grade-btn-nav[aria-current="page"] {
 }
 
 .pdf-sheet {
-  position: absolute;
-  left: -10000px;
+  position: fixed;
+  left: 0;
   top: 0;
+  z-index: -1;
   width: 794px;
   padding: 0;
   background: #fff;
@@ -2426,6 +2434,11 @@ a.grade-btn-nav[aria-current="page"] {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-template-rows: 1fr 1fr;
   gap: 10px;
+}
+
+.pdf-blocks-stack {
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-rows: minmax(0, 1fr) !important;
 }
 
 .pdf-sheet .block {
@@ -2631,6 +2644,57 @@ a.grade-btn-nav[aria-current="page"] {
   height: 28px;
 }
 
+.pdf-page-stack .block {
+  height: auto;
+}
+
+.pdf-page-stack .task-item {
+  flex: 0 1 auto;
+  min-height: 4.8rem;
+  justify-content: flex-start;
+  padding: 6px 0;
+}
+
+.pdf-page-stack .task {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  height: auto;
+  font-size: 1.05rem;
+}
+
+.pdf-page-stack .task-num,
+.pdf-page-stack .task-eq,
+.pdf-page-stack .task-main,
+.pdf-page-stack .pdf-answer-cell {
+  display: block;
+}
+
+.pdf-page-stack .task-num {
+  width: auto;
+  padding: 0 0 4px;
+  text-align: left;
+}
+
+.pdf-page-stack .task-main {
+  width: 100%;
+}
+
+.pdf-page-stack .task-visual {
+  max-height: none;
+  overflow: visible;
+}
+
+.pdf-page-stack .task-visual svg {
+  max-height: 140px;
+}
+
+.pdf-page-stack .task:has(.answer-choices),
+.pdf-page-stack .task:has(.answer-choices) .task-main {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 @media print {
   body {
     background: #fff;
@@ -2677,6 +2741,10 @@ a.grade-btn-nav[aria-current="page"] {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 8px 10px;
+  }
+
+  .blocks.is-wide {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .block {

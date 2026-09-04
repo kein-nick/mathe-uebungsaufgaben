@@ -85,11 +85,15 @@ function buildTopics(u) {
   }
 
   function fmt(n) {
-    if (typeof n === "number" && !Number.isInteger(n)) {
+    if (typeof n !== "number" || Number.isNaN(n)) {
+      return String(n).replace("-", "−");
+    }
+    if (!Number.isInteger(n)) {
       return String(n).replace(".", ",").replace("-", "−");
     }
     const sign = n < 0 ? "−" : "";
-    return sign + Math.abs(n).toLocaleString("de-DE");
+    const grouped = String(Math.abs(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "\u202f");
+    return sign + grouped;
   }
 
   function niceNumber(max, min = 2) {
