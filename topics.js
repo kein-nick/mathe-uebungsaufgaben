@@ -1639,6 +1639,10 @@ function buildTopics(u) {
         grid += svgHBar(ox, oy, plot, 2, "#1c2430");
         grid += svgVBar(ox, oy - plot, plot, 2, "#1c2430");
         for (let i = 0; i <= max; i += 1) {
+          const labelEvery = max >= 10 ? 2 : 1;
+          if (i % labelEvery !== 0 && i !== max) {
+            continue;
+          }
           grid += `<text x="${ox + i * step}" y="${oy + 10}" font-size="8" font-weight="700" text-anchor="middle" fill="#1c2430">${i}</text>`;
           grid += `<text x="${ox - 3}" y="${oy - i * step + 3}" font-size="8" font-weight="700" text-anchor="end" fill="#1c2430">${i}</text>`;
         }
