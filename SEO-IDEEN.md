@@ -96,7 +96,6 @@ Search Console und Sitemap sind eingerichtet, die Startseite ist sichtbar. Klass
 |------|---------|
 | Blog / „Aufgaben der Woche“ | Nur wenn regelmäßig Zeit ist, nicht um des Blogs willen |
 | Backlinks Elternchats | WhatsApp/Facebook — vorsichtig, kein Spam |
-| Lokale Erwähnungen | Westerkappeln / NRW im Impressum reicht meist |
 
 ---
 
