@@ -3090,6 +3090,7 @@ a.grade-btn-nav[aria-current="page"] {
   flex: 0 0 auto;
   width: 100%;
   margin-top: 1px;
+  margin-bottom: 6px;
   font-size: 0.62rem;
   line-height: 1.15;
   text-align: center;
@@ -3133,6 +3134,7 @@ a.grade-btn-nav[aria-current="page"] {
   height: 1.1rem;
   min-height: 1.1rem;
   max-height: 1.1rem;
+  margin-top: 2px;
 }
 
 .pdf-page-visual-fill .answer-choices {
@@ -3144,6 +3146,7 @@ a.grade-btn-nav[aria-current="page"] {
   gap: 3px;
   width: 100%;
   max-width: none;
+  margin-top: 2px;
 }
 
 .pdf-page-visual-fill .answer-choices .choice-chip span {
