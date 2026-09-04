@@ -28,6 +28,7 @@ Mittelfristige Punkte aus derselben Liste:
 | **Landingpages pro Thema** | erledigt | Hubs `/einmaleins`, `/brueche`, … — nicht die Kombi `/klasse-2/einmaleins` (bewusst später, nur bei Suchnachfrage) |
 | **URL mit Voreinstellungen** | erledigt | `?themen=` auf den Übungsseiten, Hubs setzen das voraus |
 | **FAQ-Bereich** | erledigt | `/faq` mit mehreren Fragen. Hubs behalten Themen-FAQs. Start- und Klassenseiten bleiben kurz |
+| **OG-Bilder je Klasse und Hub** | erledigt | Klassen: `og-image-klasse-1.jpg` … `-6.jpg`. Hubs: eigenes Bild mit Themenname. Startseite, FAQ und Info-Seiten bleiben beim gemeinsamen `og-image.jpg` |
 
 ---
 
@@ -35,7 +36,7 @@ Mittelfristige Punkte aus derselben Liste:
 
 - Domain `mathe-testen.de` mit Canonical-URL, HTTPS, `lang="de"`
 - Titel und Meta-Beschreibung (Klasse 1–6, kostenlos, PDF, online üben)
-- Open Graph und Twitter-Tags, gemeinsames `og-image.jpg` (1200×630, klein genug für WhatsApp)
+- Open Graph und Twitter-Tags; Startseite mit `og-image.jpg`, Klassen und Hubs mit eigenem Vorschaubild (1200×630, klein genug für WhatsApp)
 - `sitemap.xml` und `robots.txt` — Sitemap in Search Console und Bing; Startseite bei Google sichtbar, restliche URLs folgen
 - Impressum und Datenschutz mit Canonical
 - PWA, lokale Fonts, schnelle statische Seite
@@ -74,7 +75,6 @@ Search Console und Sitemap sind eingerichtet, die Startseite ist sichtbar. Klass
 
 - **Kombi-Seiten nur für echte Suchen**, z. B. `/klasse-2/einmaleins`, `/klasse-5/brueche` — nicht Thema × Klasse für alles. Erst Search Console: welche Anfragen haben Impressionen?
 - **Sichtbare Breadcrumbs** im HTML (nicht nur JSON-LD)
-- **Eigene OG-Bilder je Hub** — beim Teilen in Chats sonst überall dasselbe Bild
 - **`llms.txt`** plus kurzer Absatz auf der Startseite: Was ist mathe-testen.de? Kostenlos, DE, Klasse 1–6, online + PDF, ohne Anmeldung
 
 ### Beispiel-Suchbegriffe
