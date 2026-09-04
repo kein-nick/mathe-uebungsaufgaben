@@ -30,6 +30,7 @@ Mittelfristige Punkte aus derselben Liste:
 | **FAQ-Bereich** | erledigt | `/faq` mit mehreren Fragen. Hubs behalten Themen-FAQs. Start- und Klassenseiten bleiben kurz |
 | **OG-Bilder je Klasse und Hub** | erledigt | Klassen: `og-image-klasse-1.jpg` … `-6.jpg`. Hubs: eigenes Bild mit Themenname. Startseite, FAQ und Info-Seiten bleiben beim gemeinsamen `og-image.jpg` |
 | **Sichtbare Breadcrumbs** | erledigt | Pfad `Startseite › Klasse 3` bzw. Thema auf den Unterseiten, passend zum JSON-LD |
+| **`llms.txt`** | erledigt | `/llms.txt` mit Kurzbeschreibung und Links. Kein extra Absatz auf der Startseite |
 
 ---
 
@@ -49,6 +50,7 @@ Mittelfristige Punkte aus derselben Liste:
 - Startseite verlinkt Hubs und Klassen mit lesbarem Text
 - Kopfzeile mit FAQ und Für Lehrkräfte (nicht festklebend)
 - `/faq`, `/fuer-eltern`, `/fuer-lehrkraefte` und `/kontakt`
+- `llms.txt` für KI-Crawler (was die Seite ist, Klassen- und Themenlinks)
 - Bildungsserver / ELIXIER (nicht automatisch auf jedem Landesportal)
 
 ---
@@ -76,7 +78,6 @@ Search Console und Sitemap sind eingerichtet, die Startseite ist sichtbar. Klass
 ### 4. SEO, das sich noch lohnt — gezielt
 
 - **Kombi-Seiten nur für echte Suchen**, z. B. `/klasse-2/einmaleins`, `/klasse-5/brueche` — nicht Thema × Klasse für alles. Erst Search Console: welche Anfragen haben Impressionen?
-- **`llms.txt`** plus kurzer Absatz auf der Startseite: Was ist mathe-testen.de? Kostenlos, DE, Klasse 1–6, online + PDF, ohne Anmeldung
 
 ### Beispiel-Suchbegriffe
 

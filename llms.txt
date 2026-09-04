@@ -1,0 +1,44 @@
+# mathe-testen.de
+
+> Kostenlose Mathe-Übungsaufgaben für Klasse 1 bis 6 (Grundschule, Deutsch). Online üben oder als PDF drucken. Ohne Anmeldung, ohne Konto, ohne Bezahlschranke.
+
+mathe-testen.de richtet sich an Kinder, Eltern und Lehrkräfte. Aufgaben werden neu erzeugt (keine festen Blätter). Optional mit Zeitlimit. Die Seite ist auf Deutsch, der Anbieter sitzt in Deutschland.
+
+Nicht verwechseln mit kommerziellen Übungsheften, Schulbuch-PDFs oder Vergleichsarbeiten. Es gibt keine Lösungen als separates Lösungsheft; online können Eingaben geprüft werden.
+
+## Klassen
+
+- [Klasse 1](https://mathe-testen.de/klasse-1): Übersicht und Übungen (Plus/Minus, Zahlenraum 20)
+- [Klasse 2](https://mathe-testen.de/klasse-2): Übersicht und Übungen (Einmaleins, Zahlenraum 100)
+- [Klasse 3](https://mathe-testen.de/klasse-3): Übersicht und Übungen (schriftliches Rechnen, Sachaufgaben)
+- [Klasse 4](https://mathe-testen.de/klasse-4): Übersicht und Übungen (schriftliche Verfahren, Bruchanteile)
+- [Klasse 5](https://mathe-testen.de/klasse-5): Übersicht und Übungen (Brüche, Dezimalzahlen, Prozent)
+- [Klasse 6](https://mathe-testen.de/klasse-6): Übersicht und Übungen (Vertiefung, weiterführende Schule)
+
+Direkte Übungsseiten: [Klasse 1](https://mathe-testen.de/klasse-1/uebungen), [Klasse 2](https://mathe-testen.de/klasse-2/uebungen), [Klasse 3](https://mathe-testen.de/klasse-3/uebungen), [Klasse 4](https://mathe-testen.de/klasse-4/uebungen), [Klasse 5](https://mathe-testen.de/klasse-5/uebungen), [Klasse 6](https://mathe-testen.de/klasse-6/uebungen)
+
+## Themen
+
+- [Plus und Minus](https://mathe-testen.de/plus-minus)
+- [Einmaleins](https://mathe-testen.de/einmaleins)
+- [Schriftlich rechnen](https://mathe-testen.de/schriftlich-rechnen)
+- [Sachaufgaben](https://mathe-testen.de/sachaufgaben)
+- [Brüche](https://mathe-testen.de/brueche)
+- [Dezimalzahlen](https://mathe-testen.de/dezimalzahlen)
+- [Prozent](https://mathe-testen.de/prozent)
+- [Uhr](https://mathe-testen.de/uhr-ueben)
+- [Geld](https://mathe-testen.de/geld-rechnen)
+- [Geometrie](https://mathe-testen.de/geometrie-grundschule)
+
+## Für Menschen
+
+- [Für Eltern](https://mathe-testen.de/fuer-eltern)
+- [Für Lehrkräfte](https://mathe-testen.de/fuer-lehrkraefte)
+- [FAQ](https://mathe-testen.de/faq)
+- [Kontakt](https://mathe-testen.de/kontakt)
+
+## Optional
+
+- [Startseite](https://mathe-testen.de/)
+- [Impressum](https://mathe-testen.de/impressum)
+- [Datenschutz](https://mathe-testen.de/datenschutz)
