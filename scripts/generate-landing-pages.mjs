@@ -125,6 +125,24 @@ function renderOpenGraph({ title, description, url, imageAlt, image = OG_IMAGE }
     <meta name="twitter:image:alt" content="${safeImageAlt}" />`;
 }
 
+function renderBreadcrumbs(items) {
+  const list = items
+    .map((item, index) => {
+      const isLast = index === items.length - 1;
+      const content =
+        isLast || !item.href
+          ? `<span aria-current="page">${escapeHtml(item.label)}</span>`
+          : `<a href="${item.href}">${escapeHtml(item.label)}</a>`;
+      return `            <li>${content}</li>`;
+    })
+    .join("\n");
+  return `<nav class="breadcrumbs" aria-label="Pfad">
+          <ol>
+${list}
+          </ol>
+        </nav>`;
+}
+
 function renderSiteHeader(current = "") {
   const brandCurrent = current === "home" ? ' aria-current="page"' : "";
   const faqCurrent = current === "faq" ? ' aria-current="page"' : "";
@@ -318,7 +336,7 @@ function renderContactJsonLd() {
   };
 }
 
-function renderInfoPage({ current, title, description, url, h1, lead, jsonLd, mainHtml }) {
+function renderInfoPage({ current, title, description, url, h1, lead, jsonLd, mainHtml, crumb }) {
   const meta = { title, description, url, imageAlt: title };
   return `<!DOCTYPE html>
 <html lang="de">
@@ -338,6 +356,10 @@ ${renderOpenGraph(meta)}
     <div class="page-shell">
       <div class="page">
         <header class="intro">
+          ${renderBreadcrumbs([
+            { href: "/", label: "Startseite" },
+            { label: crumb || h1 },
+          ])}
           <h1>${escapeHtml(h1)}</h1>
           <p class="description">${escapeHtml(lead)}</p>
         </header>
@@ -441,10 +463,38 @@ function renderClassJsonLd(grade) {
   };
 }
 
+function renderPracticeJsonLd(grade) {
+  const url = `${SITE_URL}/klasse-${grade}/uebungen`;
+  const classUrl = `${SITE_URL}/klasse-${grade}`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${url}/#webpage`,
+        url,
+        name: `Übungsaufgaben Klasse ${grade} – online & als PDF`,
+        description: `Mathe-Übungen für Klasse ${grade}: Halbjahr, Anzahl und Themen wählen — online üben oder Arbeitsblatt als PDF zum Ausdrucken.`,
+        inLanguage: "de-DE",
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${url}/#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Startseite", item: `${SITE_URL}/` },
+          { "@type": "ListItem", position: 2, name: `Klasse ${grade}`, item: classUrl },
+          { "@type": "ListItem", position: 3, name: "Übungen", item: url },
+        ],
+      },
+    ],
+  };
+}
+
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=33" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=34" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -744,6 +794,10 @@ ${renderOpenGraph(meta)}
     <div class="page-shell">
       <div class="page">
         <header class="intro">
+          ${renderBreadcrumbs([
+            { href: "/", label: "Startseite" },
+            { label: `Klasse ${grade}` },
+          ])}
           <h1>Mathe Übungen – Klasse ${grade}</h1>
           <p class="description">${classIntros[grade]} Kostenlose Übungen online oder als Arbeitsblatt zum Ausdrucken.</p>
           ${renderClassNav(grade)}
@@ -795,6 +849,7 @@ ${renderOpenGraph({
     imageAlt: `Mathematik Übungsaufgaben Klasse ${grade}`,
   })}
     <title>Übungsaufgaben Klasse ${grade} – online &amp; als PDF</title>
+    ${renderJsonLdScript(renderPracticeJsonLd(grade))}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     ${renderHeadAssets()}
   </head>
@@ -803,9 +858,11 @@ ${renderOpenGraph({
     <div class="page-shell">
       <div class="page">
         <header class="intro">
-          <p class="kicker">
-            <a class="text-link" href="/klasse-${grade}">Zurück zur Übersicht Klasse ${grade}</a>
-          </p>
+          ${renderBreadcrumbs([
+            { href: "/", label: "Startseite" },
+            { href: `/klasse-${grade}`, label: `Klasse ${grade}` },
+            { label: "Übungen" },
+          ])}
           <h1>Übungsaufgaben – Klasse ${grade}</h1>
           <p class="description">
             Wähle Halbjahr, Anzahl und Themen — dann erstellst du dein Übungsblatt.
@@ -957,6 +1014,10 @@ ${renderOpenGraph(meta)}
     <div class="page-shell">
       <div class="page">
         <header class="intro">
+          ${renderBreadcrumbs([
+            { href: "/", label: "Startseite" },
+            { label: hub.shortName },
+          ])}
           <h1>${escapeHtml(hub.h1)}</h1>
           <p class="description">${escapeHtml(hub.lead)}</p>
         </header>
@@ -1115,6 +1176,7 @@ fs.writeFileSync(
     lead: "Kurz und klar: kostenlos, ohne Anmeldung, online oder als PDF — für Klasse 1 bis 6.",
     jsonLd: renderFaqJsonLd(),
     mainHtml: faqMain,
+    crumb: "FAQ",
   }),
   "utf8"
 );

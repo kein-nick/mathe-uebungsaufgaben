@@ -1698,6 +1698,49 @@ option:disabled {
   text-decoration: underline;
 }
 
+.breadcrumbs {
+  margin: 0 0 12px;
+}
+
+.breadcrumbs ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.2em 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.breadcrumbs li {
+  display: flex;
+  align-items: baseline;
+}
+
+.breadcrumbs li:not(:first-child)::before {
+  content: "›";
+  margin: 0 0.45em;
+  color: var(--line);
+  font-weight: 800;
+}
+
+.breadcrumbs a {
+  color: var(--grade);
+  text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumbs [aria-current="page"] {
+  color: var(--ink);
+}
+
 .site-footer {
   margin-top: 40px;
   padding-top: 20px;
