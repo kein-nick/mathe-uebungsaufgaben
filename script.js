@@ -1468,6 +1468,15 @@ function appendNotesField(item, index) {
   `;
   item.append(notes);
 }
+
+function appendPdfWorkLines(item) {
+  const lines = document.createElement("div");
+  lines.className = "pdf-work-lines";
+  lines.setAttribute("aria-hidden", "true");
+  lines.innerHTML = "<span></span><span></span><span></span>";
+  item.append(lines);
+}
+
 function isArithmeticTask(task) {
   return (
     task.operation === "addition" ||
@@ -1747,7 +1756,7 @@ function renderTasks(target = blocks, options = {}) {
       row.dataset.index = String(index);
       const item = document.createElement("div");
       item.className = "task-item";
-      if (!forPdf && usesWrittenStack(task)) {
+      if (usesWrittenStack(task)) {
         const columns = stackColumns(task);
         const operands = taskOperands(task);
         const operandRows = operands
@@ -1798,7 +1807,9 @@ function renderTasks(target = blocks, options = {}) {
           ${answerInput(index, task, allowMinusInput)}
         `;
         item.append(row);
-        if (!forPdf && usesNotesField(task)) {
+        if (forPdf && usesNotesField(task)) {
+          appendPdfWorkLines(item);
+        } else if (!forPdf && usesNotesField(task)) {
           appendNotesField(item, index);
         }
       } else {
@@ -1813,7 +1824,9 @@ function renderTasks(target = blocks, options = {}) {
           </div>
         `;
         item.append(row);
-        if (!forPdf && usesNotesField(task)) {
+        if (forPdf && usesNotesField(task)) {
+          appendPdfWorkLines(item);
+        } else if (!forPdf && usesNotesField(task)) {
           appendNotesField(item, index);
         }
       }
@@ -1925,6 +1938,9 @@ function preparePdfAnswerCells(root) {
 }
 
 function pdfUsesDenseGrid() {
+  if (notesToggle.checked) {
+    return false;
+  }
   const blockCount = Math.ceil(tasks.length / 10);
   if (blockCount < 6) {
     return false;
@@ -1936,6 +1952,25 @@ function pdfUsesDenseGrid() {
       task.kind !== "choice" &&
       taskOperands(task).length <= 2
   );
+}
+
+function pdfHasVisuals() {
+  return tasks.some((task) => task.visualHtml || task.kind === "choice");
+}
+
+function pdfUsesWrittenStacks() {
+  return notesToggle.checked && tasks.some((task) => usesWrittenStack(task));
+}
+
+function makePdfPage(inner, pageNum, pageCount, extraClass) {
+  const page = document.createElement("section");
+  page.className = `pdf-page pdf-keep${extraClass ? ` ${extraClass}` : ""}`;
+  if (pageNum === 1) {
+    page.insertAdjacentHTML("afterbegin", pdfHeaderHtml());
+  }
+  page.append(inner);
+  page.insertAdjacentHTML("beforeend", pdfFooterHtml(pageNum, pageCount));
+  return page;
 }
 
 function wrapPdfTaskPage(items, heading) {
@@ -1953,49 +1988,43 @@ async function buildPdfSheet() {
 
   const staging = document.createElement("div");
   renderTasks(staging, { forPdf: true });
-  const dense = pdfUsesDenseGrid();
   const pages = [];
 
-  if (dense) {
+  if (pdfUsesDenseGrid()) {
     const blockEls = [...staging.children];
     const perPage = 8;
     const pageCount = Math.max(1, Math.ceil(blockEls.length / perPage));
     for (let i = 0; i < blockEls.length; i += perPage) {
-      const pageNum = Math.floor(i / perPage) + 1;
-      const page = document.createElement("section");
-      page.className = "pdf-page pdf-keep";
-      if (i === 0) {
-        page.insertAdjacentHTML("afterbegin", pdfHeaderHtml());
-      }
       const grid = document.createElement("div");
       grid.className = "pdf-blocks";
       blockEls.slice(i, i + perPage).forEach((block) => grid.append(block));
-      page.append(grid);
-      page.insertAdjacentHTML("beforeend", pdfFooterHtml(pageNum, pageCount));
-      pages.push(page);
+      pages.push(makePdfPage(grid, Math.floor(i / perPage) + 1, pageCount, ""));
     }
-  } else {
+  } else if (pdfHasVisuals()) {
     const items = [...staging.querySelectorAll(".task-item")];
-    const tall = tasks.some((task) => task.visualHtml || task.kind === "choice");
-    const perPage = tall ? 4 : 8;
+    const perPage = notesToggle.checked ? 4 : 5;
     const pageCount = Math.max(1, Math.ceil(items.length / perPage));
     for (let i = 0; i < items.length; i += perPage) {
-      const pageNum = Math.floor(i / perPage) + 1;
       const slice = items.slice(i, i + perPage);
-      const start = i + 1;
-      const end = i + slice.length;
-      const page = document.createElement("section");
-      page.className = "pdf-page pdf-keep pdf-page-stack";
-      if (i === 0) {
-        page.insertAdjacentHTML("afterbegin", pdfHeaderHtml());
-      }
       const grid = document.createElement("div");
-      grid.className = "pdf-blocks pdf-blocks-stack";
-      grid.append(wrapPdfTaskPage(slice, `Aufgaben ${start}–${end}`));
-      page.append(grid);
-      page.insertAdjacentHTML("beforeend", pdfFooterHtml(pageNum, pageCount));
-      pages.push(page);
+      grid.className = "pdf-blocks pdf-blocks-list";
+      grid.append(wrapPdfTaskPage(slice, `Aufgaben ${i + 1}–${i + slice.length}`));
+      pages.push(makePdfPage(grid, Math.floor(i / perPage) + 1, pageCount, "pdf-page-visual"));
     }
+  } else {
+    const blockEls = [...staging.children];
+    const pageCount = Math.max(1, blockEls.length);
+    const pageClass = pdfUsesWrittenStacks()
+      ? "pdf-page-written"
+      : notesToggle.checked
+        ? "pdf-page-list pdf-page-notes"
+        : "pdf-page-list";
+    blockEls.forEach((block, index) => {
+      const grid = document.createElement("div");
+      grid.className = "pdf-blocks pdf-blocks-list";
+      grid.append(block);
+      pages.push(makePdfPage(grid, index + 1, pageCount, pageClass));
+    });
   }
 
   pages.forEach((page) => sheet.append(page));
