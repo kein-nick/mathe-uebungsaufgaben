@@ -2837,6 +2837,41 @@ a.grade-btn-nav[aria-current="page"] {
   flex-wrap: wrap;
 }
 
+.pdf-page-visual-fill .block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 4px 12px;
+  height: 100%;
+  padding: 8px 10px 6px 8px;
+}
+
+.pdf-page-visual-fill .block h3 {
+  grid-column: 1 / -1;
+  margin-bottom: 2px;
+}
+
+.pdf-page-visual-fill .task-item {
+  flex: unset;
+  min-height: 0;
+  padding: 2px 4px 4px;
+  justify-content: flex-start;
+}
+
+.pdf-page-visual-fill .task {
+  font-size: 0.8rem;
+}
+
+.pdf-page-visual-fill .task-visual svg {
+  max-height: 88px;
+}
+
+.pdf-page-visual-fill .choice-chip span {
+  min-height: 1.5rem;
+  padding: 2px 6px;
+  font-size: 0.72rem;
+}
+
 @media print {
   body {
     background: #fff;
