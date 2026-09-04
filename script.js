@@ -2013,18 +2013,20 @@ async function buildPdfSheet() {
     }
   } else {
     const blockEls = [...staging.children];
-    const pageCount = Math.max(1, blockEls.length);
+    const pairUp = !pdfUsesWrittenStacks();
+    const perPage = pairUp ? 2 : 1;
+    const pageCount = Math.max(1, Math.ceil(blockEls.length / perPage));
     const pageClass = pdfUsesWrittenStacks()
       ? "pdf-page-written"
       : notesToggle.checked
         ? "pdf-page-list pdf-page-notes"
         : "pdf-page-list";
-    blockEls.forEach((block, index) => {
+    for (let i = 0; i < blockEls.length; i += perPage) {
       const grid = document.createElement("div");
-      grid.className = "pdf-blocks pdf-blocks-list";
-      grid.append(block);
-      pages.push(makePdfPage(grid, index + 1, pageCount, pageClass));
-    });
+      grid.className = pairUp ? "pdf-blocks pdf-blocks-pair" : "pdf-blocks pdf-blocks-list";
+      blockEls.slice(i, i + perPage).forEach((block) => grid.append(block));
+      pages.push(makePdfPage(grid, Math.floor(i / perPage) + 1, pageCount, pageClass));
+    }
   }
 
   pages.forEach((page) => sheet.append(page));

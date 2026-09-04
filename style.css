@@ -2442,6 +2442,12 @@ a.grade-btn-nav[aria-current="page"] {
   grid-template-rows: minmax(0, 1fr) !important;
 }
 
+.pdf-blocks-pair {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-template-rows: minmax(0, 1fr) !important;
+  gap: 10px;
+}
+
 .pdf-sheet .block {
   width: 100%;
   height: 100%;
@@ -2665,18 +2671,18 @@ a.grade-btn-nav[aria-current="page"] {
 
 .pdf-page-list .task-item {
   flex: 1 1 0;
-  min-height: 2.35rem;
-  max-height: 4.6rem;
+  min-height: 2.05rem;
+  max-height: none;
   padding: 0;
   justify-content: center;
 }
 
 .pdf-page-list .task {
   display: table;
-  font-size: 0.92rem;
+  font-size: 0.82rem;
   height: auto;
   flex: none;
-  padding: 4px 4px 4px 0;
+  padding: 3px 2px 3px 0;
 }
 
 .pdf-page-list .task-num,
@@ -2687,9 +2693,24 @@ a.grade-btn-nav[aria-current="page"] {
 }
 
 .pdf-page-list .task-num {
-  width: 1.75rem;
-  padding: 0 0.55rem 0 0;
+  width: 1.45rem;
+  padding: 0 0.4rem 0 0;
   text-align: right;
+  font-size: 0.62rem;
+}
+
+.pdf-page-list .pdf-answer-cell {
+  width: 2.7rem;
+}
+
+.pdf-page-list .pdf-answer-cell .answer-input,
+.pdf-page-list .task .answer-input {
+  width: 2.55rem;
+  height: 1.25rem;
+  min-height: 1.25rem;
+  max-height: 1.25rem;
+  font-size: 0.8rem;
+  line-height: 1.2rem;
 }
 
 .pdf-page-list .pdf-work-lines {
@@ -2700,9 +2721,14 @@ a.grade-btn-nav[aria-current="page"] {
 
 .pdf-page-notes .task-item {
   max-height: none;
-  min-height: 3.4rem;
+  min-height: 0;
   justify-content: flex-start;
-  padding: 2px 0 4px;
+  padding: 1px 0 2px;
+}
+
+.pdf-page-notes .pdf-work-lines {
+  gap: 0.42rem;
+  margin: 1px 4px 2px 1.5rem;
 }
 
 .pdf-page-written .block {
