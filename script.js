@@ -1453,7 +1453,7 @@ const workingTypes = new Set([
 ]);
 
 function usesNotesField(task) {
-  if (!notesToggle.checked || task.kind === "choice") {
+  if (!notesToggle.checked || task.kind === "choice" || task.visualHtml) {
     return false;
   }
   return workingTypes.has(task.type) || isArithmeticTask(task);
@@ -1958,8 +1958,8 @@ function pdfBlockIsVisual(block) {
   return Boolean(block.querySelector(".task-visual, .answer-choices"));
 }
 
-function pdfUsesWrittenStacks() {
-  return notesToggle.checked && tasks.some((task) => usesWrittenStack(task));
+function pdfBlockIsWritten(block) {
+  return Boolean(block.querySelector(".task.is-stack"));
 }
 
 function makePdfPage(inner, pageNum, pageCount, extraClass) {
@@ -1994,13 +1994,18 @@ async function buildPdfSheet() {
     }
   } else {
     const blockEls = [...staging.children];
-    const written = pdfUsesWrittenStacks();
     const groups = [];
     for (let i = 0; i < blockEls.length; ) {
       const block = blockEls[i];
-      if (written) {
-        groups.push({ blocks: [block], kind: "written" });
-        i += 1;
+      const next = blockEls[i + 1];
+      if (pdfBlockIsWritten(block)) {
+        if (next && pdfBlockIsWritten(next)) {
+          groups.push({ blocks: [block, next], kind: "written" });
+          i += 2;
+        } else {
+          groups.push({ blocks: [block], kind: "written" });
+          i += 1;
+        }
         continue;
       }
       if (pdfBlockIsVisual(block)) {
@@ -2008,8 +2013,7 @@ async function buildPdfSheet() {
         i += 1;
         continue;
       }
-      const next = blockEls[i + 1];
-      if (next && !pdfBlockIsVisual(next)) {
+      if (next && !pdfBlockIsVisual(next) && !pdfBlockIsWritten(next)) {
         groups.push({ blocks: [block, next], kind: "pair" });
         i += 2;
       } else {
@@ -2019,8 +2023,8 @@ async function buildPdfSheet() {
     }
     groups.forEach((group, index) => {
       const grid = document.createElement("div");
-      grid.className =
-        group.kind === "pair" ? "pdf-blocks pdf-blocks-pair" : "pdf-blocks pdf-blocks-list";
+      const paired = group.blocks.length > 1 || group.kind === "pair" || group.kind === "written";
+      grid.className = paired ? "pdf-blocks pdf-blocks-pair" : "pdf-blocks pdf-blocks-list";
       group.blocks.forEach((item) => grid.append(item));
       const pageClass =
         group.kind === "written"
