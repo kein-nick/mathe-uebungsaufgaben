@@ -3089,9 +3089,9 @@ a.grade-btn-nav[aria-current="page"] {
 .pdf-page-visual-fill .task-prompt {
   flex: 0 0 auto;
   width: 100%;
-  margin-top: -1px;
-  font-size: 0.54rem;
-  line-height: 1.1;
+  margin-top: 1px;
+  font-size: 0.62rem;
+  line-height: 1.15;
   text-align: center;
 }
 
@@ -3146,11 +3146,11 @@ a.grade-btn-nav[aria-current="page"] {
   max-width: none;
 }
 
-.pdf-page-visual-fill .choice-chip span {
+.pdf-page-visual-fill .answer-choices .choice-chip span {
   display: block;
-  min-height: 1.15rem;
-  padding: 2px 5px;
-  font-size: 0.52rem;
+  min-height: 1rem;
+  padding: 1px 4px;
+  font-size: 0.44rem;
   text-align: center;
 }
 

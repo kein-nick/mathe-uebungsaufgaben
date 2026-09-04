@@ -1633,18 +1633,18 @@ function buildTopics(u) {
         const h = padT + plot + padB;
         let grid = "";
         for (let i = 0; i <= max; i += 1) {
-          grid += svgVBar(ox + i * step, oy - plot, plot, 1, "#d8d0c4");
-          grid += svgHBar(ox, oy - i * step, plot, 1, "#d8d0c4");
+          grid += svgVBar(ox + i * step, oy - plot, plot, 1.6, "#c9bfb2");
+          grid += svgHBar(ox, oy - i * step, plot, 1.6, "#c9bfb2");
         }
-        grid += svgHBar(ox, oy, plot, 2, "#1c2430");
-        grid += svgVBar(ox, oy - plot, plot, 2, "#1c2430");
+        grid += svgHBar(ox, oy, plot, 2.8, "#1c2430");
+        grid += svgVBar(ox, oy - plot, plot, 2.8, "#1c2430");
         for (let i = 0; i <= max; i += 1) {
           const labelEvery = max >= 10 ? 2 : 1;
           if (i % labelEvery !== 0 && i !== max) {
             continue;
           }
-          grid += `<text x="${ox + i * step}" y="${oy + 8}" font-size="8" font-weight="700" text-anchor="middle" fill="#1c2430">${i}</text>`;
-          grid += `<text x="${ox - 3}" y="${oy - i * step + 3}" font-size="8" font-weight="700" text-anchor="end" fill="#1c2430">${i}</text>`;
+          grid += `<text x="${ox + i * step}" y="${oy + 8}" font-size="9" font-weight="700" text-anchor="middle" fill="#1c2430">${i}</text>`;
+          grid += `<text x="${ox - 3}" y="${oy - i * step + 3}" font-size="9" font-weight="700" text-anchor="end" fill="#1c2430">${i}</text>`;
         }
         grid += `<circle cx="${ox + x * step}" cy="${oy - y * step}" r="3.2" fill="#c45c26" stroke="#1c2430" stroke-width="0.8"/>`;
         return numberTask(
