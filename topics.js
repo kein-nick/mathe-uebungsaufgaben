@@ -1136,15 +1136,16 @@ function buildTopics(u) {
         const a = randomInt(lo, hi);
         const b = randomInt(lo, hi);
         const c = randomInt(lo, Math.max(lo, Math.round(hi * 0.7)));
-        const promptHtml = `
+        return numberTask("table_read", "Wie viele Punkte haben alle zusammen?", a + b + c, {
+          visualHtml: `
           <table class="mini-table">
             <tr><th>Kind</th><th>Punkte</th></tr>
             <tr><td>Anna</td><td>${a}</td></tr>
             <tr><td>Ben</td><td>${b}</td></tr>
             <tr><td>Cara</td><td>${c}</td></tr>
-          </table>
-          <div>Wie viele Punkte haben alle zusammen?</div>`;
-        return numberTask("table_read", "Punkte zusammen", a + b + c, { promptHtml, key: `${a}:${b}:${c}` });
+          </table>`,
+          key: `${a}:${b}:${c}`,
+        });
       },
     },
     {

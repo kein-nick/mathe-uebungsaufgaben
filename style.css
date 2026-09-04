@@ -751,7 +751,7 @@ option:disabled {
 }
 
 .block.is-addsub:not(.is-written) .task,
-.block.is-eq .task:not(:has(.task-visual)):not(:has(.answer-choices)) {
+.block.is-eq .task:has(.task-eq) {
   display: grid;
   grid-template-columns: 1.7rem minmax(0, 1fr) 6.8rem;
   align-items: center;
@@ -766,7 +766,7 @@ option:disabled {
 }
 
 .block.is-addsub:not(.is-written) .task .answer-input,
-.block.is-eq .task .answer-input {
+.block.is-eq .task:has(.task-eq) .answer-input {
   margin-left: 0;
   justify-self: stretch;
   flex: none;
@@ -774,6 +774,40 @@ option:disabled {
   min-height: 2.15rem;
   height: 2.15rem;
   padding: 4px 6px;
+}
+
+.block.is-eq .task:has(.task-main) {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+}
+
+.block.is-eq .task:has(.task-main) .task-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.block.is-eq .task:has(.task-main) .task-prompt {
+  flex: 1 1 12rem;
+  min-width: 12rem;
+}
+
+.block.is-eq .task:has(.task-main) .answer-input,
+.block.is-eq .task:has(.task-main) .answer-wrap {
+  flex: 0 0 auto;
+  width: auto;
+  margin-left: auto;
+  justify-self: auto;
+}
+
+.block.is-eq .task:has(.task-main) .answer-input {
+  width: 6.5rem;
+}
+
+.block.is-eq .task:has(.task-main) .answer-input.is-wide {
+  width: 8.5rem;
 }
 
 @media (max-width: 640px) {
@@ -784,8 +818,13 @@ option:disabled {
   }
 
   .block.is-addsub:not(.is-written) .task,
-  .block.is-eq .task:not(:has(.task-visual)):not(:has(.answer-choices)) {
+  .block.is-eq .task:has(.task-eq) {
     grid-template-columns: 1.5rem minmax(0, 1fr) 5.6rem;
+  }
+
+  .block.is-eq .task:has(.task-main) .task-prompt {
+    flex-basis: 8rem;
+    min-width: 8rem;
   }
 }
 
