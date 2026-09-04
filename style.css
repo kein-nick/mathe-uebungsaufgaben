@@ -718,8 +718,8 @@ option:disabled {
   display: block;
   width: auto;
   height: auto;
-  max-width: min(100%, 280px);
-  max-height: 240px;
+  max-width: min(100%, 220px);
+  max-height: 180px;
   margin-inline: auto;
   flex-shrink: 1;
 }
@@ -2764,7 +2764,8 @@ a.grade-btn-nav[aria-current="page"] {
 }
 
 .pdf-sheet .task-visual svg,
-.pdf-sheet .geo-svg {
+.pdf-sheet .geo-svg,
+.pdf-sheet .task-visual img {
   max-width: 100%;
   max-height: none;
   width: auto;
@@ -2983,22 +2984,22 @@ a.grade-btn-nav[aria-current="page"] {
   display: grid !important;
   grid-template-columns: 1fr 1fr;
   grid-auto-rows: minmax(0, 1fr);
-  gap: 8px 14px;
+  gap: 2px 8px;
   height: 100%;
-  padding: 8px 10px 6px 8px;
+  padding: 4px 6px 2px 4px;
   align-content: stretch;
 }
 
 .pdf-page-visual-fill .block h3 {
   grid-column: 1 / -1;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .pdf-page-visual-fill .task-item {
   flex: unset;
   min-height: 0;
   overflow: visible;
-  padding: 6px 8px 8px;
+  padding: 2px 4px 4px;
   justify-content: flex-start;
   align-self: stretch;
 }
@@ -3014,8 +3015,8 @@ a.grade-btn-nav[aria-current="page"] {
   height: 100%;
   min-height: 0;
   overflow: visible;
-  padding: 0 0 0 1.3rem;
-  font-size: 0.78rem;
+  padding: 0 0 0 1.15rem;
+  font-size: 0.68rem;
 }
 
 .pdf-page-visual-fill .task-num,
@@ -3033,10 +3034,10 @@ a.grade-btn-nav[aria-current="page"] {
 .pdf-page-visual-fill .task:has(.answer-choices) .task-num {
   position: absolute;
   left: 0;
-  top: 0.1rem;
+  top: 0.05rem;
   width: auto;
   padding: 0;
-  font-size: 0.64rem;
+  font-size: 0.56rem;
 }
 
 .pdf-page-visual-fill .task-main,
@@ -3049,21 +3050,21 @@ a.grade-btn-nav[aria-current="page"] {
   flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-start;
-  gap: 6px;
+  gap: 2px;
 }
 
 .pdf-page-visual-fill .task-prompt {
   flex: 0 0 auto;
   width: 100%;
-  font-size: 0.7rem;
-  line-height: 1.25;
+  font-size: 0.58rem;
+  line-height: 1.15;
   text-align: center;
 }
 
 .pdf-page-visual-fill .task-visual {
-  flex: 1 1 auto;
-  min-height: 140px;
-  max-height: none;
+  flex: 0 0 auto;
+  min-height: 0;
+  max-height: 118px;
   width: 100%;
   overflow: visible;
   display: flex;
@@ -3072,9 +3073,10 @@ a.grade-btn-nav[aria-current="page"] {
 }
 
 .pdf-page-visual-fill .task-visual svg,
-.pdf-page-visual-fill .geo-svg {
+.pdf-page-visual-fill .geo-svg,
+.pdf-page-visual-fill .task-visual img {
   max-width: 100%;
-  max-height: 240px;
+  max-height: 118px;
   width: auto;
   height: auto;
   flex-shrink: 1;
@@ -3092,28 +3094,28 @@ a.grade-btn-nav[aria-current="page"] {
 
 .pdf-page-visual-fill .pdf-answer-cell .answer-input,
 .pdf-page-visual-fill .task .answer-input {
-  width: 5.2rem;
-  height: 1.35rem;
-  min-height: 1.35rem;
-  max-height: 1.35rem;
+  width: 4.6rem;
+  height: 1.2rem;
+  min-height: 1.2rem;
+  max-height: 1.2rem;
 }
 
 .pdf-page-visual-fill .answer-choices {
   display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-items: stretch;
-  justify-content: flex-start;
-  gap: 4px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2px 4px;
   width: 100%;
-  max-width: 13.5rem;
+  max-width: none;
 }
 
 .pdf-page-visual-fill .choice-chip span {
   display: block;
-  min-height: 1.45rem;
-  padding: 4px 8px;
-  font-size: 0.68rem;
+  min-height: 1.15rem;
+  padding: 2px 5px;
+  font-size: 0.52rem;
   text-align: center;
 }
 

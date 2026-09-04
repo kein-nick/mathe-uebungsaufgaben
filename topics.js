@@ -124,7 +124,24 @@ function buildTopics(u) {
   }
 
   function svg(inner, w = 140, h = 90) {
-    return `<svg class="geo-svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet" overflow="visible" aria-hidden="true">${inner}</svg>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" class="geo-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${inner}</svg>`;
+  }
+
+  function svgHBar(x, y, w, t, color) {
+    return `<rect x="${x}" y="${y - t / 2}" width="${w}" height="${t}" fill="${color}"/>`;
+  }
+
+  function svgVBar(x, y, h, t, color) {
+    return `<rect x="${x - t / 2}" y="${y}" width="${t}" height="${h}" fill="${color}"/>`;
+  }
+
+  function svgSegment(x1, y1, x2, y2, t, color) {
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const len = Math.hypot(dx, dy) || 0.01;
+    const nx = (-dy / len) * (t / 2);
+    const ny = (dx / len) * (t / 2);
+    return `<polygon points="${x1 + nx},${y1 + ny} ${x2 + nx},${y2 + ny} ${x2 - nx},${y2 - ny} ${x1 - nx},${y1 - ny}" fill="${color}"/>`;
   }
 
   function answerKeyPart(answer) {
@@ -1604,11 +1621,11 @@ function buildTopics(u) {
         const max = g >= 6 ? (t === 2 ? 12 : 10) : t === 2 ? 10 : 8;
         const x = randomInt(1, max);
         const y = randomInt(1, max);
-        const padL = 30;
-        const padB = 26;
-        const padT = 12;
-        const padR = 16;
-        const step = max >= 12 ? 16 : max >= 10 ? 18 : 20;
+        const padL = 16;
+        const padB = 14;
+        const padT = 8;
+        const padR = 6;
+        const step = max >= 12 ? 10 : max >= 10 ? 11 : 12;
         const plot = max * step;
         const ox = padL;
         const oy = padT + plot;
@@ -1616,18 +1633,16 @@ function buildTopics(u) {
         const h = padT + plot + padB;
         let grid = "";
         for (let i = 0; i <= max; i += 1) {
-          const gx = ox + i * step;
-          const gy = oy - i * step;
-          grid += `<line x1="${gx}" y1="${oy}" x2="${gx}" y2="${oy - plot}" stroke="#d8d0c4" stroke-width="1"/>`;
-          grid += `<line x1="${ox}" y1="${gy}" x2="${ox + plot}" y2="${gy}" stroke="#d8d0c4" stroke-width="1"/>`;
+          grid += svgVBar(ox + i * step, oy - plot, plot, 1, "#d8d0c4");
+          grid += svgHBar(ox, oy - i * step, plot, 1, "#d8d0c4");
         }
-        grid += `<line x1="${ox}" y1="${oy}" x2="${ox + plot}" y2="${oy}" stroke="#1c2430" stroke-width="2.5"/>
-                 <line x1="${ox}" y1="${oy}" x2="${ox}" y2="${oy - plot}" stroke="#1c2430" stroke-width="2.5"/>`;
+        grid += svgHBar(ox, oy, plot, 2, "#1c2430");
+        grid += svgVBar(ox, oy - plot, plot, 2, "#1c2430");
         for (let i = 0; i <= max; i += 1) {
-          grid += `<text x="${ox + i * step}" y="${oy + 18}" font-size="14" font-weight="700" text-anchor="middle" fill="#1c2430">${i}</text>`;
-          grid += `<text x="${ox - 7}" y="${oy - i * step + 5}" font-size="14" font-weight="700" text-anchor="end" fill="#1c2430">${i}</text>`;
+          grid += `<text x="${ox + i * step}" y="${oy + 10}" font-size="8" font-weight="700" text-anchor="middle" fill="#1c2430">${i}</text>`;
+          grid += `<text x="${ox - 3}" y="${oy - i * step + 3}" font-size="8" font-weight="700" text-anchor="end" fill="#1c2430">${i}</text>`;
         }
-        grid += `<circle cx="${ox + x * step}" cy="${oy - y * step}" r="7" fill="#c45c26" stroke="#1c2430" stroke-width="1"/>`;
+        grid += `<circle cx="${ox + x * step}" cy="${oy - y * step}" r="3.2" fill="#c45c26" stroke="#1c2430" stroke-width="0.8"/>`;
         return numberTask(
           "coordinates",
           `Welche Koordinaten hat der Punkt? Schreibe z. B. ${Math.min(3, max)}-${Math.min(2, max)}`,
@@ -1656,17 +1671,17 @@ function buildTopics(u) {
         ];
         const kind = pick(kinds);
         const rad = (kind.deg * Math.PI) / 180;
-        const cx = 80;
-        const cy = 78;
-        const len = 52;
+        const cx = 42;
+        const cy = 58;
+        const len = 34;
         const x2 = cx + len * Math.cos(-rad);
         const y2 = cy + len * Math.sin(-rad);
         const visual = svg(
-          `<line x1="${cx}" y1="${cy}" x2="${cx + len}" y2="${cy}" stroke="#1c2430" stroke-width="3"/>
-           <line x1="${cx}" y1="${cy}" x2="${x2}" y2="${y2}" stroke="#1c2430" stroke-width="3"/>
-           <circle cx="${cx}" cy="${cy}" r="3.5" fill="#c45c26"/>`,
-          160,
-          118
+          `${svgSegment(cx, cy, cx + len, cy, 3, "#1c2430")}
+           ${svgSegment(cx, cy, x2, y2, 3, "#1c2430")}
+           <circle cx="${cx}" cy="${cy}" r="3" fill="#c45c26"/>`,
+          110,
+          72
         );
         if (kind.id === "recht" && Math.random() < (t === 2 ? 0.7 : 0.5)) {
           return numberTask("angles", "Wie groß ist der Winkel in Grad?", 90, {

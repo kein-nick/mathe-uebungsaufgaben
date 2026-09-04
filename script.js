@@ -1960,7 +1960,7 @@ function pdfBlockIsWritten(block) {
   return rows.length > 0 && rows.every((row) => row.classList.contains("is-stack"));
 }
 
-function splitPdfVisualBlock(block, perPage = 4) {
+function splitPdfVisualBlock(block, perPage = 10) {
   const items = [...block.querySelectorAll(":scope > .task-item")];
   if (items.length <= perPage) {
     return [block];
@@ -1988,19 +1988,29 @@ function fitPdfVisualSvgs(root) {
     const box = svg.viewBox?.baseVal;
     const viewW = box && box.width ? box.width : Number(svg.getAttribute("width")) || 160;
     const viewH = box && box.height ? box.height : Number(svg.getAttribute("height")) || 120;
-    const maxW = 300;
-    const maxH = 240;
+    const maxW = 168;
+    const maxH = 118;
     const scale = Math.min(maxW / viewW, maxH / viewH, 1);
-    const width = Math.max(96, Math.round(viewW * scale));
-    const height = Math.max(80, Math.round(viewH * scale));
+    const width = Math.max(88, Math.round(viewW * scale));
+    const height = Math.max(64, Math.round(viewH * scale));
+    svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
     svg.setAttribute("width", String(width));
     svg.setAttribute("height", String(height));
     svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
-    svg.style.width = `${width}px`;
-    svg.style.height = `${height}px`;
-    svg.style.maxWidth = "100%";
-    svg.style.maxHeight = "none";
-    svg.style.flexShrink = "0";
+    const xml = new XMLSerializer().serializeToString(svg);
+    const img = document.createElement("img");
+    img.className = svg.getAttribute("class") || "geo-svg";
+    img.alt = "";
+    img.width = width;
+    img.height = height;
+    img.decoding = "sync";
+    img.style.width = `${width}px`;
+    img.style.height = `${height}px`;
+    img.style.maxWidth = "100%";
+    img.style.maxHeight = "118px";
+    img.style.display = "block";
+    img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(xml)}`;
+    svg.replaceWith(img);
   });
 }
 
@@ -2051,7 +2061,7 @@ async function buildPdfSheet() {
         continue;
       }
       if (pdfBlockIsVisual(block)) {
-        splitPdfVisualBlock(block, 4).forEach((part) => {
+        splitPdfVisualBlock(block, 10).forEach((part) => {
           groups.push({ blocks: [part], kind: "visual" });
         });
         i += 1;
