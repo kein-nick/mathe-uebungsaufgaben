@@ -77,8 +77,8 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/style.css?v=41" as="style" />
-    <link rel="stylesheet" href="/style.css?v=41" />
+    <link rel="preload" href="/style.css?v=42" as="style" />
+    <link rel="stylesheet" href="/style.css?v=42" />
   </head>
   <body class="ads-off practice-page-body" data-locked-grade="2">
     <header class="site-header">
@@ -146,32 +146,8 @@
           </div>
         </div>
 
-        <div class="setup-block is-hidden" id="count-block">
-          <h2>3. Anzahl der Aufgaben</h2>
-          <div class="count-row">
-            <label class="neg-switch" id="block-mode-switch">
-              <input type="checkbox" id="block-mode-toggle" aria-describedby="count-hint" />
-              <span class="neg-slider" aria-hidden="true"></span>
-              <span>Eigene 10er-Blöcke</span>
-            </label>
-            <select id="count-select" aria-label="Anzahl der Aufgaben" aria-describedby="count-hint">
-              <option value="" selected disabled>Bitte wählen</option>
-              <option value="10">10 Aufgaben</option>
-              <option value="20">20 Aufgaben</option>
-              <option value="30">30 Aufgaben</option>
-              <option value="40">40 Aufgaben</option>
-              <option value="50">50 Aufgaben</option>
-              <option value="60">60 Aufgaben</option>
-              <option value="70">70 Aufgaben</option>
-              <option value="80">80 Aufgaben</option>
-            </select>
-          </div>
-          <p class="hint" id="count-hint">Plus, Minus und ähnliche Rechenarten werden gemischt. Koordinaten, Winkel und andere Bilder stehen in eigenen Blöcken.</p>
-          <p class="hint is-hidden" id="block-mode-summary" aria-live="polite"></p>
-        </div>
-
         <div class="setup-block is-hidden" id="operation-block">
-          <h2>4. Was möchtest du üben?</h2>
+          <h2>3. Was möchtest du üben?</h2>
           <div class="topic-toolbar">
             <label class="neg-switch is-hidden" id="neg-switch">
               <input type="checkbox" id="neg-toggle" />
@@ -181,6 +157,8 @@
           </div>
           <div class="topic-groups" id="operation-list" role="group" aria-label="Übungsarten"></div>
           <p class="hint" id="operation-hint"></p>
+          <p class="hint" id="count-hint">Pro Rechenart stellst du ein, wie viele 10er-Blöcke auf das Blatt kommen. Höchstens 8 Blöcke (80 Aufgaben).</p>
+          <p class="hint" id="block-mode-summary" aria-live="polite"></p>
         </div>
 
         <div class="ad-mid-row is-hidden" id="ad-mid-row">
@@ -247,6 +225,8 @@
       </section>
 
       
+
+        
 
         
 
@@ -458,8 +438,9 @@
         
         
         
+        
         <script src="/topics.js?v=29"></script>
-    <script src="/script.js?v=39"></script>
+    <script src="/script.js?v=40"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>
       window.va =

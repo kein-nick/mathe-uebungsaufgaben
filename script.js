@@ -2,10 +2,7 @@ const gradeBlock = document.getElementById("grade-block");
 const gradeButtons = document.querySelectorAll(".grade-btn:not(.term-btn)");
 const termButtons = document.querySelectorAll(".term-btn");
 const termBlock = document.getElementById("term-block");
-const countBlock = document.getElementById("count-block");
-const countSelect = document.getElementById("count-select");
 const countHint = document.getElementById("count-hint");
-const blockModeToggle = document.getElementById("block-mode-toggle");
 const blockModeSummary = document.getElementById("block-mode-summary");
 const operationBlock = document.getElementById("operation-block");
 const operationList = document.getElementById("operation-list");
@@ -42,10 +39,8 @@ const mobilePracticeQuery = window.matchMedia("(max-width: 1024px), (pointer: co
 const SHOW_ADS = false;
 const TASK_BLOCK_SIZE = 10;
 const MAX_TASK_BLOCKS = 8;
-const MIXED_COUNT_HINT =
-  "Plus, Minus und ähnliche Rechenarten werden gemischt. Koordinaten, Winkel und andere Bilder stehen in eigenen Blöcken.";
 const BLOCK_MODE_HINT =
-  "Jede Rechenart bekommt eigene 10er-Blöcke, nacheinander. Die Anzahl stellst du bei den Rechenarten ein.";
+  "Pro Rechenart stellst du ein, wie viele 10er-Blöcke auf das Blatt kommen. Höchstens 8 Blöcke (80 Aufgaben).";
 
 function layoutPracticeControls() {
   if (!pageCorner || !practiceStartSlot || !practiceCheckSlot || !practiceFooterSlot) {
@@ -284,7 +279,7 @@ function selectedTopics() {
 }
 
 function isBlockMode() {
-  return Boolean(blockModeToggle?.checked);
+  return true;
 }
 
 function topicBlocksOf(input) {
@@ -304,10 +299,7 @@ function totalSelectedBlocks() {
 }
 
 function selectedTaskCount() {
-  if (isBlockMode()) {
-    return totalSelectedBlocks() * TASK_BLOCK_SIZE;
-  }
-  return Number(countSelect.value) || 0;
+  return totalSelectedBlocks() * TASK_BLOCK_SIZE;
 }
 
 function shuffleArray(items) {
@@ -683,11 +675,9 @@ function fillOperations(grade, term) {
   hint.textContent = difficulty[grade][term].hint;
   updateNegSwitch(grade);
   updateNotesSwitch(grade);
-  if (isBlockMode()) {
-    ensureDefaultBlocks();
-    updateBlockModeSummary();
-    updateTopicBlockControls();
-  }
+  ensureDefaultBlocks();
+  updateBlockModeSummary();
+  updateTopicBlockControls();
 }
 
 function fillTermHints(grade) {
@@ -712,9 +702,6 @@ function ensureDefaultBlocks() {
 }
 
 function clampBlockBudget() {
-  if (!isBlockMode()) {
-    return;
-  }
   let used = 0;
   operationList.querySelectorAll("input[data-topic]:checked:not(:disabled)").forEach((input) => {
     let blocks = Math.max(1, topicBlocksOf(input) || 1);
@@ -735,7 +722,7 @@ function updateTopicBlockControls() {
   if (!operationList) {
     return;
   }
-  const used = isBlockMode() ? totalSelectedBlocks() : 0;
+  const used = totalSelectedBlocks();
   operationList.querySelectorAll(".topic-choice").forEach((choice) => {
     const input = choice.querySelector("input[data-topic]");
     const valueEl = choice.querySelector(".topic-blocks-count");
@@ -756,14 +743,14 @@ function updateTopicBlockControls() {
 }
 
 function updateBlockModeSummary() {
-  if (!blockModeSummary || !isBlockMode()) {
+  if (!blockModeSummary) {
     return;
   }
   const quotas = selectedTopicQuotas();
   const total = quotas.reduce((sum, item) => sum + item.blocks, 0) * TASK_BLOCK_SIZE;
   if (!quotas.length) {
     blockModeSummary.textContent =
-      "Wähle unten die Rechenarten. Jede startet mit einem 10er-Block (höchstens 8 Blöcke).";
+      "Hake unten die Rechenarten an. Jede startet mit einem 10er-Block.";
     return;
   }
   const parts = quotas.map((item) => {
@@ -774,40 +761,23 @@ function updateBlockModeSummary() {
   blockModeSummary.textContent = `${total} Aufgaben: ${parts.join(", ")}${maxNote}`;
 }
 
-function setBlockModeUi(on) {
-  if (countBlock) {
-    countBlock.classList.toggle("is-block-mode", on);
-  }
+function setBlockModeUi() {
   if (countHint) {
-    countHint.textContent = on ? BLOCK_MODE_HINT : MIXED_COUNT_HINT;
+    countHint.textContent = BLOCK_MODE_HINT;
   }
   if (blockModeSummary) {
-    blockModeSummary.classList.toggle("is-hidden", !on);
+    blockModeSummary.classList.remove("is-hidden");
   }
-  if (on) {
-    ensureDefaultBlocks();
-    clampBlockBudget();
-    updateBlockModeSummary();
-    updateTopicBlockControls();
-    show(operationBlock);
-    if (selectedTopics().length) {
-      showCreateStep();
-    } else {
-      hideCreateStep();
-    }
-    return;
+  ensureDefaultBlocks();
+  clampBlockBudget();
+  updateBlockModeSummary();
+  updateTopicBlockControls();
+  show(operationBlock);
+  if (selectedTopics().length) {
+    showCreateStep();
+  } else {
+    hideCreateStep();
   }
-  if (countSelect.value) {
-    show(operationBlock);
-    if (selectedTopics().length) {
-      showCreateStep();
-    } else {
-      hideCreateStep();
-    }
-    return;
-  }
-  hide(operationBlock);
-  hideCreateStep();
 }
 
 function scrollToNext(element, align = "reveal") {
@@ -880,11 +850,6 @@ function hideCreateStep() {
 }
 
 function resetLaterSteps({ preserveTopics = false } = {}) {
-  countSelect.value = "";
-  if (blockModeToggle) {
-    blockModeToggle.checked = false;
-  }
-  setBlockModeUi(false);
   if (!preserveTopics) {
     operationList.querySelectorAll("input").forEach((input) => {
       input.checked = false;
@@ -926,7 +891,7 @@ function selectGrade(grade, options = {}) {
   updateNegSwitch(selectedGrade);
   updateNotesSwitch(selectedGrade);
   show(termBlock);
-  hide(countBlock);
+  hide(operationBlock);
   resetLaterSteps();
   if (scroll) {
     scrollToNext(termBlock);
@@ -940,10 +905,10 @@ function selectTerm(term, options = {}) {
     item.classList.toggle("is-active", Number(item.dataset.term) === term)
   );
   fillOperations(selectedGrade, selectedTerm);
-  show(countBlock);
   resetLaterSteps({ preserveTopics: true });
+  setBlockModeUi();
   if (scroll) {
-    scrollToNext(countBlock);
+    scrollToNext(operationBlock, "center-top");
   }
 }
 
@@ -965,16 +930,12 @@ function applyCompactSetupLayout() {
   }
   document.body.classList.add("is-grade-locked");
   const termTitle = termBlock.querySelector("h2");
-  const countTitle = countBlock.querySelector("h2");
   const operationTitle = operationBlock.querySelector("h2");
   if (termTitle) {
     termTitle.textContent = "1. Halbjahr wählen";
   }
-  if (countTitle) {
-    countTitle.textContent = "2. Anzahl der Aufgaben";
-  }
   if (operationTitle) {
-    operationTitle.textContent = "3. Was möchtest du üben?";
+    operationTitle.textContent = "2. Was möchtest du üben?";
   }
 }
 
@@ -1018,7 +979,7 @@ function initPageEntry() {
     if (topicIds.length) {
       scrollToNext(operationBlock, "center-top");
     } else if (hasTerm) {
-      scrollToNext(countBlock);
+      scrollToNext(operationBlock, "center-top");
     }
     return;
   }
@@ -1040,30 +1001,6 @@ termButtons.forEach((button) => {
 
 initPageEntry();
 
-countSelect.addEventListener("change", () => {
-  if (!countSelect.value) {
-    return;
-  }
-  show(operationBlock);
-  countdownMinutesDirty = false;
-  syncCountdownPreset();
-  if (selectedTopics().length) {
-    showCreateStep();
-  } else {
-    hideCreateStep();
-    scrollToNext(operationBlock, "center-top");
-  }
-});
-
-blockModeToggle?.addEventListener("change", () => {
-  setBlockModeUi(isBlockMode());
-  countdownMinutesDirty = false;
-  syncCountdownPreset();
-  if (isBlockMode() && !selectedTopics().length) {
-    scrollToNext(operationBlock, "center-top");
-  }
-});
-
 operationList.addEventListener("mousedown", (event) => {
   if (event.target.closest("[data-block-delta]")) {
     event.preventDefault();
@@ -1072,7 +1009,7 @@ operationList.addEventListener("mousedown", (event) => {
 
 operationList.addEventListener("click", (event) => {
   const btn = event.target.closest("[data-block-delta]");
-  if (!btn || !isBlockMode()) {
+  if (!btn) {
     return;
   }
   event.preventDefault();
@@ -1110,7 +1047,7 @@ operationList.addEventListener("change", (event) => {
       }
     });
   }
-  if (isBlockMode() && target instanceof HTMLInputElement && target.matches("input[data-topic]")) {
+  if (target instanceof HTMLInputElement && target.matches("input[data-topic]")) {
     if (target.checked) {
       if (topicBlocksOf(target) < 1) {
         target.dataset.blocks = "1";
@@ -1119,13 +1056,11 @@ operationList.addEventListener("change", (event) => {
       delete target.dataset.blocks;
     }
   }
-  if (isBlockMode()) {
-    clampBlockBudget();
-    ensureDefaultBlocks();
-    updateBlockModeSummary();
-    updateTopicBlockControls();
-    operationList.querySelectorAll(".topic-group").forEach((groupEl) => syncGroupToggle(groupEl));
-  }
+  clampBlockBudget();
+  ensureDefaultBlocks();
+  updateBlockModeSummary();
+  updateTopicBlockControls();
+  operationList.querySelectorAll(".topic-group").forEach((groupEl) => syncGroupToggle(groupEl));
   const group = target instanceof Element ? target.closest(".topic-group") : null;
   if (group) {
     syncGroupToggle(group);
@@ -1604,16 +1539,13 @@ function updateProgress() {
 
 function buildWorksheet() {
   const selectedOps = selectedTopics();
-  const blockMode = isBlockMode();
   const count = selectedTaskCount();
   if (!count || !selectedTerm || !selectedOps.length) {
     return false;
   }
-  tasks = blockMode
-    ? generateTasksFromQuotas(selectedGrade, selectedTerm, selectedTopicQuotas(), negativesAllowed())
-    : generateTasks(selectedGrade, selectedTerm, count, selectedOps, negativesAllowed());
+  tasks = generateTasksFromQuotas(selectedGrade, selectedTerm, selectedTopicQuotas(), negativesAllowed());
   activeTopicIds = [...selectedOps];
-  activeBlockMode = blockMode;
+  activeBlockMode = true;
   celebrated = false;
   setNotesEnabled(notesToggle.checked, false);
   renderTasks();

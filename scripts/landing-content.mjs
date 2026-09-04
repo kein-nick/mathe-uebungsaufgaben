@@ -191,9 +191,9 @@ export const siteFaqs = [
     a: "Ja. Die Aufgaben werden neu erzeugt. So übst du nicht dasselbe Blatt auswendig.",
   },
   {
-    q: "Kann ich mehrere Rechenarten auf einem Blatt mischen?",
-    a: "Ja. Du hakt die gewünschten Themen an. Standardmäßig werden sie gemischt. Mit „Eigene 10er-Blöcke“ bekommt jede Rechenart nacheinander eigene Zehnerblöcke — zum Beispiel erst 20 Plus, dann 10 Minus.",
-    html: `<p>Ja. Du hakt die gewünschten Themen an. Standardmäßig werden sie gemischt. Mit „Eigene 10er-Blöcke“ bekommt jede Rechenart nacheinander eigene Zehnerblöcke — zum Beispiel erst 20 Plus, dann 10 Minus. Themen-Seiten wie <a href="/plus-minus">Plus und Minus</a> oder <a href="/einmaleins">Einmaleins</a> starten mit passender Vorauswahl.</p>`,
+    q: "Kann ich mehrere Rechenarten auf einem Blatt kombinieren?",
+    a: "Ja. Du hakt die gewünschten Themen an und stellst pro Rechenart ein, wie viele 10er-Blöcke auf das Blatt kommen — zum Beispiel 20 Plus und 10 Minus, nacheinander.",
+    html: `<p>Ja. Du hakt die gewünschten Themen an und stellst pro Rechenart ein, wie viele 10er-Blöcke auf das Blatt kommen — zum Beispiel 20 Plus und 10 Minus, nacheinander. Themen-Seiten wie <a href="/plus-minus">Plus und Minus</a> oder <a href="/einmaleins">Einmaleins</a> starten mit passender Vorauswahl.</p>`,
   },
   {
     q: "Gibt es ein Zeitlimit?",
@@ -265,7 +265,7 @@ export const parentsPage = {
     },
     {
       q: "Die Aufgaben sind zu schwer oder zu leicht — was tun?",
-      a: "Weniger Themen anwählen, das andere Halbjahr wählen oder die Klasse anpassen. Mit eigenen 10er-Blöcken kommt erst eine Rechenart, dann die nächste — das ist oft übersichtlicher als alles gemischt.",
+      a: "Weniger Themen anwählen, das andere Halbjahr wählen oder die Klasse anpassen. Pro Rechenart kannst du die Zahl der 10er-Blöcke klein halten — dann bleibt das Blatt übersichtlich.",
     },
     {
       q: "Funktioniert das auf dem Handy oder Tablet?",
@@ -297,7 +297,7 @@ export const teachersPage = {
     },
     {
       heading: "Blöcke nach Rechenart",
-      text: "Wenn du mehrere Themen anhakt, kannst du eigene 10er-Blöcke einschalten. Dann steht zum Beispiel erst Addition, dann Subtraktion — nacheinander auf dem Blatt, nicht durcheinander. Pro Rechenart stellst du ein, wie viele Zehnerblöcke du brauchst.",
+      text: "Mehrere Themen kommen nacheinander in 10er-Blöcken auf das Blatt, nicht durcheinander. Pro Rechenart stellst du ein, wie viele Zehnerblöcke du brauchst — zum Beispiel erst 20 Addition, dann 10 Subtraktion.",
     },
     {
       heading: "Ohne Anmeldung",

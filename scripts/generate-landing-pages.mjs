@@ -210,7 +210,7 @@ function renderFaqJsonLd() {
         url,
         name: "Häufige Fragen – Mathe üben Klasse 1–6",
         description:
-          "Antworten zu mathe-testen.de: kostenlos, ohne Anmeldung, PDF-Druck, Klassen 1 bis 6, gemischte Aufgaben und 10er-Blöcke.",
+          "Antworten zu mathe-testen.de: kostenlos, ohne Anmeldung, PDF-Druck, Klassen 1 bis 6 und 10er-Blöcke pro Rechenart.",
         inLanguage: "de-DE",
         isPartOf: { "@id": `${SITE_URL}/#website` },
       },
@@ -494,7 +494,7 @@ function renderPracticeJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=41" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=42" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -753,7 +753,7 @@ function extractAppFragments() {
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart);
 
   const scripts = `    <script src="/topics.js?v=29"></script>
-    <script src="/script.js?v=39"></script>
+    <script src="/script.js?v=40"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>
       window.va =

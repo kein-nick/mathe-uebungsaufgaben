@@ -389,18 +389,6 @@ select {
   flex: 1 1 12rem;
 }
 
-#count-block.is-block-mode #count-select {
-  display: none;
-}
-
-#count-block .hint {
-  margin-bottom: 0;
-}
-
-#count-block .hint + .hint {
-  margin-top: 6px;
-}
-
 .topic-blocks {
   display: none;
   grid-column: 2;
@@ -409,16 +397,16 @@ select {
   margin-top: 6px;
 }
 
-#count-block.is-block-mode ~ #operation-block
-  .topic-choice:has(input[data-topic]:checked:not(:disabled))
-  .topic-blocks {
+.topic-choice:has(input[data-topic]:checked:not(:disabled)) .topic-blocks {
   display: inline-flex;
 }
 
-#count-block.is-block-mode ~ #operation-block
-  .topic-choice:has(input[data-topic]:checked:not(:disabled))
-  input[data-topic] {
+.topic-choice:has(input[data-topic]:checked:not(:disabled)) input[data-topic] {
   grid-row: 1 / span 3;
+}
+
+#operation-block .hint + .hint {
+  margin-top: 6px;
 }
 
 .topic-blocks-btn {
