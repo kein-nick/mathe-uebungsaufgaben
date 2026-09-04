@@ -637,7 +637,8 @@ option:disabled {
 
 .blocks {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 22rem));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  max-width: 58rem;
   justify-content: start;
   gap: 16px;
 }
@@ -667,7 +668,7 @@ option:disabled {
   grid-column: 1 / -1;
   justify-self: start;
   width: 100%;
-  max-width: 46rem;
+  max-width: 52rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 18px;
@@ -697,14 +698,78 @@ option:disabled {
 
 .block.is-visual .task-main {
   flex-direction: column;
+  flex-wrap: nowrap;
   align-items: center;
   text-align: center;
+  width: 100%;
+  gap: 6px;
+}
+
+.block.is-visual .task:has(.task-visual):not(:has(.answer-choices)) .task-main {
+  flex-wrap: nowrap;
+}
+
+.block.is-visual .task-visual {
+  flex: 0 0 auto;
   width: 100%;
 }
 
 .block.is-visual .task-visual svg {
-  max-width: min(100%, 220px);
-  max-height: 160px;
+  max-width: min(100%, 200px);
+  max-height: 150px;
+  margin-inline: auto;
+}
+
+.block.is-visual .task-prompt {
+  flex: 0 1 auto;
+  width: 100%;
+}
+
+.block.is-visual .task .answer-input,
+.block.is-visual .answer-wrap {
+  flex: 0 0 auto;
+  margin-left: 0;
+  align-self: center;
+}
+
+.block.is-visual .task .answer-input {
+  width: 4.4rem;
+  min-height: 2.15rem;
+  height: 2.15rem;
+  max-height: 2.15rem;
+  padding: 4px 6px;
+}
+
+.block.is-visual .choice-chip span {
+  min-height: 2rem;
+  padding: 4px 8px;
+  font-size: 0.82rem;
+}
+
+.block.is-addsub:not(.is-written) .task,
+.block.is-eq .task:not(:has(.task-visual)):not(:has(.answer-choices)) {
+  display: grid;
+  grid-template-columns: 1.7rem minmax(0, 1fr) 4.6rem;
+  align-items: center;
+  column-gap: 8px;
+  row-gap: 2px;
+}
+
+.block.is-addsub:not(.is-written) .task-eq,
+.block.is-eq .task-eq {
+  min-width: 0;
+  flex: none;
+}
+
+.block.is-addsub:not(.is-written) .task .answer-input,
+.block.is-eq .task .answer-input {
+  margin-left: 0;
+  justify-self: stretch;
+  flex: none;
+  width: 100%;
+  min-height: 2.15rem;
+  height: 2.15rem;
+  padding: 4px 6px;
 }
 
 @media (max-width: 640px) {
@@ -712,6 +777,11 @@ option:disabled {
   .block.is-written {
     grid-template-columns: 1fr;
     max-width: none;
+  }
+
+  .block.is-addsub:not(.is-written) .task,
+  .block.is-eq .task:not(:has(.task-visual)):not(:has(.answer-choices)) {
+    grid-template-columns: 1.5rem minmax(0, 1fr) 4.2rem;
   }
 }
 

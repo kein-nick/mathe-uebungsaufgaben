@@ -1804,8 +1804,13 @@ function renderTasks(target = blocks, options = {}) {
     block.className = "block";
     if (slice.family === "visual") {
       block.classList.add("is-visual");
-    } else if (slice.family === "addsub" && slice.items.some((item) => usesWrittenStack(item.task))) {
-      block.classList.add("is-written");
+    } else if (slice.family === "addsub") {
+      block.classList.add("is-addsub");
+      if (slice.items.some((item) => usesWrittenStack(item.task))) {
+        block.classList.add("is-written");
+      }
+    } else {
+      block.classList.add("is-eq");
     }
     block.innerHTML = `<h3>${escapeHtml(blockHeading(sliceTasks, startNum, endNum))}</h3>`;
 
