@@ -1988,8 +1988,8 @@ function fitPdfVisualSvgs(root) {
     const box = svg.viewBox?.baseVal;
     const viewW = box && box.width ? box.width : Number(svg.getAttribute("width")) || 160;
     const viewH = box && box.height ? box.height : Number(svg.getAttribute("height")) || 120;
-    const maxW = 168;
-    const maxH = 118;
+    const maxW = 156;
+    const maxH = 96;
     const scale = Math.min(maxW / viewW, maxH / viewH, 1);
     const width = Math.max(88, Math.round(viewW * scale));
     const height = Math.max(64, Math.round(viewH * scale));
@@ -2007,7 +2007,7 @@ function fitPdfVisualSvgs(root) {
     img.style.width = `${width}px`;
     img.style.height = `${height}px`;
     img.style.maxWidth = "100%";
-    img.style.maxHeight = "118px";
+    img.style.maxHeight = "96px";
     img.style.display = "block";
     img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(xml)}`;
     svg.replaceWith(img);

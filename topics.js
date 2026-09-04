@@ -1622,7 +1622,7 @@ function buildTopics(u) {
         const x = randomInt(1, max);
         const y = randomInt(1, max);
         const padL = 16;
-        const padB = 14;
+        const padB = 10;
         const padT = 8;
         const padR = 6;
         const step = max >= 12 ? 10 : max >= 10 ? 11 : 12;
@@ -1643,13 +1643,13 @@ function buildTopics(u) {
           if (i % labelEvery !== 0 && i !== max) {
             continue;
           }
-          grid += `<text x="${ox + i * step}" y="${oy + 10}" font-size="8" font-weight="700" text-anchor="middle" fill="#1c2430">${i}</text>`;
+          grid += `<text x="${ox + i * step}" y="${oy + 8}" font-size="8" font-weight="700" text-anchor="middle" fill="#1c2430">${i}</text>`;
           grid += `<text x="${ox - 3}" y="${oy - i * step + 3}" font-size="8" font-weight="700" text-anchor="end" fill="#1c2430">${i}</text>`;
         }
         grid += `<circle cx="${ox + x * step}" cy="${oy - y * step}" r="3.2" fill="#c45c26" stroke="#1c2430" stroke-width="0.8"/>`;
         return numberTask(
           "coordinates",
-          `Welche Koordinaten hat der Punkt? Schreibe z. B. ${Math.min(3, max)}-${Math.min(2, max)}`,
+          `Welche Koordinaten hat der Punkt? (z. B. ${Math.min(3, max)}-${Math.min(2, max)})`,
           `${x}-${y}`,
           {
             kind: "text",
