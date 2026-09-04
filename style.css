@@ -840,7 +840,7 @@ option:disabled {
   display: block;
   overflow: visible;
   flex-shrink: 0;
-  max-width: 100%;
+  max-width: min(100%, 320px);
   height: auto;
 }
 
@@ -2638,13 +2638,13 @@ a.grade-btn-nav[aria-current="page"] {
 }
 
 .pdf-sheet .task-visual {
-  max-height: 42%;
-  overflow: hidden;
+  max-height: none;
+  overflow: visible;
 }
 
 .pdf-sheet .task-visual svg {
   max-width: 100%;
-  max-height: 70px;
+  max-height: 180px;
   height: auto;
 }
 
@@ -2828,7 +2828,7 @@ a.grade-btn-nav[aria-current="page"] {
 }
 
 .pdf-page-visual .task-visual svg {
-  max-height: 120px;
+  max-height: 190px;
 }
 
 .pdf-page-visual .task:has(.answer-choices),

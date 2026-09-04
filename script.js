@@ -2002,7 +2002,8 @@ async function buildPdfSheet() {
     }
   } else if (pdfHasVisuals()) {
     const items = [...staging.querySelectorAll(".task-item")];
-    const perPage = notesToggle.checked ? 4 : 5;
+    const hasCoords = tasks.some((task) => task.type === "coordinates");
+    const perPage = notesToggle.checked || hasCoords ? 4 : 5;
     const pageCount = Math.max(1, Math.ceil(items.length / perPage));
     for (let i = 0; i < items.length; i += perPage) {
       const slice = items.slice(i, i + perPage);

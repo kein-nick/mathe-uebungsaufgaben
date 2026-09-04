@@ -1598,29 +1598,46 @@ function buildTopics(u) {
       group: "geometrie",
       fromGrade: 5,
       fromTerm: 1,
-      example: () => "z. B. 3-2",
+      example: (g, t) => (g >= 6 ? "z. B. 8-4" : "z. B. 6-3"),
       generate: (g, t) => {
-        const max = g >= 6 ? (t === 2 ? 10 : 8) : 5;
+        const max = g >= 6 ? (t === 2 ? 12 : 10) : t === 2 ? 10 : 8;
         const x = randomInt(1, max);
         const y = randomInt(1, max);
-        const ox = 22;
-        const step = max >= 10 ? 10 : max >= 8 ? 11 : 14;
-        const oy = 16 + (max + 1) * step;
-        let grid = `<line x1="${ox}" y1="${oy}" x2="${ox + (max + 1) * step}" y2="${oy}" stroke="#1c2430"/>
-                    <line x1="${ox}" y1="${oy}" x2="${ox}" y2="${oy - (max + 1) * step}" stroke="#1c2430"/>`;
+        const padL = 30;
+        const padB = 26;
+        const padT = 12;
+        const padR = 16;
+        const step = max >= 12 ? 18 : max >= 10 ? 20 : 22;
+        const plot = max * step;
+        const ox = padL;
+        const oy = padT + plot;
+        const w = padL + plot + padR;
+        const h = padT + plot + padB;
+        let grid = "";
         for (let i = 0; i <= max; i += 1) {
-          grid += `<text x="${ox + i * step}" y="${oy + 12}" font-size="9" text-anchor="middle">${i}</text>`;
-          grid += `<text x="${ox - 10}" y="${oy - i * step + 3}" font-size="9">${i}</text>`;
+          const gx = ox + i * step;
+          const gy = oy - i * step;
+          grid += `<line x1="${gx}" y1="${oy}" x2="${gx}" y2="${oy - plot}" stroke="#d8d0c4" stroke-width="1"/>`;
+          grid += `<line x1="${ox}" y1="${gy}" x2="${ox + plot}" y2="${gy}" stroke="#d8d0c4" stroke-width="1"/>`;
         }
-        grid += `<circle cx="${ox + x * step}" cy="${oy - y * step}" r="5" fill="#c45c26"/>`;
-        const w = ox + (max + 1) * step + 16;
-        const h = oy + 18;
-        return numberTask("coordinates", "Welche Koordinaten hat der Punkt? Schreibe z. B. 3-2", `${x}-${y}`, {
-          kind: "text",
-          wide: true,
-          visualHtml: svg(grid, w, h),
-          key: `${x}-${y}`,
-        });
+        grid += `<line x1="${ox}" y1="${oy}" x2="${ox + plot}" y2="${oy}" stroke="#1c2430" stroke-width="2.5"/>
+                 <line x1="${ox}" y1="${oy}" x2="${ox}" y2="${oy - plot}" stroke="#1c2430" stroke-width="2.5"/>`;
+        for (let i = 0; i <= max; i += 1) {
+          grid += `<text x="${ox + i * step}" y="${oy + 18}" font-size="14" font-weight="700" text-anchor="middle" fill="#1c2430">${i}</text>`;
+          grid += `<text x="${ox - 7}" y="${oy - i * step + 5}" font-size="14" font-weight="700" text-anchor="end" fill="#1c2430">${i}</text>`;
+        }
+        grid += `<circle cx="${ox + x * step}" cy="${oy - y * step}" r="7" fill="#c45c26" stroke="#1c2430" stroke-width="1"/>`;
+        return numberTask(
+          "coordinates",
+          `Welche Koordinaten hat der Punkt? Schreibe z. B. ${Math.min(3, max)}-${Math.min(2, max)}`,
+          `${x}-${y}`,
+          {
+            kind: "text",
+            wide: true,
+            visualHtml: svg(grid, w, h),
+            key: `${x}-${y}`,
+          }
+        );
       },
     },
     {
