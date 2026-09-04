@@ -144,6 +144,7 @@ function buildTopics(u) {
       answer,
       a: extra.a,
       b: extra.b,
+      operands: extra.operands,
       operation: extra.operation,
       wide: extra.wide,
       allowMinus: extra.allowMinus,
