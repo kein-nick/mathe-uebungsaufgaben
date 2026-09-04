@@ -95,7 +95,15 @@ const SITE_URL = "https://mathe-testen.de";
 const SITE_NAME = "Mathematik Übungsaufgaben";
 const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 
-function renderOpenGraph({ title, description, url, imageAlt }) {
+function classOgImage(grade) {
+  return `${SITE_URL}/og-image-klasse-${grade}.jpg`;
+}
+
+function hubOgImage(slug) {
+  return `${SITE_URL}/og-image-${slug}.jpg`;
+}
+
+function renderOpenGraph({ title, description, url, imageAlt, image = OG_IMAGE }) {
   const safeTitle = escapeHtml(title);
   const safeDescription = escapeHtml(description);
   const safeImageAlt = escapeHtml(imageAlt);
@@ -105,7 +113,7 @@ function renderOpenGraph({ title, description, url, imageAlt }) {
     <meta property="og:title" content="${safeTitle}" />
     <meta property="og:description" content="${safeDescription}" />
     <meta property="og:url" content="${url}" />
-    <meta property="og:image" content="${OG_IMAGE}" />
+    <meta property="og:image" content="${image}" />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -113,7 +121,7 @@ function renderOpenGraph({ title, description, url, imageAlt }) {
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${safeTitle}" />
     <meta name="twitter:description" content="${safeDescription}" />
-    <meta name="twitter:image" content="${OG_IMAGE}" />
+    <meta name="twitter:image" content="${image}" />
     <meta name="twitter:image:alt" content="${safeImageAlt}" />`;
 }
 
@@ -359,7 +367,8 @@ function classPageMeta(grade) {
     title: `Mathe Klasse ${grade} – Themen erklärt & üben`,
     description: `Mathe Klasse ${grade} erklärt: Themen, Rechenarten und Kategorien für Eltern — plus kostenlose Übungsaufgaben online und als PDF.`,
     url: `${SITE_URL}/klasse-${grade}`,
-    imageAlt: `Mathe Klasse ${grade} – Themen und Übungsaufgaben`,
+    image: classOgImage(grade),
+    imageAlt: `Mathematik Übungsaufgaben Klasse ${grade}`,
   };
 }
 
@@ -778,6 +787,13 @@ function renderPracticePage(grade) {
       content="Mathe-Übungen für Klasse ${grade}: Halbjahr, Anzahl und Themen wählen — online üben oder Arbeitsblatt als PDF."
     />
     <link rel="canonical" href="https://mathe-testen.de/klasse-${grade}/uebungen" />
+${renderOpenGraph({
+    title: `Übungsaufgaben Klasse ${grade} – online & als PDF`,
+    description: `Mathe-Übungen für Klasse ${grade}: Halbjahr, Anzahl und Themen wählen — online üben oder Arbeitsblatt als PDF.`,
+    url: `${SITE_URL}/klasse-${grade}/uebungen`,
+    image: classOgImage(grade),
+    imageAlt: `Mathematik Übungsaufgaben Klasse ${grade}`,
+  })}
     <title>Übungsaufgaben Klasse ${grade} – online &amp; als PDF</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     ${renderHeadAssets()}
@@ -894,6 +910,7 @@ function renderHubPage(hub) {
     title: hub.title,
     description: hub.metaDescription,
     url,
+    image: hubOgImage(hub.slug),
     imageAlt: `${hub.shortName} üben – Mathematik Übungsaufgaben`,
   };
 

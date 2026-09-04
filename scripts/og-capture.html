@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!--
+  Klassen-OG-Bilder aus og-image.jpg.
+  Lokal: python -m http.server 8767
+  Edge headless, 1200x630, virtual-time-budget 5000, Screenshot von
+  http://127.0.0.1:8767/scripts/og-capture.html?g=1
+  Parameter g=1..6, g=all (Klasse 1 bis 6) oder t=Themenname (Hubs). JPEG-Qualitaet 82.
+-->
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <title>OG-Bild</title>
+    <style>
+      @font-face {
+        font-family: "Nunito";
+        font-style: normal;
+        font-weight: 400 800;
+        font-display: block;
+        src: url("/fonts/nunito-latin.woff2") format("woff2");
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background: #fef9ec;
+      }
+      canvas {
+        display: block;
+        width: 1200px;
+        height: 630px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="og" width="1200" height="630"></canvas>
+    <script>
+      const params = new URLSearchParams(location.search);
+      const custom = params.get("t");
+      const grade = params.get("g") || "all";
+      const label = custom || (grade === "all" ? "Klasse 1 bis 6" : `Klasse ${grade}`);
+
+      async function render() {
+        await document.fonts.load("800 64px Nunito");
+        await document.fonts.ready;
+        const img = new Image();
+        img.src = "/og-image.jpg";
+        await img.decode();
+
+        const canvas = document.getElementById("og");
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, 1200, 630);
+
+        let size = 64;
+        ctx.font = `800 ${size}px Nunito`;
+        const maxWidth = 700;
+        while (ctx.measureText(label).width > maxWidth && size > 40) {
+          size -= 1;
+          ctx.font = `800 ${size}px Nunito`;
+        }
+
+        const coverX = 58;
+        const coverW = Math.min(740, Math.max(430, Math.ceil(ctx.measureText(label).width) + 24));
+        const coverY = 366;
+        const coverH = 62;
+        const row = ctx.getImageData(coverX, 358, coverW, 1);
+        for (let y = coverY; y < coverY + coverH; y++) {
+          ctx.putImageData(row, coverX, y);
+        }
+
+        ctx.fillStyle = "rgb(15, 94, 71)";
+        ctx.textBaseline = "alphabetic";
+        ctx.textAlign = "left";
+        ctx.fillText(label, 63, 417);
+        document.title = "ready";
+      }
+
+      render();
+    </script>
+  </body>
+</html>
