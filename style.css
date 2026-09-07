@@ -321,10 +321,13 @@ body.ads-off .ad-mid-row {
 
 .term-grid {
   grid-template-columns: repeat(2, 1fr);
+  align-items: start;
 }
 
 .term-option {
   display: grid;
+  grid-template-rows: auto auto;
+  align-content: start;
   gap: 8px;
 }
 
