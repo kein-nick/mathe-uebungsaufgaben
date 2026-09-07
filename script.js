@@ -1956,21 +1956,34 @@ function preparePdfAnswerCells(root) {
   });
 }
 
-function pdfUsesDenseGrid() {
-  if (notesToggle.checked) {
-    return false;
-  }
-  const blockCount = Math.ceil(tasks.length / 10);
-  if (blockCount < 6) {
-    return false;
-  }
-  return tasks.every(
-    (task) =>
-      isArithmeticTask(task) &&
-      !task.visualHtml &&
-      task.kind !== "choice" &&
-      taskOperands(task).length <= 2
+function pdfMaxCompactEqPerPage() {
+  return selectedGrade <= 2 ? 8 : 4;
+}
+
+function pdfBlockIsCompactEq(block) {
+  const rows = [...block.querySelectorAll(".task")];
+  return (
+    rows.length > 0 &&
+    rows.every(
+      (row) =>
+        Boolean(row.querySelector(".task-eq")) &&
+        !row.classList.contains("is-stack") &&
+        !row.querySelector(".task-visual, .answer-choices")
+    )
   );
+}
+
+function pdfCompactEqLayout(count) {
+  if (count >= 5) {
+    return { gridClass: "pdf-blocks", pageClass: "" };
+  }
+  if (count >= 3) {
+    return { gridClass: "pdf-blocks pdf-blocks-quad", pageClass: "pdf-page-eq-quad" };
+  }
+  if (count === 2) {
+    return { gridClass: "pdf-blocks pdf-blocks-pair", pageClass: "pdf-page-list" };
+  }
+  return { gridClass: "pdf-blocks pdf-blocks-list", pageClass: "pdf-page-list" };
 }
 
 function pdfBlockIsVisual(block) {
@@ -2062,53 +2075,64 @@ async function buildPdfSheet() {
   renderTasks(staging, { forPdf: true });
   const pages = [];
 
-  if (pdfUsesDenseGrid()) {
-    const blockEls = [...staging.children];
-    const perPage = 8;
-    const pageCount = Math.max(1, Math.ceil(blockEls.length / perPage));
-    for (let i = 0; i < blockEls.length; i += perPage) {
-      const grid = document.createElement("div");
-      grid.className = "pdf-blocks";
-      blockEls.slice(i, i + perPage).forEach((block) => grid.append(block));
-      pages.push(makePdfPage(grid, Math.floor(i / perPage) + 1, pageCount, ""));
-    }
-  } else {
-    const blockEls = [...staging.children];
-    const groups = [];
-    for (let i = 0; i < blockEls.length; ) {
-      const block = blockEls[i];
-      const next = blockEls[i + 1];
-      if (pdfBlockIsWritten(block)) {
-        if (next && pdfBlockIsWritten(next)) {
-          groups.push({ blocks: [block, next], kind: "written" });
-          i += 2;
-        } else {
-          groups.push({ blocks: [block], kind: "written" });
-          i += 1;
-        }
-        continue;
-      }
-      if (pdfBlockIsVisual(block)) {
-        splitPdfVisualBlock(block, 10).forEach((part) => {
-          groups.push({ blocks: [part], kind: "visual" });
-        });
-        i += 1;
-        continue;
-      }
-      if (next && !pdfBlockIsVisual(next) && !pdfBlockIsWritten(next)) {
-        groups.push({ blocks: [block, next], kind: "pair" });
+  const blockEls = [...staging.children];
+  const groups = [];
+  for (let i = 0; i < blockEls.length; ) {
+    const block = blockEls[i];
+    const next = blockEls[i + 1];
+    if (pdfBlockIsWritten(block)) {
+      if (next && pdfBlockIsWritten(next)) {
+        groups.push({ blocks: [block, next], kind: "written" });
         i += 2;
       } else {
-        groups.push({ blocks: [block], kind: "pair" });
+        groups.push({ blocks: [block], kind: "written" });
         i += 1;
       }
+      continue;
     }
-    groups.forEach((group, index) => {
-      const grid = document.createElement("div");
+    if (pdfBlockIsVisual(block)) {
+      splitPdfVisualBlock(block, 10).forEach((part) => {
+        groups.push({ blocks: [part], kind: "visual" });
+      });
+      i += 1;
+      continue;
+    }
+    if (pdfBlockIsCompactEq(block)) {
+      const run = [];
+      while (i < blockEls.length && pdfBlockIsCompactEq(blockEls[i])) {
+        run.push(blockEls[i]);
+        i += 1;
+      }
+      const perPage = pdfMaxCompactEqPerPage();
+      for (let offset = 0; offset < run.length; offset += perPage) {
+        groups.push({ blocks: run.slice(offset, offset + perPage), kind: "eq" });
+      }
+      continue;
+    }
+    if (
+      next &&
+      !pdfBlockIsVisual(next) &&
+      !pdfBlockIsWritten(next) &&
+      !pdfBlockIsCompactEq(next)
+    ) {
+      groups.push({ blocks: [block, next], kind: "pair" });
+      i += 2;
+    } else {
+      groups.push({ blocks: [block], kind: "pair" });
+      i += 1;
+    }
+  }
+  groups.forEach((group, index) => {
+    const grid = document.createElement("div");
+    let pageClass;
+    if (group.kind === "eq") {
+      const layout = pdfCompactEqLayout(group.blocks.length);
+      grid.className = layout.gridClass;
+      pageClass = layout.pageClass;
+    } else {
       const paired = group.blocks.length > 1 || group.kind === "pair" || group.kind === "written";
       grid.className = paired ? "pdf-blocks pdf-blocks-pair" : "pdf-blocks pdf-blocks-list";
-      group.blocks.forEach((item) => grid.append(item));
-      const pageClass =
+      pageClass =
         group.kind === "written"
           ? "pdf-page-written"
           : group.kind === "visual"
@@ -2116,9 +2140,10 @@ async function buildPdfSheet() {
             : notesToggle.checked
               ? "pdf-page-list pdf-page-notes"
               : "pdf-page-list";
-      pages.push(makePdfPage(grid, index + 1, groups.length, pageClass));
-    });
-  }
+    }
+    group.blocks.forEach((item) => grid.append(item));
+    pages.push(makePdfPage(grid, index + 1, groups.length, pageClass));
+  });
 
   pages.forEach((page) => sheet.append(page));
   clearPdfCloneInputs(sheet);

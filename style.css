@@ -2610,6 +2610,23 @@ a.grade-btn-nav[aria-current="page"] {
   height: 100%;
 }
 
+.pdf-blocks-quad {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-template-rows: 1fr 1fr !important;
+  gap: 10px;
+  align-items: stretch;
+  height: 100%;
+}
+
+.pdf-page-eq-quad .pdf-answer-cell {
+  width: 4.4rem;
+}
+
+.pdf-page-eq-quad .pdf-answer-cell .answer-input,
+.pdf-page-eq-quad .task .answer-input {
+  width: 4.2rem;
+}
+
 .pdf-sheet .block {
   width: 100%;
   height: 100%;
