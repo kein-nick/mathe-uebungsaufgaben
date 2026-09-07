@@ -1825,6 +1825,9 @@ function renderTasks(target = blocks, options = {}) {
     } else {
       block.classList.add("is-eq");
     }
+    if (sliceTasks.every((task) => task.type === "word")) {
+      block.classList.add("is-word");
+    }
     block.innerHTML = `<h3>${escapeHtml(blockHeading(sliceTasks, startNum, endNum))}</h3>`;
 
     for (const { task, index } of slice.items) {

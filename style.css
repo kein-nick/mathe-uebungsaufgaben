@@ -2988,6 +2988,23 @@ a.grade-btn-nav[aria-current="page"] {
   min-width: 0;
 }
 
+.pdf-page-list .block.is-word .task-item {
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.pdf-page-list .block.is-word .task {
+  padding: 5px 2px 4px 0;
+  align-items: flex-start;
+}
+
+.pdf-page-list .block.is-word .task:has(.task-main) .task-prompt {
+  font-size: 0.72rem;
+  line-height: 1.2;
+  font-weight: 700;
+  padding-top: 0;
+}
+
 .pdf-page-list .task:has(.task-main) .answer-input,
 .pdf-page-list .task:has(.task-main) .answer-wrap {
   flex: 0 0 auto;
