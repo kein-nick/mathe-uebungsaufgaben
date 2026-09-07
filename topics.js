@@ -172,8 +172,14 @@ function buildTopics(u) {
 
   function choiceTask(type, prompt, answer, choices, extra = {}) {
     const mapped = choices.map((item) =>
-      typeof item === "string" ? { value: item, label: item } : item
+      typeof item === "string" ? { value: item, label: item } : { ...item }
     );
+    const ordered = extra.shuffle === false ? mapped : shuffle(mapped);
+    if (ordered.every((item) => item.html && /^[A-Z]$/i.test(String(item.label || "")))) {
+      ordered.forEach((item, index) => {
+        item.label = String.fromCharCode(65 + index);
+      });
+    }
     return {
       type,
       kind: "choice",
@@ -181,7 +187,7 @@ function buildTopics(u) {
       promptHtml: extra.promptHtml,
       visualHtml: extra.visualHtml,
       answer: String(answer),
-      choices: extra.shuffle === false ? mapped : shuffle(mapped),
+      choices: ordered,
       key: extra.key || `${type}:${answer}:${prompt}`,
     };
   }
@@ -1582,7 +1588,6 @@ function buildTopics(u) {
           { id: "arrow", inner: `<path d="M10 24 h20 v-10 l18 16 -18 16 v-10 h-20 z" fill="#2f5d50" stroke="#1c2430"/>` },
           { id: "step", inner: `<path d="M12 42 h14 v-12 h14 v-16 h-28 z" fill="#2f5d50" stroke="#1c2430"/>` },
           { id: "boot", inner: `<path d="M16 10 h16 v20 h14 v14 h-30 z" fill="#2f5d50" stroke="#1c2430"/>` },
-          { id: "tee", inner: `<path d="M12 10 h36 v12 h-12 v26 h-12 v-26 h-12 z" fill="#2f5d50" stroke="#1c2430"/>` },
           { id: "flag", inner: `<path d="M18 8 v40" fill="none" stroke="#1c2430" stroke-width="3"/><path d="M20 10 h22 l-8 10 8 10 h-22 z" fill="#2f5d50" stroke="#1c2430"/>` },
           { id: "hook", inner: `<path d="M34 10 v28 h-18 v-10 h8 v-18 z" fill="#2f5d50" stroke="#1c2430"/>` },
           { id: "chair", inner: `<path d="M16 12 h20 v14 h8 v20 h-10 v-12 h-18 z" fill="#2f5d50" stroke="#1c2430"/>` },
@@ -1595,7 +1600,7 @@ function buildTopics(u) {
         const flip = `<g transform="translate(56,0) scale(-1,1)">${fig.inner}</g>`;
         const shown = faceLeft ? flip : fig.inner;
         const mirrored = faceLeft ? fig.inner : flip;
-        const rotated = `<g transform="rotate(180 28 28)">${fig.inner}</g>`;
+        const rotated = `<g transform="rotate(90 30 28)">${fig.inner}</g>`;
         const choices = [
           { value: "spiegel", label: "A", html: svg(mirrored, 60, 56) },
           { value: "gleich", label: "B", html: svg(shown, 60, 56) },
