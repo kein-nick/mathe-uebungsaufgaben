@@ -1957,7 +1957,7 @@ function preparePdfAnswerCells(root) {
 }
 
 function pdfMaxCompactEqPerPage() {
-  return selectedGrade <= 2 ? 8 : 4;
+  return selectedGrade <= 2 ? 6 : 4;
 }
 
 function pdfBlockIsCompactEq(block) {
@@ -1975,7 +1975,7 @@ function pdfBlockIsCompactEq(block) {
 
 function pdfCompactEqLayout(count) {
   if (count >= 5) {
-    return { gridClass: "pdf-blocks", pageClass: "pdf-page-eq-dense" };
+    return { gridClass: "pdf-blocks pdf-blocks-six", pageClass: "pdf-page-eq-six" };
   }
   if (count >= 3) {
     return { gridClass: "pdf-blocks pdf-blocks-quad", pageClass: "pdf-page-eq-quad" };
