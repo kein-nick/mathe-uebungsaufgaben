@@ -2992,14 +2992,17 @@ a.grade-btn-nav[aria-current="page"] {
 }
 
 .pdf-page-list .task:has(.task-main),
-.pdf-page-list .task:has(.answer-choices) {
+.pdf-page-list .task:has(.answer-choices),
+.pdf-page-list .block.is-visual .task:has(.answer-choices) {
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   width: 100%;
 }
 
 .pdf-page-list .task:has(.task-main) .task-num,
-.pdf-page-list .task:has(.answer-choices) .task-num {
+.pdf-page-list .task:has(.answer-choices) .task-num,
+.pdf-page-list .block.is-visual .task:has(.answer-choices) .task-num {
   display: block;
   position: static;
   left: auto;
@@ -3015,14 +3018,15 @@ a.grade-btn-nav[aria-current="page"] {
 .pdf-page-list .task:has(.answer-choices) .task-main,
 .pdf-page-list .block.is-visual .task-main {
   display: flex;
-  flex: 1 1 auto;
+  flex: 1 1 0;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
-  justify-content: flex-start;
-  gap: 4px 8px;
+  justify-content: space-between;
+  gap: 8px;
   min-width: 0;
-  width: 100%;
+  width: auto;
+  max-width: none;
   text-align: left;
 }
 
@@ -3031,9 +3035,10 @@ a.grade-btn-nav[aria-current="page"] {
 .pdf-page-list .task:has(.task-main) .task-prompt,
 .pdf-page-list .task:has(.answer-choices) .task-prompt,
 .pdf-page-list .block.is-visual .task-prompt {
-  flex: 1 1 auto;
+  flex: 1 1 0;
   min-width: 0;
   width: auto;
+  max-width: none;
   text-align: left;
 }
 
@@ -3097,7 +3102,7 @@ a.grade-btn-nav[aria-current="page"] {
   gap: 3px;
   width: auto;
   max-width: none;
-  margin: 0 0 0 auto;
+  margin-left: auto;
 }
 
 .pdf-page-list .block.is-visual .choice-chip span,
