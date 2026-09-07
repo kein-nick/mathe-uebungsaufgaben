@@ -197,6 +197,7 @@ let selectedGrade = null;
 let selectedTerm = null;
 let pendingTopicIds = null;
 let tasks = [];
+let lastPdfUrl = "";
 let activeTopicIds = [];
 let activeBlockMode = false;
 let celebrated = false;
@@ -2185,7 +2186,7 @@ async function capturePdfPiece(element, widthPx, heightPx) {
       },
     });
     return {
-      dataUrl: canvas.toDataURL("image/png"),
+      dataUrl: canvas.toDataURL("image/jpeg", 0.86),
       width: canvas.width,
       height: canvas.height,
     };
@@ -2257,15 +2258,41 @@ function buildPdfSolutionsSheet() {
   return sheet;
 }
 
-async function exportPdfSheet(sheet, fileName) {
+function revokeLastPdfUrl() {
+  if (lastPdfUrl) {
+    URL.revokeObjectURL(lastPdfUrl);
+    lastPdfUrl = "";
+  }
+}
+
+function offerPdfDownload(blob, fileName) {
+  revokeLastPdfUrl();
+  const url = URL.createObjectURL(blob);
+  lastPdfUrl = url;
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = fileName;
+  link.rel = "noopener";
+  document.body.append(link);
+  link.click();
+  link.remove();
+  if (statusEl) {
+    const fallback = document.createElement("a");
+    fallback.href = url;
+    fallback.download = fileName;
+    fallback.textContent = "PDF hier speichern";
+    statusEl.replaceChildren("PDF ist fertig. Falls der Download nicht startet: ", fallback, ".");
+  }
+}
+
+async function exportPdfSheet(sheet, fileName, onProgress) {
   const widthPx = 794;
   const heightPx = 1123;
   await waitForPdfImages(sheet);
   await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
   const pieces = [...sheet.querySelectorAll(".pdf-keep")];
-  const images = [];
-  for (const piece of pieces) {
-    images.push(await capturePdfPiece(piece, widthPx, heightPx));
+  if (!pieces.length) {
+    throw new Error("Keine PDF-Seiten erzeugt");
   }
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: "mm", format: "a4", compress: true });
@@ -2274,13 +2301,15 @@ async function exportPdfSheet(sheet, fileName) {
   const margin = 8;
   const usableW = pageW - margin * 2;
   const usableH = pageH - margin * 2;
-  images.forEach((image, index) => {
+  for (let index = 0; index < pieces.length; index += 1) {
+    onProgress?.(index + 1, pieces.length);
+    const image = await capturePdfPiece(pieces[index], widthPx, heightPx);
     if (index > 0) {
       doc.addPage();
     }
-    doc.addImage(image.dataUrl, "PNG", margin, margin, usableW, usableH, undefined, "FAST");
-  });
-  doc.save(fileName);
+    doc.addImage(image.dataUrl, "JPEG", margin, margin, usableW, usableH, undefined, "FAST");
+  }
+  offerPdfDownload(doc.output("blob"), fileName);
 }
 
 function pdfButtonSet() {
@@ -2301,10 +2330,14 @@ async function downloadWorksheetPdf() {
     await ensurePdfLibraries();
     await document.fonts?.ready;
     sheet = await buildPdfSheet();
-    await exportPdfSheet(sheet, worksheetMeta().fileName);
+    await exportPdfSheet(sheet, worksheetMeta().fileName, (page, total) => {
+      pdfBtn.textContent = `PDF wird erstellt… ${page}/${total}`;
+    });
   } catch (error) {
     console.error(error);
-    window.print();
+    if (statusEl) {
+      statusEl.textContent = "Das PDF konnte nicht erstellt werden. Bitte noch einmal versuchen.";
+    }
   } finally {
     sheet?.remove();
     pdfButtonSet().forEach((btn) => {
@@ -2330,7 +2363,10 @@ async function downloadSolutionsPdf() {
     sheet = buildPdfSolutionsSheet();
     await exportPdfSheet(
       sheet,
-      `mathe-klasse-${selectedGrade}-${selectedTerm}hj-${tasks.length}-loesungen.pdf`
+      `mathe-klasse-${selectedGrade}-${selectedTerm}hj-${tasks.length}-loesungen.pdf`,
+      (page, total) => {
+        pdfSolutionsBtn.textContent = `PDF wird erstellt… ${page}/${total}`;
+      }
     );
   } catch (error) {
     console.error(error);
