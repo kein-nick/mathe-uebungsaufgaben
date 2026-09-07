@@ -39,9 +39,8 @@ const mobilePracticeQuery = window.matchMedia("(max-width: 1024px), (pointer: co
 /* Werbung: auf true setzen und body-Klasse "ads-off" in index.html entfernen */
 const SHOW_ADS = false;
 const TASK_BLOCK_SIZE = 10;
-const MAX_TASK_BLOCKS = 8;
 const BLOCK_MODE_HINT =
-  "Pro Rechenart stellst du ein, wie viele 10er-Blöcke auf das Blatt kommen. Höchstens 8 Blöcke (80 Aufgaben).";
+  "Pro Rechenart stellst du ein, wie viele 10er-Blöcke auf das Blatt kommen.";
 
 function layoutPracticeControls() {
   if (!pageCorner || !practiceStartSlot || !practiceCheckSlot || !practiceFooterSlot) {
@@ -702,28 +701,10 @@ function ensureDefaultBlocks() {
   });
 }
 
-function clampBlockBudget() {
-  let used = 0;
-  operationList.querySelectorAll("input[data-topic]:checked:not(:disabled)").forEach((input) => {
-    let blocks = Math.max(1, topicBlocksOf(input) || 1);
-    if (used >= MAX_TASK_BLOCKS) {
-      input.checked = false;
-      delete input.dataset.blocks;
-      return;
-    }
-    if (used + blocks > MAX_TASK_BLOCKS) {
-      blocks = MAX_TASK_BLOCKS - used;
-    }
-    input.dataset.blocks = String(blocks);
-    used += blocks;
-  });
-}
-
 function updateTopicBlockControls() {
   if (!operationList) {
     return;
   }
-  const used = totalSelectedBlocks();
   operationList.querySelectorAll(".topic-choice").forEach((choice) => {
     const input = choice.querySelector("input[data-topic]");
     const valueEl = choice.querySelector(".topic-blocks-count");
@@ -738,7 +719,7 @@ function updateTopicBlockControls() {
       minusBtn.disabled = !input.checked || blocks <= 1;
     }
     if (plusBtn) {
-      plusBtn.disabled = !input.checked || used >= MAX_TASK_BLOCKS;
+      plusBtn.disabled = !input.checked;
     }
   });
 }
@@ -758,8 +739,7 @@ function updateBlockModeSummary() {
     const label = getTopic(item.id)?.label || item.id;
     return `${label} ${item.blocks}×10`;
   });
-  const maxNote = total >= MAX_TASK_BLOCKS * TASK_BLOCK_SIZE ? " — Maximum erreicht." : "";
-  blockModeSummary.textContent = `${total} Aufgaben: ${parts.join(", ")}${maxNote}`;
+  blockModeSummary.textContent = `${total} Aufgaben: ${parts.join(", ")}`;
 }
 
 function setBlockModeUi() {
@@ -770,7 +750,6 @@ function setBlockModeUi() {
     blockModeSummary.classList.remove("is-hidden");
   }
   ensureDefaultBlocks();
-  clampBlockBudget();
   updateBlockModeSummary();
   updateTopicBlockControls();
   show(operationBlock);
@@ -1023,15 +1002,8 @@ operationList.addEventListener("click", (event) => {
   }
   const delta = Number(btn.dataset.blockDelta);
   const current = Math.max(1, topicBlocksOf(input) || 1);
-  let next = current + delta;
-  if (next < 1) {
-    next = 1;
-  }
-  const others = totalSelectedBlocks() - current;
-  if (others + next > MAX_TASK_BLOCKS) {
-    next = MAX_TASK_BLOCKS - others;
-  }
-  input.dataset.blocks = String(Math.max(1, next));
+  const next = Math.max(1, current + delta);
+  input.dataset.blocks = String(next);
   updateBlockModeSummary();
   updateTopicBlockControls();
   countdownMinutesDirty = false;
@@ -1058,7 +1030,6 @@ operationList.addEventListener("change", (event) => {
       delete target.dataset.blocks;
     }
   }
-  clampBlockBudget();
   ensureDefaultBlocks();
   updateBlockModeSummary();
   updateTopicBlockControls();
