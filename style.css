@@ -3016,7 +3016,7 @@ a.grade-btn-nav[aria-current="page"] {
   justify-content: flex-start;
   gap: 4px 8px;
   min-width: 0;
-  width: auto;
+  width: 100%;
   text-align: left;
 }
 
@@ -3078,6 +3078,8 @@ a.grade-btn-nav[aria-current="page"] {
   font-size: 0.78rem;
 }
 
+.pdf-page-list .block.is-visual .task:has(.answer-choices) .answer-choices,
+.pdf-page-list .task:has(.answer-choices) .answer-choices,
 .pdf-page-list .answer-choices {
   display: flex;
   flex: 0 0 auto;
