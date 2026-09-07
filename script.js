@@ -1749,7 +1749,15 @@ function createTaskItem(task, index, displayNum, forPdf, allowMinusInput) {
       task.kind === "choice"
         ? choiceHtml(task, index, displayNum)
         : answerControl(index, task, Boolean(task.allowMinus), displayNum);
-    row.innerHTML = `
+    if (forPdf && task.kind === "choice" && !task.visualHtml) {
+      row.classList.add("pdf-choice-row");
+      row.innerHTML = `
+          <span class="task-num">${displayNum}.</span>
+          <div class="task-prompt">${prompt}</div>
+          ${control}
+        `;
+    } else {
+      row.innerHTML = `
           <span class="task-num">${displayNum}.</span>
           <div class="task-main">
             ${task.visualHtml ? `<div class="task-visual">${task.visualHtml}</div>` : ""}
@@ -1757,6 +1765,7 @@ function createTaskItem(task, index, displayNum, forPdf, allowMinusInput) {
             ${control}
           </div>
         `;
+    }
     item.append(row);
     if (forPdf && usesNotesField(task)) {
       appendPdfWorkLines(item);
