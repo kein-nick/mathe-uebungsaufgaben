@@ -205,8 +205,8 @@ export const siteFaqs = [
   },
   {
     q: "Können Lehrkräfte die Seite im Unterricht nutzen?",
-    a: "Ja. Ohne Login, mit PDF und wählbaren Themen. Mehr dazu steht unter Für Lehrkräfte. Eltern finden Antworten unter Für Eltern. Wenn etwas für den Unterricht angepasst werden sollte, reicht eine Mail unter Kontakt.",
-    html: `<p>Ja. Ohne Login, mit PDF und wählbaren Themen. Mehr dazu steht unter <a href="/fuer-lehrkraefte">Für Lehrkräfte</a>. Eltern finden Antworten unter <a href="/fuer-eltern">Für Eltern</a>. Wenn etwas für den Unterricht angepasst werden sollte, reicht eine Mail unter <a href="/kontakt">Kontakt</a>.</p>`,
+    a: "Ja. Ohne Login, mit PDF und wählbaren Themen. Die Seite ist im Deutschen Bildungsserver und in der Bildungsmediathek MUNDO gelistet. Mehr dazu steht unter Für Lehrkräfte. Eltern finden Antworten unter Für Eltern. Wenn etwas für den Unterricht angepasst werden sollte, reicht eine Mail unter Kontakt.",
+    html: `<p>Ja. Ohne Login, mit PDF und wählbaren Themen. Die Seite ist im <a href="https://www.bildungsserver.de/onlineressource.html?onlineressourcen_id=67289">Deutschen Bildungsserver</a> und in der Bildungsmediathek <a href="https://mundo.schule/details/SODIX-0001167761">MUNDO</a> gelistet. Mehr dazu steht unter <a href="/fuer-lehrkraefte">Für Lehrkräfte</a>. Eltern finden Antworten unter <a href="/fuer-eltern">Für Eltern</a>. Wenn etwas für den Unterricht angepasst werden sollte, reicht eine Mail unter <a href="/kontakt">Kontakt</a>.</p>`,
   },
   {
     q: "Ist das auch für Eltern gedacht?",
@@ -302,6 +302,10 @@ export const teachersPage = {
     {
       heading: "Ohne Anmeldung",
       text: "Es gibt kein Lehrer-Login, keine Klasse anlegen, keine Schülerkonten. Die Seite ist bewusst schlank: Thema wählen, Blatt erzeugen, fertig. Alles kostenlos.",
+    },
+    {
+      heading: "In Katalogen gelistet",
+      html: `<p>Die Seite ist im <a class="text-link" href="https://www.bildungsserver.de/onlineressource.html?onlineressourcen_id=67289">Deutschen Bildungsserver</a> und in der Bildungsmediathek <a class="text-link" href="https://mundo.schule/details/SODIX-0001167761">MUNDO</a> eingetragen.</p>`,
     },
     {
       heading: "So startest du",

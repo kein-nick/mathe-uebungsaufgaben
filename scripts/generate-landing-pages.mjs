@@ -1187,7 +1187,7 @@ const teachersMain = `<main class="legal-page landing-page">
             .map(
               (section, index) => `<section aria-labelledby="teachers-h-${index}">
             <h2 id="teachers-h-${index}">${escapeHtml(section.heading)}</h2>
-            <p>${escapeHtml(section.text)}</p>${section.html ? `\n            ${section.html}` : ""}
+            ${section.text ? `<p>${escapeHtml(section.text)}</p>` : ""}${section.html ? `\n            ${section.html}` : ""}
           </section>`
             )
             .join("\n")}
