@@ -1973,17 +1973,11 @@ function pdfBlockIsCompactEq(block) {
   );
 }
 
-function pdfCompactEqLayout(count) {
-  if (count >= 5) {
+function pdfCompactEqLayout() {
+  if (selectedGrade <= 2) {
     return { gridClass: "pdf-blocks pdf-blocks-six", pageClass: "pdf-page-eq-six" };
   }
-  if (count >= 3) {
-    return { gridClass: "pdf-blocks pdf-blocks-quad", pageClass: "pdf-page-eq-quad" };
-  }
-  if (count === 2) {
-    return { gridClass: "pdf-blocks pdf-blocks-pair", pageClass: "pdf-page-list" };
-  }
-  return { gridClass: "pdf-blocks pdf-blocks-list", pageClass: "pdf-page-list" };
+  return { gridClass: "pdf-blocks pdf-blocks-quad", pageClass: "pdf-page-eq-quad" };
 }
 
 function pdfBlockIsVisual(block) {
@@ -2126,7 +2120,7 @@ async function buildPdfSheet() {
     const grid = document.createElement("div");
     let pageClass;
     if (group.kind === "eq") {
-      const layout = pdfCompactEqLayout(group.blocks.length);
+      const layout = pdfCompactEqLayout();
       grid.className = layout.gridClass;
       pageClass = layout.pageClass;
     } else {

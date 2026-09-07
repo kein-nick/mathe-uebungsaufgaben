@@ -2615,6 +2615,7 @@ a.grade-btn-nav[aria-current="page"] {
   grid-template-rows: 1fr 1fr !important;
   gap: 10px;
   align-items: stretch;
+  align-content: stretch;
   height: 100%;
 }
 
@@ -2623,6 +2624,7 @@ a.grade-btn-nav[aria-current="page"] {
   grid-template-rows: 1fr 1fr !important;
   gap: 10px;
   align-items: stretch;
+  align-content: stretch;
   height: 100%;
 }
 
