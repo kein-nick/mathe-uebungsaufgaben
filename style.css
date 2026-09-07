@@ -2622,6 +2622,13 @@ a.grade-btn-nav[aria-current="page"] {
   height: 100%;
 }
 
+.pdf-page-list:not(.pdf-page-notes) .pdf-blocks-quad {
+  align-content: start;
+  align-items: start;
+  grid-template-rows: auto auto !important;
+  height: auto;
+}
+
 .pdf-blocks-six {
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   grid-template-rows: 1fr 1fr !important;
@@ -2910,6 +2917,10 @@ a.grade-btn-nav[aria-current="page"] {
   height: 100%;
 }
 
+.pdf-page-list:not(.pdf-page-notes) .block {
+  height: auto;
+}
+
 .pdf-page-list .block.is-visual {
   display: flex;
   flex-direction: column;
@@ -2929,6 +2940,12 @@ a.grade-btn-nav[aria-current="page"] {
   padding: 0;
   justify-content: center;
   overflow: hidden;
+}
+
+.pdf-page-list:not(.pdf-page-notes) .task-item {
+  flex: 0 0 auto;
+  min-height: 0;
+  justify-content: flex-start;
 }
 
 .pdf-page-list .block.is-visual .task-item {
@@ -3000,7 +3017,12 @@ a.grade-btn-nav[aria-current="page"] {
 .pdf-page-list .task:has(.task-main) .task-num,
 .pdf-page-list .task:has(.answer-choices) .task-num {
   display: block;
+  position: static;
+  left: auto;
+  top: auto;
+  transform: none;
   flex: 0 0 1.45rem;
+  align-self: center;
 }
 
 .pdf-page-list .block.is-eq .task:has(.task-main) .task-main,
@@ -3092,10 +3114,13 @@ a.grade-btn-nav[aria-current="page"] {
   margin: 0 0 0 auto;
 }
 
+.pdf-page-list .block.is-visual .choice-chip span,
 .pdf-page-list .choice-chip span {
-  min-height: 1.1rem;
-  padding: 1px 4px;
-  font-size: 0.64rem;
+  min-height: 1.15rem;
+  height: 1.15rem;
+  padding: 0 5px;
+  line-height: 1.15rem;
+  font-size: 0.68rem;
 }
 
 .pdf-page-list .pdf-work-lines {
