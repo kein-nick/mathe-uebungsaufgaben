@@ -1956,7 +1956,21 @@ function pdfCompactEqLayout() {
 
 function pdfBlockIsVisual(block) {
   const rows = [...block.querySelectorAll(".task")];
-  return rows.length > 0 && rows.every((row) => row.querySelector(".task-visual, .answer-choices"));
+  return rows.length > 0 && rows.every((row) => row.querySelector(".task-visual"));
+}
+
+function pdfMaxListPerPage() {
+  return notesToggle.checked ? 2 : 4;
+}
+
+function pdfListLayout(blockCount) {
+  if (notesToggle.checked) {
+    return {
+      gridClass: blockCount > 1 ? "pdf-blocks pdf-blocks-pair" : "pdf-blocks pdf-blocks-list",
+      pageClass: "pdf-page-list pdf-page-notes",
+    };
+  }
+  return { gridClass: "pdf-blocks pdf-blocks-quad", pageClass: "pdf-page-list" };
 }
 
 function pdfBlockIsWritten(block) {
@@ -2077,17 +2091,19 @@ async function buildPdfSheet() {
       }
       continue;
     }
-    if (
-      next &&
-      !pdfBlockIsVisual(next) &&
-      !pdfBlockIsWritten(next) &&
-      !pdfBlockIsCompactEq(next)
+    const run = [];
+    while (
+      i < blockEls.length &&
+      !pdfBlockIsWritten(blockEls[i]) &&
+      !pdfBlockIsVisual(blockEls[i]) &&
+      !pdfBlockIsCompactEq(blockEls[i])
     ) {
-      groups.push({ blocks: [block, next], kind: "pair" });
-      i += 2;
-    } else {
-      groups.push({ blocks: [block], kind: "pair" });
+      run.push(blockEls[i]);
       i += 1;
+    }
+    const perPage = pdfMaxListPerPage();
+    for (let offset = 0; offset < run.length; offset += perPage) {
+      groups.push({ blocks: run.slice(offset, offset + perPage), kind: "list" });
     }
   }
   groups.forEach((group, index) => {
@@ -2097,17 +2113,17 @@ async function buildPdfSheet() {
       const layout = pdfCompactEqLayout();
       grid.className = layout.gridClass;
       pageClass = layout.pageClass;
+    } else if (group.kind === "list") {
+      const layout = pdfListLayout(group.blocks.length);
+      grid.className = layout.gridClass;
+      pageClass = layout.pageClass;
+    } else if (group.kind === "written") {
+      grid.className =
+        group.blocks.length > 1 ? "pdf-blocks pdf-blocks-pair" : "pdf-blocks pdf-blocks-list";
+      pageClass = "pdf-page-written";
     } else {
-      const paired = group.blocks.length > 1 || group.kind === "pair" || group.kind === "written";
-      grid.className = paired ? "pdf-blocks pdf-blocks-pair" : "pdf-blocks pdf-blocks-list";
-      pageClass =
-        group.kind === "written"
-          ? "pdf-page-written"
-          : group.kind === "visual"
-            ? "pdf-page-visual pdf-page-visual-fill"
-            : notesToggle.checked
-              ? "pdf-page-list pdf-page-notes"
-              : "pdf-page-list";
+      grid.className = "pdf-blocks pdf-blocks-list";
+      pageClass = "pdf-page-visual pdf-page-visual-fill";
     }
     group.blocks.forEach((item) => grid.append(item));
     pages.push(makePdfPage(grid, index + 1, groups.length, pageClass));

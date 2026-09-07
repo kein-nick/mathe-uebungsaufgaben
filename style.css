@@ -2910,20 +2910,42 @@ a.grade-btn-nav[aria-current="page"] {
   height: 100%;
 }
 
+.pdf-page-list .block.is-visual {
+  display: flex;
+  flex-direction: column;
+  grid-template-columns: none;
+  max-width: none;
+}
+
+.pdf-page-list .block h3 {
+  margin-bottom: 3px;
+  font-size: 0.7rem;
+}
+
 .pdf-page-list .task-item {
   flex: 1 1 0;
-  min-height: 2.05rem;
+  min-height: 1.7rem;
   max-height: none;
   padding: 0;
   justify-content: center;
+  overflow: hidden;
+}
+
+.pdf-page-list .block.is-visual .task-item {
+  padding: 0;
+  border-bottom: none;
+}
+
+.pdf-page-list .block.is-visual .task-item + .task-item .task {
+  border-top: 2px dashed #666;
 }
 
 .pdf-page-list .task {
   display: table;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   height: auto;
   flex: none;
-  padding: 3px 2px 3px 0;
+  padding: 2px 2px 2px 0;
 }
 
 .pdf-page-list .task-num,
@@ -2937,7 +2959,12 @@ a.grade-btn-nav[aria-current="page"] {
   width: 1.45rem;
   padding: 0 0.4rem 0 0;
   text-align: right;
-  font-size: 0.62rem;
+  font-size: 0.58rem;
+}
+
+.pdf-page-list .task-eq,
+.pdf-page-list .task-prompt {
+  font-size: 0.78rem;
 }
 
 .pdf-page-list .task-eq {
@@ -2945,47 +2972,59 @@ a.grade-btn-nav[aria-current="page"] {
 }
 
 .pdf-page-list .pdf-answer-cell {
-  width: 5.8rem;
+  width: 4.6rem;
 }
 
 .pdf-page-list .pdf-answer-cell .answer-input,
 .pdf-page-list .task .answer-input {
-  width: 5.6rem;
-  height: 1.35rem;
-  min-height: 1.35rem;
-  max-height: 1.35rem;
-  font-size: 0.82rem;
-  line-height: 1.3rem;
+  width: 4.4rem;
+  height: 1.28rem;
+  min-height: 1.28rem;
+  max-height: 1.28rem;
+  font-size: 0.78rem;
+  line-height: 1.22rem;
 }
 
 .pdf-page-list .pdf-answer-cell .answer-input.is-wide,
 .pdf-page-list .task .answer-input.is-wide {
-  width: 6.2rem;
+  width: 5.2rem;
 }
 
-.pdf-page-list .task:has(.task-main) {
+.pdf-page-list .task:has(.task-main),
+.pdf-page-list .task:has(.answer-choices) {
   display: flex;
   align-items: center;
   width: 100%;
 }
 
-.pdf-page-list .task:has(.task-main) .task-num {
+.pdf-page-list .task:has(.task-main) .task-num,
+.pdf-page-list .task:has(.answer-choices) .task-num {
   display: block;
   flex: 0 0 1.45rem;
 }
 
-.pdf-page-list .task:has(.task-main) .task-main {
+.pdf-page-list .task:has(.task-main) .task-main,
+.pdf-page-list .task:has(.answer-choices) .task-main,
+.pdf-page-list .block.is-visual .task-main {
   display: flex;
   flex: 1 1 auto;
-  flex-wrap: wrap;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
+  justify-content: flex-start;
   gap: 4px 8px;
   min-width: 0;
+  width: auto;
+  text-align: left;
 }
 
-.pdf-page-list .task:has(.task-main) .task-prompt {
-  flex: 1 1 min(100%, max-content);
+.pdf-page-list .task:has(.task-main) .task-prompt,
+.pdf-page-list .task:has(.answer-choices) .task-prompt,
+.pdf-page-list .block.is-visual .task-prompt {
+  flex: 1 1 auto;
   min-width: 0;
+  width: auto;
+  text-align: left;
 }
 
 .pdf-page-list .block.is-word .task-item {
@@ -2994,13 +3033,13 @@ a.grade-btn-nav[aria-current="page"] {
 }
 
 .pdf-page-list .block.is-word .task {
-  padding: 5px 2px 4px 0;
+  padding: 3px 2px 3px 0;
   align-items: flex-start;
 }
 
 .pdf-page-list .block.is-word .task:has(.task-main) .task-prompt {
-  font-size: 0.72rem;
-  line-height: 1.2;
+  font-size: 0.64rem;
+  line-height: 1.18;
   font-weight: 700;
   padding-top: 0;
 }
@@ -3009,12 +3048,24 @@ a.grade-btn-nav[aria-current="page"] {
 .pdf-page-list .task:has(.task-main) .answer-wrap {
   flex: 0 0 auto;
   margin-left: auto;
+  align-self: center;
 }
 
-.pdf-page-list .task:has(.task-main) .answer-input {
-  height: 1.85rem;
-  min-height: 1.85rem;
-  max-height: 1.85rem;
+.pdf-page-list .answer-choices {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  width: auto;
+  margin: 0 0 0 auto;
+}
+
+.pdf-page-list .choice-chip span {
+  min-height: 1.15rem;
+  padding: 1px 5px;
+  font-size: 0.68rem;
 }
 
 .pdf-page-list .pdf-work-lines {
