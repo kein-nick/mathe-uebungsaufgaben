@@ -3003,6 +3003,8 @@ a.grade-btn-nav[aria-current="page"] {
   flex: 0 0 1.45rem;
 }
 
+.pdf-page-list .block.is-eq .task:has(.task-main) .task-main,
+.pdf-page-list .block.is-visual .task:has(.answer-choices) .task-main,
 .pdf-page-list .task:has(.task-main) .task-main,
 .pdf-page-list .task:has(.answer-choices) .task-main,
 .pdf-page-list .block.is-visual .task-main {
@@ -3018,6 +3020,8 @@ a.grade-btn-nav[aria-current="page"] {
   text-align: left;
 }
 
+.pdf-page-list .block.is-eq .task:has(.task-main) .task-prompt,
+.pdf-page-list .block.is-visual .task:has(.answer-choices) .task-prompt,
 .pdf-page-list .task:has(.task-main) .task-prompt,
 .pdf-page-list .task:has(.answer-choices) .task-prompt,
 .pdf-page-list .block.is-visual .task-prompt {
@@ -3038,17 +3042,40 @@ a.grade-btn-nav[aria-current="page"] {
 }
 
 .pdf-page-list .block.is-word .task:has(.task-main) .task-prompt {
-  font-size: 0.64rem;
-  line-height: 1.18;
+  font-size: 0.76rem;
+  line-height: 1.22;
   font-weight: 700;
   padding-top: 0;
 }
 
+.pdf-page-list .block.is-eq .task:has(.task-main) .answer-input,
+.pdf-page-list .block.is-eq .task:has(.task-main) .answer-wrap,
 .pdf-page-list .task:has(.task-main) .answer-input,
 .pdf-page-list .task:has(.task-main) .answer-wrap {
+  display: inline-flex;
   flex: 0 0 auto;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 4px;
+  width: auto;
   margin-left: auto;
   align-self: center;
+  white-space: nowrap;
+}
+
+.pdf-page-list .block.is-eq .task:has(.task-main) .answer-input,
+.pdf-page-list .task:has(.task-main) .answer-input {
+  width: 4.4rem;
+}
+
+.pdf-page-list .block.is-eq .task:has(.task-main) .answer-input.is-wide,
+.pdf-page-list .task:has(.task-main) .answer-input.is-wide {
+  width: 5.2rem;
+}
+
+.pdf-page-list .answer-wrap .answer-label {
+  font-size: 0.78rem;
 }
 
 .pdf-page-list .answer-choices {
@@ -3057,15 +3084,16 @@ a.grade-btn-nav[aria-current="page"] {
   flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-end;
-  gap: 4px;
+  gap: 3px;
   width: auto;
+  max-width: none;
   margin: 0 0 0 auto;
 }
 
 .pdf-page-list .choice-chip span {
-  min-height: 1.15rem;
-  padding: 1px 5px;
-  font-size: 0.68rem;
+  min-height: 1.1rem;
+  padding: 1px 4px;
+  font-size: 0.64rem;
 }
 
 .pdf-page-list .pdf-work-lines {
