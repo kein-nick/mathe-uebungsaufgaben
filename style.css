@@ -2850,7 +2850,7 @@ a.grade-btn-nav[aria-current="page"] {
   width: 4.2rem;
 }
 
-.pdf-sheet .task:has(.answer-choices) {
+.pdf-sheet .task:has(.answer-choices):not(.pdf-choice-row) {
   display: table;
   padding-left: 0;
 }
@@ -2991,18 +2991,18 @@ a.grade-btn-nav[aria-current="page"] {
   line-height: 1.22rem;
 }
 
-.pdf-page-list .task:has(.task-main),
-.pdf-page-list .task:has(.answer-choices),
-.pdf-page-list .block.is-visual .task:has(.answer-choices) {
+.pdf-page-list .task:has(.task-main):not(.pdf-choice-row),
+.pdf-page-list .task:has(.answer-choices):not(.pdf-choice-row),
+.pdf-page-list .block.is-visual .task:has(.answer-choices):not(.pdf-choice-row) {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
   width: 100%;
 }
 
-.pdf-page-list .task:has(.task-main) .task-num,
-.pdf-page-list .task:has(.answer-choices) .task-num,
-.pdf-page-list .block.is-visual .task:has(.answer-choices) .task-num {
+.pdf-page-list .task:has(.task-main):not(.pdf-choice-row) .task-num,
+.pdf-page-list .task:has(.answer-choices):not(.pdf-choice-row) .task-num,
+.pdf-page-list .block.is-visual .task:has(.answer-choices):not(.pdf-choice-row) .task-num {
   display: block;
   position: static;
   left: auto;
@@ -3013,9 +3013,9 @@ a.grade-btn-nav[aria-current="page"] {
 }
 
 .pdf-page-list .block.is-eq .task:has(.task-main) .task-main,
-.pdf-page-list .block.is-visual .task:has(.answer-choices) .task-main,
+.pdf-page-list .block.is-visual .task:has(.answer-choices):not(.pdf-choice-row) .task-main,
 .pdf-page-list .task:has(.task-main) .task-main,
-.pdf-page-list .task:has(.answer-choices) .task-main,
+.pdf-page-list .task:has(.answer-choices):not(.pdf-choice-row) .task-main,
 .pdf-page-list .block.is-visual .task-main {
   display: flex;
   flex: 1 1 0;
@@ -3031,9 +3031,9 @@ a.grade-btn-nav[aria-current="page"] {
 }
 
 .pdf-page-list .block.is-eq .task:has(.task-main) .task-prompt,
-.pdf-page-list .block.is-visual .task:has(.answer-choices) .task-prompt,
+.pdf-page-list .block.is-visual .task:has(.answer-choices):not(.pdf-choice-row) .task-prompt,
 .pdf-page-list .task:has(.task-main) .task-prompt,
-.pdf-page-list .task:has(.answer-choices) .task-prompt,
+.pdf-page-list .task:has(.answer-choices):not(.pdf-choice-row) .task-prompt,
 .pdf-page-list .block.is-visual .task-prompt {
   flex: 1 1 0;
   min-width: 0;
@@ -3091,57 +3091,71 @@ a.grade-btn-nav[aria-current="page"] {
   font-size: 0.78rem;
 }
 
-.pdf-page-list .pdf-choice-row {
-  display: table;
+.pdf-sheet .task.pdf-choice-row,
+.pdf-page-list .task.pdf-choice-row {
+  display: block !important;
   table-layout: auto;
   width: 100%;
   font-size: 0.78rem;
   height: auto;
   flex: none;
   padding: 2px 4px 2px 0;
+  white-space: nowrap;
+  overflow: visible;
 }
 
-.pdf-page-list .block.is-visual .pdf-choice-row .task-num,
-.pdf-page-list .pdf-choice-row .task-num {
-  display: table-cell;
-  position: static;
-  left: auto;
-  top: auto;
-  transform: none;
+.pdf-sheet .task.pdf-choice-row > .task-num,
+.pdf-sheet .task.pdf-choice-row > .task-prompt,
+.pdf-sheet .task.pdf-choice-row > .pdf-choice-cell,
+.pdf-page-list .block.is-visual .pdf-choice-row > .task-num,
+.pdf-page-list .task.pdf-choice-row > .task-num,
+.pdf-page-list .task.pdf-choice-row > .task-prompt,
+.pdf-page-list .task.pdf-choice-row > .pdf-choice-cell {
+  display: inline-block !important;
+  position: static !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+  float: none !important;
+  vertical-align: middle;
+}
+
+.pdf-page-list .block.is-visual .pdf-choice-row > .task-num,
+.pdf-page-list .task.pdf-choice-row > .task-num {
   width: 1.45rem;
   padding: 0 0.4rem 0 0;
-  vertical-align: middle;
   text-align: right;
   font-size: 0.58rem;
 }
 
-.pdf-page-list .pdf-choice-row .task-prompt {
-  display: table-cell;
+.pdf-page-list .task.pdf-choice-row > .task-prompt {
   width: auto;
   min-width: 0;
-  vertical-align: middle;
   text-align: left;
   font-size: 0.78rem;
+  white-space: nowrap;
 }
 
+.pdf-page-list .task.pdf-choice-row > .pdf-choice-cell,
 .pdf-page-list .block.is-visual .pdf-choice-row .answer-choices,
-.pdf-page-list .pdf-choice-row .answer-choices {
-  display: table-cell;
-  width: 1%;
-  padding-left: 8px;
-  vertical-align: middle;
+.pdf-page-list .task.pdf-choice-row .answer-choices {
+  display: inline-block !important;
+  width: auto !important;
+  max-width: none;
+  margin: 0 !important;
+  padding-left: 6px;
   text-align: right;
   white-space: nowrap;
-  margin: 0;
+  vertical-align: middle;
 }
 
-.pdf-page-list .pdf-choice-row .choice-chip {
-  display: inline-block;
+.pdf-page-list .task.pdf-choice-row .choice-chip {
+  display: inline-block !important;
   margin: 0 0 0 3px;
 }
 
 .pdf-page-list .block.is-visual .pdf-choice-row .choice-chip span,
-.pdf-page-list .pdf-choice-row .choice-chip span {
+.pdf-page-list .task.pdf-choice-row .choice-chip span {
   display: inline-block;
   min-height: 1.15rem;
   height: 1.15rem;

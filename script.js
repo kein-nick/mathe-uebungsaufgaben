@@ -1754,7 +1754,7 @@ function createTaskItem(task, index, displayNum, forPdf, allowMinusInput) {
       row.innerHTML = `
           <span class="task-num">${displayNum}.</span>
           <div class="task-prompt">${prompt}</div>
-          ${control}
+          <div class="pdf-choice-cell">${control}</div>
         `;
     } else {
       row.innerHTML = `
@@ -1937,6 +1937,59 @@ function preparePdfAnswerCells(root) {
   });
   root.querySelectorAll(".task > .answer-wrap").forEach((wrap) => {
     wrap.classList.add("pdf-answer-cell");
+  });
+}
+
+function pinPdfChoiceRows(root) {
+  root.querySelectorAll(".pdf-choice-row").forEach((row) => {
+    const num = row.querySelector(":scope > .task-num");
+    const prompt = row.querySelector(":scope > .task-prompt");
+    const cell = row.querySelector(":scope > .pdf-choice-cell");
+    if (!num || !prompt || !cell) {
+      return;
+    }
+    const choices = cell.querySelector(".answer-choices");
+    row.style.setProperty("display", "block", "important");
+    row.style.setProperty("width", "100%", "important");
+    row.style.setProperty("white-space", "nowrap", "important");
+    [num, prompt, cell].forEach((el) => {
+      el.style.setProperty("display", "inline-block", "important");
+      el.style.setProperty("vertical-align", "middle", "important");
+      el.style.setProperty("position", "static", "important");
+      el.style.setProperty("float", "none", "important");
+      el.style.width = "";
+    });
+    if (choices) {
+      choices.style.setProperty("display", "inline-block", "important");
+      choices.style.setProperty("width", "auto", "important");
+      choices.style.setProperty("margin", "0", "important");
+      choices.style.setProperty("white-space", "nowrap", "important");
+    }
+    cell.querySelectorAll(".choice-chip").forEach((chip) => {
+      chip.style.setProperty("display", "inline-block", "important");
+      chip.style.marginLeft = "3px";
+    });
+    void row.offsetWidth;
+    const rowW = row.clientWidth;
+    if (!rowW) {
+      return;
+    }
+    const numW = Math.ceil(num.getBoundingClientRect().width);
+    let cellW = Math.ceil(cell.getBoundingClientRect().width);
+    if (numW + cellW + 20 > rowW) {
+      cell.querySelectorAll(".choice-chip span").forEach((span) => {
+        span.style.padding = "0 3px";
+        span.style.fontSize = "0.62rem";
+      });
+      void row.offsetWidth;
+      cellW = Math.ceil(cell.getBoundingClientRect().width);
+    }
+    const promptW = Math.max(12, rowW - numW - cellW - 6);
+    num.style.setProperty("width", `${numW}px`, "important");
+    prompt.style.setProperty("width", `${promptW}px`, "important");
+    prompt.style.setProperty("overflow", "hidden", "important");
+    cell.style.setProperty("width", `${cellW}px`, "important");
+    cell.style.setProperty("text-align", "right", "important");
   });
 }
 
@@ -2144,6 +2197,7 @@ async function buildPdfSheet() {
   preparePdfAnswerCells(sheet);
   fitPdfVisualSvgs(sheet);
   document.body.append(sheet);
+  pinPdfChoiceRows(sheet);
   await Promise.all(
     [...sheet.querySelectorAll("img")].map(
       (img) =>
@@ -2192,6 +2246,7 @@ async function capturePdfPiece(element, widthPx, heightPx) {
         cloned.style.zIndex = "auto";
         cloned.style.opacity = "1";
         fitPdfVisualSvgs(cloned);
+        pinPdfChoiceRows(cloned);
       },
     });
     return {
