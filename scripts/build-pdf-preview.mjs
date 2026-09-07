@@ -58,7 +58,7 @@ const html = `<!DOCTYPE html>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=794" />
     <title>PDF-Vorschau</title>
-    <link rel="stylesheet" href="/style.css?v=53" />
+    <link rel="stylesheet" href="/style.css?v=54" />
     <style>
       html, body {
         margin: 0;

@@ -1975,7 +1975,7 @@ function pdfBlockIsCompactEq(block) {
 
 function pdfCompactEqLayout(count) {
   if (count >= 5) {
-    return { gridClass: "pdf-blocks", pageClass: "" };
+    return { gridClass: "pdf-blocks", pageClass: "pdf-page-eq-dense" };
   }
   if (count >= 3) {
     return { gridClass: "pdf-blocks pdf-blocks-quad", pageClass: "pdf-page-eq-quad" };
