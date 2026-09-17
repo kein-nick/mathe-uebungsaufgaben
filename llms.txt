@@ -37,6 +37,8 @@ Direkte Übungsseiten: [Klasse 1](https://mathe-testen.de/klasse-1/uebungen), [K
 - [FAQ](https://mathe-testen.de/faq)
 - [Kontakt](https://mathe-testen.de/kontakt)
 
+Gelistet im [Deutschen Bildungsserver](https://www.bildungsserver.de/onlineressource.html?onlineressourcen_id=67289), in der Bildungsmediathek [MUNDO](https://mundo.schule/details/SODIX-0001167761) und im [ZUM-Grundschullernportal](https://grundschullernportal.zum.de/wiki/Mathe-testen.de).
+
 ## Optional
 
 - [Startseite](https://mathe-testen.de/)
