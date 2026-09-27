@@ -2128,6 +2128,10 @@ function pdfBlockIsWritten(block) {
   return rows.length > 0 && rows.every((row) => row.classList.contains("is-stack"));
 }
 
+function pdfBlockIsWord(block) {
+  return block.classList.contains("is-word");
+}
+
 function splitPdfVisualBlock(block, perPage = 10) {
   const items = [...block.querySelectorAll(":scope > .task-item")];
   if (items.length <= perPage) {
@@ -2241,12 +2245,24 @@ async function buildPdfSheet() {
       }
       continue;
     }
+    if (pdfBlockIsWord(block)) {
+      const run = [];
+      while (i < blockEls.length && pdfBlockIsWord(blockEls[i])) {
+        run.push(blockEls[i]);
+        i += 1;
+      }
+      for (let offset = 0; offset < run.length; offset += 2) {
+        groups.push({ blocks: run.slice(offset, offset + 2), kind: "word" });
+      }
+      continue;
+    }
     const run = [];
     while (
       i < blockEls.length &&
       !pdfBlockIsWritten(blockEls[i]) &&
       !pdfBlockIsVisual(blockEls[i]) &&
-      !pdfBlockIsCompactEq(blockEls[i])
+      !pdfBlockIsCompactEq(blockEls[i]) &&
+      !pdfBlockIsWord(blockEls[i])
     ) {
       run.push(blockEls[i]);
       i += 1;
@@ -2267,6 +2283,10 @@ async function buildPdfSheet() {
       const layout = pdfListLayout(group.blocks.length);
       grid.className = layout.gridClass;
       pageClass = layout.pageClass;
+    } else if (group.kind === "word") {
+      grid.className =
+        group.blocks.length > 1 ? "pdf-blocks pdf-blocks-pair" : "pdf-blocks pdf-blocks-list";
+      pageClass = "pdf-page-list";
     } else if (group.kind === "written") {
       grid.className =
         group.blocks.length > 1 ? "pdf-blocks pdf-blocks-pair" : "pdf-blocks pdf-blocks-list";
