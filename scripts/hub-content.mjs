@@ -20,7 +20,7 @@ export const topicHubs = [
     whyPractice:
       "In der Schule wird das Einmaleins über Monate aufgebaut. Zuerst kommen oft die „leichten“ Reihen (1, 2, 5, 10), danach die schwierigeren. Regelmäßiges, kurzes Üben — lieber zehn Minuten täglich als eine lange Einheit — bringt meist mehr als Pauken am Abend vor der Probe.",
     howItWorks:
-      "Auf mathe-testen.de wählst du die Klasse, lässt Multiplikation vorausgewählt und erstellst ein Übungsblatt. Die Aufgaben passen sich dem Jahrgang an. Du kannst online rechnen und prüfen lassen oder das Blatt als PDF drucken — für zu Hause oder den Unterricht.",
+      "Auf mathe-testen.de wählst du die Klasse, lässt Multiplikation vorausgewählt und erstellst ein Übungsblatt. Geteiltaufgaben und Division mit Rest sind eigene Themen und lassen sich auf der Übungsseite dazunehmen. Die Aufgaben passen sich dem Jahrgang an. Du kannst online rechnen und prüfen lassen oder das Blatt als PDF drucken — für zu Hause oder den Unterricht.",
     forWhom:
       "Das Angebot richtet sich an Kinder der Klassen 2 bis 6, an Eltern beim Üben zu Hause und an Lehrkräfte, die schnell ein Arbeitsblatt brauchen. Alles ist kostenlos und funktioniert ohne Registrierung.",
     faqs: [
@@ -254,7 +254,7 @@ export const topicHubs = [
     grades: [3, 4, 5, 6],
     lead: "Schriftliche Verfahren sind das Handwerkszeug der höheren Grundschulklassen. Saubere Stellenwerte, Überträge und ein ruhiges Tempo — das lässt sich mit passenden Aufgaben trainieren.",
     whatIs:
-      "Schriftlich rechnen meint die klassischen Verfahren für Plus, Minus, Mal und Geteilt mit größeren Zahlen. Die Aufgaben auf mathe-testen.de nutzen denselben Themenbereich; in höheren Klassen werden die Zahlen und Anforderungen anspruchsvoller.",
+      "Schriftlich rechnen meint die klassischen Verfahren für Plus, Minus, Mal und Geteilt mit größeren Zahlen. Division mit Rest — Ergebnis und Rest, wenn eine Aufgabe nicht aufgeht — ist ab Klasse 3 ein eigenes Thema. Die Aufgaben auf mathe-testen.de nutzen denselben Themenbereich; in höheren Klassen werden die Zahlen und Anforderungen anspruchsvoller.",
     whyPractice:
       "Wer die Verfahren nicht sicher beherrscht, verliert Zeit und Motivation. Kurze Blätter mit klarer Struktur helfen, Routine aufzubauen — zu Hause oder in der Schule.",
     howItWorks:

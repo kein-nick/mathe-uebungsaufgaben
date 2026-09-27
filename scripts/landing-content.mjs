@@ -24,7 +24,7 @@ export const groupDescriptions = {
   },
   3: {
     rechnen:
-      "Jetzt werden die Zahlen deutlich größer. Kinder rechnen schriftlich und im Kopf, üben Punkt-vor-Strich-Aufgaben und lösen Sachaufgaben mit mehreren Schritten. Das Tempo und der Zahlenraum wachsen spürbar.",
+      "Jetzt werden die Zahlen deutlich größer. Kinder rechnen schriftlich und im Kopf, üben Division mit Rest, Punkt-vor-Strich-Aufgaben und lösen Sachaufgaben mit mehreren Schritten. Das Tempo und der Zahlenraum wachsen spürbar.",
     zahlen:
       "Runden, Überschlagen, Teilbarkeit und römische Zahlen gehören dazu. Kinder sollen einschätzen können, ob ein Ergebnis plausibel ist — eine wichtige Fähigkeit für alle weiteren Klassen.",
     groessen:
@@ -34,7 +34,7 @@ export const groupDescriptions = {
   },
   4: {
     rechnen:
-      "Schriftliche Verfahren für Addition, Subtraktion, Multiplikation und Division stehen im Mittelpunkt. Dazu kommen Klammern, Rechengesetze, erste Bruchanteile und längere Sachaufgaben mit mehreren Informationen.",
+      "Schriftliche Verfahren für Addition, Subtraktion, Multiplikation und Division stehen im Mittelpunkt. Dazu kommen Division mit Rest, Klammern, Rechengesetze, erste Bruchanteile und längere Sachaufgaben mit mehreren Informationen.",
     zahlen:
       "Zahlenräume wachsen weiter, Tabellen und Diagramme werden gelesen und ausgewertet. Kinder lernen, Informationen aus Übersichten zu entnehmen — eine Fähigkeit, die auch in anderen Fächern wichtig wird.",
     groessen:
@@ -72,7 +72,9 @@ export const topicDescriptions = {
   multiplication:
     "Malaufgaben vom kleinen Einmaleins bis zu größeren Faktoren. In frühen Klassen oft mit den „leichten“ Reihen (1, 2, 5, 10), später mit dem vollen Einmaleins.",
   division:
-    "Geteiltaufgaben als Umkehrung der Multiplikation. Kinder prüfen mit Malrechnung, ob ein Ergebnis stimmt — so wird der Zusammenhang verständlich.",
+    "Geteiltaufgaben als Umkehrung der Multiplikation. Die Aufgaben gehen auf; Kinder prüfen mit Malrechnung, ob ein Ergebnis stimmt. Division mit Rest ist ab Klasse 3 ein eigenes Thema.",
+  division_rest:
+    "Geteiltaufgaben, die nicht aufgehen. Eingetragen werden Ergebnis und Rest, zum Beispiel 17 : 5 = 3 Rest 2. Der Rest ist kleiner als der Teiler. Ab Klasse 3 im 1. Halbjahr.",
   order_ops:
     "Aufgaben mit mehreren Rechenarten, bei denen Punkt vor Strich gilt. Ein Thema, das Eltern oft neu kennenlernen, weil die Reihenfolge klar geregelt ist.",
   brackets:

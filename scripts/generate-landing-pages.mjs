@@ -38,7 +38,7 @@ const GROUPS = {
 const classIntros = {
   1: "In Klasse 1 geht es um erste Zahlen, Plus und Minus bis 20 sowie einfache Vergleiche und Zerlegungen.",
   2: "In Klasse 2 vertiefst du Plus und Minus, lernst das Einmaleins und erste Größen wie Geld und Uhr.",
-  3: "In Klasse 3 kommen größere Zahlen, schriftliches Rechnen, Tabellen und erste Sachaufgaben dazu.",
+  3: "In Klasse 3 kommen größere Zahlen, schriftliches Rechnen, Division mit Rest, Tabellen und erste Sachaufgaben dazu.",
   4: "In Klasse 4 übst du schriftliche Verfahren, Bruchanteile, Geometrie und das Umrechnen von Größen.",
   5: "In Klasse 5 vertiefst du Brüche, Dezimalzahlen, Prozent und anspruchsvollere Sachaufgaben.",
   6: "In Klasse 6 bereitest du dich auf die weiterführende Schule vor: Brüche, Prozent, Dreisatz und mehr.",
@@ -47,8 +47,8 @@ const classIntros = {
 const classDetails = {
   1: "Typisch für Klasse 1 sind Aufgaben im Zahlenraum bis 20. Kinder rechnen Plus und Minus, vergleichen Zahlen und lösen erste kurze Textaufgaben. Viele Übungen sind bewusst kleinschrittig — so wie es heute in den meisten Grundschulen eingeführt wird.",
   2: "In Klasse 2 wächst der Zahlenraum bis 100, das Einmaleins wird aufgebaut und erste Sachaufgaben werden länger. Eltern merken oft: Die Aufgaben sehen noch vertraut aus, aber die Reihenfolge der Themen und die Begriffe können anders sein als früher.",
-  3: "Klasse 3 bedeutet größere Zahlen, schriftliches Rechnen und mehr Schritte pro Aufgabe. Punkt vor Strich, Tabellen lesen und Größen wie Länge oder Gewicht kommen dazu — Themen, bei denen eine Übersicht besonders hilft.",
-  4: "In Klasse 4 stehen schriftliche Verfahren, Bruchanteile und anspruchsvollere Sachaufgaben im Fokus. Geometrie und Größen werden präziser; Kinder sollen nicht nur rechnen, sondern auch begründen, warum ein Ergebnis passt.",
+  3: "Klasse 3 bedeutet größere Zahlen, schriftliches Rechnen und mehr Schritte pro Aufgabe. Division mit Rest, Punkt vor Strich, Tabellen lesen und Größen wie Länge oder Gewicht kommen dazu — Themen, bei denen eine Übersicht besonders hilft.",
+  4: "In Klasse 4 stehen schriftliche Verfahren, Division mit Rest, Bruchanteile und anspruchsvollere Sachaufgaben im Fokus. Geometrie und Größen werden präziser; Kinder sollen nicht nur rechnen, sondern auch begründen, warum ein Ergebnis passt.",
   5: "Klasse 5 bringt Brüche, Dezimalzahlen und Prozent zusammen — oft in gemischten Aufgaben. Gleichungen, Dreisatz und Winkel sind typische Themen, die Eltern manchmal erst wieder mit dem Kind neu lernen.",
   6: "In Klasse 6 wird vieles wiederholt und vertieft, was für die weiterführende Schule wichtig ist. Die Aufgaben werden länger, die Zahlen größer, und Sachaufgaben verlangen mehrere Rechenschritte und gutes Lesen.",
 };
@@ -494,7 +494,7 @@ function renderPracticeJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=67" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=70" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -752,8 +752,8 @@ function extractAppFragments() {
   }
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart);
 
-  const scripts = `    <script src="/topics.js?v=37"></script>
-    <script src="/script.js?v=55"></script>
+  const scripts = `    <script src="/topics.js?v=41"></script>
+    <script src="/script.js?v=61"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>
       window.va =

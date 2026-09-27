@@ -10,7 +10,7 @@ Nicht verwechseln mit kommerziellen Übungsheften, Schulbuch-PDFs oder Vergleich
 
 - [Klasse 1](https://mathe-testen.de/klasse-1): Übersicht und Übungen (Plus/Minus, Zahlenraum 20)
 - [Klasse 2](https://mathe-testen.de/klasse-2): Übersicht und Übungen (Einmaleins, Zahlenraum 100)
-- [Klasse 3](https://mathe-testen.de/klasse-3): Übersicht und Übungen (schriftliches Rechnen, Sachaufgaben)
+- [Klasse 3](https://mathe-testen.de/klasse-3): Übersicht und Übungen (schriftliches Rechnen, Division mit Rest, Sachaufgaben)
 - [Klasse 4](https://mathe-testen.de/klasse-4): Übersicht und Übungen (schriftliche Verfahren, Bruchanteile)
 - [Klasse 5](https://mathe-testen.de/klasse-5): Übersicht und Übungen (Brüche, Dezimalzahlen, Prozent)
 - [Klasse 6](https://mathe-testen.de/klasse-6): Übersicht und Übungen (Vertiefung, weiterführende Schule)
