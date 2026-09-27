@@ -2328,7 +2328,7 @@ async function buildPdfSheet() {
         run.push(blockEls[i]);
         i += 1;
       }
-      const perPage = 2;
+      const perPage = pdfMaxCompactEqPerPage();
       for (let offset = 0; offset < run.length; offset += perPage) {
         groups.push({ blocks: run.slice(offset, offset + perPage), kind: "rest" });
       }
@@ -2389,8 +2389,9 @@ async function buildPdfSheet() {
       grid.className = "pdf-blocks pdf-blocks-pair";
       pageClass = "pdf-page-list";
     } else if (group.kind === "rest") {
-      grid.className = "pdf-blocks pdf-blocks-pair";
-      pageClass = notesToggle.checked ? "pdf-page-list pdf-page-notes" : "pdf-page-list";
+      const layout = pdfCompactEqLayout();
+      grid.className = layout.gridClass;
+      pageClass = layout.pageClass;
     } else if (group.kind === "written") {
       grid.className =
         group.blocks.length > 1 ? "pdf-blocks pdf-blocks-pair" : "pdf-blocks pdf-blocks-list";

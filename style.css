@@ -3100,7 +3100,7 @@ a.grade-btn-nav[aria-current="page"] {
   padding-top: 0;
 }
 
-.pdf-page-list .block.is-rest .task {
+.pdf-sheet .block.is-rest .task {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
@@ -3108,12 +3108,12 @@ a.grade-btn-nav[aria-current="page"] {
   gap: 8px;
 }
 
-.pdf-page-list .block.is-rest .task-eq {
+.pdf-sheet .block.is-rest .task-eq {
   flex: 1 1 auto;
   white-space: nowrap;
 }
 
-.pdf-page-list .block.is-rest .rest-answers {
+.pdf-sheet .block.is-rest .rest-answers {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -3121,12 +3121,12 @@ a.grade-btn-nav[aria-current="page"] {
   margin-left: 0;
 }
 
-.pdf-page-list .block.is-rest .rest-label {
+.pdf-sheet .block.is-rest .rest-label {
   font-size: 0.76rem;
   font-weight: 800;
 }
 
-.pdf-page-list .block.is-rest .rest-answers .answer-input {
+.pdf-sheet .block.is-rest .rest-answers .answer-input {
   flex: 0 0 2.7rem;
   width: 2.7rem;
   min-width: 2.7rem;

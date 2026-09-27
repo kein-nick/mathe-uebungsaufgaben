@@ -1,4 +1,4 @@
-const CACHE_NAME = "mathe-uebungsaufgaben-v85";
+const CACHE_NAME = "mathe-uebungsaufgaben-v86";
 
 const PRECACHE_URLS = [
   "/",
