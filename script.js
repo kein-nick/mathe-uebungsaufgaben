@@ -378,6 +378,7 @@ const TOPIC_SECONDS = {
   proportion: 50,
   mean: 40,
   word: 52,
+  division_rest: 36,
   decompose: 16,
   compare: 12,
   neighbor: 12,
@@ -415,6 +416,7 @@ function secondsForTopic(id, grade, term) {
     "subtraction",
     "multiplication",
     "division",
+    "division_rest",
     "round",
     "estimate",
     "word",
@@ -1139,6 +1141,8 @@ function snapshotTasks() {
   return [...document.querySelectorAll(".task")].map((row) => {
     const digits = [...row.querySelectorAll(".sum-digit-input")];
     const radios = [...row.querySelectorAll("input[type=radio]")];
+    const quotientInput = row.querySelector('.answer-input[data-part="q"]');
+    const remainderInput = row.querySelector('.answer-input[data-part="r"]');
     const input = row.querySelector(".answer-input");
     const notes = row.closest(".task-item")?.querySelector("textarea");
     let value = "";
@@ -1146,6 +1150,8 @@ function snapshotTasks() {
       value = digits.map((digit) => digit.value);
     } else if (radios.length) {
       value = radios.find((radio) => radio.checked)?.value ?? "";
+    } else if (quotientInput && remainderInput) {
+      value = [quotientInput.value, remainderInput.value];
     } else if (input) {
       value = input.value;
     }
@@ -1174,6 +1180,8 @@ function applySnapshot(snapshot) {
     }
     const digits = [...row.querySelectorAll(".sum-digit-input")];
     const radios = [...row.querySelectorAll("input[type=radio]")];
+    const quotientInput = row.querySelector('.answer-input[data-part="q"]');
+    const remainderInput = row.querySelector('.answer-input[data-part="r"]');
     const input = row.querySelector(".answer-input");
     const notes = row.closest(".task-item")?.querySelector("textarea");
 
@@ -1192,6 +1200,12 @@ function applySnapshot(snapshot) {
         radio.checked = radio.value === saved.value;
         radio.disabled = saved.disabled;
       });
+    } else if (quotientInput && remainderInput) {
+      const values = Array.isArray(saved.value) ? saved.value : ["", ""];
+      quotientInput.value = values[0] ?? "";
+      remainderInput.value = values[1] ?? "";
+      quotientInput.disabled = saved.disabled;
+      remainderInput.disabled = saved.disabled;
     } else if (input) {
       input.value = Array.isArray(saved.value)
         ? saved.value.join("").replace(/^0+(?=\d)/, "")
@@ -1290,6 +1304,16 @@ function readTaskAnswer(row) {
     const chosen = radios.find((radio) => radio.checked);
     return chosen ? chosen.value : null;
   }
+  const quotientInput = row.querySelector('.answer-input[data-part="q"]');
+  const remainderInput = row.querySelector('.answer-input[data-part="r"]');
+  if (quotientInput && remainderInput) {
+    const quotient = quotientInput.value.trim();
+    const remainder = remainderInput.value.trim();
+    if (quotient === "" && remainder === "") {
+      return null;
+    }
+    return { q: quotient, r: remainder };
+  }
   const input = row.querySelector(".answer-input");
   if (!input) {
     return null;
@@ -1301,6 +1325,14 @@ function readTaskAnswer(row) {
 function isAnswerCorrect(task, value) {
   if (value === null) {
     return false;
+  }
+  if (task.kind === "remainder") {
+    const quotient = parseNumberInput(String(value.q ?? ""));
+    const remainder = parseNumberInput(String(value.r ?? ""));
+    if (quotient === null || remainder === null || Number.isNaN(quotient) || Number.isNaN(remainder)) {
+      return false;
+    }
+    return quotient === task.answer.q && remainder === task.answer.r;
   }
   if (task.kind === "choice" || task.kind === "text") {
     const left = String(value).trim().toLowerCase().replace(/\s/g, "");
@@ -1344,6 +1376,9 @@ function isAnswerCorrect(task, value) {
 function formatAnswerHint(task) {
   if (task.kind === "choice") {
     return String(task.answer);
+  }
+  if (task.kind === "remainder" && task.answer) {
+    return `${task.answer.q} Rest ${task.answer.r}`;
   }
   if (task.kind === "fraction" && task.answer && typeof task.answer === "object") {
     return `${task.answer.n}/${task.answer.d}`;
@@ -1420,6 +1455,7 @@ const workingTypes = new Set([
   "subtraction",
   "multiplication",
   "division",
+  "division_rest",
   "order_ops",
   "brackets",
   "laws",
@@ -1803,6 +1839,49 @@ function createTaskItem(task, index, displayNum, forPdf, allowMinusInput) {
           </div>
         `;
     item.append(row);
+  } else if (task.kind === "remainder") {
+    const operands = taskOperands(task);
+    const equation = operands
+      .map((number, operandIndex) => {
+        if (operandIndex === 0) {
+          return `<span>${formatOperand(number, false)}</span>`;
+        }
+        return `<span>${symbols[task.operation]}</span><span>${formatOperand(number, true)}</span>`;
+      })
+      .join("");
+    row.classList.add("is-rest");
+    row.innerHTML = `
+          <span class="task-num">${displayNum}.</span>
+          <span class="task-eq">
+            ${equation}
+            <span>=</span>
+          </span>
+          <span class="rest-answers">
+            <input
+              class="answer-input"
+              data-part="q"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              aria-label="Ergebnis Aufgabe ${displayNum}"
+            />
+            <span class="rest-label">Rest</span>
+            <input
+              class="answer-input"
+              data-part="r"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              aria-label="Rest Aufgabe ${displayNum}"
+            />
+          </span>
+        `;
+    item.append(row);
+    if (forPdf && usesNotesField(task)) {
+      appendPdfWorkLines(item);
+    } else if (!forPdf && usesNotesField(task)) {
+      appendNotesField(item, displayNum);
+    }
   } else if (isArithmeticTask(task)) {
     const operands = taskOperands(task);
     const equation =
@@ -1895,6 +1974,9 @@ function renderTasks(target = blocks, options = {}) {
     }
     if (sliceTasks.every((task) => task.type === "word")) {
       block.classList.add("is-word");
+    }
+    if (sliceTasks.every((task) => task.kind === "remainder")) {
+      block.classList.add("is-rest");
     }
     block.innerHTML = `<h3>${escapeHtml(blockHeading(sliceTasks, startNum, endNum))}</h3>`;
 
@@ -2085,6 +2167,9 @@ function pdfMaxCompactEqPerPage() {
 }
 
 function pdfBlockIsCompactEq(block) {
+  if (block.classList.contains("is-rest")) {
+    return false;
+  }
   const rows = [...block.querySelectorAll(".task")];
   return (
     rows.length > 0 &&
@@ -2130,6 +2215,10 @@ function pdfBlockIsWritten(block) {
 
 function pdfBlockIsWord(block) {
   return block.classList.contains("is-word");
+}
+
+function pdfBlockIsRest(block) {
+  return block.classList.contains("is-rest");
 }
 
 function splitPdfVisualBlock(block, perPage = 10) {
@@ -2233,6 +2322,18 @@ async function buildPdfSheet() {
       i += 1;
       continue;
     }
+    if (pdfBlockIsRest(block)) {
+      const run = [];
+      while (i < blockEls.length && pdfBlockIsRest(blockEls[i])) {
+        run.push(blockEls[i]);
+        i += 1;
+      }
+      const perPage = notesToggle.checked ? 1 : 2;
+      for (let offset = 0; offset < run.length; offset += perPage) {
+        groups.push({ blocks: run.slice(offset, offset + perPage), kind: "rest" });
+      }
+      continue;
+    }
     if (pdfBlockIsCompactEq(block)) {
       const run = [];
       while (i < blockEls.length && pdfBlockIsCompactEq(blockEls[i])) {
@@ -2262,7 +2363,8 @@ async function buildPdfSheet() {
       !pdfBlockIsWritten(blockEls[i]) &&
       !pdfBlockIsVisual(blockEls[i]) &&
       !pdfBlockIsCompactEq(blockEls[i]) &&
-      !pdfBlockIsWord(blockEls[i])
+      !pdfBlockIsWord(blockEls[i]) &&
+      !pdfBlockIsRest(blockEls[i])
     ) {
       run.push(blockEls[i]);
       i += 1;
@@ -2286,6 +2388,10 @@ async function buildPdfSheet() {
     } else if (group.kind === "word") {
       grid.className = "pdf-blocks pdf-blocks-pair";
       pageClass = "pdf-page-list";
+    } else if (group.kind === "rest") {
+      grid.className =
+        group.blocks.length > 1 ? "pdf-blocks pdf-blocks-rest-pair" : "pdf-blocks pdf-blocks-list";
+      pageClass = notesToggle.checked ? "pdf-page-list pdf-page-notes" : "pdf-page-list";
     } else if (group.kind === "written") {
       grid.className =
         group.blocks.length > 1 ? "pdf-blocks pdf-blocks-pair" : "pdf-blocks pdf-blocks-list";
@@ -2716,6 +2822,14 @@ blocks.addEventListener("keydown", (event) => {
 
   if (event.key !== "Enter") {
     return;
+  }
+  if (event.target.dataset.part === "q") {
+    const remainderInput = row?.querySelector('.answer-input[data-part="r"]');
+    if (remainderInput) {
+      event.preventDefault();
+      remainderInput.focus();
+      return;
+    }
   }
   event.preventDefault();
   const tasksRows = [...blocks.querySelectorAll(".task")];

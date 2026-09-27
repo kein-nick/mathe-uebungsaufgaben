@@ -481,6 +481,31 @@ function buildTopics(u) {
       generate: (g, t, extra) => genArithmetic("division", g, t, extra),
     },
     {
+      id: "division_rest",
+      label: "Division mit Rest",
+      group: "rechnen",
+      fromGrade: 3,
+      fromTerm: 1,
+      example: () => "z. B. 17 : 5 = 3 Rest 2",
+      generate: (g, t) => {
+        const divisorMin = g >= 6 ? 3 : 2;
+        const divisorMax = g >= 5 ? 12 : 10;
+        const quotientMin = g >= 4 ? 2 : 1;
+        const quotientMax = g >= 6 ? 20 : g >= 5 ? 15 : g >= 4 ? (t === 2 ? 15 : 12) : 10;
+        const divisor = randomInt(divisorMin, divisorMax);
+        const quotient = randomInt(quotientMin, quotientMax);
+        const remainder = randomInt(0, 4) === 0 ? 0 : randomInt(1, divisor - 1);
+        const dividend = divisor * quotient + remainder;
+        return numberTask("division_rest", "", { q: quotient, r: remainder }, {
+          a: dividend,
+          b: divisor,
+          operation: "division",
+          kind: "remainder",
+          key: `division_rest:${dividend}:${divisor}`,
+        });
+      },
+    },
+    {
       id: "order_ops",
       label: "Punkt vor Strich",
       group: "rechnen",
