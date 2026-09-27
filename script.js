@@ -1045,8 +1045,12 @@ function applyTimesExamples() {
     example.textContent = small
       ? id === "multiplication"
         ? "z. B. 4 × 7"
-        : "z. B. 28 : 4"
-      : topic.example(selectedGrade, selectedTerm);
+        : "z. B. 8 : 4"
+      : id === "division" && selectedGrade === 3
+        ? selectedTerm === 2
+          ? "z. B. 84 : 7"
+          : "z. B. 48 : 3"
+        : topic.example(selectedGrade, selectedTerm);
   });
 }
 
