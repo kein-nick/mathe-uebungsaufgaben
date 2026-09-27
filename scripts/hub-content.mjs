@@ -114,7 +114,7 @@ export const topicHubs = [
     whatHeading: "Was sind Sachaufgaben?",
     metaDescription:
       "Sachaufgaben üben online: Mathe-Textaufgaben für die Grundschule — lesen, rechnen, prüfen. Kostenlos, online oder als PDF.",
-    topicIds: ["word"],
+    topicIds: ["word", "word_times"],
     grades: [3, 4, 5, 6],
     lead: "Sachaufgaben sind für viele Kinder der schwierigste Teil: erst den Text verstehen, dann die passende Rechnung finden, dann rechnen. Genau das lässt sich trainieren — mit Geduld und den richtigen Aufgaben.",
     whatIs:
@@ -122,7 +122,7 @@ export const topicHubs = [
     whyPractice:
       "In Proben und Vergleichsarbeiten machen Sachaufgaben den Unterschied. Wer nur „nackte“ Rechnungen übt, stolpert später über Formulierungen. Gezieltes Üben verbindet Lesen und Mathematik.",
     howItWorks:
-      "Nach der Klassenwahl sind Sachaufgaben vorausgewählt. Du erstellst ein Blatt, übst online mit Prüfung oder druckst ein PDF für die Hausaufgaben oder den Unterricht.",
+      "Nach der Klassenwahl sind zwei Sachaufgaben-Themen vorausgewählt: Plus und Minus sowie Mal und Geteilt. Geteilt-Aufgaben gehen auf, ohne Rest. In Klasse 3 folgen Mal und Geteilt dem Schalter fürs kleine Einmaleins. Du erstellst ein Blatt, übst online mit Prüfung oder druckst ein PDF für die Hausaufgaben oder den Unterricht.",
     forWhom:
       "Vor allem ab Klasse 3, wenn Texte länger werden — sowie Eltern und Lehrkräfte. Kostenlos, ohne Anmeldung.",
     faqs: [

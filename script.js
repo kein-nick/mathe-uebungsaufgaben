@@ -378,6 +378,7 @@ const TOPIC_SECONDS = {
   proportion: 50,
   mean: 40,
   word: 52,
+  word_times: 52,
   division_rest: 36,
   decompose: 16,
   compare: 12,
@@ -420,6 +421,7 @@ function secondsForTopic(id, grade, term) {
     "round",
     "estimate",
     "word",
+    "word_times",
     "money",
     "order_ops",
     "brackets",
@@ -538,7 +540,7 @@ function parseAnswer(value) {
   return parseNumberInput(value);
 }
 
-const TIMES_TOPICS = new Set(["multiplication", "division", "word"]);
+const TIMES_TOPICS = new Set(["multiplication", "division", "word_times"]);
 
 function smallTimesTable() {
   return selectedGrade === 3 && Boolean(largeMulToggle) && !largeMulToggle.checked;
@@ -1028,7 +1030,7 @@ function updateLargeMulHint() {
     return;
   }
   largeMulHint.textContent = largeMulToggle.checked
-    ? "An: auch Malaufgaben über 10."
+    ? "An: auch Mal- und Geteiltaufgaben über 10."
     : "Aus: nur kleines Einmaleins, beide Zahlen bis 10.";
 }
 
@@ -1037,11 +1039,15 @@ function applyTimesExamples() {
     return;
   }
   const small = smallTimesTable();
-  ["multiplication", "division"].forEach((id) => {
+  ["multiplication", "division", "word_times"].forEach((id) => {
     const input = operationList.querySelector(`input[data-topic="${id}"]`);
     const example = input?.closest("label")?.querySelector(".topic-example");
     const topic = getTopic(id);
     if (!example || !topic) {
+      return;
+    }
+    if (small && id === "word_times") {
+      example.textContent = "z. B. 4 Stück je 3 Cent, oder 20 auf 4 Kinder";
       return;
     }
     example.textContent = small
@@ -1468,6 +1474,7 @@ const workingTypes = new Set([
   "proportion",
   "mean",
   "word",
+  "word_times",
   "double_half",
   "round",
   "estimate",
@@ -1750,6 +1757,9 @@ function taskLayoutGroup(task) {
   if (isPictureTask(task)) {
     return `visual:${task.type}`;
   }
+  if (task.type === "word" || task.type === "word_times") {
+    return `word:${task.type}`;
+  }
   if (task.operation === "addition" || task.operation === "subtraction") {
     return "addsub";
   }
@@ -1972,7 +1982,7 @@ function renderTasks(target = blocks, options = {}) {
     } else {
       block.classList.add("is-eq");
     }
-    if (sliceTasks.every((task) => task.type === "word")) {
+    if (sliceTasks.every((task) => task.type === "word" || task.type === "word_times")) {
       block.classList.add("is-word");
     }
     if (sliceTasks.every((task) => task.kind === "remainder")) {

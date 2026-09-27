@@ -100,7 +100,9 @@ export const topicDescriptions = {
   mean:
     "Mittelwert berechnen aus mehreren Werten. Oft im Kontext von Tabellen, Umfragen oder Sport — praxisnah und prüfungsrelevant.",
   word:
-    "Sachaufgaben mit kurzen Texten: Informationen lesen, überlegen, welche Rechenart passt, und rechnen. Für viele Kinder der schwierigste, aber wichtigste Teil.",
+    "Sachaufgaben zu Plus und Minus: etwas verschenken und dazubekommen. Ab Klasse 4 auch Vergleiche, wer wie viele mehr hat. Ab Klasse 3 im 1. Halbjahr.",
+  word_times:
+    "Sachaufgaben zu Mal und Geteilt: einkaufen und gleichmäßig verteilen. Geteilt geht immer auf, ohne Rest. Ab Klasse 3. In Klasse 3 folgen die Zahlen dem Schalter fürs kleine Einmaleins.",
   decompose:
     "Zahlen zerlegen — zum Beispiel 14 = 10 + 4. Basis für das Verständnis des Zehnersystems und späteres schriftliches Rechnen.",
   compare:

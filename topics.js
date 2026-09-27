@@ -431,6 +431,51 @@ function buildTopics(u) {
     );
   }
 
+  const WORD_NAMES = ["Lea", "Ben", "Mia", "Omar", "Nora", "Finn", "Luca", "Jonas", "Lina", "Ella", "Mila", "Ayla"];
+  const WORD_THINGS = [
+    "Äpfel",
+    "Sticker",
+    "Murmeln",
+    "Sammelkarten",
+    "Muffins",
+    "Radiergummis",
+    "Kaugummis",
+    "Lollis",
+    "Bügelperlen",
+  ];
+
+  function wordScene() {
+    const name = pick(WORD_NAMES);
+    return {
+      name,
+      other: pick(WORD_NAMES.filter((item) => item !== name)),
+      thing: pick(WORD_THINGS),
+    };
+  }
+
+  function wordAmounts(g, t) {
+    const a = g >= 6
+      ? (t === 2 ? randomInt(140, 480) : randomInt(80, 240))
+      : g >= 5
+        ? (t === 2 ? randomInt(80, 220) : randomInt(40, 140))
+        : g >= 4
+          ? (t === 2 ? randomInt(50, 180) : randomInt(25, 90))
+          : (t === 2 ? randomInt(20, 80) : randomInt(10, 36));
+    const b = g >= 6
+      ? (t === 2 ? randomInt(20, 90) : randomInt(12, 40))
+      : g >= 5
+        ? (t === 2 ? randomInt(12, 50) : randomInt(8, 30))
+        : g >= 4
+          ? (t === 2 ? randomInt(8, 35) : randomInt(5, 20))
+          : (t === 2 ? randomInt(4, 18) : randomInt(2, 8));
+    const c = g >= 6
+      ? (t === 2 ? randomInt(15, 70) : randomInt(8, 35))
+      : g >= 4
+        ? (t === 2 ? randomInt(8, 40) : randomInt(4, 20))
+        : (t === 2 ? randomInt(3, 16) : randomInt(2, 8));
+    return { a, b, c };
+  }
+
   const topics = [
     {
       id: "addition",
@@ -886,79 +931,76 @@ function buildTopics(u) {
     },
     {
       id: "word",
-      label: "Sachaufgaben",
+      label: "Sachaufgaben Plus und Minus",
       group: "rechnen",
       fromGrade: 3,
       fromTerm: 1,
-      example: (g, t) => (g >= 5 ? "z. B. 120 Sticker, 35 weg, 18 dazu" : "z. B. 12 Äpfel, 4 weg, 7 dazu"),
-      generate: (g, t, extra) => {
-        const names = ["Lea", "Ben", "Mia", "Omar", "Nora", "Finn", "Luca", "Jonas", "Lina", "Ella", "Mila", "Ayla"];
-        const name = pick(names);
-        const thing = pick([
-          "Äpfel",
-          "Sticker",
-          "Murmeln",
-          "Sammelkarten",
-          "Muffins",
-          "Radiergummis",
-          "Kaugummis",
-          "Lollis",
-          "Bügelperlen",
-        ]);
-        const a = g >= 6
-          ? (t === 2 ? randomInt(140, 480) : randomInt(80, 240))
-          : g >= 5
-            ? (t === 2 ? randomInt(80, 220) : randomInt(40, 140))
-            : g >= 4
-              ? (t === 2 ? randomInt(50, 180) : randomInt(25, 90))
-              : (t === 2 ? randomInt(20, 80) : randomInt(10, 36));
-        const b = g >= 6
-          ? (t === 2 ? randomInt(20, 90) : randomInt(12, 40))
-          : g >= 5
-            ? (t === 2 ? randomInt(12, 50) : randomInt(8, 30))
-            : g >= 4
-              ? (t === 2 ? randomInt(8, 35) : randomInt(5, 20))
-              : (t === 2 ? randomInt(4, 18) : randomInt(2, 8));
-        const c = g >= 6
-          ? (t === 2 ? randomInt(15, 70) : randomInt(8, 35))
-          : g >= 4
-            ? (t === 2 ? randomInt(8, 40) : randomInt(4, 20))
-            : (t === 2 ? randomInt(3, 16) : randomInt(2, 8));
+      example: (g) => (g >= 5 ? "z. B. 120 Sticker, 35 weg, 18 dazu" : "z. B. 12 Äpfel, 4 weg, 7 dazu"),
+      generate: (g, t) => {
+        const { name, other, thing } = wordScene();
+        const { a, b, c } = wordAmounts(g, t);
         const give = Math.min(b, a - 1);
-        const style = randomInt(0, g >= 4 ? 3 : 1);
-        if (style === 0) {
+        if (g < 4 || randomInt(0, 1) === 0) {
           return numberTask(
             "word",
             `${name} hat ${a} ${thing}. ${name} verschenkt ${give} und bekommt ${c} dazu. Wie viele ${thing} sind es jetzt?`,
             a - give + c
           );
         }
-        if (style === 1) {
-          const qty = extra?.smallTimes ? randomInt(2, 10) : a;
-          const each = extra?.smallTimes ? randomInt(2, 10) : b;
-          return numberTask(
-            "word",
-            `${name} kauft ${qty} ${thing} für je ${each} Cent. Was kostet das zusammen (in Cent)?`,
-            qty * each
-          );
-        }
-        if (style === 2) {
-          const groups = pick(g >= 6 ? [4, 5, 6, 8, 10] : [3, 4, 5, 6]);
-          const each = randomInt(g >= 6 ? 8 : 4, g >= 6 ? 24 : 12);
-          const total = groups * each;
-          return numberTask(
-            "word",
-            `${name} verteilt ${total} ${thing} gleichmäßig auf ${groups} Kinder. Wie viele ${thing} bekommt jedes Kind?`,
-            each
-          );
-        }
-        const other = pick(names.filter((item) => item !== name));
         const more = Math.max(a, b + give);
         const less = Math.min(a, Math.max(1, more - give));
         return numberTask(
           "word",
           `${name} hat ${more} ${thing}, ${other} hat ${less}. Wie viele ${thing} hat ${name} mehr?`,
           more - less
+        );
+      },
+    },
+    {
+      id: "word_times",
+      label: "Sachaufgaben Mal und Geteilt",
+      group: "rechnen",
+      fromGrade: 3,
+      fromTerm: 1,
+      example: (g) =>
+        g >= 6
+          ? "z. B. 8 Packungen für je 15 Cent"
+          : g >= 4
+            ? "z. B. 24 Sticker auf 6 Kinder"
+            : "z. B. 6 Stück für je 12 Cent, oder 36 auf 6 Kinder",
+      generate: (g, t, extra) => {
+        const { name, thing } = wordScene();
+        const small = Boolean(extra?.smallTimes);
+        if (randomInt(0, 1) === 0) {
+          const { a, b } = wordAmounts(g, t);
+          const qty = small ? randomInt(2, 10) : a;
+          const each = small ? randomInt(2, 10) : b;
+          return numberTask(
+            "word_times",
+            `${name} kauft ${qty} ${thing} für je ${each} Cent. Was kostet das zusammen (in Cent)?`,
+            qty * each
+          );
+        }
+        let groups;
+        let each;
+        if (small) {
+          groups = randomInt(2, 10);
+          each = randomInt(2, 10);
+        } else if (g >= 6) {
+          groups = pick([4, 5, 6, 8, 10]);
+          each = randomInt(8, 24);
+        } else if (g <= 3) {
+          groups = pick([2, 3, 4, 5, 6, 8, 10]);
+          each = randomInt(t === 2 ? 6 : 4, t === 2 ? 16 : 12);
+        } else {
+          groups = pick([3, 4, 5, 6]);
+          each = randomInt(4, 12);
+        }
+        const total = groups * each;
+        return numberTask(
+          "word_times",
+          `${name} verteilt ${total} ${thing} gleichmäßig auf ${groups} Kinder. Wie viele ${thing} bekommt jedes Kind?`,
+          each
         );
       },
     },
