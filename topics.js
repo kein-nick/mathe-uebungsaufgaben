@@ -867,7 +867,8 @@ function buildTopics(u) {
       fromTerm: 1,
       example: (g, t) => (g >= 5 ? "z. B. 120 Sticker, 35 weg, 18 dazu" : "z. B. 12 Äpfel, 4 weg, 7 dazu"),
       generate: (g, t, extra) => {
-        const name = pick(["Lea", "Ben", "Mia", "Omar", "Nora"]);
+        const names = ["Lea", "Ben", "Mia", "Omar", "Nora", "Finn", "Luca", "Jonas", "Lina", "Ella", "Mila", "Ayla"];
+        const name = pick(names);
         const thing = pick([
           "Äpfel",
           "Sticker",
@@ -926,7 +927,7 @@ function buildTopics(u) {
             each
           );
         }
-        const other = pick(["Lea", "Ben", "Mia", "Omar", "Nora"].filter((item) => item !== name));
+        const other = pick(names.filter((item) => item !== name));
         const more = Math.max(a, b + give);
         const less = Math.min(a, Math.max(1, more - give));
         return numberTask(
