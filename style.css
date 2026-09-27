@@ -2654,14 +2654,6 @@ a.grade-btn-nav[aria-current="page"] {
   height: 100%;
 }
 
-.pdf-blocks-rest-pair {
-  grid-template-columns: minmax(0, 1fr) !important;
-  grid-template-rows: 1fr 1fr !important;
-  gap: 10px;
-  align-items: stretch;
-  height: 100%;
-}
-
 .pdf-blocks-quad {
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   grid-template-rows: 1fr 1fr !important;
