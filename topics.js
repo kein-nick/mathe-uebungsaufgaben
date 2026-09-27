@@ -868,7 +868,17 @@ function buildTopics(u) {
       example: (g, t) => (g >= 5 ? "z. B. 120 Sticker, 35 weg, 18 dazu" : "z. B. 12 Äpfel, 4 weg, 7 dazu"),
       generate: (g, t, extra) => {
         const name = pick(["Lea", "Ben", "Mia", "Omar", "Nora"]);
-        const thing = pick(["Äpfel", "Sticker", "Murmeln", "Karten"]);
+        const thing = pick([
+          "Äpfel",
+          "Sticker",
+          "Murmeln",
+          "Sammelkarten",
+          "Muffins",
+          "Radiergummis",
+          "Kaugummis",
+          "Lollis",
+          "Bügelperlen",
+        ]);
         const a = g >= 6
           ? (t === 2 ? randomInt(140, 480) : randomInt(80, 240))
           : g >= 5
