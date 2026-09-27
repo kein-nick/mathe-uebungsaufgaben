@@ -494,7 +494,7 @@ function buildTopics(u) {
         const quotientMax = g >= 6 ? 20 : g >= 5 ? 15 : g >= 4 ? (t === 2 ? 15 : 12) : 10;
         const divisor = randomInt(divisorMin, divisorMax);
         const quotient = randomInt(quotientMin, quotientMax);
-        const remainder = randomInt(0, 4) === 0 ? 0 : randomInt(1, divisor - 1);
+        const remainder = randomInt(1, divisor - 1);
         const dividend = divisor * quotient + remainder;
         return numberTask("division_rest", "", { q: quotient, r: remainder }, {
           a: dividend,
