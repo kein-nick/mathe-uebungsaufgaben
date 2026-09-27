@@ -2284,8 +2284,7 @@ async function buildPdfSheet() {
       grid.className = layout.gridClass;
       pageClass = layout.pageClass;
     } else if (group.kind === "word") {
-      grid.className =
-        group.blocks.length > 1 ? "pdf-blocks pdf-blocks-pair" : "pdf-blocks pdf-blocks-list";
+      grid.className = "pdf-blocks pdf-blocks-pair";
       pageClass = "pdf-page-list";
     } else if (group.kind === "written") {
       grid.className =
