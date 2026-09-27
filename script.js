@@ -8,6 +8,9 @@ const operationBlock = document.getElementById("operation-block");
 const operationList = document.getElementById("operation-list");
 const negSwitch = document.getElementById("neg-switch");
 const negToggle = document.getElementById("neg-toggle");
+let largeMulControl = null;
+let largeMulToggle = null;
+let largeMulHint = null;
 const createBlock = document.getElementById("create-block");
 const adMidRow = document.getElementById("ad-mid-row");
 const createBtn = document.getElementById("create-btn");
@@ -533,10 +536,17 @@ function parseAnswer(value) {
   return parseNumberInput(value);
 }
 
+const TIMES_TOPICS = new Set(["multiplication", "division", "word"]);
+
+function smallTimesTable() {
+  return selectedGrade === 3 && Boolean(largeMulToggle) && !largeMulToggle.checked;
+}
+
 function generateTask(grade, term, topicId, allowNegatives) {
   const topic = getTopic(topicId);
   const task = topic.generate(grade, term, {
     allowNegatives: Boolean(allowNegatives && topic.usesNegatives),
+    smallTimes: smallTimesTable() && TIMES_TOPICS.has(topicId),
   });
   return { ...task, type: topicId };
 }
@@ -676,6 +686,7 @@ function fillOperations(grade, term) {
   hint.textContent = difficulty[grade][term].hint;
   updateNegSwitch(grade);
   updateNotesSwitch(grade);
+  updateLargeMulSwitch();
   ensureDefaultBlocks();
   updateBlockModeSummary();
   updateTopicBlockControls();
@@ -883,6 +894,9 @@ function selectGrade(grade, options = {}) {
 function selectTerm(term, options = {}) {
   const { scroll = true } = options;
   selectedTerm = term;
+  if (selectedGrade === 3 && largeMulToggle) {
+    largeMulToggle.checked = term === 2;
+  }
   termButtons.forEach((item) =>
     item.classList.toggle("is-active", Number(item.dataset.term) === term)
   );
@@ -981,6 +995,74 @@ termButtons.forEach((button) => {
   });
 });
 
+function mountLargeMulSwitch() {
+  const toolbar = document.querySelector(".topic-toolbar");
+  if (!toolbar) {
+    return;
+  }
+  const wrap = document.createElement("div");
+  wrap.id = "large-mul-control";
+  wrap.className = "large-mul-control is-hidden";
+  wrap.innerHTML = `
+    <label class="neg-switch" id="large-mul-switch">
+      <input type="checkbox" id="large-mul-toggle" />
+      <span class="neg-slider" aria-hidden="true"></span>
+      <span>Auch größere Malaufgaben</span>
+    </label>
+    <p class="hint" id="large-mul-hint"></p>
+  `;
+  toolbar.append(wrap);
+  largeMulControl = wrap;
+  largeMulToggle = wrap.querySelector("#large-mul-toggle");
+  largeMulHint = wrap.querySelector("#large-mul-hint");
+  largeMulToggle.addEventListener("change", () => {
+    updateLargeMulHint();
+    applyTimesExamples();
+  });
+}
+
+function updateLargeMulHint() {
+  if (!largeMulHint || !largeMulToggle) {
+    return;
+  }
+  largeMulHint.textContent = largeMulToggle.checked
+    ? "An: auch Malaufgaben über 10."
+    : "Aus: nur kleines Einmaleins, beide Zahlen bis 10.";
+}
+
+function applyTimesExamples() {
+  if (!operationList || selectedTerm == null) {
+    return;
+  }
+  const small = smallTimesTable();
+  ["multiplication", "division"].forEach((id) => {
+    const input = operationList.querySelector(`input[data-topic="${id}"]`);
+    const example = input?.closest("label")?.querySelector(".topic-example");
+    const topic = getTopic(id);
+    if (!example || !topic) {
+      return;
+    }
+    example.textContent = small
+      ? id === "multiplication"
+        ? "z. B. 4 × 7"
+        : "z. B. 28 : 4"
+      : topic.example(selectedGrade, selectedTerm);
+  });
+}
+
+function updateLargeMulSwitch() {
+  if (!largeMulControl) {
+    return;
+  }
+  const visible = selectedGrade === 3 && selectedTopics().some((id) => TIMES_TOPICS.has(id));
+  largeMulControl.classList.toggle("is-hidden", !visible);
+  if (visible) {
+    updateLargeMulHint();
+  }
+  applyTimesExamples();
+}
+
+mountLargeMulSwitch();
 initPageEntry();
 
 operationList.addEventListener("mousedown", (event) => {
@@ -1046,6 +1128,7 @@ operationList.addEventListener("change", (event) => {
   } else {
     hideCreateStep();
   }
+  updateLargeMulSwitch();
 });
 
 function snapshotTasks() {

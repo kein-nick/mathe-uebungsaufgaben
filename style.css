@@ -458,6 +458,20 @@ select {
   margin-bottom: 0;
 }
 
+.large-mul-control {
+  display: grid;
+  flex-basis: 100%;
+  gap: 4px;
+}
+
+.large-mul-control.is-hidden {
+  display: none;
+}
+
+.large-mul-control .hint {
+  margin: 0;
+}
+
 .topic-groups {
   display: grid;
   gap: 18px;

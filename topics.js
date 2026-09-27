@@ -302,7 +302,13 @@ function buildTopics(u) {
     });
   }
 
-  function genArithmetic(operation, grade, term, allowNegatives) {
+  function genArithmetic(operation, grade, term, allowNegativesOrExtra) {
+    const extra =
+      allowNegativesOrExtra && typeof allowNegativesOrExtra === "object"
+        ? allowNegativesOrExtra
+        : { allowNegatives: Boolean(allowNegativesOrExtra) };
+    const allowNegatives = Boolean(extra.allowNegatives);
+    const smallTimes = Boolean(extra.smallTimes);
     const base = levelOf(grade, term);
     const level = allowNegatives && base.neg ? { ...base, ...base.neg } : base;
     const addMin = level.addMin ?? 0;
@@ -356,7 +362,10 @@ function buildTopics(u) {
     }
 
     if (operation === "multiplication") {
-      const signed = withSigns(pickValue(level.mul.a), pickValue(level.mul.b), allowNegatives);
+      const factors = smallTimes
+        ? { a: { min: 1, max: 10 }, b: { min: 1, max: 10 } }
+        : level.mul;
+      const signed = withSigns(pickValue(factors.a), pickValue(factors.b), allowNegatives);
       return numberTask("multiplication", "", signed.a * signed.b, {
         ...signed,
         operation,
@@ -365,8 +374,8 @@ function buildTopics(u) {
       });
     }
 
-    const divisor = pickValue(level.div.divisors);
-    const quotient = pickValue(level.div.quotient);
+    const divisor = pickValue(smallTimes ? { min: 1, max: 10 } : level.div.divisors);
+    const quotient = pickValue(smallTimes ? { min: 1, max: 10 } : level.div.quotient);
     const signed = withSigns(divisor, quotient, allowNegatives);
     return numberTask("division", "", signed.b, {
       a: signed.a * signed.b,
@@ -459,7 +468,7 @@ function buildTopics(u) {
         const b = Array.isArray(mul.b) ? 5 : Math.min(5, mul.b.max);
         return `z. B. ${a} × ${b}`;
       },
-      generate: (g, t, extra) => genArithmetic("multiplication", g, t, extra.allowNegatives),
+      generate: (g, t, extra) => genArithmetic("multiplication", g, t, extra),
     },
     {
       id: "division",
@@ -469,7 +478,7 @@ function buildTopics(u) {
       fromTerm: 1,
       usesNegatives: true,
       example: () => "z. B. 20 : 5",
-      generate: (g, t, extra) => genArithmetic("division", g, t, extra.allowNegatives),
+      generate: (g, t, extra) => genArithmetic("division", g, t, extra),
     },
     {
       id: "order_ops",
@@ -857,7 +866,7 @@ function buildTopics(u) {
       fromGrade: 3,
       fromTerm: 1,
       example: (g, t) => (g >= 5 ? "z. B. 120 Sticker, 35 weg, 18 dazu" : "z. B. 12 Äpfel, 4 weg, 7 dazu"),
-      generate: (g, t) => {
+      generate: (g, t, extra) => {
         const name = pick(["Lea", "Ben", "Mia", "Omar", "Nora"]);
         const thing = pick(["Äpfel", "Sticker", "Murmeln", "Karten"]);
         const a = g >= 6
@@ -889,10 +898,12 @@ function buildTopics(u) {
           );
         }
         if (style === 1) {
+          const qty = extra?.smallTimes ? randomInt(2, 10) : a;
+          const each = extra?.smallTimes ? randomInt(2, 10) : b;
           return numberTask(
             "word",
-            `${name} kauft ${a} ${thing} für je ${b} Cent. Was kostet das zusammen (in Cent)?`,
-            a * b
+            `${name} kauft ${qty} ${thing} für je ${each} Cent. Was kostet das zusammen (in Cent)?`,
+            qty * each
           );
         }
         if (style === 2) {
