@@ -1465,7 +1465,7 @@ function buildTopics(u) {
       fromGrade: 3,
       fromTerm: 1,
       untilGrade: 4,
-      example: (g) => (g >= 4 ? "z. B. 2 l 350 ml = 2350 ml" : "z. B. ½ l = 500 ml"),
+      example: (g) => (g >= 4 ? "z. B. 2 l und 350 ml = 2350 ml" : "z. B. ½ l = 500 ml"),
       generate: (g, t) => {
         if (g === 3) {
           const style = randomInt(0, t === 1 ? 2 : 3);
@@ -1504,7 +1504,7 @@ function buildTopics(u) {
           const milliliters = pick([100, 200, 250, 400, 500, 600, 750]);
           return numberTask(
             "capacity",
-            `${liters} l ${milliliters} ml = ___ ml`,
+            `${liters} l und ${milliliters} ml = ___ ml`,
             liters * 1000 + milliliters
           );
         }

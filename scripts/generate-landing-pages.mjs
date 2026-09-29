@@ -829,7 +829,7 @@ function extractAppFragments() {
   }
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart).trimEnd();
 
-  const scripts = `    <script src="/topics.js?v=46"></script>
+  const scripts = `    <script src="/topics.js?v=47"></script>
     <script src="/script.js?v=67"></script>
     <script defer src="/news.js?v=3"></script>
     <script defer src="/pwa.js?v=33"></script>
