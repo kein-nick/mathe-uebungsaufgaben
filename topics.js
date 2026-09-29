@@ -1459,6 +1459,81 @@ function buildTopics(u) {
       },
     },
     {
+      id: "capacity",
+      label: "Liter & Milliliter",
+      group: "groessen",
+      fromGrade: 3,
+      fromTerm: 1,
+      untilGrade: 4,
+      example: (g) => (g >= 4 ? "z. B. 2 l 350 ml = 2350 ml" : "z. B. ½ l = 500 ml"),
+      generate: (g, t) => {
+        if (g === 3) {
+          const style = randomInt(0, t === 1 ? 2 : 3);
+          if (style === 0) {
+            const liters = randomInt(1, t === 1 ? 5 : 10);
+            return numberTask("capacity", `${liters} l = ___ ml`, liters * 1000);
+          }
+          if (style === 1) {
+            const fraction = pick([
+              { label: "¼", ml: 250 },
+              { label: "½", ml: 500 },
+              { label: "¾", ml: 750 },
+            ]);
+            return numberTask("capacity", `${fraction.label} l = ___ ml`, fraction.ml);
+          }
+          if (style === 2) {
+            const filled = pick([100, 200, 250, 400, 500, 600, 750]);
+            return numberTask(
+              "capacity",
+              `${filled} ml + ___ ml = 1 l`,
+              1000 - filled
+            );
+          }
+          const bottles = randomInt(2, 6);
+          const each = pick([100, 200, 250, 500]);
+          return numberTask(
+            "capacity",
+            `${bottles} Flaschen enthalten je ${each} ml. Wie viele ml sind es zusammen?`,
+            bottles * each
+          );
+        }
+
+        const style = randomInt(0, 3);
+        if (style === 0) {
+          const liters = randomInt(1, t === 1 ? 6 : 12);
+          const milliliters = pick([100, 200, 250, 400, 500, 600, 750]);
+          return numberTask(
+            "capacity",
+            `${liters} l ${milliliters} ml = ___ ml`,
+            liters * 1000 + milliliters
+          );
+        }
+        if (style === 1) {
+          const liters = randomInt(2, t === 1 ? 8 : 15);
+          return numberTask("capacity", `${liters * 1000} ml = ___ l`, liters);
+        }
+        if (style === 2) {
+          const targetLiters = randomInt(2, t === 1 ? 5 : 10);
+          const missing = pick([250, 500, 750, 1000, 1250, 1500]);
+          const filled = targetLiters * 1000 - missing;
+          if (filled > 0) {
+            return numberTask(
+              "capacity",
+              `${filled} ml + ___ ml = ${targetLiters} l`,
+              missing
+            );
+          }
+        }
+        const containers = randomInt(3, t === 1 ? 8 : 12);
+        const each = pick([125, 200, 250, 500, 750]);
+        return numberTask(
+          "capacity",
+          `${containers} Gefäße enthalten je ${each} ml. Wie viele ml sind es zusammen?`,
+          containers * each
+        );
+      },
+    },
+    {
       id: "time_units",
       label: "Zeit / Kalender",
       group: "groessen",

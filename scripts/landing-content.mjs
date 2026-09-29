@@ -28,7 +28,7 @@ export const groupDescriptions = {
     zahlen:
       "Zahlenmauern, Runden, Überschlagen, Teilbarkeit und römische Zahlen gehören dazu. Kinder sollen einschätzen können, ob ein Ergebnis plausibel ist — eine wichtige Fähigkeit für alle weiteren Klassen.",
     groessen:
-      "Längen, Gewichte, Zeit und Flächen/Umfang werden genauer. Umrechnen zwischen Einheiten — zum Beispiel Zentimeter und Meter — ist oft neu für Eltern, weil es heute strukturierter geübt wird.",
+      "Längen, Gewichte, Liter und Milliliter, Zeit sowie Flächen/Umfang werden genauer. Umrechnen zwischen Einheiten ist oft neu für Eltern, weil es heute strukturierter geübt wird.",
     geometrie:
       "Muster, Zahlenstrahl und Spiegeln vertiefen das räumliche Denken. Kinder beschreiben Lagen und erkennen Regelmäßigkeiten — das wirkt spielerisch, ist aber echte Mathematik.",
   },
@@ -38,7 +38,7 @@ export const groupDescriptions = {
     zahlen:
       "Zahlenräume wachsen weiter, Tabellen und Diagramme werden gelesen und ausgewertet. Kinder lernen, Informationen aus Übersichten zu entnehmen — eine Fähigkeit, die auch in anderen Fächern wichtig wird.",
     groessen:
-      "Größen umrechnen wird anspruchsvoller: Maßstab, Volumen von Würfeln und Quadern, Flächen und Umfang. Viele Aufgaben sind an realen Situationen orientiert, etwa Pläne oder Packungen.",
+      "Größen umrechnen wird anspruchsvoller: Liter und Milliliter, Maßstab, Volumen von Würfeln und Quadern, Flächen und Umfang. Viele Aufgaben sind an realen Situationen orientiert.",
     geometrie:
       "Formen, Lagebeziehungen, Spiegelachsen und Koordinaten kommen hinzu. Kinder arbeiten genauer mit Zeichnungen und lernen, geometrische Begriffe präzise zu verwenden.",
   },
@@ -137,6 +137,8 @@ export const topicDescriptions = {
     "Längen umrechnen zwischen mm, cm, m und km. Einheitenwechsel ist ein häufiger Stolperstein — strukturiertes Üben hilft.",
   weight:
     "Gewichte vergleichen und umrechnen — Gramm und Kilogramm. Ähnlich wie bei Längen, mit Alltagsbezug.",
+  capacity:
+    "Hohlmaße mit Liter und Milliliter umrechnen und ergänzen — von ½ l = 500 ml bis zu Flaschen- und Rezeptaufgaben. Die Zahlen passen zur Klassenstufe.",
   time_units:
     "Zeitangaben umrechnen: Sekunden, Minuten, Stunden, Tage. Oft in Sachaufgaben mit Fahrplänen oder Backzeiten.",
   perimeter_area:

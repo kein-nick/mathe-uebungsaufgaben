@@ -98,6 +98,14 @@ const NEWS_ITEMS = [
   {
     dateIso: "2026-09-29",
     date: "29. September 2026",
+    title: "Liter und Milliliter für Klasse 3 und 4",
+    text: "Neue Übungen zu Hohlmaßen: Liter und Milliliter umrechnen, fehlende Mengen ergänzen und einfache Flaschenaufgaben lösen — online oder als PDF.",
+    href: "/klasse-3/uebungen?themen=capacity",
+    linkLabel: "Liter und Milliliter direkt üben",
+  },
+  {
+    dateIso: "2026-09-29",
+    date: "29. September 2026",
     title: "Zahlenmauern für Klasse 1 bis 3",
     text: "Zahlenmauern gibt es jetzt mit zwei Grundsteinen in Klasse 1 und mit drei Grundsteinen in Klasse 2 und 3. Mal fehlt ein oberer, mal ein unterer Stein.",
     href: "/klasse-1/uebungen?themen=number_wall",
@@ -798,7 +806,7 @@ function extractInstallPrompt() {
 
 const installPromptHtml = extractInstallPrompt();
 
-const pwaScripts = `    <script defer src="/news.js?v=2"></script>
+const pwaScripts = `    <script defer src="/news.js?v=3"></script>
     <script defer src="/pwa.js"></script>
     <script>
       window.va =
@@ -821,9 +829,9 @@ function extractAppFragments() {
   }
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart).trimEnd();
 
-  const scripts = `    <script src="/topics.js?v=45"></script>
-    <script src="/script.js?v=66"></script>
-    <script defer src="/news.js?v=2"></script>
+  const scripts = `    <script src="/topics.js?v=46"></script>
+    <script src="/script.js?v=67"></script>
+    <script defer src="/news.js?v=3"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>
       window.va =

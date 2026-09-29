@@ -21,6 +21,7 @@ Direkte Übungsseiten: [Klasse 1](https://mathe-testen.de/klasse-1/uebungen), [K
 
 - [Plus und Minus](https://mathe-testen.de/plus-minus)
 - [Zahlenmauern Klasse 1 bis 3](https://mathe-testen.de/klasse-1/uebungen?themen=number_wall): online lösen oder als PDF-Arbeitsblatt drucken
+- [Liter und Milliliter Klasse 3 und 4](https://mathe-testen.de/klasse-3/uebungen?themen=capacity): Hohlmaße umrechnen und ergänzen, online oder als PDF
 - [Einmaleins](https://mathe-testen.de/einmaleins): eine Reihe von 1×1 bis 10×10, oder gemischte Malaufgaben nach Klasse. Eine Reihe übt nur diese Malreihe, zum Beispiel 7×1 bis 7×10.
   - [1er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=1)
   - [2er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=2)

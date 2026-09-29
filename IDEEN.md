@@ -29,6 +29,7 @@ Stand: September 2026
 - Teilbare Links mit vorausgewählten Themen
 - Öffentliche Neuigkeiten-Seite mit Hinweis-Punkt im Kopfbereich
 - Zahlenmauern für Klasse 1 bis 3, online und im PDF
+- Hohlmaße mit Liter und Milliliter für Klasse 3 und 4
 
 ---
 
@@ -81,35 +82,30 @@ Die App deckt bereits viele Themen ab. Lehrpläne unterscheiden sich jedoch nach
 
 #### Grundschule (Klasse 1 bis 4)
 
-1. **Hohlmaße: Liter & Milliliter (Klasse 3–4)**
-   - *Beschreibung:* Liter und Milliliter grundschulgerecht umrechnen ($1\,\text{l} = 1000\,\text{ml}$, $\frac{1}{2}\,\text{l} = 500\,\text{ml}$, $250\,\text{ml} + \underline{\quad} = 1\,\text{l}$), Flaschen-/Rezept-Aufgaben.
-   - *Warum lohnend:* Schließt die Lücke bei den Größen in Klasse 3/4. Liter und Milliliter kommen bisher nur im allgemeinen Thema „Größen umrechnen“ ab Klasse 5 vor.
-   - *Aufwand:* gering.
-
-2. **Geometrische Körper erkennen (Klasse 2–4)**
+1. **Geometrische Körper erkennen (Klasse 2–4)**
    - *Beschreibung:* Ergänzung der vorhandenen 2D-Formen um Würfel, Quader, Kugel, Zylinder, Pyramide und Kegel. Das bestehende Thema „Würfel / Quader“ behandelt dagegen Volumenaufgaben ab Klasse 4.
    - *Aufgaben-Typen:* „Welcher Körper ist das?“ (Multiple Choice mit kleiner 3D-SVG/Isometrie) oder Eigenschaften wie „Wie viele Ecken/Kanten/Flächen hat ein Würfel?“.
    - *Warum lohnend:* Fester Bestandteil im Lehrplan Geometrie Kl. 2–4.
    - *Aufwand:* gering bis mittel.
 
-3. **Zehner- und Hunderterfreunde als Erweiterung von „Zerlegen“ (Klasse 1–2)**
+2. **Zehner- und Hunderterfreunde als Erweiterung von „Zerlegen“ (Klasse 1–2)**
    - *Beschreibung:* Das vorhandene Thema „Zerlegen“ gezielt um Zahlenpaare ergänzen, die zusammen 10 ergeben ($3 + \underline{7} = 10$), sowie in Klasse 2 um Hunderterfreunde ($30 + \underline{70} = 100$).
    - *Warum lohnend:* Fundamentales Automatisierungs-Training für den Zehnerübergang.
    - *Aufwand:* sehr gering; kein eigenes Thema nötig.
 
 #### Orientierungsstufe (Klasse 5 und 6)
 
-4. **Quadratzahlen & einfache Potenzen (Klasse 5–6)**
+3. **Quadratzahlen & einfache Potenzen (Klasse 5–6)**
    - *Beschreibung:* Das kleine 1×1 der Quadratzahlen von $1^2$ bis $20^2$ ($12 \times 12 = 144$) und einfache Zehnerpotenzen ($10^3 = 1000$).
    - *Warum lohnend:* Schnelles Kopfrechnen-Training, wichtige Vorbereitung für Flächenberechnung, Pythagoras und Wurzeln.
    - *Aufwand:* sehr gering.
 
-5. **ggT und kgV (Klasse 5–6)**
+4. **ggT und kgV (Klasse 5–6)**
    - *Beschreibung:* Größter gemeinsamer Teiler und kleinstes gemeinsames Vielfaches (z. B. ggT von 24 und 36 = 12).
    - *Warum lohnend:* Rechnerischer Kern für das Kürzen und Gleichnamigmachen von Brüchen.
    - *Aufwand:* gering.
 
-6. **Zufall & Wahrscheinlichkeit (Klasse 4–6)**
+5. **Zufall & Wahrscheinlichkeit (Klasse 4–6)**
    - *Beschreibung:* Grundbegriffe wie *sicher, möglich, unmöglich*, Wahrscheinlichkeiten bei Würfeln (z. B. „Chance auf eine gerade Zahl: 3 von 6“) oder Ziehen von Kugeln aus einer Urne.
    - *Warum lohnend:* Steht in fast allen neuen Bildungsplänen unter „Daten und Zufall“.
    - *Aufwand:* mittel bis hoch (eindeutige Sprache, Darstellungen und passende Antwortformate).
@@ -139,13 +135,12 @@ Diese Ideen passen eher nicht zum Konzept der Seite:
 
 ## Empfohlene Reihenfolge
 
-1. Hohlmaße: Liter & Milliliter
-2. Geometrische Körper erkennen
-3. Quadratzahlen & einfache Potenzen
-4. Zufall & Wahrscheinlichkeit
-5. ggT und kgV
-6. Zehner- und Hunderterfreunde in „Zerlegen“ ergänzen
-7. Vollständige Links mit Einstellungen
-8. Letzte Einstellungen merken
+1. Geometrische Körper erkennen
+2. Quadratzahlen & einfache Potenzen
+3. Zufall & Wahrscheinlichkeit
+4. ggT und kgV
+5. Zehner- und Hunderterfreunde in „Zerlegen“ ergänzen
+6. Vollständige Links mit Einstellungen
+7. Letzte Einstellungen merken
 
 Vor Werbung oder zusätzlichem Tracking den Einwilligungsbedarf erneut prüfen.
