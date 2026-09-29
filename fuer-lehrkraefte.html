@@ -72,8 +72,8 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/style.css?v=72" as="style" />
-    <link rel="stylesheet" href="/style.css?v=72" />
+    <link rel="preload" href="/style.css?v=73" as="style" />
+    <link rel="stylesheet" href="/style.css?v=73" />
   </head>
   <body class="ads-off legal-page-body">
     <header class="site-header">
@@ -81,6 +81,7 @@
       <a class="site-header-brand" href="/">Mathe üben</a>
       <nav class="site-header-nav" aria-label="Weitere Seiten">
         <a href="/faq">FAQ</a>
+        <a class="site-header-news" href="/neuigkeiten">Neu<span class="site-header-news-dot" aria-hidden="true"></span></a>
         <a href="/fuer-eltern">Eltern</a>
         <a href="/fuer-lehrkraefte" aria-current="page">Lehrkräfte</a>
         <a class="site-header-cta" href="/kontakt">Kontakt</a>
@@ -134,6 +135,15 @@
             <p>Passt eine Aufgabe nicht zum Unterricht, fehlt ein Thema oder soll das PDF anders aussehen? Kurz schreiben — unter Kontakt reicht eine Mail. Es gibt kein Formular und kein Lehrer-Konto.</p>
             <p><a class="text-link" href="/kontakt">Zur Kontaktseite</a></p>
           </section>
+          <section class="news-teaser" aria-labelledby="news-teaser-heading">
+            <h2 id="news-teaser-heading">Neu für den Unterricht</h2>
+            <p>Neue Aufgabenarten und Verbesserungen, die sich direkt in der Klasse oder zur Vorbereitung einsetzen lassen.</p>
+            <ul>
+              <li><a class="text-link" href="/einmaleins">Einmaleins-Reihen einzeln üben</a></li>
+              <li><a class="text-link" href="/klasse-3/uebungen?themen=word_times">Geteilt-Sachaufgaben ab Klasse 3</a></li>
+            </ul>
+            <p><a class="text-link" href="/neuigkeiten">Alle Neuigkeiten ansehen</a></p>
+          </section>
           <p class="page-actions">
             <a class="btn-primary" href="/">Klasse wählen und üben</a>
             <a class="btn-secondary" href="/faq">Zu den häufigen Fragen</a>
@@ -145,6 +155,8 @@
             <a href="/">Startseite</a>
             <span aria-hidden="true">·</span>
             <a href="/faq">FAQ</a>
+            <span aria-hidden="true">·</span>
+            <a href="/neuigkeiten">Neuigkeiten</a>
             <span aria-hidden="true">·</span>
             <a href="/fuer-eltern">Für Eltern</a>
             <span aria-hidden="true">·</span>
@@ -188,7 +200,8 @@
       </div>
     </dialog>
     <script src="/email-protect.js"></script>
-        <script defer src="/pwa.js"></script>
+        <script defer src="/news.js?v=1"></script>
+    <script defer src="/pwa.js"></script>
     <script>
       window.va =
         window.va ||

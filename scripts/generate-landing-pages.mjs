@@ -94,6 +94,24 @@ function escapeHtml(text) {
 const SITE_URL = "https://mathe-testen.de";
 const SITE_NAME = "Mathematik Übungsaufgaben";
 const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
+const NEWS_ITEMS = [
+  {
+    dateIso: "2026-09-29",
+    date: "29. September 2026",
+    title: "Einmaleins-Reihen einzeln üben",
+    text: "Von der 1er- bis zur 10er-Reihe lässt sich jetzt jede Reihe mit einem Klick öffnen. Die zehn Aufgaben reichen jeweils von × 1 bis × 10 und können auch als PDF gedruckt werden.",
+    href: "/einmaleins",
+    linkLabel: "Einmaleins-Reihe auswählen",
+  },
+  {
+    dateIso: "2026-09-27",
+    date: "27. September 2026",
+    title: "Geteilt-Sachaufgaben ab Klasse 3",
+    text: "Sachaufgaben zu Mal und Geteilt haben jetzt eigene 10er-Blöcke. Die Geteiltaufgaben gehen ohne Rest auf und richten sich in Klasse 3 nach dem kleinen Einmaleins.",
+    href: "/klasse-3/uebungen?themen=word_times",
+    linkLabel: "Mal- und Geteilt-Sachaufgaben öffnen",
+  },
+];
 
 function classOgImage(grade) {
   return `${SITE_URL}/og-image-klasse-${grade}.jpg`;
@@ -146,6 +164,7 @@ ${list}
 function renderSiteHeader(current = "") {
   const brandCurrent = current === "home" ? ' aria-current="page"' : "";
   const faqCurrent = current === "faq" ? ' aria-current="page"' : "";
+  const newsCurrent = current === "neu" ? ' aria-current="page"' : "";
   const parentsCurrent = current === "eltern" ? ' aria-current="page"' : "";
   const teachersCurrent = current === "lehrkraefte" ? ' aria-current="page"' : "";
   const contactCurrent = current === "kontakt" ? ' aria-current="page"' : "";
@@ -154,6 +173,7 @@ function renderSiteHeader(current = "") {
       <a class="site-header-brand" href="/"${brandCurrent}>Mathe üben</a>
       <nav class="site-header-nav" aria-label="Weitere Seiten">
         <a href="/faq"${faqCurrent}>FAQ</a>
+        <a class="site-header-news" href="/neuigkeiten"${newsCurrent}>Neu<span class="site-header-news-dot" aria-hidden="true"></span></a>
         <a href="/fuer-eltern"${parentsCurrent}>Eltern</a>
         <a href="/fuer-lehrkraefte"${teachersCurrent}>Lehrkräfte</a>
         <a class="site-header-cta" href="/kontakt"${contactCurrent}>Kontakt</a>
@@ -167,6 +187,7 @@ function renderSiteFooter(current = "", extraItems = []) {
     { href: "/", id: "home", label: "Startseite" },
     ...extraItems,
     { href: "/faq", id: "faq", label: "FAQ" },
+    { href: "/neuigkeiten", id: "neu", label: "Neuigkeiten" },
     { href: "/fuer-eltern", id: "eltern", label: "Für Eltern" },
     { href: "/fuer-lehrkraefte", id: "lehrkraefte", label: "Für Lehrkräfte" },
     { href: "/kontakt", id: "kontakt", label: "Kontakt" },
@@ -336,6 +357,46 @@ function renderContactJsonLd() {
   };
 }
 
+function renderNewsJsonLd() {
+  const url = `${SITE_URL}/neuigkeiten`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${url}/#webpage`,
+        url,
+        name: "Neuigkeiten – mathe-testen.de",
+        description: "Neue Übungen und wichtige Verbesserungen auf mathe-testen.de.",
+        inLanguage: "de-DE",
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${url}/#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Startseite", item: `${SITE_URL}/` },
+          { "@type": "ListItem", position: 2, name: "Neuigkeiten", item: url },
+        ],
+      },
+    ],
+  };
+}
+
+function renderNewsTeaser(heading, intro) {
+  return `<section class="news-teaser" aria-labelledby="news-teaser-heading">
+            <h2 id="news-teaser-heading">${escapeHtml(heading)}</h2>
+            <p>${escapeHtml(intro)}</p>
+            <ul>
+              ${NEWS_ITEMS.map(
+                (item) =>
+                  `<li><a class="text-link" href="${item.href}">${escapeHtml(item.title)}</a></li>`
+              ).join("\n              ")}
+            </ul>
+            <p><a class="text-link" href="/neuigkeiten">Alle Neuigkeiten ansehen</a></p>
+          </section>`;
+}
+
 function renderInfoPage({ current, title, description, url, h1, lead, jsonLd, mainHtml, crumb }) {
   const meta = { title, description, url, imageAlt: title };
   return `<!DOCTYPE html>
@@ -494,7 +555,7 @@ function renderPracticeJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=72" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=73" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -730,7 +791,8 @@ function extractInstallPrompt() {
 
 const installPromptHtml = extractInstallPrompt();
 
-const pwaScripts = `    <script defer src="/pwa.js"></script>
+const pwaScripts = `    <script defer src="/news.js?v=1"></script>
+    <script defer src="/pwa.js"></script>
     <script>
       window.va =
         window.va ||
@@ -754,6 +816,7 @@ function extractAppFragments() {
 
   const scripts = `    <script src="/topics.js?v=44"></script>
     <script src="/script.js?v=65"></script>
+    <script defer src="/news.js?v=1"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>
       window.va =
@@ -1153,6 +1216,7 @@ function updateSitemap() {
 
   const extraPages = [
     { loc: "https://mathe-testen.de/faq", priority: "0.7" },
+    { loc: "https://mathe-testen.de/neuigkeiten", priority: "0.6" },
     { loc: "https://mathe-testen.de/fuer-eltern", priority: "0.7" },
     { loc: "https://mathe-testen.de/fuer-lehrkraefte", priority: "0.7" },
     { loc: "https://mathe-testen.de/kontakt", priority: "0.5" },
@@ -1215,6 +1279,35 @@ fs.writeFileSync(
 );
 console.log("wrote faq.html");
 
+const newsMain = `<main class="legal-page landing-page news-page">
+          <div class="news-list">
+            ${NEWS_ITEMS.map(
+              (item) => `<article class="news-item">
+              <time datetime="${item.dateIso}">${escapeHtml(item.date)}</time>
+              <h2>${escapeHtml(item.title)}</h2>
+              <p>${escapeHtml(item.text)}</p>
+              <p><a class="text-link" href="${item.href}">${escapeHtml(item.linkLabel)}</a></p>
+            </article>`
+            ).join("\n")}
+          </div>
+        </main>`;
+
+fs.writeFileSync(
+  path.join(root, "neuigkeiten.html"),
+  renderInfoPage({
+    current: "neu",
+    title: "Neuigkeiten – mathe-testen.de",
+    description: "Neue Übungen und wichtige Verbesserungen auf mathe-testen.de.",
+    url: `${SITE_URL}/neuigkeiten`,
+    h1: "Neuigkeiten",
+    lead: "Neue Übungen und wichtige Verbesserungen für Kinder, Eltern und Lehrkräfte.",
+    jsonLd: renderNewsJsonLd(),
+    mainHtml: newsMain,
+  }),
+  "utf8"
+);
+console.log("wrote neuigkeiten.html");
+
 const teachersMain = `<main class="legal-page landing-page">
           ${teachersPage.sections
             .map(
@@ -1224,6 +1317,10 @@ const teachersMain = `<main class="legal-page landing-page">
           </section>`
             )
             .join("\n")}
+          ${renderNewsTeaser(
+            "Neu für den Unterricht",
+            "Neue Aufgabenarten und Verbesserungen, die sich direkt in der Klasse oder zur Vorbereitung einsetzen lassen."
+          )}
           <p class="page-actions">
             <a class="btn-primary" href="/">Klasse wählen und üben</a>
             <a class="btn-secondary" href="/faq">Zu den häufigen Fragen</a>
@@ -1251,6 +1348,10 @@ const parentsMain = `<main class="legal-page landing-page">
           <section class="hub-faq">
             ${renderFaqItems(parentsPage.faqs)}
           </section>
+          ${renderNewsTeaser(
+            "Neu beim Üben",
+            "Hier findest du neue Übungsmöglichkeiten für zu Hause, jeweils direkt mit der passenden Seite verlinkt."
+          )}
           <p class="page-actions">
             <a class="btn-primary" href="/">Klasse wählen und üben</a>
             <a class="btn-secondary" href="/faq">Weitere Fragen</a>
