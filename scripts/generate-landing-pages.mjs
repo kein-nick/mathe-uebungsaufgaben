@@ -936,26 +936,25 @@ function renderHubJsonLd(hub) {
         "@id": `${url}/#howto`,
         name: `${hub.shortName} auf mathe-testen.de üben`,
         description: hub.howItWorks,
-        step: [
+        step: (hub.howToSteps || [
           {
-            "@type": "HowToStep",
-            position: 1,
             name: "Klasse wählen",
             text: "Wähle unten die passende Klassenstufe.",
           },
           {
-            "@type": "HowToStep",
-            position: 2,
             name: "Übungsblatt erstellen",
             text: "Themen sind vorausgewählt. Anzahl festlegen und Blatt erzeugen.",
           },
           {
-            "@type": "HowToStep",
-            position: 3,
             name: "Online üben oder PDF drucken",
             text: "Aufgaben digital lösen und prüfen oder als PDF ausdrucken — kostenlos und ohne Anmeldung.",
           },
-        ],
+        ]).map((step, index) => ({
+          "@type": "HowToStep",
+          position: index + 1,
+          name: step.name,
+          text: step.text,
+        })),
       },
     ],
   };

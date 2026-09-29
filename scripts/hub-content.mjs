@@ -21,6 +21,20 @@ export const topicHubs = [
       "In der Schule wird das Einmaleins über Monate aufgebaut. Zuerst kommen oft die „leichten“ Reihen (1, 2, 5, 10), danach die schwierigeren. Regelmäßiges, kurzes Üben — lieber zehn Minuten täglich als eine lange Einheit — bringt meist mehr als Pauken am Abend vor der Probe.",
     howItWorks:
       "Oben wählst du eine Reihe, zum Beispiel die 7er-Reihe, und übst nur 7×1 bis 7×10. Darunter gibt es den anderen Weg: Klasse wählen, dann gemischte Malaufgaben, online oder als PDF. Geteiltaufgaben und Division mit Rest lassen sich auf der Übungsseite dazunehmen.",
+    howToSteps: [
+      {
+        name: "Eine Reihe wählen",
+        text: "Ein Klick auf eine Reihe, zum Beispiel die 7er-Reihe, öffnet nur 7×1 bis 7×10.",
+      },
+      {
+        name: "Oder gemischt nach Klasse",
+        text: "Klasse 2 bis 6 wählen, dann gemischte Malaufgaben online üben oder als PDF drucken.",
+      },
+      {
+        name: "Online üben oder PDF drucken",
+        text: "Aufgaben digital lösen und prüfen oder als PDF ausdrucken — kostenlos und ohne Anmeldung.",
+      },
+    ],
     forWhom:
       "Das Angebot richtet sich an Kinder der Klassen 2 bis 6, an Eltern beim Üben zu Hause und an Lehrkräfte, die schnell ein Arbeitsblatt brauchen. Alles ist kostenlos und funktioniert ohne Registrierung.",
     faqs: [

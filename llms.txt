@@ -20,7 +20,17 @@ Direkte Übungsseiten: [Klasse 1](https://mathe-testen.de/klasse-1/uebungen), [K
 ## Themen
 
 - [Plus und Minus](https://mathe-testen.de/plus-minus)
-- [Einmaleins](https://mathe-testen.de/einmaleins)
+- [Einmaleins](https://mathe-testen.de/einmaleins): eine Reihe von 1×1 bis 10×10, oder gemischte Malaufgaben nach Klasse. Eine Reihe übt nur diese Malreihe, zum Beispiel 7×1 bis 7×10.
+  - [1er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=1)
+  - [2er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=2)
+  - [3er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=3)
+  - [4er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=4)
+  - [5er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=5)
+  - [6er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=6)
+  - [7er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=7)
+  - [8er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=8)
+  - [9er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=9)
+  - [10er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=10)
 - [Schriftlich rechnen](https://mathe-testen.de/schriftlich-rechnen)
 - [Sachaufgaben](https://mathe-testen.de/sachaufgaben)
 - [Brüche](https://mathe-testen.de/brueche)
