@@ -98,6 +98,14 @@ const NEWS_ITEMS = [
   {
     dateIso: "2026-09-29",
     date: "29. September 2026",
+    title: "Zahlenmauern für Klasse 1 bis 3",
+    text: "Zahlenmauern gibt es jetzt mit zwei Grundsteinen in Klasse 1 und mit drei Grundsteinen in Klasse 2 und 3. Mal fehlt ein oberer, mal ein unterer Stein.",
+    href: "/klasse-1/uebungen?themen=number_wall",
+    linkLabel: "Zahlenmauern direkt öffnen",
+  },
+  {
+    dateIso: "2026-09-29",
+    date: "29. September 2026",
     title: "Einmaleins-Reihen einzeln üben",
     text: "Von der 1er- bis zur 10er-Reihe lässt sich jetzt jede Reihe mit einem Klick öffnen. Die zehn Aufgaben reichen jeweils von × 1 bis × 10 und können auch als PDF gedruckt werden.",
     href: "/einmaleins",
@@ -388,7 +396,7 @@ function renderNewsTeaser(heading, intro) {
             <h2 id="news-teaser-heading">${escapeHtml(heading)}</h2>
             <p>${escapeHtml(intro)}</p>
             <ul>
-              ${NEWS_ITEMS.map(
+              ${NEWS_ITEMS.slice(0, 2).map(
                 (item) =>
                   `<li><a class="text-link" href="${item.href}">${escapeHtml(item.title)}</a></li>`
               ).join("\n              ")}
@@ -555,7 +563,7 @@ function renderPracticeJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=73" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=74" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -762,8 +770,7 @@ function renderTopicOverview(grade) {
           return `<li class="landing-topic-detail">
               <h4>${escapeHtml(topic.label)}</h4>
               <p>${escapeHtml(description)}</p>
-              ${note ? `<p class="hint landing-topic-note">${escapeHtml(note)}</p>` : ""}
-            </li>`;
+${note ? `              <p class="hint landing-topic-note">${escapeHtml(note)}</p>\n` : ""}            </li>`;
         })
         .join("\n");
 
@@ -791,7 +798,7 @@ function extractInstallPrompt() {
 
 const installPromptHtml = extractInstallPrompt();
 
-const pwaScripts = `    <script defer src="/news.js?v=1"></script>
+const pwaScripts = `    <script defer src="/news.js?v=2"></script>
     <script defer src="/pwa.js"></script>
     <script>
       window.va =
@@ -805,18 +812,18 @@ const pwaScripts = `    <script defer src="/news.js?v=1"></script>
 function extractAppFragments() {
   const setupStart = practiceTemplate.indexOf('<section class="setup"');
   const footerStart = practiceTemplate.indexOf("<footer class=\"site-footer\">");
-  const appMain = practiceTemplate.slice(setupStart, footerStart);
+  const appMain = practiceTemplate.slice(setupStart, footerStart).trimEnd();
 
   const dialogStart = practiceTemplate.indexOf('<dialog class="success-dialog"');
   const scriptStart = practiceTemplate.search(/<script src="\/topics\.js[^"]*">/);
   if (scriptStart < 0) {
     throw new Error("topics.js script tag not found in practice template");
   }
-  const appDialogs = practiceTemplate.slice(dialogStart, scriptStart);
+  const appDialogs = practiceTemplate.slice(dialogStart, scriptStart).trimEnd();
 
-  const scripts = `    <script src="/topics.js?v=44"></script>
-    <script src="/script.js?v=65"></script>
-    <script defer src="/news.js?v=1"></script>
+  const scripts = `    <script src="/topics.js?v=45"></script>
+    <script src="/script.js?v=66"></script>
+    <script defer src="/news.js?v=2"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>
       window.va =
@@ -935,7 +942,6 @@ ${renderOpenGraph({
         </header>
 
         ${appMain}
-
         ${renderSiteFooter("", [{ href: `/klasse-${grade}`, id: `klasse-${grade}`, label: `Klasse ${grade}` }])}
       </div>
     </div>

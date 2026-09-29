@@ -6,7 +6,7 @@ export const groupDescriptions = {
     rechnen:
       "Im Bereich Rechnen geht es in Klasse 1 vor allem ums sichere Arbeiten im Zahlenraum bis 20. Kinder lösen einfache Plus- und Minusaufgaben, oft noch ohne Zehnerübergang, und lernen erste kurze Sachaufgaben mit Alltagssituationen.",
     zahlen:
-      "Hier geht es um das Verständnis von Zahlen selbst: vergleichen, zerlegen, Vorgänger und Nachfolger finden. Das legt die Basis für späteres Rechnen — nicht nur Ergebnisse auswendig lernen, sondern Zahlen einordnen können.",
+      "Hier geht es um das Verständnis von Zahlen selbst: vergleichen, zerlegen, Zahlenmauern lösen sowie Vorgänger und Nachfolger finden. Das legt die Basis für späteres Rechnen — nicht nur Ergebnisse auswendig lernen, sondern Zahlen einordnen können.",
     groessen:
       "Größen verbinden Mathe mit dem Alltag: Geldstücke erkennen, einfache Uhrzeiten lesen oder Längen vergleichen. In Klasse 1 sind die Aufgaben noch sehr anschaulich und nah an konkreten Situationen.",
     geometrie:
@@ -16,7 +16,7 @@ export const groupDescriptions = {
     rechnen:
       "Plus und Minus werden bis 100 sicherer, dazu kommen erste Mal- und Geteiltaufgaben im kleinen Einmaleins. Sachaufgaben werden etwas länger. Viele Schulen üben schrittweise: erst einfache Zahlen, dann größere.",
     zahlen:
-      "Kinder vergleichen Zahlen, runden zum ersten Mal, arbeiten mit geraden und ungeraden Zahlen und üben Verdoppeln und Halbieren. Tabellen und einfache Übersichten helfen, Zahlen zu ordnen.",
+      "Kinder vergleichen Zahlen, lösen größere Zahlenmauern, arbeiten mit geraden und ungeraden Zahlen und üben Verdoppeln und Halbieren. Tabellen und einfache Übersichten helfen, Zahlen zu ordnen.",
     groessen:
       "Geld und Uhr sind zentrale Themen: Wechselgeld, Uhrzeiten auf der vollen Stunde oder halben Stunde, einfache Längen und Gewichte. Der Bezug zum echten Leben macht das Üben sinnvoll.",
     geometrie:
@@ -26,7 +26,7 @@ export const groupDescriptions = {
     rechnen:
       "Jetzt werden die Zahlen deutlich größer. Kinder rechnen schriftlich und im Kopf, üben Division mit Rest, Punkt-vor-Strich-Aufgaben und lösen Sachaufgaben mit mehreren Schritten. Das Tempo und der Zahlenraum wachsen spürbar.",
     zahlen:
-      "Runden, Überschlagen, Teilbarkeit und römische Zahlen gehören dazu. Kinder sollen einschätzen können, ob ein Ergebnis plausibel ist — eine wichtige Fähigkeit für alle weiteren Klassen.",
+      "Zahlenmauern, Runden, Überschlagen, Teilbarkeit und römische Zahlen gehören dazu. Kinder sollen einschätzen können, ob ein Ergebnis plausibel ist — eine wichtige Fähigkeit für alle weiteren Klassen.",
     groessen:
       "Längen, Gewichte, Zeit und Flächen/Umfang werden genauer. Umrechnen zwischen Einheiten — zum Beispiel Zentimeter und Meter — ist oft neu für Eltern, weil es heute strukturierter geübt wird.",
     geometrie:
@@ -105,6 +105,8 @@ export const topicDescriptions = {
     "Sachaufgaben zu Mal und Geteilt: einkaufen und gleichmäßig verteilen. Geteilt geht immer auf, ohne Rest. Ab Klasse 3. In Klasse 3 folgen die Zahlen dem Schalter fürs kleine Einmaleins.",
   decompose:
     "Zahlen zerlegen — zum Beispiel 14 = 10 + 4. Basis für das Verständnis des Zehnersystems und späteres schriftliches Rechnen.",
+  number_wall:
+    "Zahlenmauern mit zwei oder drei Grundsteinen: Jeder Stein ist die Summe der beiden Steine darunter. Mal fehlt ein oberer, mal ein unterer Stein — so werden Plus und Minus gemeinsam geübt.",
   compare:
     "Zahlen vergleichen mit &lt;, &gt; oder =. Kinder lernen, Größen einzuordnen — eine Grundfähigkeit für alle Rechenarten.",
   neighbor:

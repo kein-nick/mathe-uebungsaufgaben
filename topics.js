@@ -486,6 +486,30 @@ function buildTopics(u) {
     return { a, b, c };
   }
 
+  function numberWallVisual(values, missing) {
+    const stone = (index, position) => {
+      const isMissing = index === missing;
+      return `<span class="number-wall-stone ${position}${isMissing ? " is-missing" : ""}">${
+        isMissing ? "{{ANSWER}}" : fmt(values[index])
+      }</span>`;
+    };
+    if (values.length === 3) {
+      return `<div class="number-wall number-wall-small">
+        ${stone(2, "wall-top")}
+        ${stone(0, "wall-bottom-left")}
+        ${stone(1, "wall-bottom-right")}
+      </div>`;
+    }
+    return `<div class="number-wall number-wall-large">
+      ${stone(5, "wall-top")}
+      ${stone(3, "wall-middle-left")}
+      ${stone(4, "wall-middle-right")}
+      ${stone(0, "wall-bottom-left")}
+      ${stone(1, "wall-bottom-center")}
+      ${stone(2, "wall-bottom-right")}
+    </div>`;
+  }
+
   const topics = [
     {
       id: "addition",
@@ -1027,6 +1051,61 @@ function buildTopics(u) {
         const total = niceNumber(max, Math.max(g === 1 ? 4 : 8, addMinOf(g, t)));
         const part = randomInt(1, total - 1);
         return numberTask("decompose", `${total} = ${part} + ___`, total - part);
+      },
+    },
+    {
+      id: "number_wall",
+      label: "Zahlenmauern",
+      group: "zahlen",
+      fromGrade: 1,
+      fromTerm: 1,
+      untilGrade: 3,
+      example: (g, t) =>
+        g === 1
+          ? `z. B. ${Math.min(addMax(g, t), t === 1 ? 8 : 15)} oben, ein Stein fehlt`
+          : "z. B. drei Grundsteine, ein Stein fehlt",
+      generate: (g, t) => {
+        if (g === 1) {
+          const max = addMax(g, t);
+          const top = randomInt(t === 1 ? 4 : 8, max);
+          const left = randomInt(1, top - 1);
+          const values = [left, top - left, top];
+          const missing = randomInt(0, 2);
+          return numberTask("number_wall", "Welche Zahl fehlt in der Zahlenmauer?", values[missing], {
+            kind: "number_wall",
+            visualHtml: numberWallVisual(values, missing),
+            key: `${values.join("-")}:${missing}`,
+          });
+        }
+
+        const max = addMax(g, t);
+        const min = g === 3 ? Math.max(5, Math.floor(max / 50)) : 1;
+        const componentMax = Math.max(min + 1, Math.floor(max / 4));
+        let values;
+        for (let attempt = 0; attempt < 30; attempt += 1) {
+          const a = randomInt(min, componentMax);
+          const b = randomInt(min, componentMax);
+          const c = randomInt(min, componentMax);
+          const left = a + b;
+          const right = b + c;
+          const top = left + right;
+          if (top <= max) {
+            values = [a, b, c, left, right, top];
+            break;
+          }
+        }
+        if (!values) {
+          const a = min;
+          const b = min + 1;
+          const c = min + 2;
+          values = [a, b, c, a + b, b + c, a + 2 * b + c];
+        }
+        const missing = Math.random() < 0.5 ? pick([0, 1, 2]) : pick([3, 4, 5]);
+        return numberTask("number_wall", "Welche Zahl fehlt in der Zahlenmauer?", values[missing], {
+          kind: "number_wall",
+          visualHtml: numberWallVisual(values, missing),
+          key: `${values.join("-")}:${missing}`,
+        });
       },
     },
     {

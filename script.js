@@ -382,6 +382,7 @@ const TOPIC_SECONDS = {
   word_times: 52,
   division_rest: 36,
   decompose: 16,
+  number_wall: 28,
   compare: 12,
   neighbor: 12,
   double_half: 18,
@@ -1987,10 +1988,22 @@ function createTaskItem(task, index, displayNum, forPdf, allowMinusInput) {
     }
   } else {
     const prompt = task.promptHtml || escapeHtml(task.prompt);
+    const visualHtml =
+      task.kind === "number_wall"
+        ? task.visualHtml.replace(
+            "{{ANSWER}}",
+            answerInput(index, task, Boolean(task.allowMinus), displayNum)
+          )
+        : task.visualHtml;
     const control =
       task.kind === "choice"
         ? choiceHtml(task, index, displayNum)
+        : task.kind === "number_wall"
+          ? ""
         : answerControl(index, task, Boolean(task.allowMinus), displayNum);
+    if (task.kind === "number_wall") {
+      row.classList.add("is-number-wall");
+    }
     if (forPdf && task.kind === "choice" && !task.visualHtml) {
       row.classList.add("pdf-choice-row");
       row.innerHTML = `
@@ -2002,7 +2015,7 @@ function createTaskItem(task, index, displayNum, forPdf, allowMinusInput) {
       row.innerHTML = `
           <span class="task-num">${displayNum}.</span>
           <div class="task-main">
-            ${task.visualHtml ? `<div class="task-visual">${task.visualHtml}</div>` : ""}
+            ${visualHtml ? `<div class="task-visual">${visualHtml}</div>` : ""}
             <div class="task-prompt">${prompt}</div>
             ${control}
           </div>
