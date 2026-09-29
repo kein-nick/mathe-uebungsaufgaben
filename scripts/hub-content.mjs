@@ -20,7 +20,7 @@ export const topicHubs = [
     whyPractice:
       "In der Schule wird das Einmaleins über Monate aufgebaut. Zuerst kommen oft die „leichten“ Reihen (1, 2, 5, 10), danach die schwierigeren. Regelmäßiges, kurzes Üben — lieber zehn Minuten täglich als eine lange Einheit — bringt meist mehr als Pauken am Abend vor der Probe.",
     howItWorks:
-      "Auf mathe-testen.de wählst du die Klasse, lässt Multiplikation vorausgewählt und erstellst ein Übungsblatt. Geteiltaufgaben und Division mit Rest sind eigene Themen und lassen sich auf der Übungsseite dazunehmen. Die Aufgaben passen sich dem Jahrgang an. Du kannst online rechnen und prüfen lassen oder das Blatt als PDF drucken — für zu Hause oder den Unterricht.",
+      "Oben wählst du eine Reihe, zum Beispiel die 7er-Reihe, und übst nur 7×1 bis 7×10. Darunter gibt es den anderen Weg: Klasse wählen, dann gemischte Malaufgaben, online oder als PDF. Geteiltaufgaben und Division mit Rest lassen sich auf der Übungsseite dazunehmen.",
     forWhom:
       "Das Angebot richtet sich an Kinder der Klassen 2 bis 6, an Eltern beim Üben zu Hause und an Lehrkräfte, die schnell ein Arbeitsblatt brauchen. Alles ist kostenlos und funktioniert ohne Registrierung.",
     faqs: [

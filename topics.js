@@ -362,6 +362,16 @@ function buildTopics(u) {
     }
 
     if (operation === "multiplication") {
+      const timesRow = extra?.timesRow;
+      if (timesRow >= 1 && timesRow <= 10) {
+        const other = randomInt(1, 10);
+        return numberTask("multiplication", "", timesRow * other, {
+          a: timesRow,
+          b: other,
+          operation,
+          key: `${operation}:${timesRow}:${other}`,
+        });
+      }
       const factors = smallTimes
         ? { a: { min: 1, max: 10 }, b: { min: 1, max: 10 } }
         : level.mul;

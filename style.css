@@ -2260,6 +2260,71 @@ a.grade-btn-nav[aria-current="page"] {
   margin-top: 1rem;
 }
 
+.hub-rows {
+  margin-top: 0.5rem;
+}
+
+.times-row-nav {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-top: 1rem;
+}
+
+.times-row-btn {
+  min-height: 3rem;
+  font-weight: 800;
+}
+
+.times-row-banner {
+  margin: 0 0 1rem;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #f8f4ea;
+}
+
+.times-row-banner p {
+  margin: 0;
+}
+
+.times-row-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0.7rem 0;
+}
+
+.times-row-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.2rem;
+  min-height: 2.2rem;
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.times-row-link.is-current {
+  background: var(--grade);
+  border-color: var(--grade);
+  color: #fff;
+}
+
+.times-row-alt {
+  font-weight: 700;
+}
+
+body.is-times-row .setup,
+body.is-times-row .intro .class-nav-grid {
+  display: none;
+}
+
 .hub-faq-item {
   margin: 0 0 1.25rem;
 }
@@ -2419,6 +2484,10 @@ a.grade-btn-nav[aria-current="page"] {
 @media (max-width: 640px) {
   .class-nav-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .times-row-nav {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

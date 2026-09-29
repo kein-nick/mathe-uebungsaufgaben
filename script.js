@@ -199,6 +199,7 @@ const symbols = {
 let selectedGrade = null;
 let selectedTerm = null;
 let pendingTopicIds = null;
+let timesRow = 0;
 let tasks = [];
 let lastPdfUrl = "";
 let activeTopicIds = [];
@@ -551,6 +552,7 @@ function generateTask(grade, term, topicId, allowNegatives) {
   const task = topic.generate(grade, term, {
     allowNegatives: Boolean(allowNegatives && topic.usesNegatives),
     smallTimes: smallTimesTable() && TIMES_TOPICS.has(topicId),
+    timesRow: topicId === "multiplication" && timesRow >= 1 && timesRow <= 10 ? timesRow : 0,
   });
   return { ...task, type: topicId };
 }
@@ -949,12 +951,47 @@ function parseTopicIds(themen) {
     .filter((item) => topics.some((topic) => topic.id === item));
 }
 
+function applyTimesRowChrome(row) {
+  document.body.classList.add("is-times-row");
+  document.title = `${row}er-Reihe – Einmaleins üben`;
+  const heading = document.querySelector(".intro h1");
+  if (heading) {
+    heading.textContent = `${row}er-Reihe`;
+  }
+  const description = document.querySelector(".intro .description");
+  if (description) {
+    description.textContent = `Nur die ${row}er-Reihe, von ${row} × 1 bis ${row} × 10. Gemischte Malaufgaben nach Klasse stehen auf der Einmaleins-Seite.`;
+  }
+  const crumbs = document.querySelector(".intro .breadcrumbs ol");
+  if (crumbs) {
+    crumbs.innerHTML = `<li><a href="/">Startseite</a></li><li><a href="/einmaleins">Einmaleins</a></li><li><span aria-current="page">${row}er-Reihe</span></li>`;
+  }
+  if (document.getElementById("times-row-banner")) {
+    return;
+  }
+  const banner = document.createElement("div");
+  banner.id = "times-row-banner";
+  banner.className = "times-row-banner";
+  const links = Array.from({ length: 10 }, (_, index) => {
+    const number = index + 1;
+    const current = number === row ? ' aria-current="page"' : "";
+    return `<a class="times-row-link${number === row ? " is-current" : ""}" href="/klasse-2/uebungen?reihe=${number}"${current}>${number}er</a>`;
+  }).join("");
+  banner.innerHTML = `
+    <p><strong>${row}er-Reihe.</strong> Nur ${row} × 1 bis ${row} × 10.</p>
+    <nav class="times-row-switch" aria-label="Andere Reihe">${links}</nav>
+    <p class="times-row-alt"><a href="/einmaleins#gemischt">Lieber gemischt nach Klasse, mit PDF</a></p>
+  `;
+  worksheet.insertBefore(banner, worksheet.firstChild);
+}
+
 function initPageEntry() {
   const lockedGrade = getLockedGrade();
   const params = new URLSearchParams(window.location.search);
   const gradeFromUrl = Number(params.get("klasse"));
   const termParam = Number(params.get("halbjahr"));
   const topicIds = parseTopicIds(params.get("themen"));
+  const reihe = Number(params.get("reihe"));
   const hasTerm = termParam === 1 || termParam === 2;
 
   if (!lockedGrade && gradeFromUrl >= 1 && gradeFromUrl <= 6) {
@@ -970,6 +1007,17 @@ function initPageEntry() {
 
   applyCompactSetupLayout();
   selectGrade(lockedGrade, { scroll: false });
+
+  if (reihe >= 1 && reihe <= 10) {
+    timesRow = reihe;
+    pendingTopicIds = new Set(["multiplication"]);
+    selectTerm(1, { scroll: false });
+    applyTimesRowChrome(reihe);
+    if (buildWorksheet()) {
+      scrollToNext(worksheet, "start");
+    }
+    return;
+  }
 
   if (hasTerm || topicIds.length) {
     if (topicIds.length) {
@@ -1709,6 +1757,9 @@ startBtn.addEventListener("click", () => {
 });
 
 function worksheetTopicLine() {
+  if (timesRow >= 1 && timesRow <= 10) {
+    return `Nur die ${timesRow}er-Reihe`;
+  }
   if (activeBlockMode) {
     const counts = new Map();
     for (const task of tasks) {
@@ -1727,6 +1778,14 @@ function worksheetTopicLine() {
 }
 
 function worksheetMeta() {
+  if (timesRow >= 1 && timesRow <= 10) {
+    return {
+      title: "Einmaleins",
+      line: `${timesRow}er-Reihe · ${tasks.length} Aufgaben`,
+      topics: `Nur ${timesRow} × 1 bis ${timesRow} × 10`,
+      fileName: `einmaleins-${timesRow}er-reihe.pdf`,
+    };
+  }
   return {
     title: "Mathematik Übungsaufgaben",
     line: `Klasse ${selectedGrade} · ${selectedTerm}. Halbjahr · ${tasks.length} Aufgaben`,
@@ -1794,6 +1853,13 @@ function taskLayoutSlices(taskList) {
 function blockHeading(sliceTasks, startNum, endNum) {
   const range = `${startNum}–${endNum}`;
   const labels = [...new Set(sliceTasks.map((task) => getTopic(task.type)?.label).filter(Boolean))];
+  if (
+    timesRow >= 1 &&
+    timesRow <= 10 &&
+    sliceTasks.every((task) => task.type === "multiplication")
+  ) {
+    return `${timesRow}er-Reihe · ${range}`;
+  }
   if (labels.length === 1) {
     return `${labels[0]} · ${range}`;
   }

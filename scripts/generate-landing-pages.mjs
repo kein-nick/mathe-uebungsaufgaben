@@ -494,7 +494,7 @@ function renderPracticeJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=71" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=72" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -752,8 +752,8 @@ function extractAppFragments() {
   }
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart);
 
-  const scripts = `    <script src="/topics.js?v=43"></script>
-    <script src="/script.js?v=63"></script>
+  const scripts = `    <script src="/topics.js?v=44"></script>
+    <script src="/script.js?v=64"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>
       window.va =
@@ -961,6 +961,35 @@ function renderHubJsonLd(hub) {
   };
 }
 
+function renderEinmaleinsChoices() {
+  const rows = Array.from({ length: 10 }, (_, index) => {
+    const number = index + 1;
+    return `<a class="grade-btn grade-btn-nav times-row-btn" href="/klasse-2/uebungen?reihe=${number}">${number}er-Reihe</a>`;
+  }).join("\n");
+  const grades = [2, 3, 4, 5, 6]
+    .map(
+      (grade) =>
+        `<a class="grade-btn grade-btn-nav" href="${practiceUrlWithTopics(grade, ["multiplication"])}">Klasse ${grade}</a>`
+    )
+    .join("\n");
+  return `
+          <section class="hub-rows" id="reihen" aria-labelledby="hub-rows-einmaleins">
+            <h2 id="hub-rows-einmaleins">Eine Reihe üben</h2>
+            <p class="landing-overview-hint">Ein Klick, und das Blatt ist nur diese Reihe, von 1 bis 10. Zum Beispiel die 7er-Reihe: 7×1 bis 7×10.</p>
+            <nav class="times-row-nav" aria-label="Einmaleins-Reihen">
+              ${rows}
+            </nav>
+          </section>
+
+          <section class="hub-grades" id="gemischt" aria-labelledby="hub-grades-einmaleins">
+            <h2 id="hub-grades-einmaleins">Oder gemischt nach Klasse</h2>
+            <p class="landing-overview-hint">Hier sind die Malaufgaben gemischt, nicht nur eine Reihe. Du wählst Klasse und Halbjahr, übst online oder druckst ein PDF.</p>
+            <nav class="class-nav-grid hub-grade-nav" aria-label="Klassen für Einmaleins">
+              ${grades}
+            </nav>
+          </section>`;
+}
+
 function renderHubPage(hub) {
   const url = `${SITE_URL}/${hub.slug}`;
   const meta = {
@@ -1027,6 +1056,7 @@ ${renderOpenGraph(meta)}
             <strong>${escapeHtml(hub.shortName)} üben auf mathe-testen.de:</strong>
             kostenlos, ohne Anmeldung, online oder als PDF — für Eltern, Kinder und Lehrkräfte.
           </p>
+${hub.slug === "einmaleins" ? renderEinmaleinsChoices() : ""}
 
           <section aria-labelledby="hub-what-${hub.slug}">
             <h2 id="hub-what-${hub.slug}">${escapeHtml(hub.whatHeading)}</h2>
@@ -1048,7 +1078,10 @@ ${renderOpenGraph(meta)}
             <p>${escapeHtml(hub.forWhom)}</p>
           </section>
 
-          <section class="hub-grades" id="hub-start" aria-labelledby="hub-grades-${hub.slug}">
+          ${
+            hub.slug === "einmaleins"
+              ? ""
+              : `<section class="hub-grades" id="hub-start" aria-labelledby="hub-grades-${hub.slug}">
             <h2 id="hub-grades-${hub.slug}">${escapeHtml(hub.shortName)} üben — Klasse wählen</h2>
             <p class="landing-overview-hint">
               Die Themen sind auf der Übungsseite vorausgewählt. Du kannst sie dort noch anpassen.
@@ -1056,7 +1089,8 @@ ${renderOpenGraph(meta)}
             <nav class="class-nav-grid hub-grade-nav" aria-label="Klassen für ${escapeHtml(hub.shortName)}">
               ${gradeButtons}
             </nav>
-          </section>
+          </section>`
+          }
 
           <section class="hub-faq" aria-labelledby="hub-faq-${hub.slug}">
             <h2 id="hub-faq-${hub.slug}">Häufige Fragen</h2>
@@ -1074,7 +1108,7 @@ ${renderOpenGraph(meta)}
     </div>
 
     <aside class="class-page-cta" aria-label="Zur Klassenwahl">
-      <a class="btn-primary class-page-cta-btn" href="#hub-start">Klasse wählen und üben</a>
+      <a class="btn-primary class-page-cta-btn" href="${hub.slug === "einmaleins" ? "#reihen" : "#hub-start"}">${hub.slug === "einmaleins" ? "Eine Reihe üben" : "Klasse wählen und üben"}</a>
     </aside>
 
     ${installPromptHtml}
