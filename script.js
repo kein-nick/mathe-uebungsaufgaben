@@ -2238,6 +2238,41 @@ function pinPdfChoiceRows(root) {
   });
 }
 
+function pinPdfEqRows(root) {
+  root.querySelectorAll(".pdf-page-eq-six .task, .pdf-page-eq-quad .task").forEach((row) => {
+    const num = row.querySelector(":scope > .task-num");
+    const eq = row.querySelector(":scope > .task-eq");
+    const cell = row.querySelector(":scope > .pdf-answer-cell");
+    if (!num || !eq || !cell) {
+      return;
+    }
+    row.style.setProperty("display", "block", "important");
+    row.style.setProperty("width", "100%", "important");
+    row.style.setProperty("white-space", "nowrap", "important");
+    row.style.setProperty("font-size", "0", "important");
+    [num, eq, cell].forEach((el) => {
+      el.style.setProperty("display", "inline-block", "important");
+      el.style.setProperty("vertical-align", "middle", "important");
+      el.style.setProperty("position", "static", "important");
+      el.style.setProperty("float", "none", "important");
+      el.style.setProperty("box-sizing", "border-box", "important");
+      el.style.width = "";
+    });
+    void row.offsetWidth;
+    const rowW = row.clientWidth;
+    if (!rowW) {
+      return;
+    }
+    const numW = Math.ceil(num.getBoundingClientRect().width);
+    const cellW = Math.ceil(cell.getBoundingClientRect().width);
+    const eqW = Math.max(12, rowW - numW - cellW);
+    num.style.setProperty("width", `${numW}px`, "important");
+    eq.style.setProperty("width", `${eqW}px`, "important");
+    cell.style.setProperty("width", `${cellW}px`, "important");
+    cell.style.setProperty("text-align", "right", "important");
+  });
+}
+
 function pdfMaxCompactEqPerPage() {
   return selectedGrade <= 2 ? 6 : 4;
 }
@@ -2486,6 +2521,7 @@ async function buildPdfSheet() {
   fitPdfVisualSvgs(sheet);
   document.body.append(sheet);
   pinPdfChoiceRows(sheet);
+  pinPdfEqRows(sheet);
   await Promise.all(
     [...sheet.querySelectorAll("img")].map(
       (img) =>
@@ -2535,6 +2571,7 @@ async function capturePdfPiece(element, widthPx, heightPx) {
         cloned.style.opacity = "1";
         fitPdfVisualSvgs(cloned);
         pinPdfChoiceRows(cloned);
+        pinPdfEqRows(cloned);
       },
     });
     return {
