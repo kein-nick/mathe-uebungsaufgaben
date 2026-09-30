@@ -2875,6 +2875,14 @@ body.is-times-row .intro .class-nav-grid {
   height: 100%;
 }
 
+.pdf-blocks-small-wall-pair {
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+  gap: 6px;
+  align-items: stretch;
+  height: 100%;
+}
+
 .pdf-blocks-quad {
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   grid-template-rows: 1fr 1fr !important;
@@ -3756,6 +3764,19 @@ body.is-times-row .intro .class-nav-grid {
 .pdf-page-visual-fill .number-wall {
   grid-template-columns: repeat(6, 22px);
   grid-auto-rows: 28px;
+}
+
+.pdf-page-small-wall-pair .block {
+  min-height: 0;
+}
+
+.pdf-page-small-wall-pair .number-wall {
+  grid-template-columns: repeat(6, 20px);
+  grid-auto-rows: 24px;
+}
+
+.pdf-page-small-wall-pair .task-prompt {
+  margin-bottom: 2px;
 }
 
 .pdf-page-visual-fill .number-wall-stone {
