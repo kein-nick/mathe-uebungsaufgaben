@@ -96,16 +96,16 @@ const SITE_NAME = "Mathematik Übungsaufgaben";
 const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 const NEWS_ITEMS = [
   {
-    dateIso: "2026-09-29",
-    date: "29. September 2026",
+    dateIso: "2026-09-30",
+    date: "30. September 2026",
     title: "Liter und Milliliter für Klasse 3 und 4",
     text: "Neue Übungen zu Hohlmaßen: Liter und Milliliter umrechnen, fehlende Mengen ergänzen und einfache Flaschenaufgaben lösen — online oder als PDF.",
     href: "/klasse-3/uebungen?themen=capacity",
     linkLabel: "Liter und Milliliter direkt üben",
   },
   {
-    dateIso: "2026-09-29",
-    date: "29. September 2026",
+    dateIso: "2026-09-30",
+    date: "30. September 2026",
     title: "Zahlenmauern für Klasse 1 bis 3",
     text: "Zahlenmauern gibt es jetzt mit zwei Grundsteinen in Klasse 1 und mit drei Grundsteinen in Klasse 2 und 3. Mal fehlt ein oberer, mal ein unterer Stein.",
     href: "/klasse-1/uebungen?themen=number_wall",
