@@ -2318,6 +2318,18 @@ function pdfBlockIsVisual(block) {
   return rows.length > 0 && rows.every((row) => row.querySelector(".task-visual"));
 }
 
+function pdfBlockIsSmallNumberWall(block) {
+  const rows = [...block.querySelectorAll(".task")];
+  return (
+    rows.length > 0 &&
+    rows.every(
+      (row) =>
+        row.classList.contains("is-number-wall") &&
+        Boolean(row.querySelector(".number-wall-small"))
+    )
+  );
+}
+
 function pdfMaxListPerPage() {
   return notesToggle.checked ? 2 : 4;
 }
@@ -2439,6 +2451,21 @@ async function buildPdfSheet() {
       }
       continue;
     }
+    if (pdfBlockIsSmallNumberWall(block)) {
+      const run = [];
+      while (i < blockEls.length && pdfBlockIsSmallNumberWall(blockEls[i])) {
+        run.push(blockEls[i]);
+        i += 1;
+      }
+      for (let offset = 0; offset < run.length; offset += 2) {
+        const blocks = run.slice(offset, offset + 2);
+        groups.push({
+          blocks,
+          kind: blocks.length === 2 ? "visual-small-wall-pair" : "visual",
+        });
+      }
+      continue;
+    }
     if (pdfBlockIsVisual(block)) {
       splitPdfVisualBlock(block, 10).forEach((part) => {
         groups.push({ blocks: [part], kind: "visual" });
@@ -2520,6 +2547,9 @@ async function buildPdfSheet() {
       grid.className =
         group.blocks.length > 1 ? "pdf-blocks pdf-blocks-pair" : "pdf-blocks pdf-blocks-list";
       pageClass = "pdf-page-written";
+    } else if (group.kind === "visual-small-wall-pair") {
+      grid.className = "pdf-blocks pdf-blocks-small-wall-pair";
+      pageClass = "pdf-page-visual pdf-page-visual-fill pdf-page-small-wall-pair";
     } else {
       grid.className = "pdf-blocks pdf-blocks-list";
       pageClass = "pdf-page-visual pdf-page-visual-fill";

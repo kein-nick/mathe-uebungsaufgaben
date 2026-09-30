@@ -96,8 +96,8 @@ const SITE_NAME = "Mathematik Übungsaufgaben";
 const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 const NEWS_ITEMS = [
   {
-    dateIso: "2026-09-29",
-    date: "29. September 2026",
+    dateIso: "2026-09-30",
+    date: "30. September 2026",
     title: "Zahlenmauern für Klasse 1 bis 3",
     text: "Zahlenmauern gibt es jetzt mit zwei Grundsteinen in Klasse 1 und mit drei Grundsteinen in Klasse 2 und 3. Mal fehlt ein oberer, mal ein unterer Stein.",
     href: "/klasse-1/uebungen?themen=number_wall",
@@ -563,7 +563,7 @@ function renderPracticeJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=74" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=75" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -822,7 +822,7 @@ function extractAppFragments() {
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart).trimEnd();
 
   const scripts = `    <script src="/topics.js?v=45"></script>
-    <script src="/script.js?v=66"></script>
+    <script src="/script.js?v=68"></script>
     <script defer src="/news.js?v=2"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>
