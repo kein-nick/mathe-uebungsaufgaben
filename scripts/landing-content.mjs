@@ -20,7 +20,7 @@ export const groupDescriptions = {
     groessen:
       "Geld und Uhr sind zentrale Themen: Wechselgeld, Uhrzeiten auf der vollen Stunde oder halben Stunde, einfache Längen und Gewichte. Der Bezug zum echten Leben macht das Üben sinnvoll.",
     geometrie:
-      "Muster fortsetzen, Zahlen auf dem Zahlenstrahl einordnen und einfache Spiegelungen erkennen — das schult das logische Denken und bereitet schwierigere Geometrie vor.",
+      "Muster fortsetzen, Zahlen auf dem Zahlenstrahl einordnen und Körper wie Würfel, Quader, Kugel und Zylinder erkennen. Dazu kommen einfache Spiegelungen.",
   },
   3: {
     rechnen:
@@ -30,7 +30,7 @@ export const groupDescriptions = {
     groessen:
       "Längen, Gewichte, Liter und Milliliter, Zeit sowie Flächen/Umfang werden genauer. Umrechnen zwischen Einheiten ist oft neu für Eltern, weil es heute strukturierter geübt wird.",
     geometrie:
-      "Muster, Zahlenstrahl und Spiegeln vertiefen das räumliche Denken. Kinder beschreiben Lagen und erkennen Regelmäßigkeiten — das wirkt spielerisch, ist aber echte Mathematik.",
+      "Muster, Zahlenstrahl und Spiegeln vertiefen das räumliche Denken. Körper wie Pyramide und Kegel kommen dazu, auch erste Fragen zu den Ecken.",
   },
   4: {
     rechnen:
@@ -40,7 +40,7 @@ export const groupDescriptions = {
     groessen:
       "Größen umrechnen wird anspruchsvoller: Liter und Milliliter, Maßstab, Volumen von Würfeln und Quadern, Flächen und Umfang. Viele Aufgaben sind an realen Situationen orientiert.",
     geometrie:
-      "Formen, Lagebeziehungen, Spiegelachsen und Koordinaten kommen hinzu. Kinder arbeiten genauer mit Zeichnungen und lernen, geometrische Begriffe präzise zu verwenden.",
+      "Formen, Körper, Lagebeziehungen, Spiegelachsen und Koordinaten kommen hinzu. Bei den Körpern werden auch Kanten und Flächen gezählt.",
   },
   5: {
     rechnen:
@@ -149,6 +149,8 @@ export const topicDescriptions = {
     "Volumen von Würfeln und Quadern — oft mit „wie viele kleine Würfel passen hinein?“. Räumliches Denken plus Multiplikation.",
   unit_convert:
     "Verschiedene Einheiten im Alltag umrechnen — kombiniert mehrere Größenbereiche. Typisch für die oberen Klassen.",
+  solids:
+    "Körper erkennen: Würfel, Quader, Kugel und Zylinder, ab Klasse 3 auch Pyramide und Kegel. Die Zeichnung ist eine Linienfigur. Ab Klasse 3 kommen Fragen zu Ecken, Kanten und Flächen dazu.",
   shapes:
     "Formen erkennen und benennen: Dreieck, Rechteck, Kreis, Quadrat. Grundlage für alles Weitere in Geometrie.",
   position:

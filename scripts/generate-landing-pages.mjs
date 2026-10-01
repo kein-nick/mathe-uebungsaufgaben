@@ -98,6 +98,14 @@ const NEWS_ITEMS = [
   {
     dateIso: "2026-10-01",
     date: "1. Oktober 2026",
+    title: "Körper erkennen für Klasse 2 bis 4",
+    text: "Würfel, Quader, Kugel und Zylinder, ab Klasse 3 auch Pyramide und Kegel. Die Zeichnung ist schwarz-weiß, zehn Aufgaben passen auf eine PDF-Seite. Ab Klasse 3 kommen Fragen zu Ecken, Kanten und Flächen dazu.",
+    href: "/klasse-2/uebungen?themen=solids",
+    linkLabel: "Körper direkt üben",
+  },
+  {
+    dateIso: "2026-10-01",
+    date: "1. Oktober 2026",
     title: "Lösung nach dem Prüfen optional anzeigen",
     text: "Ein Schalter neben dem Zeitlimit blendet die richtige Lösung nach dem Prüfen ein. Er ist standardmäßig aus und lässt sich auch nachträglich noch einschalten. Richtig und falsch werden trotzdem markiert.",
     href: "/klasse-1/uebungen",
@@ -579,7 +587,7 @@ function renderPracticeJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=75" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=76" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -814,7 +822,7 @@ function extractInstallPrompt() {
 
 const installPromptHtml = extractInstallPrompt();
 
-const pwaScripts = `    <script defer src="/news.js?v=4"></script>
+const pwaScripts = `    <script defer src="/news.js?v=5"></script>
     <script defer src="/pwa.js"></script>
     <script>
       window.va =
@@ -837,9 +845,9 @@ function extractAppFragments() {
   }
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart).trimEnd();
 
-  const scripts = `    <script src="/topics.js?v=47"></script>
-    <script src="/script.js?v=69"></script>
-    <script defer src="/news.js?v=4"></script>
+  const scripts = `    <script src="/topics.js?v=48"></script>
+    <script src="/script.js?v=70"></script>
+    <script defer src="/news.js?v=5"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>
       window.va =

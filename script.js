@@ -406,6 +406,7 @@ const TOPIC_SECONDS = {
   cuboid: 44,
   unit_convert: 24,
   shapes: 12,
+  solids: 16,
   position: 12,
   pattern: 18,
   number_line: 16,
@@ -1922,6 +1923,9 @@ function usesWideSheet() {
 function createTaskItem(task, index, displayNum, forPdf, allowMinusInput) {
   const row = document.createElement("div");
   row.className = "task";
+  if (task.type === "solids") {
+    row.classList.add("is-solid");
+  }
   row.dataset.index = String(index);
   const item = document.createElement("div");
   item.className = "task-item";
@@ -2351,6 +2355,11 @@ function pdfCompactEqLayout() {
   return { gridClass: "pdf-blocks pdf-blocks-quad", pageClass: "pdf-page-eq-quad" };
 }
 
+function pdfBlockIsSolid(block) {
+  const rows = [...block.querySelectorAll(".task")];
+  return rows.length > 0 && rows.every((row) => row.classList.contains("is-solid"));
+}
+
 function pdfBlockIsVisual(block) {
   const rows = [...block.querySelectorAll(".task")];
   return rows.length > 0 && rows.every((row) => row.querySelector(".task-visual"));
@@ -2423,11 +2432,12 @@ function fitPdfVisualSvgs(root) {
     const box = svg.viewBox?.baseVal;
     const viewW = box && box.width ? box.width : Number(svg.getAttribute("width")) || 160;
     const viewH = box && box.height ? box.height : Number(svg.getAttribute("height")) || 120;
-    const maxW = 156;
-    const maxH = 96;
+    const solid = Boolean(svg.closest(".is-solid"));
+    const maxW = solid ? 72 : 156;
+    const maxH = solid ? 56 : 96;
     const scale = Math.min(maxW / viewW, maxH / viewH, 1);
-    const width = Math.max(88, Math.round(viewW * scale));
-    const height = Math.max(64, Math.round(viewH * scale));
+    const width = Math.max(solid ? 64 : 88, Math.round(viewW * scale));
+    const height = Math.max(solid ? 48 : 64, Math.round(viewH * scale));
     svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
     svg.setAttribute("width", String(width));
     svg.setAttribute("height", String(height));
@@ -2442,7 +2452,7 @@ function fitPdfVisualSvgs(root) {
     img.style.width = `${width}px`;
     img.style.height = `${height}px`;
     img.style.maxWidth = "100%";
-    img.style.maxHeight = "96px";
+    img.style.maxHeight = solid ? "56px" : "96px";
     img.style.display = "block";
     img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(xml)}`;
     svg.replaceWith(img);
@@ -2487,6 +2497,11 @@ async function buildPdfSheet() {
         groups.push({ blocks: [block], kind: "written" });
         i += 1;
       }
+      continue;
+    }
+    if (pdfBlockIsSolid(block)) {
+      groups.push({ blocks: [block], kind: "solids" });
+      i += 1;
       continue;
     }
     if (pdfBlockIsSmallNumberWall(block)) {
@@ -2550,6 +2565,7 @@ async function buildPdfSheet() {
     while (
       i < blockEls.length &&
       !pdfBlockIsWritten(blockEls[i]) &&
+      !pdfBlockIsSolid(blockEls[i]) &&
       !pdfBlockIsVisual(blockEls[i]) &&
       !pdfBlockIsCompactEq(blockEls[i]) &&
       !pdfBlockIsWord(blockEls[i]) &&
@@ -2585,6 +2601,9 @@ async function buildPdfSheet() {
       grid.className =
         group.blocks.length > 1 ? "pdf-blocks pdf-blocks-pair" : "pdf-blocks pdf-blocks-list";
       pageClass = "pdf-page-written";
+    } else if (group.kind === "solids") {
+      grid.className = "pdf-blocks pdf-blocks-list";
+      pageClass = "pdf-page-solids";
     } else if (group.kind === "visual-small-wall-pair") {
       grid.className = "pdf-blocks pdf-blocks-small-wall-pair";
       pageClass = "pdf-page-visual pdf-page-visual-fill pdf-page-small-wall-pair";

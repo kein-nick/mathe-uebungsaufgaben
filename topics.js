@@ -401,6 +401,118 @@ function buildTopics(u) {
     return `z. B. ${fmt(pair.a)} ${symbol} ${fmt(pair.b)}`;
   }
 
+  function solidPoints(points) {
+    return points.map((point) => point.join(",")).join(" ");
+  }
+
+  function solidPrism(x, y, fw, fh, dx, dy) {
+    const front = [
+      [x, y - fh],
+      [x + fw, y - fh],
+      [x + fw, y],
+      [x, y],
+    ];
+    const top = [
+      [x, y - fh],
+      [x + dx, y - fh + dy],
+      [x + fw + dx, y - fh + dy],
+      [x + fw, y - fh],
+    ];
+    const side = [
+      [x + fw, y - fh],
+      [x + fw + dx, y - fh + dy],
+      [x + fw + dx, y + dy],
+      [x + fw, y],
+    ];
+    const edge = `stroke="#1c2430" stroke-width="2" stroke-linejoin="round"`;
+    return `<polygon points="${solidPoints(top)}" fill="#f3f3f3" ${edge}/>
+      <polygon points="${solidPoints(side)}" fill="#e2e2e2" ${edge}/>
+      <polygon points="${solidPoints(front)}" fill="#fff" ${edge}/>`;
+  }
+
+  function solidSvg(kind) {
+    const ink = "#1c2430";
+    const edge = `fill="none" stroke="${ink}" stroke-width="2"`;
+    const hidden = `fill="none" stroke="${ink}" stroke-width="1.6" stroke-dasharray="4 3"`;
+    if (kind === "wuerfel") {
+      return svg(solidPrism(36, 82, 40, 40, 18, -14), 140, 96);
+    }
+    if (kind === "quader") {
+      return svg(solidPrism(18, 78, 62, 28, 20, -12), 140, 96);
+    }
+    if (kind === "kugel") {
+      return svg(
+        `<circle cx="70" cy="50" r="30" fill="#fff" stroke="${ink}" stroke-width="2"/>
+         <ellipse cx="70" cy="50" rx="30" ry="11" fill="none" stroke="${ink}" stroke-width="1.7"/>`,
+        140,
+        96
+      );
+    }
+    if (kind === "zylinder") {
+      return svg(
+        `<ellipse cx="70" cy="72" rx="32" ry="11" ${hidden}/>
+         <polygon points="38,34 102,34 102,72 38,72" fill="#fff" stroke="none"/>
+         <line x1="38" y1="34" x2="38" y2="72" stroke="${ink}" stroke-width="2"/>
+         <line x1="102" y1="34" x2="102" y2="72" stroke="${ink}" stroke-width="2"/>
+         <path d="M38 72 A32 11 0 0 0 102 72" ${edge}/>
+         <ellipse cx="70" cy="34" rx="32" ry="11" fill="#fff" stroke="${ink}" stroke-width="2"/>`,
+        140,
+        96
+      );
+    }
+    if (kind === "kegel") {
+      return svg(
+        `<ellipse cx="70" cy="70" rx="32" ry="11" ${hidden}/>
+         <polygon points="70,18 38,70 102,70" fill="#fff" stroke="none"/>
+         <line x1="70" y1="18" x2="38" y2="70" stroke="${ink}" stroke-width="2"/>
+         <line x1="70" y1="18" x2="102" y2="70" stroke="${ink}" stroke-width="2"/>
+         <path d="M38 70 A32 11 0 0 0 102 70" ${edge}/>`,
+        140,
+        96
+      );
+    }
+    return svg(
+      `<polygon points="46,64 98,64 78,46 26,46" fill="#f3f3f3" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>
+       <polygon points="70,16 26,46 46,64" fill="#fff" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>
+       <polygon points="70,16 46,64 98,64" fill="#e8e8e8" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>
+       <line x1="70" y1="16" x2="78" y2="46" ${hidden}/>
+       <line x1="26" y1="46" x2="78" y2="46" ${hidden}/>
+       <line x1="78" y1="46" x2="98" y2="64" ${hidden}/>`,
+      140,
+      96
+    );
+  }
+
+  const SOLID_FACTS = {
+    wuerfel: { label: "Würfel", corners: 8, edges: 12, faces: 6 },
+    quader: { label: "Quader", corners: 8, edges: 12, faces: 6 },
+    kugel: { label: "Kugel", corners: 0, edges: 0, faces: 1 },
+    zylinder: { label: "Zylinder", corners: 0, edges: 2, faces: 3 },
+    pyramide: { label: "Pyramide", corners: 5, edges: 8, faces: 5 },
+    kegel: { label: "Kegel", corners: 1, edges: 1, faces: 2 },
+  };
+
+  function solidIds(grade) {
+    if (grade <= 2) {
+      return ["wuerfel", "quader", "kugel", "zylinder"];
+    }
+    return ["wuerfel", "quader", "kugel", "zylinder", "pyramide", "kegel"];
+  }
+
+  function solidProperty(grade, id) {
+    const fact = SOLID_FACTS[id];
+    const options = [{ key: "corners", label: "Ecken", value: fact.corners }];
+    if (grade >= 4 && ["wuerfel", "quader", "pyramide"].includes(id)) {
+      options.push(
+        { key: "edges", label: "Kanten", value: fact.edges },
+        { key: "faces", label: "Flächen", value: fact.faces }
+      );
+    } else if (grade >= 4 && (id === "zylinder" || id === "kegel")) {
+      options.push({ key: "faces", label: "Flächen", value: fact.faces });
+    }
+    return pick(options);
+  }
+
   function shapeSvg(kind) {
     if (kind === "kreis") {
       return svg(`<circle cx="70" cy="45" r="28" fill="#7eb8a4" stroke="#1c2430" stroke-width="2"/>`);
@@ -1686,6 +1798,42 @@ function buildTopics(u) {
         }
         const liters = randomInt(g >= 6 ? 3 : 2, g >= 6 ? 14 : t === 2 ? 10 : 8);
         return numberTask("unit_convert", `${liters} l = ___ ml`, liters * 1000);
+      },
+    },
+    {
+      id: "solids",
+      label: "Körper",
+      group: "geometrie",
+      fromGrade: 2,
+      fromTerm: 1,
+      untilGrade: 4,
+      example: (g) =>
+        g <= 2 ? "z. B. Welcher Körper: Würfel oder Kugel?" : "z. B. Wie viele Ecken hat die Pyramide?",
+      generate: (g) => {
+        const ids = solidIds(g);
+        const id = pick(ids);
+        const visualHtml = solidSvg(id);
+        const askProperty = g >= 3 && Math.random() < (g >= 4 ? 0.45 : 0.35);
+        if (askProperty) {
+          const property = solidProperty(g, id);
+          return numberTask(
+            "solids",
+            `Wie viele ${property.label} hat dieser Körper?`,
+            property.value,
+            {
+              visualHtml,
+              key: `eigenschaft:${id}:${property.key}:${randomInt(1, 9999)}`,
+            }
+          );
+        }
+        const others = shuffle(ids.filter((item) => item !== id)).slice(0, 3);
+        return choiceTask(
+          "solids",
+          "Welcher Körper ist das?",
+          id,
+          [id, ...others].map((item) => ({ value: item, label: SOLID_FACTS[item].label })),
+          { visualHtml, key: `sehen:${id}:${randomInt(1, 9999)}` }
+        );
       },
     },
     {
