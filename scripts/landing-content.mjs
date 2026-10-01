@@ -30,7 +30,7 @@ export const groupDescriptions = {
     groessen:
       "Längen, Gewichte, Liter und Milliliter, Zeit sowie Flächen/Umfang werden genauer. Umrechnen zwischen Einheiten ist oft neu für Eltern, weil es heute strukturierter geübt wird.",
     geometrie:
-      "Muster, Zahlenstrahl und Spiegeln vertiefen das räumliche Denken. Körper wie Pyramide und Kegel kommen dazu, auch erste Fragen zu den Ecken.",
+      "Muster, Zahlenstrahl und Spiegeln vertiefen das räumliche Denken. Körper wie Pyramide, Kegel und Prisma kommen dazu, auch erste Fragen zu den Ecken.",
   },
   4: {
     rechnen:
@@ -150,7 +150,7 @@ export const topicDescriptions = {
   unit_convert:
     "Verschiedene Einheiten im Alltag umrechnen — kombiniert mehrere Größenbereiche. Typisch für die oberen Klassen.",
   solids:
-    "Körper erkennen: Würfel, Quader, Kugel und Zylinder, ab Klasse 3 auch Pyramide und Kegel. Die Zeichnung ist eine Linienfigur. Ab Klasse 3 kommen Fragen zu Ecken, Kanten und Flächen dazu.",
+    "Körper erkennen: Würfel, Quader, Kugel und Zylinder, ab Klasse 3 auch Pyramide, Kegel und Prisma. Die Zeichnung ist eine Linienfigur. Ab Klasse 3 kommen Fragen zu Ecken, Kanten und Flächen dazu.",
   shapes:
     "Formen erkennen und benennen: Dreieck, Rechteck, Kreis, Quadrat. Grundlage für alles Weitere in Geometrie.",
   position:

@@ -99,7 +99,7 @@ const NEWS_ITEMS = [
     dateIso: "2026-10-01",
     date: "1. Oktober 2026",
     title: "Körper erkennen für Klasse 2 bis 4",
-    text: "Würfel, Quader, Kugel und Zylinder, ab Klasse 3 auch Pyramide und Kegel. Die Zeichnung ist schwarz-weiß, zehn Aufgaben passen auf eine PDF-Seite. Ab Klasse 3 kommen Fragen zu Ecken, Kanten und Flächen dazu.",
+    text: "Würfel, Quader, Kugel und Zylinder, ab Klasse 3 auch Pyramide, Kegel und Prisma. Die Zeichnung ist schwarz-weiß, zehn Aufgaben passen auf eine PDF-Seite. Ab Klasse 3 kommen Fragen zu Ecken, Kanten und Flächen dazu.",
     href: "/klasse-2/uebungen?themen=solids",
     linkLabel: "Körper direkt üben",
   },
@@ -845,7 +845,7 @@ function extractAppFragments() {
   }
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart).trimEnd();
 
-  const scripts = `    <script src="/topics.js?v=48"></script>
+  const scripts = `    <script src="/topics.js?v=49"></script>
     <script src="/script.js?v=70"></script>
     <script defer src="/news.js?v=5"></script>
     <script defer src="/pwa.js?v=33"></script>

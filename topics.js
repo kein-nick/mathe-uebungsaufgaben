@@ -471,6 +471,16 @@ function buildTopics(u) {
         96
       );
     }
+    if (kind === "prisma") {
+      return svg(
+        `<polygon points="51,32 32,70 68,56 87,18" fill="#f3f3f3" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>
+         <polygon points="51,32 70,70 106,56 87,18" fill="#e2e2e2" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>
+         <polygon points="32,70 70,70 51,32" fill="#fff" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>
+         <line x1="68" y1="56" x2="106" y2="56" ${hidden}/>`,
+        140,
+        96
+      );
+    }
     return svg(
       `<polygon points="46,64 98,64 78,46 26,46" fill="#f3f3f3" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>
        <polygon points="70,16 26,46 46,64" fill="#fff" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>
@@ -490,19 +500,20 @@ function buildTopics(u) {
     zylinder: { label: "Zylinder", corners: 0, edges: 2, faces: 3 },
     pyramide: { label: "Pyramide", corners: 5, edges: 8, faces: 5 },
     kegel: { label: "Kegel", corners: 1, edges: 1, faces: 2 },
+    prisma: { label: "Prisma", corners: 6, edges: 9, faces: 5 },
   };
 
   function solidIds(grade) {
     if (grade <= 2) {
       return ["wuerfel", "quader", "kugel", "zylinder"];
     }
-    return ["wuerfel", "quader", "kugel", "zylinder", "pyramide", "kegel"];
+    return ["wuerfel", "quader", "kugel", "zylinder", "pyramide", "kegel", "prisma"];
   }
 
-  function solidProperty(grade, id) {
+  function solidPropertyOptions(grade, id) {
     const fact = SOLID_FACTS[id];
     const options = [{ key: "corners", label: "Ecken", value: fact.corners }];
-    if (grade >= 4 && ["wuerfel", "quader", "pyramide"].includes(id)) {
+    if (grade >= 4 && ["wuerfel", "quader", "pyramide", "prisma"].includes(id)) {
       options.push(
         { key: "edges", label: "Kanten", value: fact.edges },
         { key: "faces", label: "Flächen", value: fact.faces }
@@ -510,7 +521,44 @@ function buildTopics(u) {
     } else if (grade >= 4 && (id === "zylinder" || id === "kegel")) {
       options.push({ key: "faces", label: "Flächen", value: fact.faces });
     }
-    return pick(options);
+    return options;
+  }
+
+  let solidDeck = [];
+  let solidDeckGrade = 0;
+
+  function refillSolidDeck(grade) {
+    const piles = shuffle(solidIds(grade)).map((id) => {
+      const pile = [{ id, mode: "sehen", n: 1 }];
+      if (grade <= 2) {
+        pile.push({ id, mode: "sehen", n: 2 }, { id, mode: "sehen", n: 3 });
+      } else {
+        shuffle(solidPropertyOptions(grade, id)).forEach((property) => {
+          pile.push({ id, mode: "eigenschaft", property });
+        });
+      }
+      return pile;
+    });
+    const cards = [];
+    const rounds = Math.max(...piles.map((pile) => pile.length));
+    for (let round = 0; round < rounds; round += 1) {
+      const batch = [];
+      piles.forEach((pile) => {
+        if (pile[round]) {
+          batch.push(pile[round]);
+        }
+      });
+      cards.push(...shuffle(batch));
+    }
+    solidDeck = cards;
+    solidDeckGrade = grade;
+  }
+
+  function takeSolidCard(grade) {
+    if (solidDeckGrade !== grade || solidDeck.length === 0) {
+      refillSolidDeck(grade);
+    }
+    return solidDeck.shift();
   }
 
   function shapeSvg(kind) {
@@ -1810,29 +1858,28 @@ function buildTopics(u) {
       example: (g) =>
         g <= 2 ? "z. B. Welcher Körper: Würfel oder Kugel?" : "z. B. Wie viele Ecken hat die Pyramide?",
       generate: (g) => {
+        const card = takeSolidCard(g);
         const ids = solidIds(g);
-        const id = pick(ids);
-        const visualHtml = solidSvg(id);
-        const askProperty = g >= 3 && Math.random() < (g >= 4 ? 0.45 : 0.35);
-        if (askProperty) {
-          const property = solidProperty(g, id);
+        const visualHtml = solidSvg(card.id);
+        if (card.mode === "eigenschaft") {
+          const property = card.property;
           return numberTask(
             "solids",
             `Wie viele ${property.label} hat dieser Körper?`,
             property.value,
             {
               visualHtml,
-              key: `eigenschaft:${id}:${property.key}:${randomInt(1, 9999)}`,
+              key: `eigenschaft:${card.id}:${property.key}`,
             }
           );
         }
-        const others = shuffle(ids.filter((item) => item !== id)).slice(0, 3);
+        const others = shuffle(ids.filter((item) => item !== card.id)).slice(0, 3);
         return choiceTask(
           "solids",
           "Welcher Körper ist das?",
-          id,
-          [id, ...others].map((item) => ({ value: item, label: SOLID_FACTS[item].label })),
-          { visualHtml, key: `sehen:${id}:${randomInt(1, 9999)}` }
+          card.id,
+          [card.id, ...others].map((item) => ({ value: item, label: SOLID_FACTS[item].label })),
+          { visualHtml, key: `sehen:${card.id}:${card.n}` }
         );
       },
     },
