@@ -96,6 +96,14 @@ const SITE_NAME = "Mathematik Übungsaufgaben";
 const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 const NEWS_ITEMS = [
   {
+    dateIso: "2026-10-01",
+    date: "1. Oktober 2026",
+    title: "Lösung nach dem Prüfen optional anzeigen",
+    text: "Ein Schalter neben dem Zeitlimit blendet die richtige Lösung nach dem Prüfen ein. Er ist standardmäßig aus und lässt sich auch nachträglich noch einschalten. Richtig und falsch werden trotzdem markiert.",
+    href: "/klasse-1/uebungen",
+    linkLabel: "Übungen öffnen",
+  },
+  {
     dateIso: "2026-09-30",
     date: "30. September 2026",
     title: "Liter und Milliliter für Klasse 3 und 4",
@@ -806,7 +814,7 @@ function extractInstallPrompt() {
 
 const installPromptHtml = extractInstallPrompt();
 
-const pwaScripts = `    <script defer src="/news.js?v=3"></script>
+const pwaScripts = `    <script defer src="/news.js?v=4"></script>
     <script defer src="/pwa.js"></script>
     <script>
       window.va =
@@ -831,7 +839,7 @@ function extractAppFragments() {
 
   const scripts = `    <script src="/topics.js?v=47"></script>
     <script src="/script.js?v=69"></script>
-    <script defer src="/news.js?v=3"></script>
+    <script defer src="/news.js?v=4"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>
       window.va =

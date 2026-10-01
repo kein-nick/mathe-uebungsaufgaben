@@ -1,5 +1,5 @@
 (function () {
-  const NEWS_VERSION = "2026-09-29-4";
+  const NEWS_VERSION = "2026-10-01-1";
   const STORAGE_KEY = "mathe-news-read";
   const link = document.querySelector(".site-header-news");
 
