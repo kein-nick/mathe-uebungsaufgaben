@@ -25,6 +25,7 @@ const startBtn = document.getElementById("start-btn");
 const statusEl = document.getElementById("status");
 const timerEl = document.getElementById("timer");
 const countdownToggle = document.getElementById("countdown-toggle");
+const revealToggle = document.getElementById("reveal-toggle");
 const countdownSetup = document.getElementById("countdown-setup");
 const countdownMinutesInput = document.getElementById("countdown-minutes");
 const countdownEl = document.getElementById("countdown");
@@ -1276,6 +1277,7 @@ function applySnapshot(snapshot) {
     row.classList.toggle("is-wrong", saved.wrong);
     row.classList.toggle("is-late", saved.late);
   });
+  refreshAnswerReveal();
 }
 
 function taskOperands(task) {
@@ -1475,6 +1477,36 @@ function setTaskHint(row, task, isCorrect) {
   row.append(hint);
 }
 
+function showCheckedAnswer(row, task, isCorrect) {
+  if (revealToggle?.checked) {
+    markChoiceReview(row, task);
+    setTaskHint(row, task, isCorrect);
+    return;
+  }
+  row.querySelector(".task-answer-hint")?.remove();
+  row.querySelectorAll(".choice-chip").forEach((chip) => {
+    const input = chip.querySelector("input");
+    if (!input) {
+      return;
+    }
+    chip.classList.toggle("is-picked", input.checked);
+    chip.classList.remove("is-solution");
+  });
+}
+
+function refreshAnswerReveal() {
+  document.querySelectorAll(".task").forEach((row) => {
+    if (!row.classList.contains("is-correct") && !row.classList.contains("is-wrong")) {
+      return;
+    }
+    const task = tasks[Number(row.dataset.index)];
+    if (!task) {
+      return;
+    }
+    showCheckedAnswer(row, task, row.classList.contains("is-correct"));
+  });
+}
+
 function setTaskInputsDisabled(row, disabled) {
   row.querySelectorAll("input, textarea").forEach((input) => {
     input.disabled = disabled;
@@ -1658,6 +1690,10 @@ notesToggle.addEventListener("change", () => {
   setNotesEnabled(notesToggle.checked);
   countdownMinutesDirty = false;
   syncCountdownPreset();
+});
+
+revealToggle?.addEventListener("change", () => {
+  refreshAnswerReveal();
 });
 
 countdownToggle.addEventListener("change", () => {
@@ -2847,8 +2883,7 @@ checkBtn.addEventListener("click", () => {
       correct += 1;
       row.classList.remove("is-wrong");
       row.classList.add("is-correct");
-      markChoiceReview(row, tasks[index]);
-      setTaskHint(row, tasks[index], true);
+      showCheckedAnswer(row, tasks[index], true);
       setTaskInputsDisabled(row, true);
       row.title = row.classList.contains("is-late")
         ? "Richtig, aber nach der Zeit eingetragen"
@@ -2856,8 +2891,7 @@ checkBtn.addEventListener("click", () => {
     } else {
       row.classList.remove("is-correct");
       row.classList.add("is-wrong");
-      markChoiceReview(row, tasks[index]);
-      setTaskHint(row, tasks[index], false);
+      showCheckedAnswer(row, tasks[index], false);
       setTaskInputsDisabled(row, false);
       row.title = row.classList.contains("is-late") ? "Nach der Zeit eingetragen" : "";
     }
