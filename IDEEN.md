@@ -117,7 +117,6 @@ Die App deckt bereits viele Themen ab. Lehrpläne unterscheiden sich jedoch nach
 | Idee | Kurzbeschreibung | Aufwand |
 |------|------------------|---------|
 | **Werbung aktivieren** | `SHOW_ADS` und `ads-off` wieder einschalten, wenn Anbieter steht | gering |
-| **Datenschutzfreundlichere Analytics** | z. B. Plausible oder Umami statt Vercel — weniger Abhängigkeit | mittel |
 | **Eigenes Admin-Dashboard** | Nur sinnvoll bei sehr speziellen Fragen (z. B. „wie oft Brüche?“) — braucht Backend | hoch |
 
 ---
@@ -130,6 +129,7 @@ Diese Ideen passen eher nicht zum Konzept der Seite:
 - Zu viele Belohnungen, Avatare, Punktesysteme
 - Großer Umbau der Code-Struktur ohne konkreten Nutzen
 - Eigene Datenbank nur für Besucherzahlen (Vercel Analytics reicht)
+- Wechsel zu Plausible oder Umami (Vercel Web Analytics bleibt)
 
 ---
 
