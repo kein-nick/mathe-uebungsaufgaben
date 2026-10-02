@@ -46,7 +46,7 @@ export const groupDescriptions = {
     rechnen:
       "Brüche, Dezimalzahlen und Prozent werden eingeführt und miteinander verknüpft. Gleichungen, Dreisatz und der Mittelwert erweitern das Repertoire. Sachaufgaben verlangen oft mehrere Rechenschritte und gutes Lesen.",
     zahlen:
-      "Primzahlen, Teilbarkeitsregeln und Arbeiten mit großen Zahlen festigen das Zahlenverständnis. Überschlagen und sinnvolles Runden bleiben wichtig, um Ergebnisse einzuschätzen.",
+      "Primzahlen, Teilbarkeitsregeln und Quadratzahlen bis 12² festigen das Zahlenverständnis. Überschlagen und sinnvolles Runden bleiben wichtig, um Ergebnisse einzuschätzen.",
     groessen:
       "Maßstab, Flächen, Volumen und Einheitenwechsel werden vertieft. Kinder sollen Größen nicht nur ausrechnen, sondern auch im Kontext verstehen — zum Beispiel bei Karten oder Plänen.",
     geometrie:
@@ -56,7 +56,7 @@ export const groupDescriptions = {
     rechnen:
       "In Klasse 6 werden Brüche, Dezimalzahlen, Prozent und Dreisatz sicher beherrscht. Negative Zahlen, längere Gleichungen und anspruchsvolle Sachaufgaben bereiten auf die weiterführende Schule vor.",
     zahlen:
-      "Zahlenverständnis, Tabellen, Diagramme und statistische Grundbegriffe wie der Mittelwert werden wiederholt und vertieft. Genauigkeit und Begründen werden wichtiger als reines Auswendiglernen.",
+      "Quadratzahlen bis 20² und einfache Zehnerpotenzen kommen dazu. Tabellen, Diagramme und der Mittelwert werden vertieft. Genauigkeit und Begründen werden wichtiger als reines Auswendiglernen.",
     groessen:
       "Komplexere Umrechnungen, Maßstab und räumliche Größen festigen das Gelernte. Viele Aufgaben ähneln schon dem, was in der Sekundarstufe erwartet wird.",
     geometrie:
@@ -125,6 +125,8 @@ export const topicDescriptions = {
     "Römische Zahlen lesen und schreiben (I, V, X, L …). Kommt in vielen Bundesländern in Klasse 3 oder 4 vor — für Eltern oft ein Überraschungsthema.",
   primes:
     "Primzahlen erkennen und zerlegen in Faktoren. Grundlage für Bruchrechnung und spätere Mathematik.",
+  squares:
+    "Quadratzahlen üben: in Klasse 5 bis 12², in Klasse 6 bis 20². Dazu kommen einfache Zehnerpotenzen wie 10³ = 1000. Der Zahlenraum richtet sich nach Klasse und Halbjahr.",
   table_read:
     "Tabellen und einfache Diagramme lesen — Informationen entnehmen und Fragen beantworten. Übergang zu Sachkunde und Statistik.",
   money:

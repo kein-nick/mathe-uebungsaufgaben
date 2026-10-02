@@ -96,6 +96,14 @@ const SITE_NAME = "Mathematik Übungsaufgaben";
 const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 const NEWS_ITEMS = [
   {
+    dateIso: "2026-10-02",
+    date: "2. Oktober 2026",
+    title: "Quadratzahlen für Klasse 5 und 6",
+    text: "In Klasse 5 bis 12², in Klasse 6 bis 20², dazu einfache Zehnerpotenzen wie 10³ = 1000. Der Schwierigkeitsgrad richtet sich nach Klasse und Halbjahr.",
+    href: "/klasse-5/uebungen?themen=squares",
+    linkLabel: "Quadratzahlen direkt üben",
+  },
+  {
     dateIso: "2026-10-01",
     date: "1. Oktober 2026",
     title: "Körper erkennen für Klasse 2 bis 4",
@@ -822,7 +830,7 @@ function extractInstallPrompt() {
 
 const installPromptHtml = extractInstallPrompt();
 
-const pwaScripts = `    <script defer src="/news.js?v=5"></script>
+const pwaScripts = `    <script defer src="/news.js?v=6"></script>
     <script defer src="/pwa.js"></script>
     <script>
       window.va =
@@ -845,9 +853,9 @@ function extractAppFragments() {
   }
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart).trimEnd();
 
-  const scripts = `    <script src="/topics.js?v=49"></script>
-    <script src="/script.js?v=70"></script>
-    <script defer src="/news.js?v=5"></script>
+  const scripts = `    <script src="/topics.js?v=50"></script>
+    <script src="/script.js?v=71"></script>
+    <script defer src="/news.js?v=6"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>
       window.va =

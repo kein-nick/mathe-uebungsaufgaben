@@ -31,6 +31,7 @@ Stand: September 2026
 - Zahlenmauern für Klasse 1 bis 3, online und im PDF
 - Hohlmaße mit Liter und Milliliter für Klasse 3 und 4
 - Körper erkennen für Klasse 2 bis 4, online und im PDF
+- Quadratzahlen und einfache Zehnerpotenzen für Klasse 5 und 6
 
 ---
 
@@ -90,17 +91,12 @@ Die App deckt bereits viele Themen ab. Lehrpläne unterscheiden sich jedoch nach
 
 #### Orientierungsstufe (Klasse 5 und 6)
 
-2. **Quadratzahlen & einfache Potenzen (Klasse 5–6)**
-   - *Beschreibung:* Das kleine 1×1 der Quadratzahlen von $1^2$ bis $20^2$ ($12 \times 12 = 144$) und einfache Zehnerpotenzen ($10^3 = 1000$).
-   - *Warum lohnend:* Schnelles Kopfrechnen-Training, wichtige Vorbereitung für Flächenberechnung, Pythagoras und Wurzeln.
-   - *Aufwand:* sehr gering.
-
-3. **ggT und kgV (Klasse 5–6)**
+2. **ggT und kgV (Klasse 5–6)**
    - *Beschreibung:* Größter gemeinsamer Teiler und kleinstes gemeinsames Vielfaches (z. B. ggT von 24 und 36 = 12).
    - *Warum lohnend:* Rechnerischer Kern für das Kürzen und Gleichnamigmachen von Brüchen.
    - *Aufwand:* gering.
 
-4. **Zufall & Wahrscheinlichkeit (Klasse 4–6)**
+3. **Zufall & Wahrscheinlichkeit (Klasse 4–6)**
    - *Beschreibung:* Grundbegriffe wie *sicher, möglich, unmöglich*, Wahrscheinlichkeiten bei Würfeln (z. B. „Chance auf eine gerade Zahl: 3 von 6“) oder Ziehen von Kugeln aus einer Urne.
    - *Warum lohnend:* Steht in fast allen neuen Bildungsplänen unter „Daten und Zufall“.
    - *Aufwand:* mittel bis hoch (eindeutige Sprache, Darstellungen und passende Antwortformate).
@@ -130,11 +126,10 @@ Diese Ideen passen eher nicht zum Konzept der Seite:
 
 ## Empfohlene Reihenfolge
 
-1. Quadratzahlen & einfache Potenzen
-2. Zufall & Wahrscheinlichkeit
-3. ggT und kgV
-4. Zehner- und Hunderterfreunde in „Zerlegen“ ergänzen
-5. Vollständige Links mit Einstellungen
-6. Letzte Einstellungen merken
+1. Zufall & Wahrscheinlichkeit
+2. ggT und kgV
+3. Zehner- und Hunderterfreunde in „Zerlegen“ ergänzen
+4. Vollständige Links mit Einstellungen
+5. Letzte Einstellungen merken
 
 Vor Werbung oder zusätzlichem Tracking den Einwilligungsbedarf erneut prüfen.

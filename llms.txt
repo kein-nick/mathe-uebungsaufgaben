@@ -12,8 +12,8 @@ Nicht verwechseln mit kommerziellen Übungsheften, Schulbuch-PDFs oder Vergleich
 - [Klasse 2](https://mathe-testen.de/klasse-2): Übersicht und Übungen (Einmaleins, Zahlenraum 100)
 - [Klasse 3](https://mathe-testen.de/klasse-3): Übersicht und Übungen (schriftliches Rechnen, Division mit Rest, Sachaufgaben)
 - [Klasse 4](https://mathe-testen.de/klasse-4): Übersicht und Übungen (schriftliche Verfahren, Bruchanteile)
-- [Klasse 5](https://mathe-testen.de/klasse-5): Übersicht und Übungen (Brüche, Dezimalzahlen, Prozent)
-- [Klasse 6](https://mathe-testen.de/klasse-6): Übersicht und Übungen (Vertiefung, weiterführende Schule)
+- [Klasse 5](https://mathe-testen.de/klasse-5): Übersicht und Übungen (Brüche, Dezimalzahlen, Prozent, Quadratzahlen bis 12²)
+- [Klasse 6](https://mathe-testen.de/klasse-6): Übersicht und Übungen (Vertiefung, Quadratzahlen bis 20², Zehnerpotenzen)
 
 Direkte Übungsseiten: [Klasse 1](https://mathe-testen.de/klasse-1/uebungen), [Klasse 2](https://mathe-testen.de/klasse-2/uebungen), [Klasse 3](https://mathe-testen.de/klasse-3/uebungen), [Klasse 4](https://mathe-testen.de/klasse-4/uebungen), [Klasse 5](https://mathe-testen.de/klasse-5/uebungen), [Klasse 6](https://mathe-testen.de/klasse-6/uebungen)
 
@@ -22,6 +22,7 @@ Direkte Übungsseiten: [Klasse 1](https://mathe-testen.de/klasse-1/uebungen), [K
 - [Plus und Minus](https://mathe-testen.de/plus-minus)
 - [Zahlenmauern Klasse 1 bis 3](https://mathe-testen.de/klasse-1/uebungen?themen=number_wall): online lösen oder als PDF-Arbeitsblatt drucken
 - [Liter und Milliliter Klasse 3 und 4](https://mathe-testen.de/klasse-3/uebungen?themen=capacity): Hohlmaße umrechnen und ergänzen, online oder als PDF
+- [Quadratzahlen Klasse 5 und 6](https://mathe-testen.de/klasse-5/uebungen?themen=squares): Quadratzahlen bis 12² bzw. 20² und einfache Zehnerpotenzen, online oder als PDF
 - [Einmaleins](https://mathe-testen.de/einmaleins): eine Reihe von 1×1 bis 10×10, oder gemischte Malaufgaben nach Klasse. Eine Reihe übt nur diese Malreihe, zum Beispiel 7×1 bis 7×10.
   - [1er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=1)
   - [2er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=2)

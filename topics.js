@@ -1467,6 +1467,57 @@ function buildTopics(u) {
       },
     },
     {
+      id: "squares",
+      label: "Quadratzahlen",
+      group: "zahlen",
+      fromGrade: 5,
+      fromTerm: 1,
+      example: (g, t) => {
+        if (g >= 6 && t === 2) {
+          return "z. B. 10³ = 1000";
+        }
+        if (g >= 6) {
+          return "z. B. 15² = 225";
+        }
+        if (t === 2) {
+          return "z. B. 12² = 144";
+        }
+        return "z. B. 7² = 49";
+      },
+      generate: (g, t) => {
+        const sup = ["", "", "²", "³", "⁴", "⁵", "⁶"];
+        const grouped = (value) => String(value).replace(/\B(?=(\d{3})+(?!\d))/g, "\u202f");
+        const powerMax = g >= 6 ? (t === 2 ? 6 : 4) : 0;
+        if (powerMax && Math.random() < (t === 2 ? 0.4 : 0.25)) {
+          const exp = randomInt(2, powerMax);
+          const value = 10 ** exp;
+          if (exp >= 4) {
+            return numberTask("squares", `${grouped(value)} = 10 hoch`, exp, { key: `hoch:${exp}` });
+          }
+          if (Math.random() < 0.5) {
+            return numberTask("squares", `${grouped(value)} = 10 hoch`, exp, { key: `hoch:${exp}` });
+          }
+          return numberTask("squares", `10${sup[exp]} =`, value, { key: `zehn:${exp}` });
+        }
+        const range = g >= 6
+          ? (t === 2 ? { min: 11, max: 20 } : { min: 8, max: 16 })
+          : (t === 2 ? { min: 1, max: 12 } : { min: 1, max: 10 });
+        const upper = Math.ceil((range.min + range.max) / 2);
+        const n = t === 2 && Math.random() < 0.6
+          ? randomInt(upper, range.max)
+          : randomInt(range.min, range.max);
+        const square = n * n;
+        const roll = Math.random();
+        if (roll < 0.22) {
+          return numberTask("squares", `${n} × ${n} =`, square, { key: `mal:${n}` });
+        }
+        if (roll < 0.48) {
+          return numberTask("squares", `${grouped(square)} ist das Quadrat von`, n, { key: `wurzel:${n}` });
+        }
+        return numberTask("squares", `${n}² =`, square, { key: `quadrat:${n}` });
+      },
+    },
+    {
       id: "table_read",
       label: "Tabellen",
       group: "zahlen",

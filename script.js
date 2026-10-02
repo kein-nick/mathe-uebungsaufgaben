@@ -393,6 +393,7 @@ const TOPIC_SECONDS = {
   divisible: 14,
   roman: 22,
   primes: 16,
+  squares: 16,
   table_read: 24,
   money: 26,
   clock: 18,
@@ -2028,6 +2029,13 @@ function createTaskItem(task, index, displayNum, forPdf, allowMinusInput) {
     } else if (!forPdf && usesNotesField(task)) {
       appendNotesField(item, displayNum);
     }
+  } else if (task.type === "squares") {
+    row.innerHTML = `
+          <span class="task-num">${displayNum}.</span>
+          <span class="task-eq">${escapeHtml(task.prompt)}</span>
+          ${answerInput(index, task, false, displayNum)}
+        `;
+    item.append(row);
   } else {
     const prompt = task.promptHtml || escapeHtml(task.prompt);
     const visualHtml =
