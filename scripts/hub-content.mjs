@@ -392,4 +392,38 @@ export const topicHubs = [
       },
     ],
   },
+  {
+    slug: "quadratzahlen",
+    title: "Quadratzahlen üben online – kostenlos & als PDF",
+    h1: "Quadratzahlen üben",
+    shortName: "Quadratzahlen",
+    whatHeading: "Was sind Quadratzahlen?",
+    metaDescription:
+      "Quadratzahlen üben: Klasse 5 bis 12², Klasse 6 bis 20², dazu Zehnerpotenzen wie 10³ = 1000 — kostenlos online oder als PDF, ohne Anmeldung.",
+    topicIds: ["squares"],
+    grades: [5, 6],
+    lead: "Eine Quadratzahl entsteht, wenn eine Zahl mit sich selbst malgenommen wird. 7² ist 7 mal 7, also 49. In Klasse 5 und 6 werden diese Ergebnisse geübt, in Klasse 6 kommen Zehnerpotenzen dazu.",
+    whatIs:
+      "Eine Quadratzahl ist das Ergebnis einer Zahl mal sich selbst: 1² = 1, 2² = 4, 10² = 100, 12² = 144, 20² = 400. Die Aufgabe lautet entweder „7² =“ oder umgekehrt „49 ist das Quadrat von“. Ein Wurzelzeichen kommt nicht vor, und es gibt keine Aufgabe der Form 7 × 7. In Klasse 5 geht es im 1. Halbjahr bis 10² und im 2. Halbjahr bis 12². In Klasse 6 reichen die Quadratzahlen im 1. Halbjahr von 8² bis 16² und im 2. Halbjahr von 11² bis 20².",
+    whyPractice:
+      "Quadratzahlen braucht man bei Flächen, später beim Pythagoras und beim Überschlagen. Wer 12² oder 15² nicht sicher hat, rechnet jede Fläche neu aus. Kurze Blöcke mit der passenden Obergrenze festigen die Reihe, ohne dass 20² schon in Klasse 5 drankommt.",
+    howItWorks:
+      "Unten Klasse 5 oder 6 wählen. Quadratzahlen sind auf der Übungsseite vorausgewählt, das Halbjahr setzt die Obergrenze. In Klasse 6 ist ein Teil der Aufgaben eine Zehnerpotenz, zum Beispiel 10³ = 1000 oder 10 000 = 10 hoch. Im 1. Halbjahr reicht das bis 10⁴, im 2. Halbjahr bis 10⁶. Danach online prüfen oder als PDF drucken.",
+    forWhom:
+      "Kinder in Klasse 5 und 6, Eltern beim Üben zu Hause und Lehrkräfte, die ein Arbeitsblatt brauchen. Kostenlos und ohne Anmeldung.",
+    faqs: [
+      {
+        q: "Bis zu welcher Quadratzahl geht es in Klasse 5?",
+        a: "Im 1. Halbjahr bis 10² = 100, im 2. Halbjahr bis 12² = 144.",
+      },
+      {
+        q: "Was kommt in Klasse 6 dazu?",
+        a: "Quadratzahlen im 1. Halbjahr von 8² bis 16², im 2. Halbjahr von 11² bis 20². Dazu Zehnerpotenzen: im 1. Halbjahr bis 10⁴, im 2. Halbjahr bis 10⁶, zum Beispiel 10³ = 1000.",
+      },
+      {
+        q: "Wird auch die Wurzel abgefragt?",
+        a: "Nicht mit einem Wurzelzeichen. Die Umkehrung lautet „49 ist das Quadrat von“, die Antwort ist 7.",
+      },
+    ],
+  },
 ];

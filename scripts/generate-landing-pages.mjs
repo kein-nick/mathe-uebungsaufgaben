@@ -108,8 +108,8 @@ const NEWS_ITEMS = [
     date: "3. Oktober 2026",
     title: "Quadratzahlen für Klasse 5 und 6",
     text: "Neue Übungen zu Quadratzahlen. In Klasse 5 bis 12², im 1. Halbjahr bis 10². In Klasse 6 bis 20², dazu einfache Zehnerpotenzen wie 10³ = 1000. Eine Aufgabe lautet zum Beispiel 7² = 49 oder 49 ist das Quadrat von 7.",
-    href: "/klasse-5/uebungen?themen=squares",
-    linkLabel: "Quadratzahlen direkt üben",
+    href: "/quadratzahlen",
+    linkLabel: "Quadratzahlen üben",
   },
   {
     dateIso: "2026-10-01",
@@ -166,7 +166,11 @@ function classOgImage(grade) {
 }
 
 function hubOgImage(slug) {
-  return `${SITE_URL}/og-image-${slug}.jpg`;
+  const file = path.join(root, `og-image-${slug}.jpg`);
+  if (fs.existsSync(file)) {
+    return `${SITE_URL}/og-image-${slug}.jpg`;
+  }
+  return OG_IMAGE;
 }
 
 function renderOpenGraph({ title, description, url, imageAlt, image = OG_IMAGE }) {

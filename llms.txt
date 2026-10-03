@@ -23,7 +23,7 @@ Direkte Übungsseiten: [Klasse 1](https://mathe-testen.de/klasse-1/uebungen), [K
 - [Zahlenmauern Klasse 1 bis 3](https://mathe-testen.de/klasse-1/uebungen?themen=number_wall): online lösen oder als PDF-Arbeitsblatt drucken
 - [Zehner- und Hunderterfreunde Klasse 1 und 2](https://mathe-testen.de/klasse-1/uebungen?themen=decompose): im Thema Zerlegen. Klasse 1 übt Zehnerfreunde wie 3 + ___ = 10. Klasse 2 übt zusätzlich Hunderterfreunde wie 30 + ___ = 100, im 2. Halbjahr auch 36 + ___ = 100. Daneben bleiben Zerlegungen wie 14 = 6 + ___. Online prüfen oder als PDF drucken.
 - [Liter und Milliliter Klasse 3 und 4](https://mathe-testen.de/klasse-3/uebungen?themen=capacity): Hohlmaße umrechnen und ergänzen, online oder als PDF
-- [Quadratzahlen Klasse 5 und 6](https://mathe-testen.de/klasse-5/uebungen?themen=squares): Klasse 5 bis 12² (1. Halbjahr bis 10²), Klasse 6 bis 20². Aufgaben wie 7² = 49 oder „49 ist das Quadrat von“. In Klasse 6 zusätzlich Zehnerpotenzen wie 10³ = 1000. Online prüfen oder als PDF drucken.
+- [Quadratzahlen](https://mathe-testen.de/quadratzahlen): Klasse 5 im 1. Halbjahr bis 10², im 2. Halbjahr bis 12². Klasse 6 im 1. Halbjahr von 8² bis 16², im 2. Halbjahr von 11² bis 20². Aufgaben wie 7² = 49 oder „49 ist das Quadrat von“. Kein Wurzelzeichen. In Klasse 6 zusätzlich Zehnerpotenzen, im 1. Halbjahr bis 10⁴, im 2. Halbjahr bis 10⁶, zum Beispiel 10³ = 1000. Online prüfen oder als PDF drucken.
 - [Einmaleins](https://mathe-testen.de/einmaleins): eine Reihe von 1×1 bis 10×10, oder gemischte Malaufgaben nach Klasse. Eine Reihe übt nur diese Malreihe, zum Beispiel 7×1 bis 7×10.
   - [1er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=1)
   - [2er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=2)
