@@ -1507,11 +1507,7 @@ function buildTopics(u) {
           ? randomInt(upper, range.max)
           : randomInt(range.min, range.max);
         const square = n * n;
-        const roll = Math.random();
-        if (roll < 0.22) {
-          return numberTask("squares", `${n} × ${n} =`, square, { key: `mal:${n}` });
-        }
-        if (roll < 0.48) {
+        if (Math.random() < 0.4) {
           return numberTask("squares", `${grouped(square)} ist das Quadrat von`, n, { key: `wurzel:${n}` });
         }
         return numberTask("squares", `${n}² =`, square, { key: `quadrat:${n}` });
