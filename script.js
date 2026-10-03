@@ -2340,6 +2340,71 @@ function pdfMaxCompactEqPerPage() {
   return selectedGrade <= 2 ? 6 : 4;
 }
 
+function pdfSharedSlot(kind) {
+  if (kind === "eq" || kind === "rest") {
+    return selectedGrade <= 2 ? { family: "six", cap: 6 } : { family: "quad", cap: 4 };
+  }
+  if (kind === "list" && !notesToggle.checked && selectedGrade >= 3) {
+    return { family: "quad", cap: 4 };
+  }
+  return null;
+}
+
+function packSharedPdfGroups(groups) {
+  const packed = [];
+  let bucket = [];
+  let family = null;
+  let cap = 0;
+
+  const flush = () => {
+    if (!bucket.length) {
+      return;
+    }
+    packed.push({ blocks: bucket, kind: family === "six" ? "eq" : "quad-mix" });
+    bucket = [];
+    family = null;
+    cap = 0;
+  };
+
+  groups.forEach((group) => {
+    const slot = pdfSharedSlot(group.kind);
+    if (!slot || (family && slot.family !== family)) {
+      flush();
+      if (!slot) {
+        packed.push(group);
+        return;
+      }
+    }
+    if (!family) {
+      family = slot.family;
+      cap = slot.cap;
+    }
+    group.blocks.forEach((block) => {
+      if (bucket.length === cap) {
+        const full = bucket;
+        bucket = [];
+        packed.push({ blocks: full, kind: family === "six" ? "eq" : "quad-mix" });
+      }
+      bucket.push(block);
+    });
+  });
+  flush();
+  return packed;
+}
+
+function pdfMixedPageClass(blocks) {
+  const hasShortEq = blocks.some((block) => pdfBlockIsCompactEq(block) || pdfBlockIsRest(block));
+  const hasList = blocks.some((block) => !pdfBlockIsCompactEq(block) && !pdfBlockIsRest(block));
+  const classes = [];
+  if (hasShortEq) {
+    classes.push(selectedGrade <= 2 ? "pdf-page-eq-six" : "pdf-page-eq-quad");
+  }
+  if (hasList) {
+    classes.push("pdf-page-list");
+  }
+  return classes.join(" ");
+}
+
 function pdfBlockIsCompactEq(block) {
   if (block.classList.contains("is-rest")) {
     return false;
@@ -2587,10 +2652,14 @@ async function buildPdfSheet() {
       groups.push({ blocks: run.slice(offset, offset + perPage), kind: "list" });
     }
   }
-  groups.forEach((group, index) => {
+  const pageGroups = packSharedPdfGroups(groups);
+  pageGroups.forEach((group, index) => {
     const grid = document.createElement("div");
     let pageClass;
-    if (group.kind === "eq") {
+    if (group.kind === "quad-mix") {
+      grid.className = "pdf-blocks pdf-blocks-quad";
+      pageClass = pdfMixedPageClass(group.blocks);
+    } else if (group.kind === "eq") {
       const layout = pdfCompactEqLayout();
       grid.className = layout.gridClass;
       pageClass = layout.pageClass;
@@ -2620,7 +2689,7 @@ async function buildPdfSheet() {
       pageClass = "pdf-page-visual pdf-page-visual-fill";
     }
     group.blocks.forEach((item) => grid.append(item));
-    pages.push(makePdfPage(grid, index + 1, groups.length, pageClass));
+    pages.push(makePdfPage(grid, index + 1, pageGroups.length, pageClass));
   });
 
   pages.forEach((page) => sheet.append(page));
