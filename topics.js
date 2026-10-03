@@ -670,6 +670,33 @@ function buildTopics(u) {
     </div>`;
   }
 
+  function numberFriend(total, known) {
+    const friend = total - known;
+    if (Math.random() < 0.5) {
+      return numberTask("decompose", `${known} + ___ = ${total}`, friend, {
+        key: `freund:${total}:${known}`,
+      });
+    }
+    return numberTask("decompose", `___ + ${known} = ${total}`, friend, {
+      key: `freund-l:${total}:${known}`,
+    });
+  }
+
+  function zehnerfreund() {
+    return numberFriend(10, randomInt(1, 9));
+  }
+
+  function hunderterfreund(tensOnly) {
+    if (tensOnly) {
+      return numberFriend(100, randomInt(1, 9) * 10);
+    }
+    let known = randomInt(1, 99);
+    if (known % 10 === 0) {
+      known += known === 90 ? -1 : 1;
+    }
+    return numberFriend(100, known);
+  }
+
   const topics = [
     {
       id: "addition",
@@ -1205,12 +1232,45 @@ function buildTopics(u) {
       fromGrade: 1,
       fromTerm: 1,
       untilGrade: 2,
-      example: (g, t) => `z. B. ${Math.min(10, addMax(g, t))} = 3 + ___`,
+      example: (g, t) => {
+        if (g >= 2 && t === 2) {
+          return "z. B. 36 + ___ = 100";
+        }
+        if (g >= 2) {
+          return "z. B. 30 + ___ = 100";
+        }
+        return "z. B. 3 + ___ = 10";
+      },
       generate: (g, t) => {
-        const max = Math.min(addMax(g, t), g >= 2 ? addMax(g, t) : addMax(g, t));
+        const roll = Math.random();
+        if (g <= 1) {
+          if (roll < (t === 1 ? 0.7 : 0.5)) {
+            return zehnerfreund();
+          }
+        } else if (t === 1) {
+          if (roll < 0.35) {
+            return zehnerfreund();
+          }
+          if (roll < 0.75) {
+            return hunderterfreund(true);
+          }
+        } else {
+          if (roll < 0.2) {
+            return zehnerfreund();
+          }
+          if (roll < 0.5) {
+            return hunderterfreund(true);
+          }
+          if (roll < 0.8) {
+            return hunderterfreund(false);
+          }
+        }
+        const max = addMax(g, t);
         const total = niceNumber(max, Math.max(g === 1 ? 4 : 8, addMinOf(g, t)));
-        const part = randomInt(1, total - 1);
-        return numberTask("decompose", `${total} = ${part} + ___`, total - part);
+        const part = randomInt(1, Math.max(1, total - 1));
+        return numberTask("decompose", `${total} = ${part} + ___`, total - part, {
+          key: `zerlegen:${total}:${part}`,
+        });
       },
     },
     {
