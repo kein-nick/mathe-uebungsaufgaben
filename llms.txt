@@ -8,8 +8,8 @@ Nicht verwechseln mit kommerziellen Übungsheften, Schulbuch-PDFs oder Vergleich
 
 ## Klassen
 
-- [Klasse 1](https://mathe-testen.de/klasse-1): Übersicht und Übungen (Plus/Minus, Zahlenraum 20)
-- [Klasse 2](https://mathe-testen.de/klasse-2): Übersicht und Übungen (Einmaleins, Zahlenraum 100)
+- [Klasse 1](https://mathe-testen.de/klasse-1): Übersicht und Übungen (Plus/Minus, Zahlenraum 20, Zehnerfreunde)
+- [Klasse 2](https://mathe-testen.de/klasse-2): Übersicht und Übungen (Einmaleins, Zahlenraum 100, Zehner- und Hunderterfreunde)
 - [Klasse 3](https://mathe-testen.de/klasse-3): Übersicht und Übungen (schriftliches Rechnen, Division mit Rest, Sachaufgaben)
 - [Klasse 4](https://mathe-testen.de/klasse-4): Übersicht und Übungen (schriftliche Verfahren, Bruchanteile)
 - [Klasse 5](https://mathe-testen.de/klasse-5): Übersicht und Übungen (Brüche, Dezimalzahlen, Prozent, Quadratzahlen bis 12²)
@@ -21,6 +21,7 @@ Direkte Übungsseiten: [Klasse 1](https://mathe-testen.de/klasse-1/uebungen), [K
 
 - [Plus und Minus](https://mathe-testen.de/plus-minus)
 - [Zahlenmauern Klasse 1 bis 3](https://mathe-testen.de/klasse-1/uebungen?themen=number_wall): online lösen oder als PDF-Arbeitsblatt drucken
+- [Zehner- und Hunderterfreunde Klasse 1 und 2](https://mathe-testen.de/klasse-1/uebungen?themen=decompose): im Thema Zerlegen. Klasse 1 übt Zehnerfreunde wie 3 + ___ = 10. Klasse 2 übt zusätzlich Hunderterfreunde wie 30 + ___ = 100, im 2. Halbjahr auch 36 + ___ = 100. Daneben bleiben Zerlegungen wie 14 = 6 + ___. Online prüfen oder als PDF drucken.
 - [Liter und Milliliter Klasse 3 und 4](https://mathe-testen.de/klasse-3/uebungen?themen=capacity): Hohlmaße umrechnen und ergänzen, online oder als PDF
 - [Quadratzahlen Klasse 5 und 6](https://mathe-testen.de/klasse-5/uebungen?themen=squares): Klasse 5 bis 12² (1. Halbjahr bis 10²), Klasse 6 bis 20². Aufgaben wie 7² = 49 oder „49 ist das Quadrat von“. In Klasse 6 zusätzlich Zehnerpotenzen wie 10³ = 1000. Online prüfen oder als PDF drucken.
 - [Einmaleins](https://mathe-testen.de/einmaleins): eine Reihe von 1×1 bis 10×10, oder gemischte Malaufgaben nach Klasse. Eine Reihe übt nur diese Malreihe, zum Beispiel 7×1 bis 7×10.

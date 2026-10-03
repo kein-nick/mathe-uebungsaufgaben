@@ -36,8 +36,8 @@ const GROUPS = {
 };
 
 const classIntros = {
-  1: "In Klasse 1 geht es um erste Zahlen, Plus und Minus bis 20 sowie einfache Vergleiche und Zerlegungen.",
-  2: "In Klasse 2 vertiefst du Plus und Minus, lernst das Einmaleins und erste Größen wie Geld und Uhr.",
+  1: "In Klasse 1 geht es um erste Zahlen, Plus und Minus bis 20, Zehnerfreunde und einfache Zerlegungen.",
+  2: "In Klasse 2 vertiefst du Plus und Minus bis 100, übst Zehner- und Hunderterfreunde und lernst das Einmaleins.",
   3: "In Klasse 3 kommen größere Zahlen, schriftliches Rechnen, Division mit Rest, Tabellen und erste Sachaufgaben dazu.",
   4: "In Klasse 4 übst du schriftliche Verfahren, Bruchanteile, Geometrie und das Umrechnen von Größen.",
   5: "In Klasse 5 vertiefst du Brüche, Dezimalzahlen und Prozent. Quadratzahlen gehen bis 12².",
@@ -45,8 +45,8 @@ const classIntros = {
 };
 
 const classDetails = {
-  1: "Typisch für Klasse 1 sind Aufgaben im Zahlenraum bis 20. Kinder rechnen Plus und Minus, vergleichen Zahlen und lösen erste kurze Textaufgaben. Viele Übungen sind bewusst kleinschrittig — so wie es heute in den meisten Grundschulen eingeführt wird.",
-  2: "In Klasse 2 wächst der Zahlenraum bis 100, das Einmaleins wird aufgebaut und erste Sachaufgaben werden länger. Eltern merken oft: Die Aufgaben sehen noch vertraut aus, aber die Reihenfolge der Themen und die Begriffe können anders sein als früher.",
+  1: "Typisch für Klasse 1 sind Aufgaben im Zahlenraum bis 20. Beim Zerlegen üben Kinder Zehnerfreunde, zum Beispiel 3 + ___ = 10, und zerlegen Zahlen wie 8 = 5 + ___. Dazu kommen Plus, Minus und erste Vergleiche.",
+  2: "In Klasse 2 wächst der Zahlenraum bis 100. Beim Zerlegen bleiben Zehnerfreunde, dazu kommen Hunderterfreunde wie 30 + ___ = 100. Im 2. Halbjahr auch Aufgaben wie 36 + ___ = 100. Das Einmaleins wird aufgebaut.",
   3: "Klasse 3 bedeutet größere Zahlen, schriftliches Rechnen und mehr Schritte pro Aufgabe. Division mit Rest, Punkt vor Strich, Tabellen lesen und Größen wie Länge oder Gewicht kommen dazu — Themen, bei denen eine Übersicht besonders hilft.",
   4: "In Klasse 4 stehen schriftliche Verfahren, Division mit Rest, Bruchanteile und anspruchsvollere Sachaufgaben im Fokus. Geometrie und Größen werden präziser; Kinder sollen nicht nur rechnen, sondern auch begründen, warum ein Ergebnis passt.",
   5: "Klasse 5 bringt Brüche, Dezimalzahlen und Prozent zusammen — oft in gemischten Aufgaben. Quadratzahlen gehören dazu: im 1. Halbjahr bis 10², im 2. Halbjahr bis 12². Geübt wird zum Beispiel 7² = 49 und die Umkehrung 49 ist das Quadrat von 7.",
@@ -95,6 +95,14 @@ const SITE_URL = "https://mathe-testen.de";
 const SITE_NAME = "Mathematik Übungsaufgaben";
 const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 const NEWS_ITEMS = [
+  {
+    dateIso: "2026-10-03",
+    date: "3. Oktober 2026",
+    title: "Zehner- und Hunderterfreunde für Klasse 1 und 2",
+    text: "Beim Zerlegen kommen Zahlenfreunde dazu. In Klasse 1 sind es Zehnerfreunde, zum Beispiel 3 + ___ = 10. In Klasse 2 kommen Hunderterfreunde dazu, etwa 30 + ___ = 100. Der größere Teil bleibt das Zerlegen, zum Beispiel 14 = 6 + ___.",
+    href: "/klasse-1/uebungen?themen=decompose",
+    linkLabel: "Zehnerfreunde direkt üben",
+  },
   {
     dateIso: "2026-10-03",
     date: "3. Oktober 2026",
@@ -487,6 +495,8 @@ ${json}
 
 function classPageMeta(grade) {
   const descriptions = {
+    1: "Mathe Klasse 1 üben: Zehnerfreunde wie 3 + ___ = 10, Plus und Minus bis 20. Kostenlos online oder als PDF. Ohne Anmeldung.",
+    2: "Mathe Klasse 2 üben: Zehner- und Hunderterfreunde wie 30 + ___ = 100, Einmaleins bis 100. Kostenlos online oder als PDF. Ohne Anmeldung.",
     5: "Mathe Klasse 5 üben: Quadratzahlen bis 12², Brüche, Dezimalzahlen und Prozent. Kostenlos online oder als PDF. Ohne Anmeldung.",
     6: "Mathe Klasse 6 üben: Quadratzahlen bis 20², Zehnerpotenzen wie 10³, Brüche und Prozent. Kostenlos online oder als PDF. Ohne Anmeldung.",
   };
@@ -571,6 +581,12 @@ function renderClassJsonLd(grade) {
 }
 
 function practiceDescription(grade) {
+  if (grade === 1) {
+    return "Übungsaufgaben Klasse 1: Zehnerfreunde wie 3 + ___ = 10 und Zerlegen. Halbjahr und Themen wählen, online üben oder als PDF drucken.";
+  }
+  if (grade === 2) {
+    return "Übungsaufgaben Klasse 2: Zehner- und Hunderterfreunde wie 30 + ___ = 100. Halbjahr und Themen wählen, online üben oder als PDF drucken.";
+  }
   if (grade === 5) {
     return "Übungsaufgaben Klasse 5: Quadratzahlen bis 12², Brüche und Prozent. Halbjahr und Themen wählen, online üben oder als PDF drucken.";
   }
@@ -815,8 +831,14 @@ function renderTopicOverview(grade) {
         .map((topic) => {
           const description = topicDescriptions[topic.id] || "Übungen zu diesem Thema im passenden Schwierigkeitsgrad.";
           const note = topicAvailabilityNote(topic, grade);
+          const cardLabel =
+            topic.id === "decompose"
+              ? grade <= 1
+                ? "Zerlegen und Zehnerfreunde"
+                : "Zerlegen, Zehner- und Hunderterfreunde"
+              : topic.label;
           return `<li class="landing-topic-detail">
-              <h4>${escapeHtml(topic.label)}</h4>
+              <h4>${escapeHtml(cardLabel)}</h4>
               <p>${escapeHtml(description)}</p>
 ${note ? `              <p class="hint landing-topic-note">${escapeHtml(note)}</p>\n` : ""}            </li>`;
         })
@@ -846,7 +868,7 @@ function extractInstallPrompt() {
 
 const installPromptHtml = extractInstallPrompt();
 
-const pwaScripts = `    <script defer src="/news.js?v=6"></script>
+const pwaScripts = `    <script defer src="/news.js?v=7"></script>
     <script defer src="/pwa.js"></script>
     <script>
       window.va =
@@ -870,8 +892,8 @@ function extractAppFragments() {
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart).trimEnd();
 
   const scripts = `    <script src="/topics.js?v=53"></script>
-    <script src="/script.js?v=73"></script>
-    <script defer src="/news.js?v=6"></script>
+    <script src="/script.js?v=74"></script>
+    <script defer src="/news.js?v=7"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>
       window.va =

@@ -673,13 +673,14 @@ function fillOperations(grade, term) {
       checkbox.checked = allowed && previous.has(item.id);
       const name = document.createElement("span");
       name.className = "topic-choice-name";
-      name.textContent = allowed ? item.label : `${item.label} (ab Klasse ${item.fromGrade})`;
+      const choiceLabel = item.id === "decompose" ? decomposeLabel(grade) : item.label;
+      name.textContent = allowed ? choiceLabel : `${choiceLabel} (ab Klasse ${item.fromGrade})`;
       const example = document.createElement("span");
       example.className = "topic-example";
       example.textContent = item.example(grade, term);
       const stepper = document.createElement("div");
       stepper.className = "topic-blocks";
-      const safeLabel = escapeHtml(item.label);
+      const safeLabel = escapeHtml(choiceLabel);
       stepper.innerHTML = `
         <button type="button" class="topic-blocks-btn" data-block-delta="-1" aria-label="Einen 10er-Block weniger für ${safeLabel}">−</button>
         <span class="topic-blocks-count" aria-live="polite">1 × 10</span>
@@ -759,7 +760,7 @@ function updateBlockModeSummary() {
     return;
   }
   const parts = quotas.map((item) => {
-    const label = getTopic(item.id)?.label || item.id;
+    const label = topicSheetLabel(item.id) || item.id;
     return `${label} ${item.blocks}×10`;
   });
   blockModeSummary.textContent = `${total} Aufgaben: ${parts.join(", ")}`;
@@ -1891,12 +1892,16 @@ function taskLayoutSlices(taskList) {
   return slices;
 }
 
+function decomposeLabel(grade) {
+  if (grade <= 1) {
+    return "Zerlegen und Zehnerfreunde";
+  }
+  return "Zerlegen, Zehner- und Hunderterfreunde";
+}
+
 function topicSheetLabel(id) {
   if (id === "decompose") {
-    if (selectedGrade <= 1) {
-      return "Zerlegen und Zehnerfreunde";
-    }
-    return "Zerlegen, Zehner- und Hunderterfreunde";
+    return decomposeLabel(selectedGrade);
   }
   return getTopic(id)?.label;
 }

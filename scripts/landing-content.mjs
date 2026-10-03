@@ -6,7 +6,7 @@ export const groupDescriptions = {
     rechnen:
       "Im Bereich Rechnen geht es in Klasse 1 vor allem ums sichere Arbeiten im Zahlenraum bis 20. Kinder lösen einfache Plus- und Minusaufgaben, oft noch ohne Zehnerübergang, und lernen erste kurze Sachaufgaben mit Alltagssituationen.",
     zahlen:
-      "Hier geht es um das Verständnis von Zahlen selbst: vergleichen, zerlegen, Zahlenmauern lösen sowie Vorgänger und Nachfolger finden. Das legt die Basis für späteres Rechnen — nicht nur Ergebnisse auswendig lernen, sondern Zahlen einordnen können.",
+      "Hier geht es um das Verständnis von Zahlen selbst: vergleichen, zerlegen und Zehnerfreunde wie 3 + ___ = 10, Zahlenmauern lösen sowie Vorgänger und Nachfolger finden.",
     groessen:
       "Größen verbinden Mathe mit dem Alltag: Geldstücke erkennen, einfache Uhrzeiten lesen oder Längen vergleichen. In Klasse 1 sind die Aufgaben noch sehr anschaulich und nah an konkreten Situationen.",
     geometrie:
@@ -16,7 +16,7 @@ export const groupDescriptions = {
     rechnen:
       "Plus und Minus werden bis 100 sicherer, dazu kommen erste Mal- und Geteiltaufgaben im kleinen Einmaleins. Sachaufgaben werden etwas länger. Viele Schulen üben schrittweise: erst einfache Zahlen, dann größere.",
     zahlen:
-      "Kinder vergleichen Zahlen, lösen größere Zahlenmauern, arbeiten mit geraden und ungeraden Zahlen und üben Verdoppeln und Halbieren. Tabellen und einfache Übersichten helfen, Zahlen zu ordnen.",
+      "Kinder vergleichen Zahlen, lösen größere Zahlenmauern und üben Zehner- und Hunderterfreunde, zum Beispiel 30 + ___ = 100. Dazu kommen gerade und ungerade Zahlen, Verdoppeln und Halbieren.",
     groessen:
       "Geld und Uhr sind zentrale Themen: Wechselgeld, Uhrzeiten auf der vollen Stunde oder halben Stunde, einfache Längen und Gewichte. Der Bezug zum echten Leben macht das Üben sinnvoll.",
     geometrie:
@@ -104,7 +104,7 @@ export const topicDescriptions = {
   word_times:
     "Sachaufgaben zu Mal und Geteilt: einkaufen und gleichmäßig verteilen. Geteilt geht immer auf, ohne Rest. Ab Klasse 3. In Klasse 3 folgen die Zahlen dem Schalter fürs kleine Einmaleins.",
   decompose:
-    "Zahlen zerlegen — zum Beispiel 14 = 10 + 4. Basis für das Verständnis des Zehnersystems und späteres schriftliches Rechnen.",
+    "Zahlen zerlegen, zum Beispiel 14 = 6 + ___. In Klasse 1 kommen Zehnerfreunde dazu, etwa 3 + ___ = 10. In Klasse 2 auch Hunderterfreunde, etwa 30 + ___ = 100 und im 2. Halbjahr 36 + ___ = 100.",
   number_wall:
     "Zahlenmauern mit zwei oder drei Grundsteinen: Jeder Stein ist die Summe der beiden Steine darunter. Mal fehlt ein oberer, mal ein unterer Stein — so werden Plus und Minus gemeinsam geübt.",
   compare:

@@ -32,6 +32,7 @@ Stand: 3. Oktober 2026
 - Hohlmaße mit Liter und Milliliter für Klasse 3 und 4
 - Körper erkennen für Klasse 2 bis 4, online und im PDF
 - Quadratzahlen und einfache Zehnerpotenzen für Klasse 5 und 6
+- Zehnerfreunde in Klasse 1 und 2, Hunderterfreunde in Klasse 2, im Thema Zerlegen
 
 ---
 
@@ -82,21 +83,14 @@ Stand: 3. Oktober 2026
 
 Die App deckt bereits viele Themen ab. Lehrpläne unterscheiden sich jedoch nach Bundesland und Schulform; eine genaue Prozentangabe wäre deshalb nicht belastbar. Folgende Ergänzungen schließen erkennbare Lücken oder vertiefen häufig geübte Inhalte:
 
-#### Grundschule (Klasse 1 bis 4)
-
-1. **Zehner- und Hunderterfreunde als Erweiterung von „Zerlegen“ (Klasse 1–2)**
-   - *Beschreibung:* Das vorhandene Thema „Zerlegen“ gezielt um Zahlenpaare ergänzen, die zusammen 10 ergeben ($3 + \underline{7} = 10$), sowie in Klasse 2 um Hunderterfreunde ($30 + \underline{70} = 100$).
-   - *Warum lohnend:* Fundamentales Automatisierungs-Training für den Zehnerübergang.
-   - *Aufwand:* sehr gering; kein eigenes Thema nötig.
-
 #### Orientierungsstufe (Klasse 5 und 6)
 
-2. **ggT und kgV (Klasse 5–6)**
+1. **ggT und kgV (Klasse 5–6)**
    - *Beschreibung:* Größter gemeinsamer Teiler und kleinstes gemeinsames Vielfaches (z. B. ggT von 24 und 36 = 12).
    - *Warum lohnend:* Rechnerischer Kern für das Kürzen und Gleichnamigmachen von Brüchen.
    - *Aufwand:* gering.
 
-3. **Zufall & Wahrscheinlichkeit (Klasse 4–6)**
+2. **Zufall & Wahrscheinlichkeit (Klasse 4–6)**
    - *Beschreibung:* Grundbegriffe wie *sicher, möglich, unmöglich*, Wahrscheinlichkeiten bei Würfeln (z. B. „Chance auf eine gerade Zahl: 3 von 6“) oder Ziehen von Kugeln aus einer Urne.
    - *Warum lohnend:* Steht in fast allen neuen Bildungsplänen unter „Daten und Zufall“.
    - *Aufwand:* mittel bis hoch (eindeutige Sprache, Darstellungen und passende Antwortformate).
@@ -128,8 +122,7 @@ Diese Ideen passen eher nicht zum Konzept der Seite:
 
 1. Zufall & Wahrscheinlichkeit
 2. ggT und kgV
-3. Zehner- und Hunderterfreunde in „Zerlegen“ ergänzen
-4. Vollständige Links mit Einstellungen
-5. Letzte Einstellungen merken
+3. Vollständige Links mit Einstellungen
+4. Letzte Einstellungen merken
 
 Vor Werbung oder zusätzlichem Tracking den Einwilligungsbedarf erneut prüfen.
