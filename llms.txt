@@ -43,6 +43,7 @@ Direkte Übungsseiten: [Klasse 1](https://mathe-testen.de/klasse-1/uebungen), [K
 - [Uhr](https://mathe-testen.de/uhr-ueben)
 - [Geld](https://mathe-testen.de/geld-rechnen)
 - [Geometrie](https://mathe-testen.de/geometrie-grundschule)
+- [Geometrische Körper](https://mathe-testen.de/geometrische-koerper): Würfel, Quader, Kugel und Zylinder in Klasse 2, ab Klasse 3 auch Pyramide, Kegel und Prisma. Ecken ab Klasse 3, Kanten und Flächen ab Klasse 4. Ein Würfel hat 8 Ecken, 12 Kanten und 6 Flächen. Online prüfen oder als PDF drucken.
 
 ## Für Menschen
 

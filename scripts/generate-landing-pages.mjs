@@ -116,8 +116,8 @@ const NEWS_ITEMS = [
     date: "1. Oktober 2026",
     title: "Körper erkennen für Klasse 2 bis 4",
     text: "Würfel, Quader, Kugel und Zylinder, ab Klasse 3 auch Pyramide, Kegel und Prisma. Die Zeichnung ist schwarz-weiß, zehn Aufgaben passen auf eine PDF-Seite. Ab Klasse 3 kommen Fragen zu Ecken, Kanten und Flächen dazu.",
-    href: "/klasse-2/uebungen?themen=solids",
-    linkLabel: "Körper direkt üben",
+    href: "/geometrische-koerper",
+    linkLabel: "Geometrische Körper üben",
   },
   {
     dateIso: "2026-10-01",
@@ -1157,9 +1157,15 @@ function renderHubPage(hub) {
     )
     .join("\n");
 
-  const related = topicHubs
-    .filter((other) => other.slug !== hub.slug)
-    .slice(0, 6)
+  const preferredRelated = {
+    "geometrische-koerper": ["geometrie-grundschule"],
+    "geometrie-grundschule": ["geometrische-koerper"],
+  };
+  const preferred = new Set(preferredRelated[hub.slug] || []);
+  const related = [
+    ...topicHubs.filter((other) => preferred.has(other.slug)),
+    ...topicHubs.filter((other) => other.slug !== hub.slug && !preferred.has(other.slug)),
+  ].slice(0, 6)
     .map((other) => `<li><a href="/${other.slug}">${escapeHtml(other.shortName)}</a></li>`)
     .join("\n");
 

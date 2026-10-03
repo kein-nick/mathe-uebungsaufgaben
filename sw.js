@@ -1,4 +1,4 @@
-const CACHE_NAME = "mathe-uebungsaufgaben-v107";
+const CACHE_NAME = "mathe-uebungsaufgaben-v108";
 
 const PRECACHE_URLS = [
   "/",
@@ -42,6 +42,7 @@ const PRECACHE_URLS = [
   "/schriftlich-rechnen.html",
   "/dezimalzahlen.html",
   "/geometrie-grundschule.html",
+  "/geometrische-koerper.html",
   "/sitemap.xml",
   "/robots.txt",
   "/icons/icon-192.png",

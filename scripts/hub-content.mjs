@@ -346,7 +346,7 @@ export const topicHubs = [
     faqs: [
       {
         q: "Was gehört zur Geometrie in der Grundschule?",
-        a: "Unter anderem Formen erkennen, Lage beschreiben, Muster, Symmetrie/Spiegeln und Arbeiten am Zahlenstrahl — später auch Umfang, Fläche, Koordinaten und Winkel.",
+        a: "Unter anderem Formen erkennen, Lage beschreiben, Muster, Symmetrie/Spiegeln und Arbeiten am Zahlenstrahl — später auch Umfang, Fläche, Koordinaten und Winkel. Räumliche Körper wie Würfel und Kugel haben eine eigene Seite.",
       },
       {
         q: "Sind das Bildaufgaben?",
@@ -355,6 +355,40 @@ export const topicHubs = [
       {
         q: "Kostenlos ausdrucken?",
         a: "Ja, über die PDF-Funktion nach dem Erstellen des Blattes.",
+      },
+    ],
+  },
+  {
+    slug: "geometrische-koerper",
+    title: "Geometrische Körper üben online – kostenlos & als PDF",
+    h1: "Geometrische Körper üben",
+    shortName: "Körper",
+    whatHeading: "Was sind geometrische Körper?",
+    metaDescription:
+      "Geometrische Körper üben: Würfel, Quader, Kugel, Zylinder, Pyramide, Kegel und Prisma — kostenlos online oder als PDF, ohne Anmeldung.",
+    topicIds: ["solids"],
+    grades: [2, 3, 4],
+    lead: "Geometrische Körper sind die Formen mit Länge, Breite und Höhe. In der Grundschule erkennt man sie zuerst an der Zeichnung: Würfel, Quader, Kugel und Zylinder, später auch Pyramide, Kegel und Prisma.",
+    whatIs:
+      "Ein geometrischer Körper ist eine räumliche Form, kein flaches Bild. Ein Kreis liegt in der Ebene, eine Kugel füllt einen Raum. Auf dem Blatt sieht man eine schwarz-weiße Linienzeichnung und benennt den Körper. In Klasse 2 sind das Würfel, Quader, Kugel und Zylinder. Ab Klasse 3 kommen Pyramide, Kegel und Prisma dazu, und die Frage, wie viele Ecken der Körper hat. In Klasse 4 kommen Kanten und Flächen dazu. Ein Würfel hat 8 Ecken, 12 Kanten und 6 Flächen.",
+    whyPractice:
+      "Körper erkennen gehört in Klasse 2 bis 4 fest zur Geometrie. Wer Würfel und Quader verwechselt oder an der Pyramide die Ecken nicht findet, übt das an der Zeichnung, nicht an einer langen Erklärung. Die Abbildungen wechseln, damit nicht immer dieselbe Figur drankommt.",
+    howItWorks:
+      "Unten die Klasse wählen. Das Thema Körper ist auf der Übungsseite vorausgewählt. In Klasse 2 lautet die Aufgabe „Welcher Körper ist das?“. Ab Klasse 3 kommt „Wie viele Ecken hat dieser Körper?“, in Klasse 4 auch Kanten und Flächen. Danach online prüfen oder als PDF drucken: zehn Körper passen auf eine Seite. Flache Formen wie Kreis, Dreieck und Quadrat stehen auf der Seite Geometrie.",
+    forWhom:
+      "Kinder in Klasse 2, 3 und 4, Eltern beim Üben zu Hause und Lehrkräfte, die ein Arbeitsblatt brauchen. Kostenlos und ohne Anmeldung.",
+    faqs: [
+      {
+        q: "Welche geometrischen Körper lernt man in der Grundschule?",
+        a: "In Klasse 2 Würfel, Quader, Kugel und Zylinder. Ab Klasse 3 kommen Pyramide, Kegel und Prisma dazu.",
+      },
+      {
+        q: "Was ist der Unterschied zwischen Würfel und Quader?",
+        a: "Beim Würfel sind alle Kanten gleich lang, die sechs Flächen sind Quadrate. Beim Quader sind die Flächen Rechtecke, gegenüberliegende Flächen sind gleich. Beide haben 8 Ecken, 12 Kanten und 6 Flächen.",
+      },
+      {
+        q: "Ab wann übt man Ecken, Kanten und Flächen?",
+        a: "Ecken ab Klasse 3. Kanten und Flächen ab Klasse 4. Ein Würfel hat 8 Ecken, 12 Kanten und 6 Flächen.",
       },
     ],
   },
