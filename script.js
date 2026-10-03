@@ -2407,6 +2407,74 @@ function packSharedPdfGroups(groups) {
   return packed;
 }
 
+function pdfHalfPageLayout(group) {
+  if (group.kind === "quad-mix") {
+    return {
+      gridClass: "pdf-blocks pdf-blocks-quad",
+      pageClass: pdfMixedPageClass(group.blocks),
+    };
+  }
+  if (group.kind === "eq" || group.kind === "rest") {
+    const layout = pdfCompactEqLayout();
+    return { gridClass: layout.gridClass, pageClass: layout.pageClass };
+  }
+  if (group.kind === "list" && !notesToggle.checked) {
+    return { gridClass: "pdf-blocks pdf-blocks-quad", pageClass: "pdf-page-list" };
+  }
+  return null;
+}
+
+function pdfGroupHasFreeBottomHalf(group) {
+  const layout = group ? pdfHalfPageLayout(group) : null;
+  if (!layout || group.wall) {
+    return false;
+  }
+  const columns = layout.gridClass.includes("pdf-blocks-six") ? 3 : 2;
+  return group.blocks.length > 0 && group.blocks.length <= columns;
+}
+
+function isLoneSmallNumberWall(group) {
+  return (
+    group.kind === "visual" &&
+    group.blocks.length === 1 &&
+    pdfBlockIsSmallNumberWall(group.blocks[0])
+  );
+}
+
+function attachLoneSmallWalls(pageGroups) {
+  const packed = [];
+  pageGroups.forEach((group) => {
+    const previous = packed[packed.length - 1];
+    if (isLoneSmallNumberWall(group) && pdfGroupHasFreeBottomHalf(previous)) {
+      previous.wall = group.blocks[0];
+      return;
+    }
+    packed.push(group);
+  });
+  return packed;
+}
+
+function renderSplitWallPage(group) {
+  const layout = pdfHalfPageLayout(group);
+  const split = document.createElement("div");
+  split.className = "pdf-split";
+  const top = document.createElement("div");
+  top.className = `pdf-split-top ${layout.pageClass}`;
+  const topGrid = document.createElement("div");
+  topGrid.className = layout.gridClass;
+  group.blocks.forEach((block) => topGrid.append(block));
+  top.append(topGrid);
+  const bottom = document.createElement("div");
+  bottom.className =
+    "pdf-split-bottom pdf-page-visual pdf-page-visual-fill pdf-page-small-wall-pair";
+  const bottomGrid = document.createElement("div");
+  bottomGrid.className = "pdf-blocks pdf-blocks-list";
+  bottomGrid.append(group.wall);
+  bottom.append(bottomGrid);
+  split.append(top, bottom);
+  return split;
+}
+
 function pdfMixedPageClass(blocks) {
   const hasShortEq = blocks.some((block) => pdfBlockIsCompactEq(block) || pdfBlockIsRest(block));
   const hasList = blocks.some((block) => !pdfBlockIsCompactEq(block) && !pdfBlockIsRest(block));
@@ -2667,8 +2735,14 @@ async function buildPdfSheet() {
       groups.push({ blocks: run.slice(offset, offset + perPage), kind: "list" });
     }
   }
-  const pageGroups = packSharedPdfGroups(groups);
+  const pageGroups = attachLoneSmallWalls(packSharedPdfGroups(groups));
   pageGroups.forEach((group, index) => {
+    if (group.wall) {
+      pages.push(
+        makePdfPage(renderSplitWallPage(group), index + 1, pageGroups.length, "pdf-page-split")
+      );
+      return;
+    }
     const grid = document.createElement("div");
     let pageClass;
     if (group.kind === "quad-mix") {
