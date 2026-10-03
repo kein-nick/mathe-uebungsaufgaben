@@ -1808,13 +1808,13 @@ function worksheetTopicLine() {
     }
     const parts = [...counts]
       .map(([id, n]) => {
-        const label = getTopic(id)?.label;
+        const label = topicSheetLabel(id);
         return label ? `${label} ${n}` : null;
       })
       .filter(Boolean);
     return parts.length ? `Themen: ${parts.join(", ")}` : "";
   }
-  const topicNames = activeTopicIds.map((id) => getTopic(id)?.label).filter(Boolean);
+  const topicNames = activeTopicIds.map((id) => topicSheetLabel(id)).filter(Boolean);
   return topicNames.length ? `Themen: ${topicNames.join(", ")}` : "";
 }
 
@@ -1891,9 +1891,19 @@ function taskLayoutSlices(taskList) {
   return slices;
 }
 
+function topicSheetLabel(id) {
+  if (id === "decompose") {
+    if (selectedGrade <= 1) {
+      return "Zerlegen und Zehnerfreunde";
+    }
+    return "Zerlegen, Zehner- und Hunderterfreunde";
+  }
+  return getTopic(id)?.label;
+}
+
 function blockHeading(sliceTasks, startNum, endNum) {
   const range = `${startNum}–${endNum}`;
-  const labels = [...new Set(sliceTasks.map((task) => getTopic(task.type)?.label).filter(Boolean))];
+  const labels = [...new Set(sliceTasks.map((task) => topicSheetLabel(task.type)).filter(Boolean))];
   if (
     timesRow >= 1 &&
     timesRow <= 10 &&

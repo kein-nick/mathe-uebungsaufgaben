@@ -1244,24 +1244,24 @@ function buildTopics(u) {
       generate: (g, t) => {
         const roll = Math.random();
         if (g <= 1) {
-          if (roll < (t === 1 ? 0.7 : 0.5)) {
+          if (roll < (t === 1 ? 0.3 : 0.2)) {
             return zehnerfreund();
           }
         } else if (t === 1) {
-          if (roll < 0.35) {
+          if (roll < 0.15) {
             return zehnerfreund();
           }
-          if (roll < 0.75) {
+          if (roll < 0.35) {
             return hunderterfreund(true);
           }
         } else {
-          if (roll < 0.2) {
+          if (roll < 0.1) {
             return zehnerfreund();
           }
-          if (roll < 0.5) {
+          if (roll < 0.25) {
             return hunderterfreund(true);
           }
-          if (roll < 0.8) {
+          if (roll < 0.45) {
             return hunderterfreund(false);
           }
         }
