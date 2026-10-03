@@ -126,7 +126,7 @@ export const topicDescriptions = {
   primes:
     "Primzahlen erkennen und zerlegen in Faktoren. Grundlage für Bruchrechnung und spätere Mathematik.",
   squares:
-    "Quadratzahlen üben: in Klasse 5 bis 12², in Klasse 6 bis 20². Dazu kommen einfache Zehnerpotenzen wie 10³ = 1000. Der Zahlenraum richtet sich nach Klasse und Halbjahr.",
+    "Quadratzahlen in Klasse 5 bis 12², im 1. Halbjahr bis 10², und in Klasse 6 bis 20². Eine Aufgabe lautet zum Beispiel 7² = 49 oder 49 ist das Quadrat von 7. In Klasse 6 kommen einfache Zehnerpotenzen dazu, etwa 10³ = 1000.",
   table_read:
     "Tabellen und einfache Diagramme lesen — Informationen entnehmen und Fragen beantworten. Übergang zu Sachkunde und Statistik.",
   money:

@@ -40,8 +40,8 @@ const classIntros = {
   2: "In Klasse 2 vertiefst du Plus und Minus, lernst das Einmaleins und erste Größen wie Geld und Uhr.",
   3: "In Klasse 3 kommen größere Zahlen, schriftliches Rechnen, Division mit Rest, Tabellen und erste Sachaufgaben dazu.",
   4: "In Klasse 4 übst du schriftliche Verfahren, Bruchanteile, Geometrie und das Umrechnen von Größen.",
-  5: "In Klasse 5 vertiefst du Brüche, Dezimalzahlen, Prozent und anspruchsvollere Sachaufgaben.",
-  6: "In Klasse 6 bereitest du dich auf die weiterführende Schule vor: Brüche, Prozent, Dreisatz und mehr.",
+  5: "In Klasse 5 vertiefst du Brüche, Dezimalzahlen und Prozent. Quadratzahlen gehen bis 12².",
+  6: "In Klasse 6 kommen Quadratzahlen bis 20² und einfache Zehnerpotenzen dazu, außerdem Brüche, Prozent und Dreisatz.",
 };
 
 const classDetails = {
@@ -49,8 +49,8 @@ const classDetails = {
   2: "In Klasse 2 wächst der Zahlenraum bis 100, das Einmaleins wird aufgebaut und erste Sachaufgaben werden länger. Eltern merken oft: Die Aufgaben sehen noch vertraut aus, aber die Reihenfolge der Themen und die Begriffe können anders sein als früher.",
   3: "Klasse 3 bedeutet größere Zahlen, schriftliches Rechnen und mehr Schritte pro Aufgabe. Division mit Rest, Punkt vor Strich, Tabellen lesen und Größen wie Länge oder Gewicht kommen dazu — Themen, bei denen eine Übersicht besonders hilft.",
   4: "In Klasse 4 stehen schriftliche Verfahren, Division mit Rest, Bruchanteile und anspruchsvollere Sachaufgaben im Fokus. Geometrie und Größen werden präziser; Kinder sollen nicht nur rechnen, sondern auch begründen, warum ein Ergebnis passt.",
-  5: "Klasse 5 bringt Brüche, Dezimalzahlen und Prozent zusammen — oft in gemischten Aufgaben. Gleichungen, Dreisatz und Winkel sind typische Themen, die Eltern manchmal erst wieder mit dem Kind neu lernen.",
-  6: "In Klasse 6 wird vieles wiederholt und vertieft, was für die weiterführende Schule wichtig ist. Die Aufgaben werden länger, die Zahlen größer, und Sachaufgaben verlangen mehrere Rechenschritte und gutes Lesen.",
+  5: "Klasse 5 bringt Brüche, Dezimalzahlen und Prozent zusammen — oft in gemischten Aufgaben. Quadratzahlen gehören dazu: im 1. Halbjahr bis 10², im 2. Halbjahr bis 12². Geübt wird zum Beispiel 7² = 49 und die Umkehrung 49 ist das Quadrat von 7.",
+  6: "In Klasse 6 wird vieles wiederholt und vertieft, was für die weiterführende Schule wichtig ist. Quadratzahlen gehen im 1. Halbjahr bis 16² und im 2. Halbjahr bis 20². Dazu kommen Zehnerpotenzen wie 10³ = 1000.",
 };
 
 const groupOrder = ["rechnen", "zahlen", "groessen", "geometrie"];
@@ -96,10 +96,10 @@ const SITE_NAME = "Mathematik Übungsaufgaben";
 const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 const NEWS_ITEMS = [
   {
-    dateIso: "2026-10-02",
-    date: "2. Oktober 2026",
+    dateIso: "2026-10-03",
+    date: "3. Oktober 2026",
     title: "Quadratzahlen für Klasse 5 und 6",
-    text: "In Klasse 5 bis 12², in Klasse 6 bis 20², dazu einfache Zehnerpotenzen wie 10³ = 1000. Der Schwierigkeitsgrad richtet sich nach Klasse und Halbjahr.",
+    text: "Neue Übungen zu Quadratzahlen. In Klasse 5 bis 12², im 1. Halbjahr bis 10². In Klasse 6 bis 20², dazu einfache Zehnerpotenzen wie 10³ = 1000. Eine Aufgabe lautet zum Beispiel 7² = 49 oder 49 ist das Quadrat von 7.",
     href: "/klasse-5/uebungen?themen=squares",
     linkLabel: "Quadratzahlen direkt üben",
   },
@@ -486,9 +486,15 @@ ${json}
 }
 
 function classPageMeta(grade) {
+  const descriptions = {
+    5: "Mathe Klasse 5 üben: Quadratzahlen bis 12², Brüche, Dezimalzahlen und Prozent. Kostenlos online oder als PDF. Ohne Anmeldung.",
+    6: "Mathe Klasse 6 üben: Quadratzahlen bis 20², Zehnerpotenzen wie 10³, Brüche und Prozent. Kostenlos online oder als PDF. Ohne Anmeldung.",
+  };
   return {
     title: `Mathe Klasse ${grade} – Übungen online & als PDF`,
-    description: `Mathe Klasse ${grade}: kostenlose Übungen und Arbeitsblätter — online üben oder als PDF zum Ausdrucken. Ohne Anmeldung.`,
+    description:
+      descriptions[grade] ||
+      `Mathe Klasse ${grade}: kostenlose Übungen und Arbeitsblätter — online üben oder als PDF zum Ausdrucken. Ohne Anmeldung.`,
     url: `${SITE_URL}/klasse-${grade}`,
     image: classOgImage(grade),
     imageAlt: `Mathematik Übungsaufgaben Klasse ${grade}`,
@@ -564,6 +570,16 @@ function renderClassJsonLd(grade) {
   };
 }
 
+function practiceDescription(grade) {
+  if (grade === 5) {
+    return "Übungsaufgaben Klasse 5: Quadratzahlen bis 12², Brüche und Prozent. Halbjahr und Themen wählen, online üben oder als PDF drucken.";
+  }
+  if (grade === 6) {
+    return "Übungsaufgaben Klasse 6: Quadratzahlen bis 20² und Zehnerpotenzen wie 10³. Halbjahr und Themen wählen, online üben oder als PDF drucken.";
+  }
+  return `Mathe-Übungen für Klasse ${grade}: Halbjahr, Anzahl und Themen wählen — online üben oder Arbeitsblatt als PDF zum Ausdrucken.`;
+}
+
 function renderPracticeJsonLd(grade) {
   const url = `${SITE_URL}/klasse-${grade}/uebungen`;
   const classUrl = `${SITE_URL}/klasse-${grade}`;
@@ -575,7 +591,7 @@ function renderPracticeJsonLd(grade) {
         "@id": `${url}/#webpage`,
         url,
         name: `Übungsaufgaben Klasse ${grade} – online & als PDF`,
-        description: `Mathe-Übungen für Klasse ${grade}: Halbjahr, Anzahl und Themen wählen — online üben oder Arbeitsblatt als PDF zum Ausdrucken.`,
+        description: practiceDescription(grade),
         inLanguage: "de-DE",
         isPartOf: { "@id": `${SITE_URL}/#website` },
       },
@@ -940,12 +956,12 @@ function renderPracticePage(grade) {
     ${renderDeviceMeta({ withManifest: true })}
     <meta
       name="description"
-      content="Mathe-Übungen für Klasse ${grade}: Halbjahr, Anzahl und Themen wählen — online üben oder Arbeitsblatt als PDF zum Ausdrucken."
+      content="${practiceDescription(grade)}"
     />
     <link rel="canonical" href="https://mathe-testen.de/klasse-${grade}/uebungen" />
 ${renderOpenGraph({
     title: `Übungsaufgaben Klasse ${grade} – online & als PDF`,
-    description: `Mathe-Übungen für Klasse ${grade}: Halbjahr, Anzahl und Themen wählen — online üben oder Arbeitsblatt als PDF zum Ausdrucken.`,
+    description: practiceDescription(grade),
     url: `${SITE_URL}/klasse-${grade}/uebungen`,
     image: classOgImage(grade),
     imageAlt: `Mathematik Übungsaufgaben Klasse ${grade}`,

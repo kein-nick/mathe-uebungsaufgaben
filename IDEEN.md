@@ -1,14 +1,14 @@
 # Ideen für die Mathe-Übungsseite
 
 Offene Verbesserungsvorschläge für die Seite.  
-Stand: September 2026
+Stand: 3. Oktober 2026
 
 ---
 
 ## Bereits umgesetzt
 
 - Countdown mit Zeitlimit, Start-Button und Markierung verspäteter Antworten
-- PDF-Export (4×2 Blöcke pro Seite, ohne Rechenweg-Felder)
+- PDF-Export; kurze 10er-Blöcke teilen sich eine Seite, wenn noch ein ganzer Block Platz hat
 - Mobile-Layout (Start/Prüfen/Bestzeiten an passenden Stellen)
 - Gleichmäßige Verteilung gemischter Rechenarten
 - Werbeplätze ausblendbar (`SHOW_ADS` / `ads-off`)
