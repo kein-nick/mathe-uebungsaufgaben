@@ -136,6 +136,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://mathe-testen.de/fuer-schulen</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+  <url>
     <loc>https://mathe-testen.de/fuer-eltern</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
