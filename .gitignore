@@ -5,6 +5,8 @@ Thumbs.db
 .env.*
 .vercel
 node_modules/
+play-store/
+scripts/fonts/
 scripts/pdf-preview-page.html
 _audit-*.js
 _debug-*.js

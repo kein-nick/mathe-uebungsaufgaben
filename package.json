@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "generate:pinterest": "node scripts/generate-pinterest-pin.mjs"
+  },
+  "dependencies": {
+    "@bubblewrap/cli": "^1.25.0"
+  }
+}
