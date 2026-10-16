@@ -2168,6 +2168,7 @@ option:disabled {
   margin: 0 0 14px;
   padding-left: 1.2rem;
   max-width: 68ch;
+  text-align: left;
 }
 
 .classroom-steps li + li {
