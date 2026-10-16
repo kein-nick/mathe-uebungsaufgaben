@@ -1373,9 +1373,23 @@ function renderRechenartenJsonLd() {
         url,
         name: "Rechenarten nach Klasse – mathe-testen.de",
         description:
-          "Alle Übungsthemen von Klasse 1 bis 6, geordnet nach Klasse, mit Link zu den Übungsaufgaben.",
+          "Welche Mathe-Themen gibt es in Klasse 1 bis 6? Übersicht zu Rechnen, Zahlen, Größen und Geometrie, mit kurzer Erklärung.",
         inLanguage: "de-DE",
         isPartOf: { "@id": `${SITE_URL}/#website` },
+      },
+      {
+        "@type": "ItemList",
+        "@id": `${url}/#klassen`,
+        name: "Rechenarten nach Klasse",
+        itemListOrder: "https://schema.org/ItemListOrderAscending",
+        numberOfItems: 6,
+        itemListElement: [1, 2, 3, 4, 5, 6].map((grade) => ({
+          "@type": "ListItem",
+          position: grade,
+          name: `Klasse ${grade}`,
+          description: classIntros[grade],
+          url: `${url}#klasse-${grade}`,
+        })),
       },
       {
         "@type": "BreadcrumbList",
@@ -1434,6 +1448,7 @@ function renderRechenartenMain() {
 
       return `<section class="home-class-card" id="klasse-${grade}" aria-labelledby="rechenarten-klasse-${grade}">
           <h2 id="rechenarten-klasse-${grade}">Klasse ${grade}</h2>
+          <p class="home-class-intro">${escapeHtml(classIntros[grade])}</p>
           <div class="home-categories">
             ${groups}
           </div>
@@ -1449,14 +1464,14 @@ function renderRechenartenMain() {
 
 function writeRechenartenPage() {
   const description =
-    "Alle Übungsthemen von Klasse 1 bis 6, geordnet nach Klasse. Jedes Thema öffnet die passende Übung, unter der Liste geht es zu den Übungsaufgaben der Klasse.";
+    "Welche Mathe-Themen gibt es in Klasse 1 bis 6? Übersicht zu Rechnen, Zahlen, Größen und Geometrie, mit kurzer Erklärung und Link zu den Übungsaufgaben.";
   const html = renderInfoPage({
     current: "rechenarten",
     title: "Rechenarten nach Klasse – mathe-testen.de",
     description,
     url: `${SITE_URL}/rechenarten`,
     h1: "Rechenarten nach Klasse",
-    lead: "Hier stehen alle Übungsthemen, die es in der jeweiligen Klasse gibt: Rechnen, Zahlen, Größen und Geometrie. Unter jedem Namen steht kurz, worum es geht. Ein Klick öffnet genau dieses Thema, unter der Liste geht es zu den Übungsaufgaben der Klasse.",
+    lead: "Alle Übungsthemen für Klasse 1 bis 6. Jede Klasse ist in Rechnen, Zahlen, Größen und Geometrie geteilt. Unter dem Namen steht in ein bis zwei Sätzen, worum es geht. Der Name öffnet die Übung, unter der Liste stehen die Übungsaufgaben der Klasse.",
     jsonLd: renderRechenartenJsonLd(),
     mainHtml: renderRechenartenMain(),
     crumb: "Rechenarten nach Klasse",

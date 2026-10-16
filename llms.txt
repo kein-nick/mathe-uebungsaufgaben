@@ -50,7 +50,7 @@ Direkte Übungsseiten: [Klasse 1](https://mathe-testen.de/klasse-1/uebungen), [K
 - [Für Eltern](https://mathe-testen.de/fuer-eltern)
 - [Für Lehrkräfte](https://mathe-testen.de/fuer-lehrkraefte)
 - [Neuigkeiten](https://mathe-testen.de/neuigkeiten)
-- [Rechenarten nach Klasse](https://mathe-testen.de/rechenarten): Alle Übungsthemen von Klasse 1 bis 6, jeweils mit Link zu den Übungsaufgaben.
+- [Rechenarten nach Klasse](https://mathe-testen.de/rechenarten): Vollständige Themenliste für Klasse 1 bis 6, gegliedert in Rechnen, Zahlen, Größen und Geometrie. Zu jedem Thema ein bis zwei Sätze und ein Link zur Übung. Kurzfassung: Klasse 1 Plus und Minus bis 20, Zehnerfreunde. Klasse 2 Einmaleins und Zahlenraum 100. Klasse 3 schriftliches Rechnen, Division mit Rest, Sachaufgaben. Klasse 4 schriftliche Verfahren und Bruchanteile. Klasse 5 Brüche, Dezimalzahlen, Prozent, Quadratzahlen bis 12². Klasse 6 Brüche, Prozent, Dreisatz, Quadratzahlen bis 20² und Zehnerpotenzen.
 - [FAQ](https://mathe-testen.de/faq)
 - [Kontakt](https://mathe-testen.de/kontakt)
 
