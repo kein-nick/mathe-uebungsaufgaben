@@ -808,6 +808,9 @@ function sheetParams(seed) {
   const params = new URLSearchParams();
   if (timesRow >= 1 && timesRow <= 10) {
     params.set("reihe", String(timesRow));
+    const quotas = tasks.length ? quotasFromTasks(tasks) : selectedTopicQuotas();
+    const blocks = quotas.reduce((sum, item) => sum + item.blocks, 0) || 1;
+    params.set("bloecke", String(blocks));
   } else {
     const quotas = tasks.length ? quotasFromTasks(tasks) : selectedTopicQuotas();
     params.set("halbjahr", String(selectedTerm));
@@ -927,7 +930,7 @@ function updateTopicBlockControls() {
       minusBtn.disabled = !input.checked || blocks <= 1;
     }
     if (plusBtn) {
-      plusBtn.disabled = !input.checked;
+      plusBtn.disabled = !input.checked || blocks >= 12;
     }
   });
 }
@@ -1208,10 +1211,11 @@ function initPageEntry() {
   if (reihe >= 1 && reihe <= 10) {
     timesRow = reihe;
     pendingTopicIds = new Set(["multiplication"]);
+    pendingBlockMap = parseBlockCounts(params.get("bloecke") || "1", ["multiplication"]);
     if (sheetSeed) {
       activeSheetSeed = sheetSeed;
     }
-    selectTerm(1, { scroll: false });
+    selectTerm(1, { scroll: false, preserveBlocks: Boolean(params.get("bloecke")) });
     applyTimesRowChrome(reihe);
     if (buildWorksheet()) {
       if (params.get("pruefen") === "1") {
@@ -1366,7 +1370,7 @@ operationList.addEventListener("click", (event) => {
   }
   const delta = Number(btn.dataset.blockDelta);
   const current = Math.max(1, topicBlocksOf(input) || 1);
-  const next = Math.max(1, current + delta);
+  const next = Math.min(12, Math.max(1, current + delta));
   input.dataset.blocks = String(next);
   updateBlockModeSummary();
   updateTopicBlockControls();
@@ -2486,7 +2490,8 @@ function checkTaskParts(task) {
   }
   const prompt = String(task.prompt || "")
     .replace(/\s+/g, " ")
-    .trim();
+    .trim()
+    .replace(/\s*=\s*$/, "");
   return { left: prompt, answer };
 }
 
