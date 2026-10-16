@@ -2650,11 +2650,22 @@ body.is-times-row .intro .class-nav-grid {
   margin-bottom: 1.25rem;
 }
 
+.home-topics-action {
+  justify-content: flex-start;
+  margin-top: 0.85rem;
+}
+
+.home-category h3,
 .home-category h4 {
   margin: 0 0 0.35rem;
   font-size: 0.95rem;
   font-weight: 800;
   color: var(--grade);
+}
+
+.grade-topic-note {
+  color: var(--muted);
+  font-weight: 700;
 }
 
 .home-category p {

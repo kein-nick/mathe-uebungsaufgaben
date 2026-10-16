@@ -244,6 +244,7 @@ function renderSiteHeader(current = "") {
         <a class="site-header-news" href="/neuigkeiten"${newsCurrent}>Neu<span class="site-header-news-dot" aria-hidden="true"></span></a>
         <a href="/fuer-eltern"${parentsCurrent}>Eltern</a>
         <a href="/fuer-lehrkraefte"${teachersCurrent}>Lehrkräfte</a>
+        <a href="/fuer-schulen">Schulen</a>
         <a class="site-header-cta" href="/kontakt"${contactCurrent}>Kontakt</a>
       </nav>
     </div>
@@ -721,6 +722,9 @@ function renderHomeMain() {
             <p class="landing-overview-hint">
               Du suchst etwas Bestimmtes — Einmaleins, Brüche, Sachaufgaben?
               Hier findest du Themen-Seiten mit Erklärung und direkten Übungslinks nach Klasse.
+            </p>
+            <p class="page-actions home-topics-action">
+              <a class="btn-secondary" href="/rechenarten">Alle Rechenarten nach Klasse</a>
             </p>
             <ul class="home-topic-hubs">
               ${hubLinks}
@@ -1322,6 +1326,7 @@ function updateSitemap() {
     { loc: "https://mathe-testen.de/fuer-eltern", priority: "0.7" },
     { loc: "https://mathe-testen.de/fuer-lehrkraefte", priority: "0.7" },
     { loc: "https://mathe-testen.de/kontakt", priority: "0.5" },
+    { loc: "https://mathe-testen.de/rechenarten", priority: "0.7" },
   ];
   for (const page of extraPages) {
     if (!sitemap.includes(`${page.loc}</loc>`)) {
@@ -1337,6 +1342,119 @@ function updateSitemap() {
   }
 
   fs.writeFileSync(sitemapPath, sitemap, "utf8");
+}
+
+function topicLabelForGrade(topic, grade) {
+  if (topic.id === "decompose") {
+    return grade <= 1
+      ? "Zerlegen und Zehnerfreunde"
+      : "Zerlegen, Zehner- und Hunderterfreunde";
+  }
+  return topic.label;
+}
+
+function renderRechenartenJsonLd() {
+  const url = `${SITE_URL}/rechenarten`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${url}/#webpage`,
+        url,
+        name: "Rechenarten nach Klasse – mathe-testen.de",
+        description:
+          "Alle Übungsthemen von Klasse 1 bis 6, geordnet nach Klasse, mit Link zu den Übungsaufgaben.",
+        inLanguage: "de-DE",
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${url}/#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Startseite", item: `${SITE_URL}/` },
+          { "@type": "ListItem", position: 2, name: "Rechenarten nach Klasse", item: url },
+        ],
+      },
+    ],
+  };
+}
+
+function renderRechenartenMain() {
+  const sections = [1, 2, 3, 4, 5, 6]
+    .map((grade) => {
+      const groups = groupOrder
+        .map((groupId) => {
+          const items = topics.filter(
+            (topic) =>
+              topic.group === groupId &&
+              (isTopicAllowed(topic, grade, 1) || isTopicAllowed(topic, grade, 2))
+          );
+          if (!items.length) {
+            return "";
+          }
+          const lis = items
+            .map((topic) => {
+              const term = isTopicAllowed(topic, grade, 1) ? 1 : 2;
+              const note =
+                isTopicAllowed(topic, grade, 1) && isTopicAllowed(topic, grade, 2)
+                  ? ""
+                  : term === 1
+                    ? "1. Halbjahr"
+                    : "ab 2. Halbjahr";
+              const href = `/klasse-${grade}/uebungen?halbjahr=${term}&themen=${encodeURIComponent(topic.id)}`;
+              const noteHtml = note
+                ? ` <span class="grade-topic-note">(${escapeHtml(note)})</span>`
+                : "";
+              return `<li><a href="${href}">${escapeHtml(topicLabelForGrade(topic, grade))}</a>${noteHtml}</li>`;
+            })
+            .join("\n                ");
+          return `<div class="home-category">
+              <h3>${escapeHtml(GROUPS[groupId])}</h3>
+              <ul class="home-topic-hubs grade-topic-list">
+                ${lis}
+              </ul>
+            </div>`;
+        })
+        .filter(Boolean)
+        .join("\n            ");
+
+      return `<section class="home-class-card" id="klasse-${grade}" aria-labelledby="rechenarten-klasse-${grade}">
+          <h2 id="rechenarten-klasse-${grade}">Klasse ${grade}</h2>
+          <div class="home-categories">
+            ${groups}
+          </div>
+          <p><a class="text-link" href="/klasse-${grade}/uebungen">Übungsaufgaben Klasse ${grade}</a></p>
+        </section>`;
+    })
+    .join("\n");
+
+  return `<main class="legal-page landing-page">
+          ${sections}
+        </main>`;
+}
+
+function writeRechenartenPage() {
+  const description =
+    "Alle Übungsthemen von Klasse 1 bis 6, geordnet nach Klasse. Jedes Thema öffnet die passende Übung, unter der Liste geht es zu den Übungsaufgaben der Klasse.";
+  const html = renderInfoPage({
+    current: "",
+    title: "Rechenarten nach Klasse – mathe-testen.de",
+    description,
+    url: `${SITE_URL}/rechenarten`,
+    h1: "Rechenarten nach Klasse",
+    lead: "Hier stehen alle Übungsthemen, die es in der jeweiligen Klasse gibt: Rechnen, Zahlen, Größen und Geometrie. Ein Klick auf den Namen öffnet genau dieses Thema. Unter jeder Liste geht es zu den Übungsaufgaben der Klasse.",
+    jsonLd: renderRechenartenJsonLd(),
+    mainHtml: renderRechenartenMain(),
+    crumb: "Rechenarten nach Klasse",
+  }).replaceAll("/style.css?v=77", "/style.css?v=82");
+  fs.writeFileSync(path.join(root, "rechenarten.html"), html, "utf8");
+  console.log("wrote rechenarten.html");
+}
+
+writeRechenartenPage();
+if (process.argv.includes("--nur-rechenarten")) {
+  process.exit(0);
 }
 
 for (let grade = 1; grade <= 6; grade += 1) {

@@ -161,6 +161,11 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://mathe-testen.de/rechenarten</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://mathe-testen.de/quadratzahlen</loc>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>

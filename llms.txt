@@ -50,6 +50,7 @@ Direkte Übungsseiten: [Klasse 1](https://mathe-testen.de/klasse-1/uebungen), [K
 - [Für Eltern](https://mathe-testen.de/fuer-eltern)
 - [Für Lehrkräfte](https://mathe-testen.de/fuer-lehrkraefte)
 - [Neuigkeiten](https://mathe-testen.de/neuigkeiten)
+- [Rechenarten nach Klasse](https://mathe-testen.de/rechenarten): Alle Übungsthemen von Klasse 1 bis 6, jeweils mit Link zu den Übungsaufgaben.
 - [FAQ](https://mathe-testen.de/faq)
 - [Kontakt](https://mathe-testen.de/kontakt)
 
