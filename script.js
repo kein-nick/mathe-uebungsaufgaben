@@ -204,6 +204,7 @@ let pendingBlockMap = null;
 let classMode = false;
 let activeSheetSeed = null;
 let classLinkRenewed = false;
+let pendingCheckQr = "";
 let timesRow = 0;
 let tasks = [];
 let lastPdfUrl = "";
@@ -787,20 +788,42 @@ function parseBlockCounts(raw, topicIds) {
   return map;
 }
 
-function classSheetUrl(seed) {
-  const quotas = selectedTopicQuotas();
+function sheetParams(seed) {
   const params = new URLSearchParams();
-  params.set("halbjahr", String(selectedTerm));
-  params.set("themen", quotas.map((item) => item.id).join(","));
-  params.set("bloecke", quotas.map((item) => item.blocks).join(","));
-  if (negativesAllowed()) {
-    params.set("negativ", "1");
-  }
-  if (selectedGrade === 3 && largeMulToggle) {
-    params.set("gross", largeMulToggle.checked ? "1" : "0");
+  if (timesRow >= 1 && timesRow <= 10) {
+    params.set("reihe", String(timesRow));
+  } else {
+    const quotas = selectedTopicQuotas();
+    params.set("halbjahr", String(selectedTerm));
+    params.set("themen", quotas.map((item) => item.id).join(","));
+    params.set("bloecke", quotas.map((item) => item.blocks).join(","));
+    if (negativesAllowed()) {
+      params.set("negativ", "1");
+    }
+    if (selectedGrade === 3 && largeMulToggle) {
+      params.set("gross", largeMulToggle.checked ? "1" : "0");
+    }
   }
   params.set("start", seed);
+  return params;
+}
+
+function sheetUrl(seed, extra) {
+  const params = sheetParams(seed);
+  if (extra) {
+    for (const [key, value] of Object.entries(extra)) {
+      params.set(key, value);
+    }
+  }
   return `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+}
+
+function classSheetUrl(seed) {
+  return sheetUrl(seed);
+}
+
+function checkSheetUrl(seed) {
+  return sheetUrl(seed, { pruefen: "1" });
 }
 
 function ensureClassLinkPanel() {
@@ -1167,10 +1190,17 @@ function initPageEntry() {
   if (reihe >= 1 && reihe <= 10) {
     timesRow = reihe;
     pendingTopicIds = new Set(["multiplication"]);
+    if (sheetSeed) {
+      activeSheetSeed = sheetSeed;
+    }
     selectTerm(1, { scroll: false });
     applyTimesRowChrome(reihe);
     if (buildWorksheet()) {
-      scrollToNext(worksheet, "start");
+      if (params.get("pruefen") === "1") {
+        showCheckSheet();
+      } else {
+        scrollToNext(worksheet, "start");
+      }
     }
     return;
   }
@@ -1183,7 +1213,11 @@ function initPageEntry() {
     applySheetFlags(params);
     if (buildWorksheet()) {
       hide(document.querySelector(".setup"));
-      scrollToNext(worksheet, "start");
+      if (params.get("pruefen") === "1") {
+        showCheckSheet();
+      } else {
+        scrollToNext(worksheet, "start");
+      }
     }
     return;
   }
@@ -1883,10 +1917,8 @@ negToggle.addEventListener("change", () => {
 });
 
 createBtn.addEventListener("click", () => {
-  if (classMode) {
-    activeSheetSeed = newSheetSeed();
-    classLinkRenewed = false;
-  }
+  activeSheetSeed = newSheetSeed();
+  classLinkRenewed = false;
   if (!buildWorksheet()) {
     return;
   }
@@ -1913,6 +1945,9 @@ function buildWorksheet() {
   const count = selectedTaskCount();
   if (!count || !selectedTerm || !selectedOps.length) {
     return false;
+  }
+  if (!activeSheetSeed) {
+    activeSheetSeed = newSheetSeed();
   }
   tasks = runWithSeed(activeSheetSeed, () =>
     generateTasksFromQuotas(selectedGrade, selectedTerm, selectedTopicQuotas(), negativesAllowed())
@@ -1955,10 +1990,8 @@ newSheetBtn.addEventListener("click", () => {
   if (successDialog.open) {
     successDialog.close();
   }
-  if (classMode) {
-    activeSheetSeed = newSheetSeed();
-    classLinkRenewed = true;
-  }
+  activeSheetSeed = newSheetSeed();
+  classLinkRenewed = classMode;
   if (!buildWorksheet()) {
     return;
   }
@@ -2398,19 +2431,72 @@ function formatSolutionAnswer(task) {
 
 function pdfHeaderHtml({ solutions = false } = {}) {
   const meta = worksheetMeta();
+  const qr =
+    !solutions && pendingCheckQr
+      ? `<div class="pdf-header-qr"><img src="${pendingCheckQr}" width="120" height="120" alt="" /><span>Prüf-Code</span></div>`
+      : "";
   return `
-    <header class="pdf-header">
-      <p class="kicker">Klassen 1 bis 6</p>
-      <h1>${escapeHtml(meta.title)}</h1>
-      <p>${escapeHtml(meta.line)}</p>
-      ${meta.topics ? `<p>${escapeHtml(meta.topics)}</p>` : ""}
-      ${
-        solutions
-          ? `<p class="pdf-solutions-banner">Lösungsblatt · nicht für Kinder</p>`
-          : `<p class="print-meta">Name: ______________________ &nbsp; Datum: ______________</p>`
-      }
+    <header class="pdf-header${qr ? " pdf-header-with-qr" : ""}">
+      <div class="pdf-header-copy">
+        <p class="kicker">Klassen 1 bis 6</p>
+        <h1>${escapeHtml(meta.title)}</h1>
+        <p>${escapeHtml(meta.line)}</p>
+        ${meta.topics ? `<p>${escapeHtml(meta.topics)}</p>` : ""}
+        ${
+          solutions
+            ? `<p class="pdf-solutions-banner">Lösungsblatt · nicht für Kinder</p>`
+            : `<p class="print-meta">Name: ______________________ &nbsp; Datum: ______________</p>`
+        }
+      </div>
+      ${qr}
     </header>
   `;
+}
+
+function showCheckSheet() {
+  hide(document.querySelector(".setup"));
+  hide(blocks);
+  hide(printHeader);
+  hide(startBtn);
+  hide(checkBtn);
+  hide(pdfBtn);
+  hide(pdfSolutionsBtn);
+  hide(newSheetBtn);
+  hide(document.getElementById("class-link-panel"));
+  document.getElementById("check-sheet")?.remove();
+  const section = document.createElement("section");
+  section.id = "check-sheet";
+  section.className = "check-sheet";
+  const items = tasks
+    .map((task) => {
+      const prompt = escapeHtml(String(task.prompt || "").replace(/\s+/g, " ").trim());
+      return `<li><span class="check-sheet-prompt">${prompt}</span> <strong>${escapeHtml(
+        formatSolutionAnswer(task)
+      )}</strong></li>`;
+    })
+    .join("");
+  section.innerHTML = `
+    <h2>Prüf-Code</h2>
+    <p>Lösungen zu diesem Blatt.</p>
+    <ol>${items}</ol>
+  `;
+  worksheet.append(section);
+  show(worksheet);
+  scrollToNext(section, "start");
+}
+
+async function checkQrDataUrl() {
+  if (!activeSheetSeed) {
+    return "";
+  }
+  await loadScriptOnce("/vendor/qrcode.min.js");
+  if (typeof window.qrcode !== "function") {
+    return "";
+  }
+  const qr = window.qrcode(0, "M");
+  qr.addData(checkSheetUrl(activeSheetSeed));
+  qr.make();
+  return qr.createDataURL(6, 0);
 }
 
 function pdfFooterHtml(pageNum, pageCount) {
@@ -2812,6 +2898,7 @@ function makePdfPage(inner, pageNum, pageCount, extraClass, headerOptions) {
 }
 
 async function buildPdfSheet() {
+  pendingCheckQr = await checkQrDataUrl().catch(() => "");
   const sheet = document.createElement("div");
   sheet.className = "pdf-sheet";
   sheet.setAttribute("aria-hidden", "true");

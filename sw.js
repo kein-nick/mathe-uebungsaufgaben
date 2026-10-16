@@ -1,4 +1,4 @@
-const CACHE_NAME = "mathe-uebungsaufgaben-v109";
+const CACHE_NAME = "mathe-uebungsaufgaben-v110";
 
 const PRECACHE_URLS = [
   "/",
@@ -50,6 +50,7 @@ const PRECACHE_URLS = [
   "/icons/icon-512.png",
   "/icons/apple-touch-icon.png",
   "/icons/qr-mathe-testen.png",
+  "/vendor/qrcode.min.js",
   "/images/pdf-vorschau.png",
 ];
 

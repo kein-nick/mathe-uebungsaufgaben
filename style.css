@@ -2885,6 +2885,60 @@ body.is-times-row .intro .class-nav-grid {
   padding: 0 0 12px;
 }
 
+.pdf-header-with-qr {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.pdf-header-copy {
+  min-width: 0;
+}
+
+.pdf-header-qr {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.pdf-header-qr img {
+  width: 120px;
+  height: 120px;
+  display: block;
+  image-rendering: pixelated;
+}
+
+.pdf-header-qr span {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #1c2430;
+}
+
+.check-sheet {
+  margin-top: 8px;
+}
+
+.check-sheet h2 {
+  font-family: "Fraunces", Georgia, serif;
+  margin: 0 0 6px;
+}
+
+.check-sheet ol {
+  margin: 12px 0 0;
+  padding-left: 1.4rem;
+}
+
+.check-sheet li {
+  margin: 0 0 8px;
+}
+
+.check-sheet-prompt {
+  color: var(--muted);
+}
+
 .pdf-sheet .pdf-header h1 {
   font-family: "Fraunces", serif;
   font-size: 1.35rem;
