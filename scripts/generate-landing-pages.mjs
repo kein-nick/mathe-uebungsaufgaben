@@ -107,7 +107,7 @@ const NEWS_ITEMS = [
     dateIso: "2026-10-16",
     date: "16. Oktober 2026",
     title: "Prüf-Code auf dem gedruckten Aufgabenblatt",
-    text: "Oben rechts auf dem PDF steht ein größerer QR-Code, darunter „Prüf-Code“. Gescannt zeigt er die Lösungen genau zu diesem Blatt, in denselben Blöcken wie die Aufgaben. Der kleine Code unten bleibt und führt auf mathe-testen.de.",
+    text: "Oben rechts auf dem PDF steht ein größerer QR-Code, darunter „Prüf-Code“. Gescannt zeigt er die Lösungen genau zu diesem Blatt, in denselben Blöcken wie die Aufgaben.",
     href: "/klasse-1/uebungen",
     linkLabel: "Aufgabenblatt erstellen",
   },
