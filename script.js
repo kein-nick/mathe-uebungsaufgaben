@@ -200,6 +200,10 @@ const symbols = {
 let selectedGrade = null;
 let selectedTerm = null;
 let pendingTopicIds = null;
+let pendingBlockMap = null;
+let classMode = false;
+let activeSheetSeed = null;
+let classLinkRenewed = false;
 let timesRow = 0;
 let tasks = [];
 let lastPdfUrl = "";
@@ -237,6 +241,46 @@ let lastSuccessIndex = -1;
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function hashSeed(value) {
+  let hash = 2166136261;
+  const text = String(value);
+  for (let index = 0; index < text.length; index += 1) {
+    hash ^= text.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+function mulberry32(seed) {
+  let state = seed >>> 0;
+  return function random() {
+    state = (state + 0x6d2b79f5) >>> 0;
+    let value = state;
+    value = Math.imul(value ^ (value >>> 15), value | 1);
+    value ^= value + Math.imul(value ^ (value >>> 7), value | 61);
+    return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function runWithSeed(seed, fn) {
+  if (!seed) {
+    return fn();
+  }
+  const previous = Math.random;
+  Math.random = mulberry32(hashSeed(seed));
+  try {
+    return fn();
+  } finally {
+    Math.random = previous;
+  }
+}
+
+function newSheetSeed() {
+  const bytes = new Uint32Array(1);
+  crypto.getRandomValues(bytes);
+  return bytes[0].toString(36);
 }
 
 function pickValue(spec) {
@@ -719,10 +763,111 @@ function hide(element) {
 
 function ensureDefaultBlocks() {
   operationList.querySelectorAll("input[data-topic]:checked:not(:disabled)").forEach((input) => {
+    if (pendingBlockMap && pendingBlockMap.has(input.value)) {
+      input.dataset.blocks = String(pendingBlockMap.get(input.value));
+      return;
+    }
     if (topicBlocksOf(input) < 1) {
       input.dataset.blocks = "1";
     }
   });
+  pendingBlockMap = null;
+}
+
+function parseBlockCounts(raw, topicIds) {
+  if (!raw || !topicIds.length) {
+    return null;
+  }
+  const parts = raw.split(",");
+  const map = new Map();
+  topicIds.forEach((id, index) => {
+    const count = Number(parts[index]);
+    map.set(id, Number.isFinite(count) && count > 0 ? Math.min(12, Math.floor(count)) : 1);
+  });
+  return map;
+}
+
+function classSheetUrl(seed) {
+  const quotas = selectedTopicQuotas();
+  const params = new URLSearchParams();
+  params.set("halbjahr", String(selectedTerm));
+  params.set("themen", quotas.map((item) => item.id).join(","));
+  params.set("bloecke", quotas.map((item) => item.blocks).join(","));
+  if (negativesAllowed()) {
+    params.set("negativ", "1");
+  }
+  if (selectedGrade === 3 && largeMulToggle) {
+    params.set("gross", largeMulToggle.checked ? "1" : "0");
+  }
+  params.set("start", seed);
+  return `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+}
+
+function ensureClassLinkPanel() {
+  let panel = document.getElementById("class-link-panel");
+  if (panel) {
+    return panel;
+  }
+  panel = document.createElement("div");
+  panel.id = "class-link-panel";
+  panel.className = "class-link-panel";
+  panel.innerHTML = `
+    <p class="class-link-title">Link für die Tablets</p>
+    <p class="hint">Kopieren und in Apple Classroom bei Navigieren einfügen.</p>
+    <div class="class-link-row">
+      <input id="class-link-input" type="text" readonly aria-label="Link für die Klasse" />
+      <button type="button" class="pdf-btn" id="class-link-copy">Kopieren</button>
+    </div>
+    <p class="hint" id="class-link-status" aria-live="polite"></p>
+  `;
+  const checkBar = worksheet.querySelector(".check-bar");
+  worksheet.insertBefore(panel, checkBar);
+  panel.querySelector("#class-link-copy").addEventListener("click", async () => {
+    const input = panel.querySelector("#class-link-input");
+    const status = panel.querySelector("#class-link-status");
+    try {
+      await navigator.clipboard.writeText(input.value);
+      status.textContent = "Kopiert.";
+    } catch {
+      input.focus();
+      input.select();
+      status.textContent = "Bitte den Link markieren und kopieren.";
+    }
+  });
+  return panel;
+}
+
+function showClassLink(seed, renewed) {
+  const panel = ensureClassLinkPanel();
+  panel.querySelector("#class-link-input").value = classSheetUrl(seed);
+  panel.querySelector("#class-link-status").textContent = renewed
+    ? "Neues Blatt. Den Link bitte erneut kopieren."
+    : "";
+  show(panel);
+}
+
+function prepareClassMode() {
+  if (!createBtn) {
+    return;
+  }
+  createBtn.textContent = "Blatt für die Klasse";
+  if (document.getElementById("class-mode-hint")) {
+    return;
+  }
+  const hint = document.createElement("p");
+  hint.id = "class-mode-hint";
+  hint.className = "hint";
+  hint.textContent = "Danach den Link kopieren und in Apple Classroom bei Navigieren einfügen.";
+  createBtn.insertAdjacentElement("afterend", hint);
+}
+
+function applySheetFlags(params) {
+  if (params.get("negativ") === "1" && negToggle) {
+    negToggle.checked = true;
+  }
+  if (largeMulToggle && params.has("gross")) {
+    largeMulToggle.checked = params.get("gross") === "1";
+  }
 }
 
 function updateTopicBlockControls() {
@@ -999,6 +1144,8 @@ function initPageEntry() {
   const topicIds = parseTopicIds(params.get("themen"));
   const reihe = Number(params.get("reihe"));
   const hasTerm = termParam === 1 || termParam === 2;
+  const sheetSeed = params.get("start");
+  classMode = params.get("unterricht") === "1" && !sheetSeed;
 
   if (!lockedGrade && gradeFromUrl >= 1 && gradeFromUrl <= 6) {
     params.delete("klasse");
@@ -1013,6 +1160,9 @@ function initPageEntry() {
 
   applyCompactSetupLayout();
   selectGrade(lockedGrade, { scroll: false });
+  if (classMode) {
+    prepareClassMode();
+  }
 
   if (reihe >= 1 && reihe <= 10) {
     timesRow = reihe;
@@ -1020,6 +1170,19 @@ function initPageEntry() {
     selectTerm(1, { scroll: false });
     applyTimesRowChrome(reihe);
     if (buildWorksheet()) {
+      scrollToNext(worksheet, "start");
+    }
+    return;
+  }
+
+  if (sheetSeed && hasTerm && topicIds.length) {
+    activeSheetSeed = sheetSeed;
+    pendingTopicIds = new Set(topicIds);
+    pendingBlockMap = parseBlockCounts(params.get("bloecke"), topicIds);
+    selectTerm(termParam, { scroll: false });
+    applySheetFlags(params);
+    if (buildWorksheet()) {
+      hide(document.querySelector(".setup"));
       scrollToNext(worksheet, "start");
     }
     return;
@@ -1720,6 +1883,10 @@ negToggle.addEventListener("change", () => {
 });
 
 createBtn.addEventListener("click", () => {
+  if (classMode) {
+    activeSheetSeed = newSheetSeed();
+    classLinkRenewed = false;
+  }
   if (!buildWorksheet()) {
     return;
   }
@@ -1747,7 +1914,9 @@ function buildWorksheet() {
   if (!count || !selectedTerm || !selectedOps.length) {
     return false;
   }
-  tasks = generateTasksFromQuotas(selectedGrade, selectedTerm, selectedTopicQuotas(), negativesAllowed());
+  tasks = runWithSeed(activeSheetSeed, () =>
+    generateTasksFromQuotas(selectedGrade, selectedTerm, selectedTopicQuotas(), negativesAllowed())
+  );
   activeTopicIds = [...selectedOps];
   activeBlockMode = true;
   celebrated = false;
@@ -1764,6 +1933,13 @@ function buildWorksheet() {
   show(pdfBtn);
   show(pdfSolutionsBtn);
   show(newSheetBtn);
+  if (classMode && activeSheetSeed) {
+    showClassLink(activeSheetSeed, classLinkRenewed);
+    classLinkRenewed = false;
+  } else if (activeSheetSeed) {
+    hide(newSheetBtn);
+    hide(document.getElementById("class-link-panel"));
+  }
   hide(progressEl);
   progressEl.textContent = "";
   if (countdownActive) {
@@ -1778,6 +1954,10 @@ newSheetBtn.addEventListener("click", () => {
   stopFireworks();
   if (successDialog.open) {
     successDialog.close();
+  }
+  if (classMode) {
+    activeSheetSeed = newSheetSeed();
+    classLinkRenewed = true;
   }
   if (!buildWorksheet()) {
     return;
