@@ -119,11 +119,11 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/style.css?v=83" as="style" />
-    <link rel="stylesheet" href="/style.css?v=83" />
+    <link rel="preload" href="/style.css?v=85" as="style" />
+    <link rel="stylesheet" href="/style.css?v=85" />
   </head>
   <body class="ads-off legal-page-body">
-    <header class="site-header">
+    <header class="site-header" id="seitenanfang">
     <div class="site-header-inner">
       <a class="site-header-brand" href="/">Mathe üben</a>
       <nav class="site-header-nav" aria-label="Weitere Seiten">
@@ -148,7 +148,15 @@
           <h1>Rechenarten nach Klasse</h1>
           <p class="description">Alle Übungsthemen für Klasse 1 bis 6. Jede Klasse ist in Rechnen, Zahlen, Größen und Geometrie geteilt. Unter dem Namen steht in ein bis zwei Sätzen, worum es geht. Der Name öffnet die Übung, unter der Liste stehen die Übungsaufgaben der Klasse.</p>
         </header>
-        <main class="legal-page landing-page">
+        <main class="legal-page landing-page rechenarten-page">
+          <nav class="grade-jump" aria-label="Direkt zu einer Klasse">
+            <a class="text-link" href="#klasse-1">Klasse 1</a>
+            <a class="text-link" href="#klasse-2">Klasse 2</a>
+            <a class="text-link" href="#klasse-3">Klasse 3</a>
+            <a class="text-link" href="#klasse-4">Klasse 4</a>
+            <a class="text-link" href="#klasse-5">Klasse 5</a>
+            <a class="text-link" href="#klasse-6">Klasse 6</a>
+          </nav>
           <section class="home-class-card" id="klasse-1" aria-labelledby="rechenarten-klasse-1">
           <h2 id="rechenarten-klasse-1">Klasse 1</h2>
           <p class="home-class-intro">In Klasse 1 geht es um erste Zahlen, Plus und Minus bis 20, Zehnerfreunde und einfache Zerlegungen.</p>
@@ -448,6 +456,7 @@
           </div>
           <p><a class="text-link" href="/klasse-6/uebungen">Übungsaufgaben Klasse 6</a></p>
         </section>
+          <a class="btn-secondary to-top" href="#seitenanfang">Nach oben</a>
         </main>
         <footer class="site-footer">
           <nav aria-label="Weitere Seiten">

@@ -236,7 +236,8 @@ function renderSiteHeader(current = "") {
   const parentsCurrent = current === "eltern" ? ' aria-current="page"' : "";
   const teachersCurrent = current === "lehrkraefte" ? ' aria-current="page"' : "";
   const contactCurrent = current === "kontakt" ? ' aria-current="page"' : "";
-  return `<header class="site-header">
+  const topId = current === "rechenarten" ? ' id="seitenanfang"' : "";
+  return `<header class="site-header"${topId}>
     <div class="site-header-inner">
       <a class="site-header-brand" href="/"${brandCurrent}>Mathe üben</a>
       <nav class="site-header-nav" aria-label="Weitere Seiten">
@@ -1457,8 +1458,16 @@ function renderRechenartenMain() {
     })
     .join("\n");
 
-  return `<main class="legal-page landing-page">
+  const jumps = [1, 2, 3, 4, 5, 6]
+    .map((grade) => `<a class="text-link" href="#klasse-${grade}">Klasse ${grade}</a>`)
+    .join("\n            ");
+
+  return `<main class="legal-page landing-page rechenarten-page">
+          <nav class="grade-jump" aria-label="Direkt zu einer Klasse">
+            ${jumps}
+          </nav>
           ${sections}
+          <a class="btn-secondary to-top" href="#seitenanfang">Nach oben</a>
         </main>`;
 }
 
@@ -1475,7 +1484,7 @@ function writeRechenartenPage() {
     jsonLd: renderRechenartenJsonLd(),
     mainHtml: renderRechenartenMain(),
     crumb: "Rechenarten nach Klasse",
-  }).replaceAll("/style.css?v=77", "/style.css?v=83");
+  }).replaceAll("/style.css?v=77", "/style.css?v=85");
   fs.writeFileSync(path.join(root, "rechenarten.html"), html, "utf8");
   console.log("wrote rechenarten.html");
 }

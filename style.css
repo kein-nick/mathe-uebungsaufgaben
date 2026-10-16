@@ -2644,6 +2644,40 @@ body.is-times-row .intro .class-nav-grid {
   color: var(--ink);
 }
 
+.grade-jump {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 1.1rem;
+  margin: 0 0 0.25rem;
+}
+
+.rechenarten-page .home-class-card {
+  scroll-margin-top: 1rem;
+}
+
+#seitenanfang {
+  scroll-margin-top: 0;
+}
+
+.page:has(.rechenarten-page) {
+  padding-bottom: 4.5rem;
+}
+
+.to-top {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 30;
+  box-shadow: 0 4px 16px rgba(28, 36, 48, 0.16);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.rechenarten-page) {
+    scroll-behavior: smooth;
+  }
+}
+
 .home-categories {
   display: grid;
   gap: 1rem;
