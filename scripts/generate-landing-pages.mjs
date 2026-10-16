@@ -257,6 +257,7 @@ function renderSiteFooter(current = "", extraItems = []) {
     ...extraItems,
     { href: "/faq", id: "faq", label: "FAQ" },
     { href: "/neuigkeiten", id: "neu", label: "Neuigkeiten" },
+    { href: "/rechenarten", id: "rechenarten", label: "Rechenarten" },
     { href: "/fuer-eltern", id: "eltern", label: "Für Eltern" },
     { href: "/fuer-lehrkraefte", id: "lehrkraefte", label: "Für Lehrkräfte" },
     { href: "/kontakt", id: "kontakt", label: "Kontakt" },
@@ -975,6 +976,7 @@ ${renderOpenGraph(meta)}
             <p class="landing-overview-hint">
               In der Grundschule wird Mathe oft in vier Bereiche gegliedert. Hier siehst du,
               was dahinter steckt — und welche konkreten Übungstypen es für diese Klasse gibt.
+              <a class="text-link" href="/rechenarten">Alle Klassen im Vergleich</a>
             </p>
             ${topicOverview}
           </section>
@@ -1438,7 +1440,7 @@ function writeRechenartenPage() {
   const description =
     "Alle Übungsthemen von Klasse 1 bis 6, geordnet nach Klasse. Jedes Thema öffnet die passende Übung, unter der Liste geht es zu den Übungsaufgaben der Klasse.";
   const html = renderInfoPage({
-    current: "",
+    current: "rechenarten",
     title: "Rechenarten nach Klasse – mathe-testen.de",
     description,
     url: `${SITE_URL}/rechenarten`,
