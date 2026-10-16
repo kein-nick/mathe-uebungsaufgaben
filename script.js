@@ -2505,6 +2505,8 @@ function showCheckSheet() {
   hide(pdfSolutionsBtn);
   hide(newSheetBtn);
   hide(document.getElementById("class-link-panel"));
+  hide(document.querySelector(".check-bar"));
+  statusEl.textContent = "";
   document.getElementById("check-sheet")?.remove();
   const section = document.createElement("section");
   section.id = "check-sheet";
