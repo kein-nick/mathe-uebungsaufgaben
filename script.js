@@ -788,12 +788,28 @@ function parseBlockCounts(raw, topicIds) {
   return map;
 }
 
+function quotasFromTasks(taskList) {
+  const runs = [];
+  for (const task of taskList) {
+    const last = runs[runs.length - 1];
+    if (last && last.id === task.type) {
+      last.count += 1;
+    } else {
+      runs.push({ id: task.type, count: 1 });
+    }
+  }
+  return runs.map((item) => ({
+    id: item.id,
+    blocks: Math.max(1, Math.round(item.count / 10)),
+  }));
+}
+
 function sheetParams(seed) {
   const params = new URLSearchParams();
   if (timesRow >= 1 && timesRow <= 10) {
     params.set("reihe", String(timesRow));
   } else {
-    const quotas = selectedTopicQuotas();
+    const quotas = tasks.length ? quotasFromTasks(tasks) : selectedTopicQuotas();
     params.set("halbjahr", String(selectedTerm));
     params.set("themen", quotas.map((item) => item.id).join(","));
     params.set("bloecke", quotas.map((item) => item.blocks).join(","));
@@ -1021,16 +1037,18 @@ function hideCreateStep() {
   hide(createBlock);
 }
 
-function resetLaterSteps({ preserveTopics = false } = {}) {
+function resetLaterSteps({ preserveTopics = false, preserveBlocks = false } = {}) {
   if (!preserveTopics) {
     operationList.querySelectorAll("input").forEach((input) => {
       input.checked = false;
       input.indeterminate = false;
     });
   }
-  operationList.querySelectorAll("input[data-topic]").forEach((input) => {
-    delete input.dataset.blocks;
-  });
+  if (!preserveBlocks) {
+    operationList.querySelectorAll("input[data-topic]").forEach((input) => {
+      delete input.dataset.blocks;
+    });
+  }
   hide(operationBlock);
   hideCreateStep();
   hide(worksheet);
@@ -1072,7 +1090,7 @@ function selectGrade(grade, options = {}) {
 }
 
 function selectTerm(term, options = {}) {
-  const { scroll = true } = options;
+  const { scroll = true, preserveBlocks = false } = options;
   selectedTerm = term;
   if (selectedGrade === 3 && largeMulToggle) {
     largeMulToggle.checked = term === 2;
@@ -1081,7 +1099,7 @@ function selectTerm(term, options = {}) {
     item.classList.toggle("is-active", Number(item.dataset.term) === term)
   );
   fillOperations(selectedGrade, selectedTerm);
-  resetLaterSteps({ preserveTopics: true });
+  resetLaterSteps({ preserveTopics: true, preserveBlocks });
   setBlockModeUi();
   if (scroll) {
     scrollToNext(operationBlock, "center-top");
@@ -1209,7 +1227,7 @@ function initPageEntry() {
     activeSheetSeed = sheetSeed;
     pendingTopicIds = new Set(topicIds);
     pendingBlockMap = parseBlockCounts(params.get("bloecke"), topicIds);
-    selectTerm(termParam, { scroll: false });
+    selectTerm(termParam, { scroll: false, preserveBlocks: Boolean(params.get("bloecke")) });
     applySheetFlags(params);
     if (buildWorksheet()) {
       hide(document.querySelector(".setup"));
@@ -2453,6 +2471,25 @@ function pdfHeaderHtml({ solutions = false } = {}) {
   `;
 }
 
+function checkTaskParts(task) {
+  const answer = formatSolutionAnswer(task);
+  const operands = taskOperands(task);
+  if ((isArithmeticTask(task) || task.kind === "remainder") && operands.length) {
+    const left = operands
+      .map((number, index) =>
+        index === 0
+          ? formatOperand(number, false)
+          : `${symbols[task.operation]} ${formatOperand(number, true)}`
+      )
+      .join(" ");
+    return { left, answer };
+  }
+  const prompt = String(task.prompt || "")
+    .replace(/\s+/g, " ")
+    .trim();
+  return { left: prompt, answer };
+}
+
 function showCheckSheet() {
   hide(document.querySelector(".setup"));
   hide(blocks);
@@ -2467,18 +2504,32 @@ function showCheckSheet() {
   const section = document.createElement("section");
   section.id = "check-sheet";
   section.className = "check-sheet";
-  const items = tasks
-    .map((task) => {
-      const prompt = escapeHtml(String(task.prompt || "").replace(/\s+/g, " ").trim());
-      return `<li><span class="check-sheet-prompt">${prompt}</span> <strong>${escapeHtml(
-        formatSolutionAnswer(task)
-      )}</strong></li>`;
+  const slices = taskLayoutSlices(tasks);
+  let displayNum = 1;
+  const blockHtml = slices
+    .map((slice) => {
+      const sliceTasks = slice.items.map((item) => item.task);
+      const startNum = displayNum;
+      const endNum = displayNum + slice.items.length - 1;
+      const items = slice.items
+        .map(({ task }) => {
+          const parts = checkTaskParts(task);
+          displayNum += 1;
+          const left = parts.left
+            ? `<span class="check-sheet-prompt">${escapeHtml(parts.left)}</span> `
+            : "";
+          return `<li>${left}<span class="check-eq">=</span> <strong>${escapeHtml(parts.answer)}</strong></li>`;
+        })
+        .join("");
+      return `<article class="check-block"><h3>${escapeHtml(
+        blockHeading(sliceTasks, startNum, endNum)
+      )}</h3><ol start="${startNum}">${items}</ol></article>`;
     })
     .join("");
   section.innerHTML = `
     <h2>Prüf-Code</h2>
-    <p>Lösungen zu diesem Blatt.</p>
-    <ol>${items}</ol>
+    <p>Lösungen zu diesem Blatt. ${tasks.length} Aufgaben.</p>
+    <div class="check-blocks">${blockHtml}</div>
   `;
   worksheet.append(section);
   show(worksheet);

@@ -2927,8 +2927,35 @@ body.is-times-row .intro .class-nav-grid {
 }
 
 .check-sheet ol {
-  margin: 12px 0 0;
+  margin: 8px 0 0;
   padding-left: 1.4rem;
+}
+
+.check-blocks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.check-block {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: #fffdf8;
+}
+
+.check-block h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.check-block ol {
+  margin: 8px 0 0;
+}
+
+.check-eq {
+  font-weight: 800;
 }
 
 .check-sheet li {
