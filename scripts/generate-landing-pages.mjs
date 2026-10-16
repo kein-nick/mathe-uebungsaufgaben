@@ -1346,6 +1346,13 @@ function updateSitemap() {
   fs.writeFileSync(sitemapPath, sitemap, "utf8");
 }
 
+function plainTopicText(text) {
+  return String(text)
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
+}
+
 function topicLabelForGrade(topic, grade) {
   if (topic.id === "decompose") {
     return grade <= 1
@@ -1408,7 +1415,11 @@ function renderRechenartenMain() {
               const noteHtml = note
                 ? ` <span class="grade-topic-note">(${escapeHtml(note)})</span>`
                 : "";
-              return `<li><a href="${href}">${escapeHtml(topicLabelForGrade(topic, grade))}</a>${noteHtml}</li>`;
+              const description = plainTopicText(
+                topicDescriptions[topic.id] ||
+                  "Übungen zu diesem Thema im passenden Schwierigkeitsgrad."
+              );
+              return `<li class="grade-topic-item"><a href="${href}">${escapeHtml(topicLabelForGrade(topic, grade))}</a>${noteHtml}<p>${escapeHtml(description)}</p></li>`;
             })
             .join("\n                ");
           return `<div class="home-category">
@@ -1445,11 +1456,11 @@ function writeRechenartenPage() {
     description,
     url: `${SITE_URL}/rechenarten`,
     h1: "Rechenarten nach Klasse",
-    lead: "Hier stehen alle Übungsthemen, die es in der jeweiligen Klasse gibt: Rechnen, Zahlen, Größen und Geometrie. Ein Klick auf den Namen öffnet genau dieses Thema. Unter jeder Liste geht es zu den Übungsaufgaben der Klasse.",
+    lead: "Hier stehen alle Übungsthemen, die es in der jeweiligen Klasse gibt: Rechnen, Zahlen, Größen und Geometrie. Unter jedem Namen steht kurz, worum es geht. Ein Klick öffnet genau dieses Thema, unter der Liste geht es zu den Übungsaufgaben der Klasse.",
     jsonLd: renderRechenartenJsonLd(),
     mainHtml: renderRechenartenMain(),
     crumb: "Rechenarten nach Klasse",
-  }).replaceAll("/style.css?v=77", "/style.css?v=82");
+  }).replaceAll("/style.css?v=77", "/style.css?v=83");
   fs.writeFileSync(path.join(root, "rechenarten.html"), html, "utf8");
   console.log("wrote rechenarten.html");
 }

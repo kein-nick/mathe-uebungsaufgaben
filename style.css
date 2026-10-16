@@ -2663,9 +2663,12 @@ body.is-times-row .intro .class-nav-grid {
   color: var(--grade);
 }
 
-.grade-topic-note {
+.legal-page .grade-topic-item p {
+  margin: 0.2rem 0 0.9rem;
   color: var(--muted);
-  font-weight: 700;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.45;
 }
 
 .home-category p {
