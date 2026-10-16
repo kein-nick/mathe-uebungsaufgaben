@@ -94,6 +94,7 @@ function escapeHtml(text) {
 const SITE_URL = "https://mathe-testen.de";
 const SITE_NAME = "Mathematik Übungsaufgaben";
 const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
+// Neue Beiträge auch in news.js unter ARTICLES eintragen, sonst fehlt die Zahl am Menüpunkt Neu.
 const NEWS_ITEMS = [
   {
     dateIso: "2026-10-16",
@@ -650,7 +651,7 @@ function renderPracticeJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=77" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=86" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -894,7 +895,7 @@ function extractInstallPrompt() {
 
 const installPromptHtml = extractInstallPrompt();
 
-const pwaScripts = `    <script defer src="/news.js?v=8"></script>
+const pwaScripts = `    <script defer src="/news.js?v=9"></script>
     <script defer src="/pwa.js"></script>
     <script>
       window.va =
@@ -919,7 +920,7 @@ function extractAppFragments() {
 
   const scripts = `    <script src="/topics.js?v=53"></script>
     <script src="/script.js?v=81"></script>
-    <script defer src="/news.js?v=8"></script>
+    <script defer src="/news.js?v=9"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>
       window.va =
@@ -1484,7 +1485,7 @@ function writeRechenartenPage() {
     jsonLd: renderRechenartenJsonLd(),
     mainHtml: renderRechenartenMain(),
     crumb: "Rechenarten nach Klasse",
-  }).replaceAll("/style.css?v=77", "/style.css?v=85");
+  });
   fs.writeFileSync(path.join(root, "rechenarten.html"), html, "utf8");
   console.log("wrote rechenarten.html");
 }

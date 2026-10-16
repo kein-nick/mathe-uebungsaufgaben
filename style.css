@@ -1943,19 +1943,29 @@ option:disabled {
 
 .site-header-news-dot {
   position: absolute;
-  top: 1px;
-  right: -8px;
+  top: -5px;
+  right: -12px;
   display: none;
-  width: 7px;
-  height: 7px;
-  border: 1px solid rgba(255, 255, 255, 0.95);
-  border-radius: 50%;
+  min-width: 1.05rem;
+  height: 1.05rem;
+  padding: 0 0.28rem;
+  border: 1px solid #fff;
+  border-radius: 999px;
   background: #f2b84b;
+  color: #2a2418;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1.05rem;
+  text-align: center;
   box-shadow: 0 0 0 2px var(--grade);
 }
 
+.site-header-news.has-unread-news {
+  margin-right: 0.45rem;
+}
+
 .site-header-news.has-unread-news .site-header-news-dot {
-  display: block;
+  display: inline-block;
 }
 
 .site-header-nav a.site-header-cta {
