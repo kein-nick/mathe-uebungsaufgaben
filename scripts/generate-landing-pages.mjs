@@ -96,6 +96,22 @@ const SITE_NAME = "Mathematik Übungsaufgaben";
 const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 const NEWS_ITEMS = [
   {
+    dateIso: "2026-10-16",
+    date: "16. Oktober 2026",
+    title: "Gleiches Übungsblatt mit Apple Classroom",
+    text: "Für den Unterricht gibt es auf der Startseite den Bereich „Für die Nutzung mit Apple Classroom“. Klasse wählen, Halbjahr und Themen einstellen, dann „Blatt für die Klasse“. Den Link in Apple Classroom bei Navigieren einfügen. Die Tablets der Gruppe öffnen dieselben Aufgaben. Ein Konto brauchen die Kinder dafür nicht.",
+    href: "/fuer-lehrkraefte#teachers-classroom",
+    linkLabel: "Kurzanleitung für Lehrkräfte",
+  },
+  {
+    dateIso: "2026-10-16",
+    date: "16. Oktober 2026",
+    title: "Prüf-Code auf dem gedruckten Aufgabenblatt",
+    text: "Oben rechts auf dem PDF steht ein größerer QR-Code, darunter „Prüf-Code“. Gescannt zeigt er die Lösungen genau zu diesem Blatt, in denselben Blöcken wie die Aufgaben. Der kleine Code unten bleibt und führt auf mathe-testen.de.",
+    href: "/klasse-1/uebungen",
+    linkLabel: "Aufgabenblatt erstellen",
+  },
+  {
     dateIso: "2026-10-03",
     date: "3. Oktober 2026",
     title: "Zehner- und Hunderterfreunde für Klasse 1 und 2",
@@ -872,7 +888,7 @@ function extractInstallPrompt() {
 
 const installPromptHtml = extractInstallPrompt();
 
-const pwaScripts = `    <script defer src="/news.js?v=7"></script>
+const pwaScripts = `    <script defer src="/news.js?v=8"></script>
     <script defer src="/pwa.js"></script>
     <script>
       window.va =
@@ -897,7 +913,7 @@ function extractAppFragments() {
 
   const scripts = `    <script src="/topics.js?v=53"></script>
     <script src="/script.js?v=81"></script>
-    <script defer src="/news.js?v=7"></script>
+    <script defer src="/news.js?v=8"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>
       window.va =
