@@ -7,6 +7,21 @@ import { topicHubs } from "./hub-content.mjs";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const topicsSrc = fs.readFileSync(path.join(root, "topics.js"), "utf8");
+const scriptSrc = fs.readFileSync(path.join(root, "script.js"), "utf8");
+const difficultyMatch = scriptSrc.match(/const difficulty = (\{[\s\S]*?\n\});/);
+if (!difficultyMatch) {
+  throw new Error("difficulty-Block nicht in script.js gefunden.");
+}
+const difficulty = new Function(`return (${difficultyMatch[1]});`)();
+const buildTopics = new Function(`${topicsSrc}\nreturn buildTopics;`)();
+const { topics: runtimeTopics } = buildTopics({
+  randomInt: (min) => min,
+  pickValue: (spec) => (Array.isArray(spec) ? spec[0] : spec.min),
+  difficulty,
+  withSigns: (a, b) => ({ a, b }),
+  symbols: { addition: "+", subtraction: "−", multiplication: "×", division: ":" },
+});
+const runtimeTopicById = Object.fromEntries(runtimeTopics.map((topic) => [topic.id, topic]));
 const practiceTemplatePath = path.join(root, "klasse-1", "uebungen.html");
 const practiceTemplate = fs.readFileSync(practiceTemplatePath, "utf8");
 const block = topicsSrc.slice(topicsSrc.indexOf("const topics = ["));
@@ -1367,6 +1382,351 @@ function topicLabelForGrade(topic, grade) {
   return topic.label;
 }
 
+function fmtDe(value) {
+  return String(Math.abs(value)).replace(/\B(?=(\d{3})+(?!\d))/g, "\u202f");
+}
+
+function topicGradeAddon(topic, grade) {
+  const id = topic.id;
+  const runtimeTopic = runtimeTopicById[id];
+  const ex1 = runtimeTopic?.example ? runtimeTopic.example(grade, 1) : "";
+  const ex2 = runtimeTopic?.example ? runtimeTopic.example(grade, 2) : "";
+  const d1 = difficulty[grade][1];
+  const d2 = difficulty[grade][2];
+
+  if (id === "addition" || id === "subtraction") {
+    if (d1.addMax !== d2.addMax) {
+      return `In Klasse ${grade} im 1. Halbjahr bis ${fmtDe(d1.addMax)} (${ex1}), im 2. Halbjahr bis ${fmtDe(d2.addMax)} (${ex2}).`;
+    }
+    return `In Klasse ${grade} ab ${fmtDe(d1.addMin)} bzw. ${fmtDe(d2.addMin)} bis ${fmtDe(d2.addMax)} (${ex1}), optional mit negativen Zahlen bis −${fmtDe(d2.neg.addMax)}.`;
+  }
+
+  if (id === "compare") {
+    if (d1.addMax !== d2.addMax) {
+      return `In Klasse ${grade} im Zahlenraum bis ${fmtDe(d1.addMax)} (${ex1}) bzw. bis ${fmtDe(d2.addMax)} (${ex2}).`;
+    }
+    return `In Klasse ${grade} ab ${fmtDe(d1.addMin)} bzw. ${fmtDe(d2.addMin)} bis ${fmtDe(d2.addMax)} (${ex1}), optional mit negativen Zahlen bis −${fmtDe(d2.neg.addMax)}.`;
+  }
+
+  if (id === "multiplication") {
+    if (grade === 2) {
+      return `In Klasse 2 im 1. Halbjahr mit den Reihen 1, 2, 5 und 10, im 2. Halbjahr mit dem kleinen Einmaleins bis 10 × 10 (${ex1}).`;
+    }
+    if (grade === 3) {
+      return `In Klasse 3 im 1. Halbjahr mit Faktoren bis ${d1.mul.a.max} × ${d1.mul.b.max} (${ex1}), im 2. Halbjahr zweistellig mal einstellig bis ${d2.mul.a.max} × ${d2.mul.b.max}.`;
+    }
+    if (grade === 4) {
+      return `In Klasse 4 im 1. Halbjahr bis ${d1.mul.a.max} × ${d1.mul.b.max} (${ex1}), im 2. Halbjahr zweistellig mal zweistellig bis ${d2.mul.a.max} × ${d2.mul.b.max}.`;
+    }
+    if (grade === 5) {
+      return `In Klasse 5 zweistellig bis ${d1.mul.a.max} × ${d1.mul.b.max} im 1. Halbjahr (${ex1}) und bis ${d2.mul.a.max} × ${d2.mul.b.max} im 2. Halbjahr.`;
+    }
+    return `In Klasse 6 ab ${d1.mul.a.min} × ${d1.mul.b.min} (${ex1}) bis ${d2.mul.a.max} × ${d2.mul.b.max} im 2. Halbjahr.`;
+  }
+
+  if (id === "division") {
+    if (grade === 2) {
+      return `In Klasse 2 im 1. Halbjahr durch 1, 2, 5 und 10, im 2. Halbjahr durch 1 bis 10 (${ex1}).`;
+    }
+    const exText = grade === 3 ? "z. B. 48 : 3 bzw. 84 : 7" : ex1;
+    return `In Klasse ${grade} mit Teilern von ${d1.div.divisors.min} bis ${d2.div.divisors.max} und Ergebnissen bis ${d1.div.quotient.max} im 1. Halbjahr bzw. ${d2.div.quotient.max} im 2. Halbjahr (${exText}).`;
+  }
+
+  if (id === "division_rest") {
+    const byGrade = {
+      3: `In Klasse 3 mit Teilern von 2 bis 10 und Ergebnissen bis 10 (${ex1}).`,
+      4: `In Klasse 4 mit Teilern von 2 bis 10 und Ergebnissen von 2 bis 12 bzw. 15 (${ex1}).`,
+      5: `In Klasse 5 mit Teilern von 2 bis 12 und Ergebnissen bis 15 (${ex1}).`,
+      6: `In Klasse 6 mit Teilern von 3 bis 12 und Ergebnissen bis 20 (${ex1}).`,
+    };
+    return byGrade[grade] || "";
+  }
+
+  if (id === "order_ops" || id === "brackets" || id === "laws" || id === "placeholder" || id === "equations" || id === "mean") {
+    return `In Klasse ${grade} im 1. Halbjahr (${ex1}), im 2. Halbjahr (${ex2}).`;
+  }
+
+  if (id === "proportion") {
+    return `In Klasse ${grade} im 1. Halbjahr mit kleineren Stückzahlen (${ex1}), im 2. Halbjahr mit größeren Mengen (${ex2}).`;
+  }
+
+  if (id === "fractions_share") {
+    return grade === 4
+      ? `In Klasse 4 mit den Nennern 2, 4, 5 und 10 (${ex1}).`
+      : `In Klasse 5 zusätzlich mit Dritteln und Achteln bei größeren Mengen (${ex1}).`;
+  }
+
+  if (id === "fractions_read") {
+    return `In Klasse ${grade} mit Nennern bis 5 im 1. Halbjahr und bis 8 im 2. Halbjahr (${ex1}).`;
+  }
+
+  if (id === "fractions") {
+    return `In Klasse ${grade} im 1. Halbjahr gleichnamig (${ex1}), im 2. Halbjahr auch ungleichnamig sowie Mal und Geteilt (${ex2}).`;
+  }
+
+  if (id === "decimals") {
+    return `In Klasse ${grade} im 1. Halbjahr mit einer Nachkommastelle (${ex1}), im 2. Halbjahr bis zwei Nachkommastellen sowie Mal und Geteilt (${ex2}).`;
+  }
+
+  if (id === "percent") {
+    return `In Klasse ${grade} im 1. Halbjahr ${ex1}, im 2. Halbjahr auch mit 5 % und 20 % (${ex2}).`;
+  }
+
+  if (id === "word") {
+    const byGrade = {
+      3: `In Klasse 3 mit Mengen bis 36 im 1. Halbjahr und bis 80 im 2. Halbjahr (${ex1}).`,
+      4: `In Klasse 4 mit Mengen bis 90 bzw. 180 und zusätzlichen Vergleichsfragen (${ex1}).`,
+      5: `In Klasse 5 mit Zahlen von 40 bis 220 (${ex1}).`,
+      6: `In Klasse 6 mit größeren Zahlen von 80 bis 480 (${ex1}).`,
+    };
+    return byGrade[grade] || "";
+  }
+
+  if (id === "word_times") {
+    const byGrade = {
+      3: `In Klasse 3 mit Zahlen bis 36 bzw. 80 (${ex1}).`,
+      4: `In Klasse 4 mit Mengen bis 180 und Verteilen auf 3 bis 6 Kinder (${ex1}).`,
+      5: `In Klasse 5 mit Mengen bis 220 und Einzelpreisen bis 50 Cent (${ex1}).`,
+      6: `In Klasse 6 mit Mengen bis 480 und bis zu 10 Gruppen (${ex1}).`,
+    };
+    return byGrade[grade] || "";
+  }
+
+  if (id === "decompose") {
+    return grade === 1
+      ? `In Klasse 1 im 1. Halbjahr bis ${fmtDe(d1.addMax)}, im 2. Halbjahr bis ${fmtDe(d2.addMax)} (${ex1}).`
+      : `In Klasse 2 im 1. Halbjahr bis ${fmtDe(d1.addMax)} (${ex1}), im 2. Halbjahr bis ${fmtDe(d2.addMax)} (${ex2}).`;
+  }
+
+  if (id === "number_wall") {
+    if (grade === 1) {
+      return `In Klasse 1 mit zwei Grundsteinen bis ${fmtDe(d1.addMax)} im 1. Halbjahr (${ex1}) und bis ${fmtDe(d2.addMax)} im 2. Halbjahr (${ex2}).`;
+    }
+    return `In Klasse ${grade} mit drei Grundsteinen im Zahlenraum bis ${fmtDe(d1.addMax)} im 1. Halbjahr und bis ${fmtDe(d2.addMax)} im 2. Halbjahr (${ex1}).`;
+  }
+
+  if (id === "neighbor" || id === "even_odd") {
+    return `In Klasse ${grade} im Zahlenraum bis ${fmtDe(d1.addMax)} im 1. Halbjahr und bis ${fmtDe(d2.addMax)} im 2. Halbjahr (${ex1}).`;
+  }
+
+  if (id === "double_half") {
+    const byGrade = {
+      2: `In Klasse 2 mit Ausgangszahlen bis 25 im 1. Halbjahr und bis 40 im 2. Halbjahr (${ex1}).`,
+      3: `In Klasse 3 mit Ausgangszahlen von 12 bis 40 bzw. 80 (${ex1}).`,
+      4: `In Klasse 4 mit größeren Ausgangszahlen bis 120 bzw. 250 (${ex1}).`,
+    };
+    return byGrade[grade] || "";
+  }
+
+  if (id === "round") {
+    const byGrade = {
+      3: `In Klasse 3 auf Zehner und im 2. Halbjahr auch Hunderter bis ${fmtDe(d2.addMax)} (${ex1}).`,
+      4: `In Klasse 4 auf Zehner, Hunderter und im 2. Halbjahr Tausender bis 60\u202f000 (${ex1}).`,
+      5: `In Klasse 5 auf Zehner, Hunderter und Tausender bis 400\u202f000 (${ex1}).`,
+      6: `In Klasse 6 auf Hunderter, Tausender und im 2. Halbjahr Zehntausender bis ${fmtDe(d2.addMax)} (${ex1}).`,
+    };
+    return byGrade[grade] || "";
+  }
+
+  if (id === "estimate") {
+    const byGrade = {
+      3: `In Klasse 3 mit Zahlen bis 89 auf Zehner gerundet (${ex1}).`,
+      4: `In Klasse 4 im 1. Halbjahr bis 280 auf Zehner, im 2. Halbjahr bis 890 auf Hunderter (${ex1}).`,
+      5: `In Klasse 5 mit Zahlen bis 890 bzw. 4\u202f500 auf Hunderter gerundet (${ex1}).`,
+      6: `In Klasse 6 im 1. Halbjahr bis 8\u202f900 auf Hunderter, im 2. Halbjahr bis 28\u202f000 auf Tausender (${ex2}).`,
+    };
+    return byGrade[grade] || "";
+  }
+
+  if (id === "divisible") {
+    const byGrade = {
+      3: `In Klasse 3 durch 2, 5 und 10 bei Zahlen bis 150 (${ex1}).`,
+      4: `In Klasse 4 durch 2, 5 und 10 bei Zahlen bis 250 (${ex1}).`,
+      5: `In Klasse 5 durch 2, 3, 4, 5, 9 und 10 bei Zahlen bis 400 (${ex1}).`,
+      6: `In Klasse 6 durch 2, 3, 4, 5, 9 und 10 bei größeren Zahlen bis 900 (${ex1}).`,
+    };
+    return byGrade[grade] || "";
+  }
+
+  if (id === "roman") {
+    return grade === 3
+      ? `In Klasse 3 mit Zahlen von 4 bis 20 im 1. Halbjahr und bis 30 im 2. Halbjahr (${ex1}).`
+      : `In Klasse 4 mit Zahlen von 8 bis 40 im 1. Halbjahr und bis 89 im 2. Halbjahr (${ex1}).`;
+  }
+
+  if (id === "primes") {
+    return grade === 5
+      ? `In Klasse 5 mit Primzahlen bis 23 im 1. Halbjahr und bis 31 im 2. Halbjahr (${ex1}).`
+      : `In Klasse 6 mit größeren Primzahlen von 11 bis 43 bzw. 29 bis 59 (${ex1}).`;
+  }
+
+  if (id === "squares") {
+    return grade === 5
+      ? `Hier in Klasse 5 im 1. Halbjahr von 1² bis 10² (${ex1}) und im 2. Halbjahr bis 12² (${ex2}).`
+      : `Hier in Klasse 6 im 1. Halbjahr von 8² bis 16² (${ex1}) mit Zehnerpotenzen bis 10⁴ und im 2. Halbjahr von 11² bis 20² mit Zehnerpotenzen bis 10⁶ (${ex2}).`;
+  }
+
+  if (id === "table_read") {
+    const byGrade = {
+      2: `In Klasse 2 mit Tabellenwerten bis 10 im 1. Halbjahr und bis 16 im 2. Halbjahr (${ex1}).`,
+      3: `In Klasse 3 mit Tabellenwerten von 8 bis 20 bzw. 36 (${ex1}).`,
+      4: `In Klasse 4 mit Tabellenwerten von 8 bis 40 bzw. 80 (${ex1}).`,
+    };
+    return byGrade[grade] || "";
+  }
+
+  if (id === "money") {
+    const byGrade = {
+      2: `In Klasse 2 mit Münzbeträgen aus 5, 10, 20 und 50 ct (${ex1}).`,
+      3: `In Klasse 3 im 1. Halbjahr in Cent (${ex1}), im 2. Halbjahr mit Euro-Kommazahlen bis 3,00 €.`,
+      4: `In Klasse 4 mit Euro-Beträgen von 0,40 € bis 5,20 € (${ex1}).`,
+      5: `In Klasse 5 mit Euro-Beträgen von 0,85 € bis 8,90 € (${ex1}).`,
+      6: `In Klasse 6 mit größeren Euro-Beträgen von 1,80 € bis 14,50 € (${ex1}).`,
+    };
+    return byGrade[grade] || "";
+  }
+
+  if (id === "clock") {
+    return grade === 2
+      ? `In Klasse 2 im 1. Halbjahr volle und halbe Stunden (${ex1}), im 2. Halbjahr auch Viertelstunden.`
+      : `In Klasse 3 auf 5 Minuten genau (${ex1}).`;
+  }
+
+  if (id === "length") {
+    return `In Klasse ${grade} mit ganzen Metern bis 8 m im 1. Halbjahr und bis 12 m im 2. Halbjahr (${ex1}).`;
+  }
+
+  if (id === "length_convert") {
+    return grade === 3
+      ? `In Klasse 3 mit ganzen Metern bis 12 m bzw. 18 m in Millimeter (${ex1}).`
+      : `In Klasse 4 bis 25 m in Millimeter sowie Zentimeter mit Komma in Meter (${ex1}).`;
+  }
+
+  if (id === "weight") {
+    return grade === 3
+      ? `In Klasse 3 mit ganzen Kilogramm bis 6 kg bzw. 10 kg (${ex1}).`
+      : `In Klasse 4 mit Gewichten von 3 bis 12 kg bzw. 18 kg (${ex1}).`;
+  }
+
+  if (id === "capacity") {
+    return grade === 3
+      ? `In Klasse 3 mit ganzen Litern bis 10 l, Bruchteilen und Ergänzen auf 1 l (${ex1}).`
+      : `In Klasse 4 mit gemischten Angaben bis 15 l und Ergänzen auf mehrere Liter (${ex1}).`;
+  }
+
+  if (id === "time_units") {
+    return grade === 3
+      ? `In Klasse 3 mit bis zu 8 Stunden, 6 Wochen und 4 Tagen (${ex1}).`
+      : `In Klasse 4 mit größeren Zeitspannen bis 18 Stunden, 14 Wochen und 6 Tagen (${ex1}).`;
+  }
+
+  if (id === "perimeter_area") {
+    const byGrade = {
+      3: `In Klasse 3 Umfang von Rechtecken mit Seiten bis 8 cm bzw. 10 cm (${ex1}).`,
+      4: `In Klasse 4 Umfang und Fläche von Rechtecken mit Seiten bis 12 cm bzw. 16 cm (${ex1}).`,
+      5: `In Klasse 5 Umfang und Fläche von Rechtecken mit Seiten bis 16 cm bzw. 22 cm (${ex1}).`,
+      6: `In Klasse 6 im 1. Halbjahr Rechtecke bis 24 cm × 16 cm (${ex1}), im 2. Halbjahr bis 36 cm × 28 cm (${ex2}) und Dreiecksflächen.`,
+    };
+    return byGrade[grade] || "";
+  }
+
+  if (id === "scale") {
+    const byGrade = {
+      4: `In Klasse 4 mit Maßstäben 1 : 50, 1 : 100 und 1 : 200 (${ex1}).`,
+      5: `In Klasse 5 zusätzlich mit dem Maßstab 1 : 250 (${ex1}).`,
+      6: `In Klasse 6 mit Maßstäben bis 1 : 1\u202f000 und im 2. Halbjahr auch rückwärts von Metern in Zentimeter (${ex1}).`,
+    };
+    return byGrade[grade] || "";
+  }
+
+  if (id === "cuboid") {
+    const byGrade = {
+      4: `In Klasse 4 mit Kantenlängen bis 10 cm bzw. 12 cm (${ex1}).`,
+      5: `In Klasse 5 mit Kantenlängen von 3 bis 12 cm (${ex1}).`,
+      6: `In Klasse 6 mit größeren Kantenlängen bis 18 cm bzw. 22 cm (${ex1}).`,
+    };
+    return byGrade[grade] || "";
+  }
+
+  if (id === "unit_convert") {
+    return grade === 5
+      ? `In Klasse 5 mit ganzen Zahlen bis 12 km, t oder l (${ex1}).`
+      : `In Klasse 6 bis 18 Einheiten und mit Kommazahlen bei km, kg und l (${ex1}).`;
+  }
+
+  if (id === "solids") {
+    const byGrade = {
+      2: `In Klasse 2 mit Würfel, Quader, Kugel und Zylinder (${ex1}).`,
+      3: `In Klasse 3 zusätzlich mit Pyramide, Kegel und Prisma sowie der Anzahl der Ecken (${ex1}).`,
+      4: `In Klasse 4 mit allen sieben Körpern sowie Fragen nach Ecken, Kanten und Flächen (${ex1}).`,
+    };
+    return byGrade[grade] || "";
+  }
+
+  if (id === "shapes") {
+    return grade === 1
+      ? `In Klasse 1 als erster Einstieg mit Kreis, Dreieck, Quadrat und Rechteck (${ex1}).`
+      : `In Klasse 2 zum sicheren Unterscheiden von Quadrat, Rechteck, Dreieck und Kreis (${ex1}).`;
+  }
+
+  if (id === "position") {
+    return grade === 1
+      ? `In Klasse 1 mit links, rechts, über und unter dem Haus (${ex1}).`
+      : `In Klasse 2 zur sicheren Orientierung mit links, rechts, über und unter dem Haus (${ex1}).`;
+  }
+
+  if (id === "pattern") {
+    const byGrade = {
+      1: `In Klasse 1 mit Farbmustern (${ex1}).`,
+      2: `In Klasse 2 mit Farbmustern (${ex1}) und Zahlenfolgen in 2er-, 5er- und 10er-Schritten.`,
+      3: `In Klasse 3 mit Zahlenfolgen in Schritten von 2 bis 10 ab Startwerten bis 8 (${ex1}).`,
+      4: `In Klasse 4 mit Zahlenfolgen in Schritten von 2 bis 10 ab Startwerten von 8 bis 40 (${ex1}).`,
+      5: `In Klasse 5 mit Zahlenfolgen in Schritten von 3 bis 10 ab Startwerten bis 40 (${ex1}).`,
+      6: `In Klasse 6 mit Schrittweiten bis 25 und Startwerten bis 120 (${ex2}).`,
+    };
+    return byGrade[grade] || "";
+  }
+
+  if (id === "number_line") {
+    const byGrade = {
+      1: `In Klasse 1 in 1er-Schritten bis ${fmtDe(d1.addMax)} bzw. ${fmtDe(d2.addMax)} (${ex1}).`,
+      2: `In Klasse 2 in 1er-, 2er- und 5er-Schritten bis ${fmtDe(d1.addMax)} bzw. ${fmtDe(d2.addMax)} (${ex1}).`,
+      3: `In Klasse 3 in 1er-, 2er-, 5er- und 10er-Schritten bis ${fmtDe(d1.addMax)} bzw. ${fmtDe(d2.addMax)} (${ex1}).`,
+    };
+    return byGrade[grade] || "";
+  }
+
+  if (id === "mirror") {
+    const byGrade = {
+      2: `In Klasse 2 mit sechs Grundfiguren an der Spiegelachse (${ex1}).`,
+      3: `In Klasse 3 mit acht verschiedenen Figuren an der Spiegelachse (${ex1}).`,
+      4: `In Klasse 4 mit allen neun Figuren inklusive Zackenformen (${ex1}).`,
+    };
+    return byGrade[grade] || "";
+  }
+
+  if (id === "coordinates") {
+    return grade === 5
+      ? `In Klasse 5 mit Achsen bis 8 im 1. Halbjahr und bis 10 im 2. Halbjahr (${ex1}).`
+      : `In Klasse 6 mit Achsen bis 10 im 1. Halbjahr und bis 12 im 2. Halbjahr (${ex1}).`;
+  }
+
+  if (id === "angles") {
+    return `In Klasse ${grade} mit Winkeln von 20° bis 150° zum Erkennen und Ablesen (${ex1}).`;
+  }
+
+  return ex1 ? `In Klasse ${grade}: ${ex1}.` : "";
+}
+
+function rechenartenTopicDescription(topic, grade) {
+  const base = plainTopicText(
+    topicDescriptions[topic.id] ||
+      "Übungen zu diesem Thema im passenden Schwierigkeitsgrad."
+  );
+  const addon = topicGradeAddon(topic, grade);
+  return addon ? `${base} ${addon}` : base;
+}
+
 function renderRechenartenJsonLd() {
   const url = `${SITE_URL}/rechenarten`;
   return {
@@ -1434,10 +1794,7 @@ function renderRechenartenMain() {
               const noteHtml = note
                 ? ` <span class="grade-topic-note">(${escapeHtml(note)})</span>`
                 : "";
-              const description = plainTopicText(
-                topicDescriptions[topic.id] ||
-                  "Übungen zu diesem Thema im passenden Schwierigkeitsgrad."
-              );
+              const description = rechenartenTopicDescription(topic, grade);
               return `<li class="grade-topic-item"><a href="${href}">${escapeHtml(topicLabelForGrade(topic, grade))}</a>${noteHtml}<p>${escapeHtml(description)}</p></li>`;
             })
             .join("\n                ");
