@@ -108,7 +108,7 @@ export const topicDescriptions = {
   number_wall:
     "Zahlenmauern mit zwei oder drei Grundsteinen: Jeder Stein ist die Summe der beiden Steine darunter. Mal fehlt ein oberer, mal ein unterer Stein — so werden Plus und Minus gemeinsam geübt.",
   compare:
-    "Zahlen vergleichen mit &lt;, &gt; oder =. Kinder lernen, Größen einzuordnen — eine Grundfähigkeit für alle Rechenarten.",
+    "Zahlen vergleichen mit <, > oder =. Kinder lernen, Größen einzuordnen — eine Grundfähigkeit für alle Rechenarten.",
   neighbor:
     "Vorgänger und Nachfolger einer Zahl finden. Festigt das Zählen und die Zahlengerade im Kopf.",
   double_half:

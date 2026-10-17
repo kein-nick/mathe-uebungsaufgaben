@@ -857,7 +857,9 @@ function renderTopicOverview(grade) {
       const groupIntro = groupDescriptions[grade]?.[groupId] || "";
       const topicItems = [...active, ...preview]
         .map((topic) => {
-          const description = topicDescriptions[topic.id] || "Übungen zu diesem Thema im passenden Schwierigkeitsgrad.";
+          const description = plainTopicText(
+            topicDescriptions[topic.id] || "Übungen zu diesem Thema im passenden Schwierigkeitsgrad."
+          );
           const note = topicAvailabilityNote(topic, grade);
           const cardLabel =
             topic.id === "decompose"
