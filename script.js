@@ -899,6 +899,12 @@ function showClassLink(seed, renewed) {
 }
 
 function prepareClassMode() {
+  document.querySelectorAll('.intro .class-nav-grid a[href^="/klasse-"]').forEach((link) => {
+    const match = link.getAttribute("href")?.match(/^\/klasse-([1-6])$/);
+    if (match) {
+      link.setAttribute("href", `/klasse-${match[1]}/uebungen?unterricht=1`);
+    }
+  });
   if (!createBtn) {
     return;
   }
