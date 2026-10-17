@@ -113,17 +113,23 @@
       };
     }
 
-    if (count === 5 && heavyCount >= 3) {
+    if (count >= 5 && heavyCount >= 2) {
       return {
         recommended: 30,
-        reason:
-          "Empfehlung bei 5 Themen (davon mehrere zeitintensiv): 30 Aufgaben pro Tag als gute Balance aus Themenabdeckung und Dauer.",
+        reason: `Empfehlung bei ${count} Themen (davon ${heavyCount} zeitintensiv wie Schriftlich/Sachaufgaben): 30 Aufgaben pro Tag halten die Übungszeit im Rahmen.`,
+      };
+    }
+
+    if (count >= 5 && heavyCount === 1) {
+      return {
+        recommended: 30,
+        reason: `Empfehlung bei ${count} Themen (inkl. 1 zeitintensiven Thema): 30 Aufgaben pro Tag als gute Balance aus Themenabdeckung und Dauer.`,
       };
     }
 
     return {
       recommended: 40,
-      reason: `Empfehlung bei ${count} Themen: 40 Aufgaben pro Tag, damit trotz der vielen Themen jedes Gebiet genug Aufgaben bekommt.`,
+      reason: `Empfehlung bei ${count} kompakten Themen: 40 Aufgaben pro Tag, damit jedes Gebiet genug Aufgaben bekommt.`,
     };
   }
 
