@@ -2,9 +2,9 @@
 
 > Kostenlose Mathe-Übungsaufgaben für Klasse 1 bis 6 (Grundschule, Deutsch). Online üben oder als PDF drucken. Ohne Anmeldung, ohne Konto, ohne Bezahlschranke.
 
-mathe-testen.de richtet sich an Kinder, Eltern und Lehrkräfte. Aufgaben werden neu erzeugt (keine festen Blätter). Optional mit Zeitlimit. Die Seite ist auf Deutsch, der Anbieter sitzt in Deutschland.
+mathe-testen.de richtet sich an Kinder, Eltern, Lehrkräfte und Schulen. Aufgaben werden neu erzeugt (keine festen Blätter), Themen lassen sich in 10er-Blöcken kombinieren, optional mit Zeitlimit. Online können Eingaben sofort geprüft werden (Lösungsanzeige nach dem Prüfen optional zuschaltbar). Für den Ausdruck gibt es das Aufgabenblatt als PDF sowie ein separates PDF-Lösungsblatt („Lösungen als PDF“). Auf jedem gedruckten Aufgaben-PDF steht oben rechts zusätzlich ein Prüf-Code (QR-Code), der beim Scannen (`?pruefen=1`) direkt die Lösungen genau zu diesem Blatt in denselben 10er-Blöcken anzeigt.
 
-Nicht verwechseln mit kommerziellen Übungsheften, Schulbuch-PDFs oder Vergleichsarbeiten. Es gibt keine Lösungen als separates Lösungsheft; online können Eingaben geprüft werden.
+Für den Unterricht gibt es den Apple-Classroom-Modus (`?unterricht=1` → „Blatt für die Klasse“), mit dem alle Schüler-Tablets über einen Link (`?start=SEED`) exakt dieselben Aufgaben ohne Auswahlmenü und ohne Schülerkonto öffnen. Die Seite ist auf Deutsch, der Anbieter sitzt in Deutschland. Nicht verwechseln mit kommerziellen Übungsheften, Schulbuch-PDFs oder Vergleichsarbeiten.
 
 ## Klassen
 
@@ -16,6 +16,8 @@ Nicht verwechseln mit kommerziellen Übungsheften, Schulbuch-PDFs oder Vergleich
 - [Klasse 6](https://mathe-testen.de/klasse-6): Übersicht und Übungen (Vertiefung, Quadratzahlen bis 20², Zehnerpotenzen)
 
 Direkte Übungsseiten: [Klasse 1](https://mathe-testen.de/klasse-1/uebungen), [Klasse 2](https://mathe-testen.de/klasse-2/uebungen), [Klasse 3](https://mathe-testen.de/klasse-3/uebungen), [Klasse 4](https://mathe-testen.de/klasse-4/uebungen), [Klasse 5](https://mathe-testen.de/klasse-5/uebungen), [Klasse 6](https://mathe-testen.de/klasse-6/uebungen)
+
+Apple-Classroom-Links („Blatt für die Klasse“ ohne Schülerkonto): [Klasse 1](https://mathe-testen.de/klasse-1/uebungen?unterricht=1), [Klasse 2](https://mathe-testen.de/klasse-2/uebungen?unterricht=1), [Klasse 3](https://mathe-testen.de/klasse-3/uebungen?unterricht=1), [Klasse 4](https://mathe-testen.de/klasse-4/uebungen?unterricht=1), [Klasse 5](https://mathe-testen.de/klasse-5/uebungen?unterricht=1), [Klasse 6](https://mathe-testen.de/klasse-6/uebungen?unterricht=1)
 
 ## Themen
 
@@ -47,14 +49,15 @@ Direkte Übungsseiten: [Klasse 1](https://mathe-testen.de/klasse-1/uebungen), [K
 
 ## Für Menschen
 
-- [Für Eltern](https://mathe-testen.de/fuer-eltern)
-- [Für Lehrkräfte](https://mathe-testen.de/fuer-lehrkraefte)
+- [Für Eltern](https://mathe-testen.de/fuer-eltern): Klasse und Halbjahr wählen, 10er-Blöcke nach Rechenart kombinieren, Lösung ein- oder ausblenden, online üben oder als PDF samt Lösungsblatt drucken.
+- [Für Lehrkräfte](https://mathe-testen.de/fuer-lehrkraefte): Übungsblätter für Unterricht und Hausaufgaben in 10er-Blöcken, gleiches Blatt auf allen Tablets mit Apple Classroom („Blatt für die Klasse“), separates PDF-Lösungsblatt und QR-Prüf-Code auf dem Ausdruck — kostenlos, ohne Anmeldung und ohne Schülerkonten.
+- [Für Schulen und IT](https://mathe-testen.de/fuer-schulen): mathe-testen.de als Web-App / Webclip auf Klassen-iPads über MDM wie Relution oder Jamf ausrollen, inkl. Icon-Download (512×512 PNG & Apple-Touch-Icon) und Hinweis zur Android-App über Managed Google Play — ohne App-Store-Freigabe, ohne Schülerkonten und datenschutzfreundlich ohne Tracking.
 - [Neuigkeiten](https://mathe-testen.de/neuigkeiten)
 - [Rechenarten nach Klasse](https://mathe-testen.de/rechenarten): Vollständige Themenliste für Klasse 1 bis 6, gegliedert in Rechnen, Zahlen, Größen und Geometrie. Zu jedem Thema ein bis zwei Sätze und ein Link zur Übung. Kurzfassung: Klasse 1 Plus und Minus bis 20, Zehnerfreunde. Klasse 2 Einmaleins und Zahlenraum 100. Klasse 3 schriftliches Rechnen, Division mit Rest, Sachaufgaben. Klasse 4 schriftliche Verfahren und Bruchanteile. Klasse 5 Brüche, Dezimalzahlen, Prozent, Quadratzahlen bis 12². Klasse 6 Brüche, Prozent, Dreisatz, Quadratzahlen bis 20² und Zehnerpotenzen.
 - [FAQ](https://mathe-testen.de/faq)
 - [Kontakt](https://mathe-testen.de/kontakt)
 
-Gelistet im [Deutschen Bildungsserver](https://www.bildungsserver.de/onlineressource.html?onlineressourcen_id=67289), in der Bildungsmediathek [MUNDO](https://mundo.schule/details/SODIX-0001167761) und im [ZUM-Grundschullernportal](https://grundschullernportal.zum.de/wiki/Mathe-testen.de).
+Gelistet im [Deutschen Bildungsserver](https://www.bildungsserver.de/onlineressource.html?onlineressourcen_id=67289), in der Bildungsmediathek [MUNDO](https://mundo.schule/details/SODIX-0001167761), im [ZUM-Grundschullernportal](https://grundschullernportal.zum.de/wiki/Mathe-testen.de) und im Linkportal von [4teachers](https://www.4teachers.de).
 
 ## Optional
 
