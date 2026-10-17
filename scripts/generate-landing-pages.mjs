@@ -236,6 +236,7 @@ function renderSiteHeader(current = "") {
   const newsCurrent = current === "neu" ? ' aria-current="page"' : "";
   const parentsCurrent = current === "eltern" ? ' aria-current="page"' : "";
   const teachersCurrent = current === "lehrkraefte" ? ' aria-current="page"' : "";
+  const schoolsCurrent = current === "schulen" ? ' aria-current="page"' : "";
   const contactCurrent = current === "kontakt" ? ' aria-current="page"' : "";
   const topId = current === "rechenarten" ? ' id="seitenanfang"' : "";
   return `<header class="site-header"${topId}>
@@ -246,7 +247,7 @@ function renderSiteHeader(current = "") {
         <a class="site-header-news" href="/neuigkeiten"${newsCurrent}>Neu<span class="site-header-news-dot" aria-hidden="true"></span></a>
         <a href="/fuer-eltern"${parentsCurrent}>Eltern</a>
         <a href="/fuer-lehrkraefte"${teachersCurrent}>Lehrkräfte</a>
-        <a href="/fuer-schulen">Schulen</a>
+        <a href="/fuer-schulen"${schoolsCurrent}>Schulen</a>
         <a class="site-header-cta" href="/kontakt"${contactCurrent}>Kontakt</a>
       </nav>
     </div>
@@ -977,8 +978,7 @@ ${renderOpenGraph(meta)}
             <h2 id="topics-heading-${grade}">Kategorien und Rechenarten in Klasse ${grade}</h2>
             <p class="landing-overview-hint">
               In der Grundschule wird Mathe oft in vier Bereiche gegliedert. Hier siehst du,
-              was dahinter steckt — und welche konkreten Übungstypen es für diese Klasse gibt.
-              <a class="text-link" href="/rechenarten">Alle Klassen im Vergleich</a>
+              was dahinter steckt — und welche konkreten Übungstypen es für diese Klasse gibt. <a class="text-link" href="/rechenarten">Alle Klassen im Vergleich</a>
             </p>
             ${topicOverview}
           </section>
@@ -1329,6 +1329,7 @@ function updateSitemap() {
     { loc: "https://mathe-testen.de/neuigkeiten", priority: "0.6" },
     { loc: "https://mathe-testen.de/fuer-eltern", priority: "0.7" },
     { loc: "https://mathe-testen.de/fuer-lehrkraefte", priority: "0.7" },
+    { loc: "https://mathe-testen.de/fuer-schulen", priority: "0.65" },
     { loc: "https://mathe-testen.de/kontakt", priority: "0.5" },
     { loc: "https://mathe-testen.de/rechenarten", priority: "0.7" },
   ];
@@ -1568,12 +1569,14 @@ console.log("wrote neuigkeiten.html");
 
 const teachersMain = `<main class="legal-page landing-page">
           ${teachersPage.sections
-            .map(
-              (section, index) => `<section aria-labelledby="teachers-h-${index}">
-            <h2 id="teachers-h-${index}">${escapeHtml(section.heading)}</h2>
-            ${section.text ? `<p>${escapeHtml(section.text)}</p>` : ""}${section.html ? `\n            ${section.html}` : ""}
-          </section>`
-            )
+            .map((section, index) => {
+              const headingId = section.id || `teachers-h-${index}`;
+              const textHtml = section.text ? `\n            <p>${escapeHtml(section.text)}</p>` : "";
+              const extraHtml = section.html ? `\n            ${section.html}` : "";
+              return `<section aria-labelledby="${headingId}">
+            <h2 id="${headingId}">${escapeHtml(section.heading)}</h2>${textHtml}${extraHtml}
+          </section>`;
+            })
             .join("\n")}
           ${renderNewsTeaser(
             "Neu für den Unterricht",

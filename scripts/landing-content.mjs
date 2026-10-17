@@ -217,8 +217,8 @@ export const siteFaqs = [
   },
   {
     q: "Können Lehrkräfte die Seite im Unterricht nutzen?",
-    a: "Ja. Ohne Login, mit PDF und wählbaren Themen. Die Seite ist im Deutschen Bildungsserver, in der Bildungsmediathek MUNDO und im ZUM-Grundschullernportal gelistet. Mehr dazu steht unter Für Lehrkräfte. Eltern finden Antworten unter Für Eltern. Wenn etwas für den Unterricht angepasst werden sollte, reicht eine Mail unter Kontakt.",
-    html: `<p>Ja. Ohne Login, mit PDF und wählbaren Themen. Die Seite ist im <a href="https://www.bildungsserver.de/onlineressource.html?onlineressourcen_id=67289">Deutschen Bildungsserver</a>, in der Bildungsmediathek <a href="https://mundo.schule/details/SODIX-0001167761">MUNDO</a> und im <a href="https://grundschullernportal.zum.de/wiki/Mathe-testen.de">ZUM-Grundschullernportal</a> gelistet. Mehr dazu steht unter <a href="/fuer-lehrkraefte">Für Lehrkräfte</a>. Eltern finden Antworten unter <a href="/fuer-eltern">Für Eltern</a>. Wenn etwas für den Unterricht angepasst werden sollte, reicht eine Mail unter <a href="/kontakt">Kontakt</a>.</p>`,
+    a: "Ja. Ohne Login, mit PDF und wählbaren Themen. Die Seite ist im Deutschen Bildungsserver, in der Bildungsmediathek MUNDO, im ZUM-Grundschullernportal und im Linkportal von 4teachers gelistet. Mehr dazu steht unter Für Lehrkräfte. Eltern finden Antworten unter Für Eltern. Wenn etwas für den Unterricht angepasst werden sollte, reicht eine Mail unter Kontakt.",
+    html: `<p>Ja. Ohne Login, mit PDF und wählbaren Themen. Die Seite ist im <a href="https://www.bildungsserver.de/onlineressource.html?onlineressourcen_id=67289">Deutschen Bildungsserver</a>, in der Bildungsmediathek <a href="https://mundo.schule/details/SODIX-0001167761">MUNDO</a>, im <a href="https://grundschullernportal.zum.de/wiki/Mathe-testen.de">ZUM-Grundschullernportal</a> und im Linkportal von <a href="https://www.4teachers.de">4teachers</a> gelistet. Mehr dazu steht unter <a href="/fuer-lehrkraefte">Für Lehrkräfte</a>. Eltern finden Antworten unter <a href="/fuer-eltern">Für Eltern</a>. Wenn etwas für den Unterricht angepasst werden sollte, reicht eine Mail unter <a href="/kontakt">Kontakt</a>.</p>`,
   },
   {
     q: "Ist das auch für Eltern gedacht?",
@@ -316,14 +316,43 @@ export const teachersPage = {
       text: "Es gibt kein Lehrer-Login, keine Klasse anlegen, keine Schülerkonten. Die Seite ist bewusst schlank: Thema wählen, Blatt erzeugen, fertig. Alles kostenlos.",
     },
     {
+      id: "teachers-h-4",
       heading: "In Katalogen gelistet",
-      html: `<p>Die Seite ist im <a class="text-link" href="https://www.bildungsserver.de/onlineressource.html?onlineressourcen_id=67289">Deutschen Bildungsserver</a>, in der Bildungsmediathek <a class="text-link" href="https://mundo.schule/details/SODIX-0001167761">MUNDO</a> und im <a class="text-link" href="https://grundschullernportal.zum.de/wiki/Mathe-testen.de">ZUM-Grundschullernportal</a> eingetragen.</p>`,
+      html: `<p>Die Seite ist im <a class="text-link" href="https://www.bildungsserver.de/onlineressource.html?onlineressourcen_id=67289">Deutschen Bildungsserver</a>, in der Bildungsmediathek <a class="text-link" href="https://mundo.schule/details/SODIX-0001167761">MUNDO</a>, im <a class="text-link" href="https://grundschullernportal.zum.de/wiki/Mathe-testen.de">ZUM-Grundschullernportal</a> und im Linkportal von <a class="text-link" href="https://www.4teachers.de">4teachers</a> eingetragen.</p>`,
     },
     {
+      id: "teachers-h-schulen",
+      heading: "Auf Schul-iPads",
+      html: `<p>
+              Für IT und Schulträger gibt es eine kurze Seite, wie mathe-testen.de als Web-App über Relution oder Jamf
+              auf Klassen-iPads kommt — inkl. Logo-Download.
+            </p>
+            <p><a class="text-link" href="/fuer-schulen">Zur Seite für Schulen und IT</a></p>`,
+    },
+    {
+      id: "teachers-h-5",
       heading: "So startest du",
       text: "Klasse wählen, auf der Übungsseite Halbjahr und Themen festlegen, dann „Aufgaben erstellen“. Für den Ausdruck: „Als PDF herunterladen“ und bei Bedarf „Lösungen als PDF“.",
     },
     {
+      id: "teachers-classroom",
+      heading: "Für die Nutzung mit Apple Classroom",
+      html: `<ol class="classroom-steps">
+              <li>Klasse wählen und Halbjahr, Themen und Anzahl einstellen.</li>
+              <li>Auf „Blatt für die Klasse“ tippen und den Link kopieren.</li>
+              <li>In Apple Classroom auf Navigieren tippen und den Link einfügen. Die Tablets der Gruppe öffnen dieselben Aufgaben.</li>
+            </ol>
+            <nav class="class-nav-grid" aria-label="Klasse für Apple Classroom">
+              <a class="grade-btn grade-btn-nav" href="/klasse-1/uebungen?unterricht=1">Klasse 1</a>
+              <a class="grade-btn grade-btn-nav" href="/klasse-2/uebungen?unterricht=1">Klasse 2</a>
+              <a class="grade-btn grade-btn-nav" href="/klasse-3/uebungen?unterricht=1">Klasse 3</a>
+              <a class="grade-btn grade-btn-nav" href="/klasse-4/uebungen?unterricht=1">Klasse 4</a>
+              <a class="grade-btn grade-btn-nav" href="/klasse-5/uebungen?unterricht=1">Klasse 5</a>
+              <a class="grade-btn grade-btn-nav" href="/klasse-6/uebungen?unterricht=1">Klasse 6</a>
+            </nav>`,
+    },
+    {
+      id: "teachers-h-6",
       heading: "Wenn etwas angepasst werden sollte",
       text: "Passt eine Aufgabe nicht zum Unterricht, fehlt ein Thema oder soll das PDF anders aussehen? Kurz schreiben — unter Kontakt reicht eine Mail. Es gibt kein Formular und kein Lehrer-Konto.",
       html: `<p><a class="text-link" href="/kontakt">Zur Kontaktseite</a></p>`,
