@@ -3244,6 +3244,26 @@ body.is-times-row .intro .class-nav-grid {
   border-bottom: 1px solid #7a7a7a;
 }
 
+.pdf-work-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols, 20), 11.5px);
+  grid-auto-rows: 11.5px;
+  width: max-content;
+  max-width: calc(100% - 1.75rem);
+  margin: 2px 6px 2px 1.5rem;
+  border-top: 1px solid #c2c9d2;
+  border-left: 1px solid #c2c9d2;
+  background: #fff;
+  flex: 0 0 auto;
+}
+
+.pdf-work-grid span {
+  display: block;
+  box-sizing: border-box;
+  border-right: 1px solid #c2c9d2;
+  border-bottom: 1px solid #c2c9d2;
+}
+
 .pdf-sheet .task-item {
   flex: 1 1 0;
   min-height: 0;
@@ -3736,9 +3756,18 @@ body.is-times-row .intro .class-nav-grid {
   padding: 1px 0 2px;
 }
 
+.pdf-page-notes .task {
+  flex: 0 0 auto;
+  height: auto;
+}
+
 .pdf-page-notes .pdf-work-lines {
   gap: 0.42rem;
   margin: 1px 4px 2px 1.5rem;
+}
+
+.pdf-page-notes .pdf-work-grid {
+  margin: 2px 4px 2px 1.5rem;
 }
 
 .pdf-page-written .block {
@@ -4185,7 +4214,8 @@ body.is-times-row .intro .class-nav-grid {
   text-align: center;
 }
 
-.pdf-page-visual-fill .pdf-work-lines {
+.pdf-page-visual-fill .pdf-work-lines,
+.pdf-page-visual-fill .pdf-work-grid {
   display: none;
 }
 

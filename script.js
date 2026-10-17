@@ -1860,6 +1860,33 @@ function appendPdfWorkLines(item) {
   item.append(lines);
 }
 
+function usesPdfWorkGrid(task) {
+  return (
+    usesNotesField(task) &&
+    (task.operation === "multiplication" || task.operation === "division")
+  );
+}
+
+function appendPdfWorkGrid(item) {
+  const grid = document.createElement("div");
+  grid.className = "pdf-work-grid";
+  grid.setAttribute("aria-hidden", "true");
+  const cols = 20;
+  const rows = 4;
+  grid.style.setProperty("--grid-cols", String(cols));
+  grid.style.setProperty("--grid-rows", String(rows));
+  grid.innerHTML = "<span></span>".repeat(cols * rows);
+  item.append(grid);
+}
+
+function appendPdfWorkSpace(item, task) {
+  if (usesPdfWorkGrid(task)) {
+    appendPdfWorkGrid(item);
+    return;
+  }
+  appendPdfWorkLines(item);
+}
+
 function isArithmeticTask(task) {
   return (
     task.operation === "addition" ||
@@ -2286,7 +2313,7 @@ function createTaskItem(task, index, displayNum, forPdf, allowMinusInput) {
         `;
     item.append(row);
     if (forPdf && usesNotesField(task)) {
-      appendPdfWorkLines(item);
+      appendPdfWorkSpace(item, task);
     } else if (!forPdf && usesNotesField(task)) {
       appendNotesField(item, displayNum);
     }
@@ -2313,7 +2340,7 @@ function createTaskItem(task, index, displayNum, forPdf, allowMinusInput) {
         `;
     item.append(row);
     if (forPdf && usesNotesField(task)) {
-      appendPdfWorkLines(item);
+      appendPdfWorkSpace(item, task);
     } else if (!forPdf && usesNotesField(task)) {
       appendNotesField(item, displayNum);
     }
@@ -2361,7 +2388,7 @@ function createTaskItem(task, index, displayNum, forPdf, allowMinusInput) {
     }
     item.append(row);
     if (forPdf && usesNotesField(task)) {
-      appendPdfWorkLines(item);
+      appendPdfWorkSpace(item, task);
     } else if (!forPdf && usesNotesField(task)) {
       appendNotesField(item, displayNum);
     }
@@ -2861,8 +2888,12 @@ function pdfMixedPageClass(blocks) {
   return classes.join(" ");
 }
 
+function pdfBlockHasWorkNotes(block) {
+  return Boolean(block.querySelector(".pdf-work-lines, .pdf-work-grid"));
+}
+
 function pdfBlockIsCompactEq(block) {
-  if (block.classList.contains("is-rest")) {
+  if (block.classList.contains("is-rest") || pdfBlockHasWorkNotes(block)) {
     return false;
   }
   const rows = [...block.querySelectorAll(".task")];
@@ -2930,7 +2961,7 @@ function pdfBlockIsWord(block) {
 }
 
 function pdfBlockIsRest(block) {
-  return block.classList.contains("is-rest");
+  return block.classList.contains("is-rest") && !pdfBlockHasWorkNotes(block);
 }
 
 function splitPdfVisualBlock(block, perPage = 10) {
@@ -3132,7 +3163,7 @@ async function buildPdfSheet() {
       pageClass = layout.pageClass;
     } else if (group.kind === "word") {
       grid.className = "pdf-blocks pdf-blocks-pair";
-      pageClass = "pdf-page-list";
+      pageClass = notesToggle.checked ? "pdf-page-list pdf-page-notes" : "pdf-page-list";
     } else if (group.kind === "rest") {
       const layout = pdfCompactEqLayout();
       grid.className = layout.gridClass;
