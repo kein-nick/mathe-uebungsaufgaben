@@ -30,6 +30,7 @@
   const daysSelect = document.getElementById("exam-plan-days");
   const dateInput = document.getElementById("exam-plan-date");
   const dailyCountSelect = document.getElementById("exam-plan-daily-count");
+  const dailyRecHint = document.getElementById("exam-plan-daily-rec-hint");
   const topicsListEl = document.getElementById("exam-plan-topics-list");
   const selectAllBtn = document.getElementById("exam-plan-select-all");
   const selectNoneBtn = document.getElementById("exam-plan-select-none");
@@ -43,6 +44,108 @@
   }
 
   let activeExamSession = null; // { dayIndex, firstCheckDone, checkAttempts, firstTryByTopic, firstTryCorrect, firstTryWrongTasks }
+  let userOverrodeDailyCount = false;
+
+  // Zeitintensive Aufgabentypen (Sachaufgaben, schriftliches Rechnen, Dreisatz, Gleichungen, Zahlenmauern)
+  const HEAVY_EFFORT_TOPICS = new Set([
+    "word",
+    "word_times",
+    "written_add",
+    "written_sub",
+    "written_mul",
+    "written_div",
+    "proportionality",
+    "equations",
+    "fraction_ops",
+    "number_wall",
+  ]);
+
+  const DAILY_BASE_LABELS = {
+    20: "20 Aufgaben pro Tag (ca. 15–20 Min.)",
+    30: "30 Aufgaben pro Tag (ca. 20–30 Min.)",
+    40: "40 Aufgaben pro Tag (ca. 30–40 Min.)",
+  };
+
+  function getCheckedDialogTopics() {
+    if (!topicsListEl) return [];
+    return [...topicsListEl.querySelectorAll("input[data-exam-topic]:checked")].map(
+      (el) => el.dataset.examTopic
+    );
+  }
+
+  function computeRecommendedDailyCount(topicIds) {
+    const count = topicIds.length;
+    if (count === 0) {
+      return {
+        recommended: 30,
+        reason: "Bitte wähle oben mindestens ein Prüfungsthema aus.",
+      };
+    }
+
+    const heavyCount = topicIds.filter((id) => HEAVY_EFFORT_TOPICS.has(id)).length;
+    // Gewichtete Themen-Last: zeitintensive Themen zählen etwas stärker für die Sitzungsdauer,
+    // aber viele verschiedene Themen erfordern mehr Gesamtaufgaben für eine verlässliche Statistik.
+    if (count <= 2) {
+      if (count === 2 && heavyCount === 0) {
+        return {
+          recommended: 20,
+          reason: `Empfehlung bei ${count} kompakten Themen: 20 Aufgaben pro Tag (je 10 Aufgaben pro Thema).`,
+        };
+      }
+      return {
+        recommended: 20,
+        reason: `Empfehlung bei ${count === 1 ? "1 Thema" : `${count} Themen`}${heavyCount > 0 ? " (inkl. rechenintensiver Aufgaben)" : ""}: 20 Aufgaben pro Tag reichen hier für ein gründliches Training.`,
+      };
+    }
+
+    if (count === 3 && heavyCount >= 2) {
+      return {
+        recommended: 20,
+        reason:
+          "Empfehlung bei 3 Themen mit mehreren schriftlichen/Text-Aufgaben: 20 Aufgaben pro Tag halten die Übungszeit gut machbar.",
+      };
+    }
+
+    if (count <= 4) {
+      return {
+        recommended: 30,
+        reason: `Empfehlung bei ${count} Themen: 30 Aufgaben pro Tag, damit jedes Thema mit ca. ${Math.round(30 / count)} Aufgaben pro Tag sauber trainiert wird.`,
+      };
+    }
+
+    if (count === 5 && heavyCount >= 3) {
+      return {
+        recommended: 30,
+        reason:
+          "Empfehlung bei 5 Themen (davon mehrere zeitintensiv): 30 Aufgaben pro Tag als gute Balance aus Themenabdeckung und Dauer.",
+      };
+    }
+
+    return {
+      recommended: 40,
+      reason: `Empfehlung bei ${count} Themen: 40 Aufgaben pro Tag, damit trotz der vielen Themen jedes Gebiet genug Aufgaben bekommt.`,
+    };
+  }
+
+  function syncDailyCountRecommendation() {
+    if (!dailyCountSelect) return;
+    const chosen = getCheckedDialogTopics();
+    const { recommended, reason } = computeRecommendedDailyCount(chosen);
+
+    [...dailyCountSelect.options].forEach((opt) => {
+      const val = Number(opt.value);
+      const base = DAILY_BASE_LABELS[val] || opt.textContent;
+      opt.textContent = val === recommended ? `${base} (Empfohlen)` : base;
+    });
+
+    if (!userOverrodeDailyCount) {
+      dailyCountSelect.value = String(recommended);
+    }
+
+    if (dailyRecHint) {
+      dailyRecHint.textContent = reason;
+    }
+  }
 
   function escapeHtml(text) {
     return String(text ?? "")
@@ -223,6 +326,7 @@
         `;
       })
       .join("");
+    syncDailyCountRecommendation();
   }
 
   function updateSubmitButtonLabel() {
@@ -248,11 +352,11 @@
     if (daysSelect) {
       daysSelect.value = existing ? String(existing.totalDays) : "5";
     }
-    if (dailyCountSelect) {
-      const validDaily = [20, 30, 40].includes(Number(existing?.dailyCount))
-        ? String(existing.dailyCount)
-        : "20";
-      dailyCountSelect.value = validDaily;
+    userOverrodeDailyCount = Boolean(
+      existing && [20, 30, 40].includes(Number(existing.dailyCount))
+    );
+    if (dailyCountSelect && userOverrodeDailyCount) {
+      dailyCountSelect.value = String(existing.dailyCount);
     }
     if (dateInput) {
       const minDate = new Date();
@@ -1032,10 +1136,12 @@
   });
 
   gradeSelect?.addEventListener("change", () => {
+    userOverrodeDailyCount = false;
     renderDialogTopics(Number(gradeSelect.value), Number(termSelect.value));
   });
 
   termSelect?.addEventListener("change", () => {
+    userOverrodeDailyCount = false;
     renderDialogTopics(Number(gradeSelect.value), Number(termSelect.value));
   });
 
@@ -1069,15 +1175,33 @@
   });
 
   selectAllBtn?.addEventListener("click", () => {
+    userOverrodeDailyCount = false;
     topicsListEl
       ?.querySelectorAll("input[data-exam-topic]")
       .forEach((input) => (input.checked = true));
+    syncDailyCountRecommendation();
   });
 
   selectNoneBtn?.addEventListener("click", () => {
+    userOverrodeDailyCount = false;
     topicsListEl
       ?.querySelectorAll("input[data-exam-topic]")
       .forEach((input) => (input.checked = false));
+    syncDailyCountRecommendation();
+  });
+
+  topicsListEl?.addEventListener("change", (event) => {
+    if (event.target instanceof HTMLInputElement && event.target.hasAttribute("data-exam-topic")) {
+      userOverrodeDailyCount = false;
+      if (errorEl) {
+        errorEl.classList.add("is-hidden");
+      }
+      syncDailyCountRecommendation();
+    }
+  });
+
+  dailyCountSelect?.addEventListener("change", () => {
+    userOverrodeDailyCount = true;
   });
 
   submitBtn?.addEventListener("click", () => {

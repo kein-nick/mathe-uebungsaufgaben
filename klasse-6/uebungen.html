@@ -364,7 +364,7 @@
         <div class="exam-plan-form">
           <div class="exam-plan-field-row">
             <div class="exam-plan-field">
-              <label class="exam-plan-label" for="exam-plan-grade">Klassenstufe</label>
+              <label class="exam-plan-label" for="exam-plan-grade">1. Klassenstufe</label>
               <select id="exam-plan-grade">
                 <option value="1">Klasse 1</option>
                 <option value="2">Klasse 2</option>
@@ -375,7 +375,7 @@
               </select>
             </div>
             <div class="exam-plan-field">
-              <label class="exam-plan-label" for="exam-plan-term">Halbjahr / Stoffumfang</label>
+              <label class="exam-plan-label" for="exam-plan-term">2. Halbjahr / Stoffumfang</label>
               <select id="exam-plan-term">
                 <option value="1">1. Halbjahr</option>
                 <option value="2">2. Halbjahr (voller Jahresstoff)</option>
@@ -383,9 +383,21 @@
             </div>
           </div>
 
+          <div class="exam-plan-field">
+            <div class="exam-plan-topics-header">
+              <span class="exam-plan-label">3. Welche Themen kommen in der Mathe-Arbeit dran?</span>
+              <div class="exam-plan-topics-quick">
+                <button type="button" class="exam-plan-mini-btn" id="exam-plan-select-all">Alle wählen</button>
+                <button type="button" class="exam-plan-mini-btn" id="exam-plan-select-none">Auswahl leeren</button>
+              </div>
+            </div>
+            <div class="exam-plan-topics-grid" id="exam-plan-topics-list" role="group" aria-label="Prüfungsthemen"></div>
+            <p class="exam-plan-error is-hidden" id="exam-plan-error" role="alert"></p>
+          </div>
+
           <div class="exam-plan-field-row">
             <div class="exam-plan-field">
-              <label class="exam-plan-label" for="exam-plan-days">Wie viele Tage möchtest du üben?</label>
+              <label class="exam-plan-label" for="exam-plan-days">4. Wie viele Tage möchtest du üben?</label>
               <select id="exam-plan-days">
                 <option value="3">3 Tage (Kurz-Endspurt)</option>
                 <option value="4">4 Tage</option>
@@ -399,28 +411,17 @@
               <input type="date" class="exam-plan-date-input" id="exam-plan-date" />
             </div>
             <div class="exam-plan-field">
-              <label class="exam-plan-label" for="exam-plan-daily-count">Aufgaben pro Trainingstag</label>
+              <label class="exam-plan-label" for="exam-plan-daily-count">5. Aufgaben pro Trainingstag</label>
               <select id="exam-plan-daily-count">
-                <option value="20" selected>20 Aufgaben pro Tag (ca. 15–20 Min.)</option>
-                <option value="30">30 Aufgaben pro Tag (ca. 20–30 Min.)</option>
+                <option value="20">20 Aufgaben pro Tag (ca. 15–20 Min.)</option>
+                <option value="30" selected>30 Aufgaben pro Tag (ca. 20–30 Min.) – Empfohlen</option>
                 <option value="40">40 Aufgaben pro Tag (ca. 30–40 Min.)</option>
               </select>
+              <p class="hint" id="exam-plan-daily-rec-hint"></p>
               <p class="hint">
                 <strong>2-Stufen-Wertung:</strong> Beim 1. Klick auf <em>Prüfen</em> zählt deine Erstversuch-Quote für den Lernplan — Fehler korrigierst du danach direkt!
               </p>
             </div>
-          </div>
-
-          <div class="exam-plan-field">
-            <div class="exam-plan-topics-header">
-              <span class="exam-plan-label">Welche Themen kommen in der Mathe-Arbeit dran?</span>
-              <div class="exam-plan-topics-quick">
-                <button type="button" class="exam-plan-mini-btn" id="exam-plan-select-all">Alle wählen</button>
-                <button type="button" class="exam-plan-mini-btn" id="exam-plan-select-none">Auswahl leeren</button>
-              </div>
-            </div>
-            <div class="exam-plan-topics-grid" id="exam-plan-topics-list" role="group" aria-label="Prüfungsthemen"></div>
-            <p class="exam-plan-error is-hidden" id="exam-plan-error" role="alert"></p>
           </div>
         </div>
 
@@ -432,7 +433,7 @@
     </dialog>
         <script src="/topics.js?v=54"></script>
     <script src="/script.js?v=88"></script>
-    <script src="/exam-plan.js?v=1"></script>
+    <script src="/exam-plan.js?v=2"></script>
     <script defer src="/news.js?v=10"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>

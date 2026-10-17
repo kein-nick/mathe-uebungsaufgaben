@@ -4783,6 +4783,11 @@ body.is-times-row .intro .class-nav-grid {
   line-height: 1.35;
 }
 
+#exam-plan-daily-rec-hint {
+  color: var(--grade) !important;
+  font-weight: 700;
+}
+
 .exam-plan-topics-header {
   display: flex;
   flex-wrap: wrap;
