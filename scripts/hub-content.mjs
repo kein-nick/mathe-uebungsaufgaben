@@ -597,4 +597,166 @@ export const topicHubs = [
       },
     ],
   },
+  {
+    slug: "zahlenmauern",
+    title: "Zahlenmauern & Zahlenfreunde üben – Klasse 1 bis 3 (PDF)",
+    h1: "Zahlenmauern & Zahlenfreunde üben",
+    shortName: "Zahlenmauern",
+    whatHeading: "Was sind Zahlenmauern und Zahlenfreunde?",
+    metaDescription:
+      "Zahlenmauern und Zahlenfreunde (Zehnerfreunde, Hunderterfreunde, Zerlegen) online üben oder als PDF drucken — kostenlos für Klasse 1 bis 3, ohne Anmeldung.",
+    topicIds: ["number_wall", "decompose"],
+    topicIdsByGrade: {
+      1: ["number_wall", "decompose"],
+      2: ["number_wall", "decompose"],
+      3: ["number_wall"],
+    },
+    grades: [1, 2, 3],
+    lead: "Zahlenmauern (Rechenmauern) und Zahlenfreunde gehören in Klasse 1 bis 3 zu den beliebtesten Aufgabenformaten: Kinder sehen sofort, wie zwei Steine zusammen den Stein darüber ergeben und welche Partnerzahlen sich zu 10 oder 100 ergänzen.",
+    whatIs:
+      "In einer Zahlenmauer steht in jedem oberen Stein immer die Summe der beiden Steine direkt darunter. In Klasse 1 besteht die Mauer aus drei Steinen (zwei Grundsteine, ein Deckstein), in Klasse 2 und 3 aus sechs Steinen in drei Reihen. Fehlt der obere Stein, wird addiert; fehlt ein unterer Stein, hilft die Umkehraufgabe (Minus oder Ergänzen). Eng damit verwandt ist das Thema „Zerlegen“ mit den Zahlenfreunden: In Klasse 1 trainieren Kinder die Zehnerfreunde (z. B. 3 + ___ = 10) und Zerlegungen wie 14 = 6 + ___, in Klasse 2 kommen die Hunderterfreunde mit ganzen Zehnern (30 + ___ = 100) und im 2. Halbjahr mit zweistelligen Zahlen (z. B. 36 + ___ = 100) dazu.",
+    whyPractice:
+      "Wer Zahlenmauern und Zahlenfreunde sicher beherrscht, versteht Plus und Minus als zusammengehörige Operationen und meistert den Zehner- und Hunderterübergang ohne zählendes Rechnen an den Fingern.",
+    mistakesHeading: "Drei typische Fehler bei Zahlenmauern und Zahlenfreunden",
+    mistakes: [
+      {
+        title: "1. Fehlenden unteren Stein addieren statt ergänzen",
+        text: "Steht oben 15 und unten links 9, rechnen manche Kinder 15 + 9 = 24. Weil die beiden unteren Steine zusammen den oberen ergeben (9 + ___ = 15), muss man die Differenz bilden: 15 − 9 = 6.",
+      },
+      {
+        title: "2. Den mittleren Grundstein nur einmal mitrechnen",
+        text: "Bei einer dreistöckigen Zahlenmauer in Klasse 2 und 3 fließt der mittlere Grundstein sowohl in den linken als auch in den rechten Mittelstein ein. Es lohnt sich, Reihe für Reihe vorzugehen.",
+      },
+      {
+        title: "3. Bei Hunderterfreunden auf 110 statt 100 ergänzen",
+        text: "Bei Aufgaben wie 36 + ___ = 100 ergänzen viele Kinder die Einer auf 10 (6 + 4) und gleichzeitig die Zehner auf 100 (30 + 70) und schreiben 74 statt 64. Merksatz: Die Zehner ergänzen sich zu 90, die Einer zu 10.",
+      },
+    ],
+    directLinksHeading: "Direkteinstieg nach Thema und Klasse",
+    directLinksIntro:
+      "Starte direkt mit reinen Zahlenmauern oder gezielt mit Zehner- und Hunderterfreunden:",
+    directLinks: [
+      {
+        label: "Zahlenmauern Klasse 1",
+        href: "/klasse-1/uebungen?themen=number_wall",
+        note: "Kleine Zahlenmauern mit 3 Steinen im Zahlenraum bis 10 bzw. 20",
+      },
+      {
+        label: "Zahlenmauern Klasse 2",
+        href: "/klasse-2/uebungen?themen=number_wall",
+        note: "Dreistöckige Zahlenmauern mit 6 Steinen im Zahlenraum bis 100",
+      },
+      {
+        label: "Zahlenmauern Klasse 3",
+        href: "/klasse-3/uebungen?themen=number_wall",
+        note: "Zahlenmauern mit größeren Zahlen im Zahlenraum bis 1 000",
+      },
+      {
+        label: "Zehnerfreunde & Zerlegen (Klasse 1)",
+        href: "/klasse-1/uebungen?themen=decompose",
+        note: "Partnerzahlen zur 10 wie 3 + ___ = 10 und Zerlegungen wie 12 = 5 + ___",
+      },
+      {
+        label: "Hunderterfreunde & Zerlegen (Klasse 2)",
+        href: "/klasse-2/uebungen?themen=decompose",
+        note: "Ergänzen auf 100: erst mit Zehnerzahlen (30 + ___ = 100), im 2. Halbjahr auch 36 + ___ = 100",
+      },
+    ],
+    howItWorks:
+      "Unten wählst du Klasse 1, 2 oder 3 — oder klickst oben direkt auf dein Wunschthema. In Klasse 1 und 2 sind Zahlenmauern und Zerlegen gemeinsam vorausgewählt, in Klasse 3 die Zahlenmauern. Jedes Blatt lässt sich direkt online ausfüllen und prüfen oder als sauberes PDF mit Lösungsblatt und QR-Prüf-Code ausdrucken.",
+    forWhom:
+      "Kinder in Klasse 1 bis 3, Eltern beim täglichen Kopfrechnen-Training und Lehrkräfte in der Grundschule. Kostenlos und ohne Anmeldung.",
+    faqs: [
+      {
+        q: "Wie funktioniert eine Zahlenmauer?",
+        a: "Zwei nebeneinanderliegende Steine werden addiert; ihre Summe steht im Stein mittig darüber. Fehlt ein unterer Stein, zieht man den bekannten Nachbarstein vom Stein darüber ab.",
+      },
+      {
+        q: "Was sind Zehnerfreunde und Hunderterfreunde?",
+        a: "Zehnerfreunde sind Zahlenpaare, die zusammen 10 ergeben (1+9, 2+8, 3+7, 4+6, 5+5). Hunderterfreunde ergänzen sich entsprechend zu 100 — in Klasse 2 erst als glatte Zehner (30+70), im 2. Halbjahr auch mit Einern (36+64).",
+      },
+      {
+        q: "Werden die Zahlenmauern auch auf dem PDF gezeichnet?",
+        a: "Ja. Sowohl online als auch auf dem gedruckten PDF-Arbeitsblatt werden die Zahlenmauern grafisch als Mauersteine mit einem freien Feld für die gesuchte Zahl dargestellt.",
+      },
+    ],
+  },
+  {
+    slug: "dreisatz-gleichungen",
+    title: "Dreisatz & Gleichungen üben – Klasse 5 & 6 (mit PDF)",
+    h1: "Dreisatz, Gleichungen & Platzhalter üben",
+    shortName: "Dreisatz & Gleichungen",
+    whatHeading: "Wie hängen Platzhalter, Gleichungen und Dreisatz zusammen?",
+    metaDescription:
+      "Dreisatz, Gleichungen mit x (Klasse 6) und Platzhalteraufgaben (Klasse 5) online üben oder als PDF-Arbeitsblatt drucken — kostenlos und ohne Anmeldung.",
+    topicIds: ["placeholder", "equations", "proportion"],
+    topicIdsByGrade: {
+      5: ["placeholder"],
+      6: ["equations", "proportion"],
+    },
+    grades: [5, 6],
+    lead: "In Klasse 5 suchen Kinder noch die fehlende Zahl in einem Platzhalterfeld (___ + 12 = 30), in Klasse 6 wird daraus die Gleichung mit x (2 · x + 5 = 17) und der Dreisatz für proportionale Zuordnungen. Hier lassen sich alle drei Schritte gezielt trainieren.",
+    whatIs:
+      "Auf dem Weg zur Algebra bauen drei Themen aufeinander auf: In Klasse 5 festigen Platzhalteraufgaben das Rückwärtsrechnen mit allen vier Grundrechenarten, etwa ___ + 14 = 32, 45 − ___ = 19, ___ × 7 = 56 oder ___ : 6 = 8. In Klasse 6 tritt der Buchstabe x an die Stelle des Platzhalters: Im 1. Halbjahr lösen Kinder einstufige Gleichungen wie x + 9 = 24, x − 8 = 15 oder 6 · x = 54, im 2. Halbjahr zweistufige Gleichungen wie 3 · x + 7 = 28 oder 4 · x − 6 = 30. Parallel dazu kommt in Klasse 6 der Dreisatz bei proportionalen Zuordnungen („je mehr, desto mehr“) hinzu, zum Beispiel: „3 Hefte kosten 12 €. Was kosten 5 Hefte?“",
+    whyPractice:
+      "Gleichungen und Dreisatz gehören in Klasse 6 zu den wichtigsten Themen für Klassenarbeiten und begleiten Schülerinnen und Schüler durch die gesamte Mittelstufe. Wer Umkehroperationen und den Schluss auf die Einheit (1 Stück) sicher beherrscht, vermeidet typische Vorzeichen- und Rechenfehler.",
+    mistakesHeading: "Drei typische Fehler bei Platzhaltern, Gleichungen und Dreisatz",
+    mistakes: [
+      {
+        title: "1. Bei Minus-Aufgaben mit gesuchtem Abzug addieren",
+        text: "Steht die Lücke hinter dem Minuszeichen wie bei 32 − ___ = 18, rechnen manche Kinder 32 + 18 = 50. Richtig ist die Frage „Wie viel fehlt von 18 bis 32?“, also 32 − 18 = 14.",
+      },
+      {
+        title: "2. Bei 2 · x + 5 = 17 zuerst teilen statt subtrahieren",
+        text: "Bei zweistufigen Gleichungen kehrt man zuerst die Strichrechnung um: Erst auf beiden Seiten 5 abziehen (2 · x = 12) und erst danach durch 2 teilen (x = 6).",
+      },
+      {
+        title: "3. Beim Dreisatz den Schritt auf 1 Stück überspringen",
+        text: "Wenn 4 Hefte 12 € kosten und nach 7 Heften gefragt ist, lässt sich 4 nicht direkt auf 7 vervielfachen. Der sichere Weg führt immer über 1 Heft: 12 € : 4 = 3 € pro Heft, dann 3 € × 7 = 21 €.",
+      },
+    ],
+    directLinksHeading: "Direkteinstieg nach Einzelthema",
+    directLinksIntro:
+      "Wähle direkt aus, ob du Platzhalter in Klasse 5, Gleichungen mit x oder den Dreisatz in Klasse 6 üben möchtest:",
+    directLinks: [
+      {
+        label: "Platzhalteraufgaben (Klasse 5)",
+        href: "/klasse-5/uebungen?themen=placeholder",
+        note: "Umkehraufgaben in allen vier Grundrechenarten, z. B. ___ + 11 = 28 oder ___ × 6 = 54",
+      },
+      {
+        label: "Gleichungen mit x (Klasse 6)",
+        href: "/klasse-6/uebungen?themen=equations",
+        note: "1. Halbjahr: x + 7 = 20 oder 5 · x = 45 · 2. Halbjahr: 2 · x + 5 = 17",
+      },
+      {
+        label: "Dreisatz üben (Klasse 6)",
+        href: "/klasse-6/uebungen?themen=proportion",
+        note: "Proportionale Zuordnungen im Alltag, z. B. 3 Hefte = 12 €, 5 Hefte = ?",
+      },
+      {
+        label: "Gleichungen & Dreisatz kombiniert (Klasse 6)",
+        href: "/klasse-6/uebungen?themen=equations,proportion",
+        note: "Gemischte 10er-Blöcke zur Vorbereitung auf Klassenarbeiten in Klasse 6",
+      },
+    ],
+    howItWorks:
+      "Unten wählst du Klasse 5 (Platzhalter) oder Klasse 6 (Gleichungen & Dreisatz) — oder startest oben direkt mit einem einzelnen Thema. Über den Halbjahres-Schalter auf der Übungsseite steuerst du in Klasse 6 auch den Schwierigkeitsgrad der Gleichungen (1. Halbjahr einstufig, 2. Halbjahr zweistufig wie 2 · x + 5 = 17). Danach online prüfen oder als PDF samt Lösungsblatt drucken.",
+    forWhom:
+      "Kinder in Klasse 5 und 6, Eltern beim Üben vor Klassenarbeiten und Lehrkräfte an weiterführenden Schulen und in der 6. Klasse Grundschule (Berlin/Brandenburg). Kostenlos und ohne Anmeldung.",
+    faqs: [
+      {
+        q: "Ab welcher Klasse kommen Gleichungen mit x und der Dreisatz dran?",
+        a: "In Klasse 5 bereiten Platzhalteraufgaben (z. B. ___ + 8 = 23) das Thema vor. Ab Klasse 6 wird mit der Variablen x gerechnet und der Dreisatz für proportionale Zuordnungen eingeführt.",
+      },
+      {
+        q: "Wie löst man eine Dreisatz-Aufgabe am einfachsten?",
+        a: "In drei festen Schritten: 1. Bekanntes Paar notieren (z. B. 3 Hefte = 12 €). 2. Auf 1 Einheit herunterrechnen (1 Heft = 12 € : 3 = 4 €). 3. Auf die gesuchte Anzahl hochrechnen (5 Hefte = 4 € × 5 = 20 €).",
+      },
+      {
+        q: "Wie löst man Gleichungen wie 2 · x + 5 = 17?",
+        a: "Man isoliert x schrittweise mit Umkehraufgaben: Zuerst + 5 rückgängig machen, also 17 − 5 = 12. Es bleibt 2 · x = 12. Danach durch 2 teilen: x = 12 : 2 = 6.",
+      },
+    ],
+  },
 ];
