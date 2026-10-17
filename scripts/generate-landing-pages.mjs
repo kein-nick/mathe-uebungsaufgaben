@@ -936,8 +936,8 @@ function extractAppFragments() {
   }
   const appDialogs = practiceTemplate.slice(dialogStart, scriptStart).trimEnd();
 
-  const scripts = `    <script src="/topics.js?v=53"></script>
-    <script src="/script.js?v=83"></script>
+  const scripts = `    <script src="/topics.js?v=54"></script>
+    <script src="/script.js?v=84"></script>
     <script defer src="/news.js?v=9"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>
@@ -1577,6 +1577,7 @@ function topicGradeAddon(topic, grade) {
 
   if (id === "money") {
     const byGrade = {
+      1: `In Klasse 1 ab dem 2. Halbjahr mit einfachen Euro-Beträgen bis 20 € (${ex2}).`,
       2: `In Klasse 2 mit Münzbeträgen aus 5, 10, 20 und 50 ct (${ex1}).`,
       3: `In Klasse 3 im 1. Halbjahr in Cent (${ex1}), im 2. Halbjahr mit Euro-Kommazahlen bis 3,00 €.`,
       4: `In Klasse 4 mit Euro-Beträgen von 0,40 € bis 5,20 € (${ex1}).`,
@@ -1587,6 +1588,9 @@ function topicGradeAddon(topic, grade) {
   }
 
   if (id === "clock") {
+    if (grade === 1) {
+      return `In Klasse 1 ab dem 2. Halbjahr mit vollen Stunden (${ex2}).`;
+    }
     return grade === 2
       ? `In Klasse 2 im 1. Halbjahr volle und halbe Stunden (${ex1}), im 2. Halbjahr auch Viertelstunden.`
       : `In Klasse 3 auf 5 Minuten genau (${ex1}).`;

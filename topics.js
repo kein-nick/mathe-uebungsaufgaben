@@ -1603,12 +1603,30 @@ function buildTopics(u) {
       id: "money",
       label: "Geld",
       group: "groessen",
-      fromGrade: 2,
-      fromTerm: 1,
-      example: (g) => (g >= 4 ? "z. B. 1,20 € + 0,50 €" : g >= 3 ? "z. B. 80 ct + 50 ct" : "z. B. 20 ct + 50 ct"),
+      fromGrade: 1,
+      fromTerm: 2,
+      example: (g) =>
+        g >= 4
+          ? "z. B. 1,20 € + 0,50 €"
+          : g >= 3
+            ? "z. B. 80 ct + 50 ct"
+            : g === 2
+              ? "z. B. 20 ct + 50 ct"
+              : "z. B. 5 € + 2 €",
       generate: (g, t) => {
         const euro = (cents) => `${Math.floor(cents / 100)},${String(cents % 100).padStart(2, "0")} €`;
         const minus = g >= 3 && Math.random() < 0.45;
+
+        if (g === 1) {
+          if (Math.random() < 0.35) {
+            const left = randomInt(4, 20);
+            const right = randomInt(1, left - 1);
+            return numberTask("money", `${left} € − ${right} € = ___ €`, left - right);
+          }
+          const a = randomInt(1, 18);
+          const b = randomInt(1, 20 - a);
+          return numberTask("money", `${a} € + ${b} € = ___ €`, a + b);
+        }
 
         if (g < 3) {
           const coins = t === 2 ? [10, 20, 50] : [5, 10, 20, 50];
@@ -1656,19 +1674,22 @@ function buildTopics(u) {
       id: "clock",
       label: "Uhr",
       group: "groessen",
-      fromGrade: 2,
-      fromTerm: 1,
+      fromGrade: 1,
+      fromTerm: 2,
       untilGrade: 3,
-      example: (g) => (g >= 3 ? "z. B. 8:25" : "z. B. 8:30"),
+      example: (g) => (g >= 3 ? "z. B. 8:25" : g === 2 ? "z. B. 8:30" : "z. B. 8:00"),
       generate: (g, t) => {
         const hours = randomInt(1, 12);
         const minutes = g >= 3
           ? pick([0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55])
-          : t === 2
-            ? pick([0, 15, 30, 45])
-            : pick([0, 30]);
+          : g === 1
+            ? 0
+            : t === 2
+              ? pick([0, 15, 30, 45])
+              : pick([0, 30]);
         const stamp = `${hours}:${String(minutes).padStart(2, "0")}`;
-        return numberTask("clock", "Wie spät ist es? Schreibe z. B. 8:30", stamp, {
+        const exampleClock = g === 1 ? "8:00" : "8:30";
+        return numberTask("clock", `Wie spät ist es? Schreibe z. B. ${exampleClock}`, stamp, {
           kind: "text",
           wide: true,
           visualHtml: clockSvg(hours, minutes),

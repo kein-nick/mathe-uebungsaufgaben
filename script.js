@@ -81,7 +81,7 @@ const difficulty = {
     2: {
       addMax: 20,
       addMin: 1,
-      hint: "Plus und Minus bis 20.",
+      hint: "Plus und Minus bis 20. Einfaches Geld und volle Stunden.",
     },
   },
   2: {
@@ -685,8 +685,11 @@ function fillOperations(grade, term) {
   const groupOrder = ["rechnen", "zahlen", "groessen", "geometrie"];
   groupOrder.forEach((groupId) => {
     const listed = topics.filter((item) => item.group === groupId && isTopicListed(item, grade));
-    const hasAllowed = listed.some((item) => isTopicAllowed(item, grade, term));
-    if (!hasAllowed) {
+    const hasAllowedInTerm = listed.some((item) => isTopicAllowed(item, grade, term));
+    const hasAllowedInGrade = listed.some(
+      (item) => isTopicAllowed(item, grade, 1) || isTopicAllowed(item, grade, 2)
+    );
+    if (!hasAllowedInGrade) {
       return;
     }
 
@@ -698,10 +701,13 @@ function fillOperations(grade, term) {
     head.className = "topic-group-head";
     const title = document.createElement("h3");
     title.textContent = topicGroups[groupId];
-    const allLabel = document.createElement("label");
-    allLabel.className = "group-all";
-    allLabel.innerHTML = `<input type="checkbox" class="group-toggle" /> Alle in dieser Gruppe`;
-    head.append(title, allLabel);
+    head.append(title);
+    if (hasAllowedInTerm) {
+      const allLabel = document.createElement("label");
+      allLabel.className = "group-all";
+      allLabel.innerHTML = `<input type="checkbox" class="group-toggle" /> Alle in dieser Gruppe`;
+      head.append(allLabel);
+    }
 
     const grid = document.createElement("div");
     grid.className = "topic-grid";
@@ -719,7 +725,11 @@ function fillOperations(grade, term) {
       const name = document.createElement("span");
       name.className = "topic-choice-name";
       const choiceLabel = item.id === "decompose" ? decomposeLabel(grade) : item.label;
-      name.textContent = allowed ? choiceLabel : `${choiceLabel} (ab Klasse ${item.fromGrade})`;
+      const disabledReason =
+        item.fromGrade === grade && item.fromTerm > term
+          ? `ab ${item.fromTerm}. Halbjahr`
+          : `ab Klasse ${item.fromGrade}`;
+      name.textContent = allowed ? choiceLabel : `${choiceLabel} (${disabledReason})`;
       const example = document.createElement("span");
       example.className = "topic-example";
       example.textContent = item.example(grade, term);
@@ -1248,7 +1258,21 @@ function initPageEntry() {
     if (topicIds.length) {
       pendingTopicIds = new Set(topicIds);
     }
-    selectTerm(hasTerm ? termParam : 2, { scroll: false });
+    let initialTerm = hasTerm ? termParam : 2;
+    if (
+      topicIds.length &&
+      !topicIds.some((id) => {
+        const topic = getTopic(id);
+        return topic && isTopicAllowed(topic, lockedGrade, initialTerm);
+      }) &&
+      topicIds.some((id) => {
+        const topic = getTopic(id);
+        return topic && isTopicAllowed(topic, lockedGrade, 2);
+      })
+    ) {
+      initialTerm = 2;
+    }
+    selectTerm(initialTerm, { scroll: false });
     if (topicIds.length) {
       scrollToNext(operationBlock, "center-top");
     } else if (hasTerm) {
@@ -1627,7 +1651,15 @@ function isAnswerCorrect(task, value) {
     }
     if (task.type === "clock") {
       const clock = left.replace(".", ":");
-      return clock === right || clock === `0${right}`;
+      if (clock === right || clock === `0${right}`) {
+        return true;
+      }
+      if (right.endsWith(":00")) {
+        const hourOnly = right.slice(0, -3);
+        const stripped = clock.replace(/uhr$/, "");
+        return stripped === hourOnly || stripped === `0${hourOnly}`;
+      }
+      return false;
     }
     return left === right;
   }
