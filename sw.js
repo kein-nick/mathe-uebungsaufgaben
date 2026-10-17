@@ -1,4 +1,4 @@
-const CACHE_NAME = "mathe-uebungsaufgaben-v133";
+const CACHE_NAME = "mathe-uebungsaufgaben-v134";
 
 const PRECACHE_URLS = [
   "/",
@@ -7,6 +7,7 @@ const PRECACHE_URLS = [
   "/fonts/nunito-latin.woff2",
   "/fonts/fraunces-latin.woff2",
   "/script.js",
+  "/exam-plan.js",
   "/topics.js",
   "/pwa.js",
   "/news.js",

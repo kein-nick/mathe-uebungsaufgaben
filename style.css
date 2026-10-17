@@ -4438,6 +4438,9 @@ body.is-times-row .intro .class-nav-grid {
   .check-bar,
   .page-corner,
   .practice-slot,
+  .exam-plan-entry,
+  .exam-day-briefing,
+  .exam-day-summary,
   .success-dialog,
   .pdf-sheet {
     display: none !important;
@@ -4524,3 +4527,540 @@ body.is-times-row .intro .class-nav-grid {
     padding-bottom: 4px;
   }
 }
+
+/* ==========================================================================
+   Für Mathe-Arbeit üben — Trainingsplan-Modul
+   ========================================================================== */
+
+.exam-plan-entry {
+  background: linear-gradient(135deg, #fffdf8 0%, #f4efe2 100%);
+  border: 2px solid #c5b69c;
+  border-radius: 18px;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow);
+}
+
+.exam-plan-entry-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 20px;
+}
+
+.exam-plan-entry-text {
+  flex: 1 1 260px;
+}
+
+.exam-plan-kicker {
+  display: inline-block;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--grade);
+  background: #e4f0ec;
+  padding: 3px 9px;
+  border-radius: 999px;
+  margin-bottom: 6px;
+}
+
+.exam-plan-entry-title {
+  font-family: "Fraunces", serif;
+  font-size: 1.25rem;
+  margin: 0 0 4px;
+  color: var(--ink);
+}
+
+.exam-plan-entry-desc {
+  margin: 0;
+  font-size: 0.94rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.exam-plan-open-btn {
+  font: inherit;
+  font-weight: 800;
+  font-size: 0.98rem;
+  cursor: pointer;
+  background: var(--grade);
+  color: #fff;
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 18px;
+  white-space: nowrap;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.exam-plan-open-btn:hover {
+  background: var(--grade-hover);
+}
+
+.exam-plan-active-bar {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.exam-active-progress-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  margin-bottom: 10px;
+}
+
+.exam-active-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.exam-active-status-badge {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--grade);
+}
+
+.exam-active-device-note {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.exam-active-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.exam-continue-btn {
+  padding: 9px 15px;
+  font-size: 0.92rem;
+}
+
+.exam-plan-mini-btn {
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: #f3eee3;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 6px 11px;
+}
+
+.exam-plan-mini-btn:hover {
+  background: #e7dfd0;
+}
+
+.exam-plan-delete-btn {
+  color: var(--wrong);
+}
+
+.exam-active-bar-track {
+  height: 8px;
+  background: #e6decb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.exam-active-bar-fill {
+  height: 100%;
+  background: var(--grade);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+/* Setup-Dialog für Mathe-Arbeit */
+.exam-plan-dialog-card {
+  width: min(680px, calc(100% - 24px));
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  text-align: left;
+  padding: 24px 24px 20px;
+}
+
+.exam-plan-dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.exam-plan-dialog-header h2 {
+  font-size: 1.65rem;
+  margin: 0;
+}
+
+.exam-plan-close-x {
+  background: #f3eee3;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ink);
+  flex-shrink: 0;
+}
+
+.exam-plan-dialog-lead {
+  font-size: 0.95rem !important;
+  line-height: 1.45;
+  margin: 0 0 14px !important;
+}
+
+.exam-plan-device-warning {
+  background: #fef7e3;
+  border: 1.5px solid #e2b95b;
+  border-radius: 13px;
+  padding: 11px 14px;
+  margin-bottom: 16px;
+  font-size: 0.88rem;
+  color: #5c4308;
+}
+
+.exam-plan-device-warning strong {
+  display: block;
+  margin-bottom: 3px;
+  color: #463204;
+}
+
+.exam-plan-device-warning p {
+  margin: 0 !important;
+  font-size: 0.86rem !important;
+  color: #5c4308 !important;
+  line-height: 1.4;
+}
+
+.exam-plan-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.exam-plan-field-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.exam-plan-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.exam-plan-field select,
+.exam-plan-date-input {
+  max-width: 100%;
+  width: 100%;
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 10px 12px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+}
+
+.exam-plan-label {
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.exam-plan-field .hint {
+  margin: 2px 0 0 !important;
+  font-size: 0.82rem !important;
+  line-height: 1.35;
+}
+
+.exam-plan-topics-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.exam-plan-topics-quick {
+  display: flex;
+  gap: 6px;
+}
+
+.exam-plan-topics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+  gap: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 4px 2px;
+}
+
+.exam-plan-topic-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8f4eb;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.exam-plan-topic-item:has(input:checked) {
+  background: #e4f0ec;
+  border-color: var(--grade);
+  color: var(--grade);
+}
+
+.exam-plan-topic-item input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--grade);
+  flex-shrink: 0;
+}
+
+.exam-plan-error {
+  color: var(--wrong) !important;
+  font-weight: 700;
+  font-size: 0.88rem !important;
+  margin: 4px 0 0 !important;
+}
+
+.exam-plan-dialog-actions {
+  margin-top: 18px;
+  justify-content: flex-end;
+}
+
+/* Tages-Einleitung (Schüler-Briefing über den Aufgaben) */
+.exam-day-briefing {
+  margin-bottom: 18px;
+}
+
+.exam-briefing-card {
+  background: #fffdf8;
+  border: 2px solid var(--grade);
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+}
+
+.exam-briefing-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.exam-briefing-badge {
+  display: inline-block;
+  background: var(--grade);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.82rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.exam-briefing-rule {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.exam-briefing-title {
+  font-family: "Fraunces", serif;
+  font-size: 1.2rem;
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+
+.exam-briefing-text {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.exam-briefing-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.exam-topic-pill {
+  background: #f3eee3;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 11px;
+  font-size: 0.84rem;
+  color: var(--ink);
+}
+
+/* Tages-Fazit & SVG-Lernkurve */
+.exam-day-summary {
+  margin: 20px 0 16px;
+}
+
+.exam-summary-card {
+  background: #fffdf8;
+  border: 2px solid var(--correct);
+  border-radius: 18px;
+  padding: 20px 22px;
+  box-shadow: var(--shadow);
+}
+
+.exam-summary-header h3 {
+  font-family: "Fraunces", serif;
+  font-size: 1.32rem;
+  margin: 4px 0 14px;
+  color: var(--ink);
+}
+
+.exam-summary-topics {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.exam-summary-topic-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 14px;
+  background: #f8f4eb;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  padding: 9px 13px;
+  font-size: 0.9rem;
+}
+
+.exam-summary-topic-name {
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.exam-summary-topic-score {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.exam-topic-status {
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.exam-topic-status.is-strong {
+  background: var(--correct-bg);
+  color: var(--correct);
+}
+
+.exam-topic-status.is-focus {
+  background: #fef7e3;
+  color: #8f5b00;
+}
+
+.exam-summary-outlook {
+  background: #f3eee3;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 0.93rem;
+  line-height: 1.45;
+  margin: 0 0 16px;
+}
+
+.exam-chart-wrap {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.exam-chart-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.exam-chart-header h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.exam-chart-header span {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--correct);
+}
+
+.exam-chart-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.exam-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #eee6d8;
+  font-size: 0.83rem;
+}
+
+.exam-chart-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.exam-chart-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.exam-summary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  .exam-plan-field-row {
+    grid-template-columns: 1fr;
+  }
+  .exam-plan-dialog-card {
+    padding: 18px 16px;
+  }
+  .exam-plan-open-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+

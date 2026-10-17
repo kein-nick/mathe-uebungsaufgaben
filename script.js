@@ -1071,6 +1071,9 @@ function resetLaterSteps({ preserveTopics = false, preserveBlocks = false } = {}
   hide(operationBlock);
   hideCreateStep();
   hide(worksheet);
+  if (typeof window.clearExamDayCards === "function") {
+    window.clearExamDayCards();
+  }
   hide(checkBtn);
   hide(pdfBtn);
   hide(pdfSolutionsBtn);
@@ -2063,6 +2066,9 @@ function updateProgress() {
 }
 
 function buildWorksheet() {
+  if (typeof window.clearExamDayCards === "function") {
+    window.clearExamDayCards();
+  }
   const selectedOps = selectedTopics();
   const count = selectedTaskCount();
   if (!count || !selectedTerm || !selectedOps.length) {
@@ -3562,6 +3568,9 @@ checkBtn.addEventListener("click", () => {
     statusEl.textContent = `Sehr gut! Alle Aufgaben sind richtig.${lateHint}`;
     freezeTimer();
     updateProgress();
+    if (typeof window.onExamPlanCheckEvaluated === "function") {
+      window.onExamPlanCheckEvaluated({ rows, correct, checked, allSolved: true });
+    }
     if (!celebrated) {
       celebrated = true;
       openSuccess();
@@ -3569,7 +3578,11 @@ checkBtn.addEventListener("click", () => {
     return;
   }
 
-  statusEl.textContent = `${correct} von ${tasks.length} richtig.${lateHint} Falsche oder leere Felder kannst du noch ausfüllen.`;
+  if (typeof window.onExamPlanCheckEvaluated === "function") {
+    window.onExamPlanCheckEvaluated({ rows, correct, checked, allSolved: false });
+  } else {
+    statusEl.textContent = `${correct} von ${tasks.length} richtig.${lateHint} Falsche oder leere Felder kannst du noch ausfüllen.`;
+  }
   updateProgress();
 });
 
