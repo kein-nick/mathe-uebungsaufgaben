@@ -4189,68 +4189,150 @@ body.is-times-row .intro .class-nav-grid {
   display: none;
 }
 
+.pdf-page-solutions {
+  padding: 18px 20px 12px;
+}
+
+.pdf-page-solutions .pdf-header {
+  padding-bottom: 8px;
+}
+
+.pdf-page-solutions .pdf-header h1 {
+  font-size: 1.22rem;
+  margin-bottom: 4px;
+}
+
+.pdf-page-solutions .pdf-header p {
+  font-size: 0.8rem;
+  margin-bottom: 2px;
+}
+
 .pdf-solutions-banner {
-  margin: 8px 0 0;
+  margin: 4px 0 0;
+  font-size: 0.82rem;
   font-weight: 800;
   color: #c45c26;
 }
 
 .pdf-solutions-banner-continued {
   flex: 0 0 auto;
-  margin: 0 0 10px;
+  margin: 0 0 8px;
 }
 
 .pdf-solutions-page {
   flex: 1;
   min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: max-content;
+  align-content: start;
+  gap: 10px;
+}
+
+.pdf-solutions-page.is-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.pdf-solutions-page.is-dense {
+  gap: 8px;
 }
 
 .pdf-solutions-block {
-  padding: 8px 10px 10px;
-  border: 2px solid #333;
-  border-radius: 8px;
-  background: #fff;
+  min-width: 0;
+  padding: 7px 8px 8px;
+  border: 1.5px solid #c9bfb2;
+  border-radius: 10px;
+  background: #f8f4ea;
+}
+
+.pdf-solutions-page.is-dense .pdf-solutions-block {
+  padding: 5px 7px 6px;
 }
 
 .pdf-solutions-block h3 {
-  margin: 0 0 8px;
-  font-size: 0.82rem;
+  margin: 0 0 5px;
+  font-size: 0.78rem;
+  line-height: 1.2;
   font-weight: 800;
-  color: #333;
+  color: #1c2430;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pdf-solutions-page.is-dense .pdf-solutions-block h3 {
+  margin-bottom: 4px;
+  font-size: 0.74rem;
 }
 
 .pdf-solutions-list {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5px 20px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 3px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+.pdf-solutions-page.is-dense .pdf-solutions-list {
+  gap: 2px;
+}
+
 .pdf-solutions-list li {
-  display: grid;
-  grid-template-columns: 2.2rem minmax(0, 1fr);
-  column-gap: 8px;
+  display: flex;
   align-items: baseline;
+  gap: 4px;
   min-width: 0;
+  padding: 2px 6px;
+  border: 1px solid #dfd7c8;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 0.74rem;
+  line-height: 1.28;
+}
+
+.pdf-solutions-page.is-dense .pdf-solutions-list li {
+  padding: 1.5px 5px;
+  font-size: 0.7rem;
+  line-height: 1.22;
+}
+
+.pdf-solutions-page.is-cols-3 .pdf-solutions-list li {
+  padding: 1.5px 5px;
+  font-size: 0.68rem;
+  line-height: 1.2;
 }
 
 .pdf-sol-num {
-  color: #777;
-  font-size: 0.7rem;
-  font-weight: 600;
+  flex: 0 0 1.45rem;
+  color: #5b6573;
+  font-size: 0.66rem;
+  font-weight: 800;
   text-align: right;
 }
 
-.pdf-sol-ans {
+.pdf-sol-prompt {
+  flex: 0 1 auto;
+  min-width: 0;
   color: #1c2430;
-  font-size: 0.95rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pdf-sol-eq {
+  flex: 0 0 auto;
+  color: #5b6573;
   font-weight: 800;
-  overflow-wrap: anywhere;
+}
+
+.pdf-sol-ans {
+  flex: 0 0 auto;
+  color: #2f5d50;
+  font-weight: 800;
+  white-space: nowrap;
 }
 
 @media print {

@@ -3255,22 +3255,35 @@ function buildPdfSolutionsSheet() {
     list.className = "pdf-solutions-list";
     list.start = startNum;
     for (const { task } of slice.items) {
+      const parts = checkTaskParts(task);
       const item = document.createElement("li");
-      item.innerHTML = `<span class="pdf-sol-num">${displayNum}.</span><span class="pdf-sol-ans">${escapeHtml(
-        formatSolutionAnswer(task)
-      )}</span>`;
+      const left = parts.left
+        ? `<span class="pdf-sol-prompt">${escapeHtml(parts.left)}</span><span class="pdf-sol-eq">${escapeHtml(parts.sep)}</span>`
+        : "";
+      item.innerHTML = `<span class="pdf-sol-num">${displayNum}.</span>${left}<strong class="pdf-sol-ans">${escapeHtml(
+        parts.answer
+      )}</strong>`;
       list.append(item);
       displayNum += 1;
     }
     article.append(list);
     articles.push(article);
   }
-  const perPage = 5;
+  const perPage = 9;
   const pageCount = Math.max(1, Math.ceil(articles.length / perPage));
   for (let i = 0; i < pageCount; i += 1) {
+    const pageBlocks = articles.slice(i * perPage, i * perPage + perPage);
     const pageInner = document.createElement("div");
     pageInner.className = "pdf-solutions-page";
-    articles.slice(i * perPage, i * perPage + perPage).forEach((block) => pageInner.append(block));
+    if (pageBlocks.length >= 7) {
+      pageInner.classList.add("is-cols-3");
+    } else {
+      pageInner.classList.add("is-cols-2");
+    }
+    if (pageBlocks.length >= 5) {
+      pageInner.classList.add("is-dense");
+    }
+    pageBlocks.forEach((block) => pageInner.append(block));
     sheet.append(
       makePdfPage(pageInner, i + 1, pageCount, "pdf-page-solutions", {
         solutions: true,
