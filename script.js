@@ -428,7 +428,7 @@ const TOPIC_SECONDS = {
   word_times: 52,
   division_rest: 36,
   decompose: 16,
-  number_wall: 28,
+  number_wall: 42,
   compare: 12,
   neighbor: 12,
   double_half: 18,
@@ -436,21 +436,21 @@ const TOPIC_SECONDS = {
   round: 22,
   estimate: 28,
   divisible: 14,
-  roman: 22,
+  roman: 30,
   primes: 16,
   squares: 16,
   table_read: 24,
   money: 26,
   clock: 18,
-  length: 18,
-  length_convert: 22,
-  weight: 18,
-  capacity: 22,
-  time_units: 16,
+  length: 22,
+  length_convert: 30,
+  weight: 22,
+  capacity: 28,
+  time_units: 22,
   perimeter_area: 36,
   scale: 42,
   cuboid: 44,
-  unit_convert: 24,
+  unit_convert: 32,
   shapes: 12,
   solids: 16,
   position: 12,
@@ -469,21 +469,28 @@ function secondsForTopic(id, grade, term) {
     "multiplication",
     "division",
     "division_rest",
+    "number_wall",
     "round",
     "estimate",
     "word",
     "word_times",
     "money",
+    "length_convert",
+    "unit_convert",
     "order_ops",
     "brackets",
   ]);
   if (growsWithGrade.has(id)) {
-    seconds += (grade - 1) * 4;
+    seconds += (grade - 1) * 5;
     if (term === 2) {
-      seconds += 3;
+      seconds += 4;
     }
   } else if (grade >= 5) {
     seconds += 4;
+  }
+  // Ab Klasse 3 (bis 1.000) und Klasse 4 (bis 1.000.000) brauchen Grundrechenarten deutlich mehr Zwischenschritte
+  if (grade >= 3 && ["addition", "subtraction", "multiplication", "division"].includes(id)) {
+    seconds += grade >= 4 ? 10 : 6;
   }
   if (term === 2 && ["equations", "fractions", "decimals", "percent", "proportion", "cuboid", "perimeter_area"].includes(id)) {
     seconds += 8;
