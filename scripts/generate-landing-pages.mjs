@@ -112,6 +112,30 @@ const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 // Neue Beiträge auch in news.js unter ARTICLES eintragen, sonst fehlt die Zahl am Menüpunkt Neu.
 const NEWS_ITEMS = [
   {
+    dateIso: "2026-10-17",
+    date: "17. Oktober 2026",
+    title: "Übertragszeile beim schriftlichen Rechnen online",
+    text: "Wenn „Rechenweg notieren“ eingeschaltet ist, steht bei Plus und Minus über dem Ergebnisstrich jetzt eine kleine Zeile „Ü“. Dort können Kinder Überträge für die nächste Stelle eintragen. Mit den Pfeiltasten wechselt man direkt zwischen Ergebnis- und Übertragszeile.",
+    href: "/schriftlich-rechnen",
+    linkLabel: "Schriftlich rechnen üben",
+  },
+  {
+    dateIso: "2026-10-17",
+    date: "17. Oktober 2026",
+    title: "Rechenkästchen unter Mal und Geteilt im PDF",
+    text: "Im PDF-Druck erscheint bei eingeschaltetem Rechenweg unter Aufgaben zur Multiplikation und Division jetzt ein kleines Kästchenraster statt einfacher Linien. So können Kinder Zwischenschritte ordentlich stellengerecht untereinander schreiben.",
+    href: "/schriftlich-rechnen",
+    linkLabel: "Arbeitsblatt zum schriftlichen Rechnen erstellen",
+  },
+  {
+    dateIso: "2026-10-17",
+    date: "17. Oktober 2026",
+    title: "Geld und Uhrzeit jetzt schon ab Klasse 1 (2. Halbjahr)",
+    text: "Im 2. Halbjahr der 1. Klasse gibt es im Bereich Größen jetzt zwei neue Themen: einfache Euro-Beträge bis 20 Euro zusammenrechnen sowie volle Stunden auf der analogen Uhr ablesen, zum Beispiel 8:00 oder 8 Uhr.",
+    href: "/klasse-1/uebungen?themen=money,clock",
+    linkLabel: "Geld und Uhr in Klasse 1 üben",
+  },
+  {
     dateIso: "2026-10-16",
     date: "16. Oktober 2026",
     title: "Gleiches Übungsblatt mit Apple Classroom",
@@ -913,7 +937,7 @@ function extractInstallPrompt() {
 
 const installPromptHtml = extractInstallPrompt();
 
-const pwaScripts = `    <script defer src="/news.js?v=9"></script>
+const pwaScripts = `    <script defer src="/news.js?v=10"></script>
     <script defer src="/pwa.js"></script>
     <script>
       window.va =
@@ -938,7 +962,7 @@ function extractAppFragments() {
 
   const scripts = `    <script src="/topics.js?v=54"></script>
     <script src="/script.js?v=87"></script>
-    <script defer src="/news.js?v=9"></script>
+    <script defer src="/news.js?v=10"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>
       window.va =

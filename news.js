@@ -1,6 +1,9 @@
 (function () {
   // Neueste Beiträge zuerst. Beim Ergänzen eines Eintrags in NEWS_ITEMS hier dieselbe id vorn anfügen.
   const ARTICLES = [
+    "uebertragszeile",
+    "pdf-rechenkaestchen",
+    "klasse1-geld-uhr",
     "apple-classroom",
     "pruef-code",
     "zehnerfreunde",
@@ -13,7 +16,7 @@
     "geteilt-sachaufgaben",
   ];
   const STORAGE_KEY = "mathe-news-read";
-  const CURRENT_VERSION = "2026-10-16-1";
+  const CURRENT_VERSION = "2026-10-17-1";
   const link = document.querySelector(".site-header-news");
 
   if (!link) {
