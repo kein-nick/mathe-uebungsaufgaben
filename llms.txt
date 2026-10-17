@@ -12,8 +12,8 @@ Für den Unterricht gibt es den Apple-Classroom-Modus (`?unterricht=1` → „Bl
 - [Klasse 2](https://mathe-testen.de/klasse-2): Übersicht und Übungen (Einmaleins, Zahlenraum 100, Zehner- und Hunderterfreunde)
 - [Klasse 3](https://mathe-testen.de/klasse-3): Übersicht und Übungen (schriftliches Rechnen, Division mit Rest, Sachaufgaben)
 - [Klasse 4](https://mathe-testen.de/klasse-4): Übersicht und Übungen (schriftliche Verfahren, Bruchanteile)
-- [Klasse 5](https://mathe-testen.de/klasse-5): Übersicht und Übungen (Brüche, Dezimalzahlen, Prozent, Quadratzahlen bis 12²)
-- [Klasse 6](https://mathe-testen.de/klasse-6): Übersicht und Übungen (Vertiefung, Quadratzahlen bis 20², Zehnerpotenzen)
+- [Klasse 5](https://mathe-testen.de/klasse-5): Übersicht und Übungen (Klammern, Rechengesetze, Platzhalter, Brüche erkennen, Quadratzahlen bis 12²)
+- [Klasse 6](https://mathe-testen.de/klasse-6): Übersicht und Übungen (Brüche rechnen, Dezimalzahlen, Prozent, Dreisatz, Gleichungen, Quadratzahlen bis 20², Zehnerpotenzen)
 
 Direkte Übungsseiten: [Klasse 1](https://mathe-testen.de/klasse-1/uebungen), [Klasse 2](https://mathe-testen.de/klasse-2/uebungen), [Klasse 3](https://mathe-testen.de/klasse-3/uebungen), [Klasse 4](https://mathe-testen.de/klasse-4/uebungen), [Klasse 5](https://mathe-testen.de/klasse-5/uebungen), [Klasse 6](https://mathe-testen.de/klasse-6/uebungen)
 
@@ -55,7 +55,7 @@ Apple-Classroom-Links („Blatt für die Klasse“ ohne Schülerkonto): [Klasse 
 - [Für Lehrkräfte](https://mathe-testen.de/fuer-lehrkraefte): Übungsblätter für Unterricht und Hausaufgaben in 10er-Blöcken, gleiches Blatt auf allen Tablets mit Apple Classroom („Blatt für die Klasse“), separates PDF-Lösungsblatt und QR-Prüf-Code auf dem Ausdruck — kostenlos, ohne Anmeldung und ohne Schülerkonten.
 - [Für Schulen und IT](https://mathe-testen.de/fuer-schulen): mathe-testen.de als Web-App / Webclip auf Klassen-iPads über MDM wie Relution oder Jamf ausrollen, inkl. Icon-Download (512×512 PNG & Apple-Touch-Icon) und Hinweis zur Android-App über Managed Google Play — ohne App-Store-Freigabe, ohne Schülerkonten und datenschutzfreundlich ohne Tracking.
 - [Neuigkeiten](https://mathe-testen.de/neuigkeiten)
-- [Rechenarten nach Klasse](https://mathe-testen.de/rechenarten): Vollständige Themenliste für Klasse 1 bis 6, gegliedert in Rechnen, Zahlen, Größen und Geometrie. Zu jedem Thema ein bis zwei Sätze und ein Link zur Übung. Kurzfassung: Klasse 1 Plus und Minus bis 20, Zehnerfreunde. Klasse 2 Einmaleins und Zahlenraum 100. Klasse 3 schriftliches Rechnen, Division mit Rest, Sachaufgaben. Klasse 4 schriftliche Verfahren und Bruchanteile. Klasse 5 Brüche, Dezimalzahlen, Prozent, Quadratzahlen bis 12². Klasse 6 Brüche, Prozent, Dreisatz, Quadratzahlen bis 20² und Zehnerpotenzen.
+- [Rechenarten nach Klasse](https://mathe-testen.de/rechenarten): Vollständige Themenliste für Klasse 1 bis 6, gegliedert in Rechnen, Zahlen, Größen und Geometrie. Zu jedem Thema ein bis zwei Sätze und ein Link zur Übung. Kurzfassung: Klasse 1 Plus und Minus bis 20, Zehnerfreunde. Klasse 2 Einmaleins und Zahlenraum 100. Klasse 3 schriftliches Rechnen, Division mit Rest, Sachaufgaben. Klasse 4 schriftliche Verfahren und Bruchanteile. Klasse 5 Klammern, Rechengesetze, Platzhalter, Brüche erkennen, Quadratzahlen bis 12². Klasse 6 Brüche rechnen, Dezimalzahlen, Prozent, Dreisatz, Gleichungen, Quadratzahlen bis 20² und Zehnerpotenzen.
 - [FAQ](https://mathe-testen.de/faq)
 - [Kontakt](https://mathe-testen.de/kontakt)
 

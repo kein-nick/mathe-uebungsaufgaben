@@ -55,8 +55,8 @@ const classIntros = {
   2: "In Klasse 2 vertiefst du Plus und Minus bis 100, übst Zehner- und Hunderterfreunde und lernst das Einmaleins.",
   3: "In Klasse 3 kommen größere Zahlen, schriftliches Rechnen, Division mit Rest, Tabellen und erste Sachaufgaben dazu.",
   4: "In Klasse 4 übst du schriftliche Verfahren, Bruchanteile, Geometrie und das Umrechnen von Größen.",
-  5: "In Klasse 5 vertiefst du Brüche, Dezimalzahlen und Prozent. Quadratzahlen gehen bis 12².",
-  6: "In Klasse 6 kommen Quadratzahlen bis 20² und einfache Zehnerpotenzen dazu, außerdem Brüche, Prozent und Dreisatz.",
+  5: "In Klasse 5 übst du Klammern, Rechengesetze, Platzhalter, Brüche erkennen sowie Quadratzahlen bis 12².",
+  6: "In Klasse 6 kommen Brüche rechnen, Dezimalzahlen, Prozent, Dreisatz und Gleichungen dazu, außerdem Quadratzahlen bis 20² und Zehnerpotenzen.",
 };
 
 const classDetails = {
@@ -64,8 +64,8 @@ const classDetails = {
   2: "In Klasse 2 wächst der Zahlenraum bis 100. Beim Zerlegen bleiben Zehnerfreunde, dazu kommen Hunderterfreunde wie 30 + ___ = 100. Im 2. Halbjahr auch Aufgaben wie 36 + ___ = 100. Das Einmaleins wird aufgebaut.",
   3: "Klasse 3 bedeutet größere Zahlen, schriftliches Rechnen und mehr Schritte pro Aufgabe. Division mit Rest, Punkt vor Strich, Tabellen lesen und Größen wie Länge oder Gewicht kommen dazu — Themen, bei denen eine Übersicht besonders hilft.",
   4: "In Klasse 4 stehen schriftliche Verfahren, Division mit Rest, Bruchanteile und anspruchsvollere Sachaufgaben im Fokus. Geometrie und Größen werden präziser; Kinder sollen nicht nur rechnen, sondern auch begründen, warum ein Ergebnis passt.",
-  5: "Klasse 5 bringt Brüche, Dezimalzahlen und Prozent zusammen — oft in gemischten Aufgaben. Quadratzahlen gehören dazu: im 1. Halbjahr bis 10², im 2. Halbjahr bis 12². Geübt wird zum Beispiel 7² = 49 und die Umkehrung 49 ist das Quadrat von 7.",
-  6: "In Klasse 6 wird vieles wiederholt und vertieft, was für die weiterführende Schule wichtig ist. Quadratzahlen gehen im 1. Halbjahr bis 16² und im 2. Halbjahr bis 20². Dazu kommen Zehnerpotenzen wie 10³ = 1000.",
+  5: "Klasse 5 verbindet das Rechnen mit großen Zahlen mit Klammern, Rechengesetzen, Platzhaltern, Primzahlen, Bruchanteilen und dem Erkennen von Brüchen. Quadratzahlen gehören dazu: im 1. Halbjahr bis 10², im 2. Halbjahr bis 12². Geübt wird zum Beispiel 7² = 49 und die Umkehrung 49 ist das Quadrat von 7.",
+  6: "In Klasse 6 kommen das Rechnen mit Brüchen, Dezimalzahlen, Prozent, Dreisatz, Gleichungen mit x und der Mittelwert zusammen. Quadratzahlen gehen im 1. Halbjahr bis 16² und im 2. Halbjahr bis 20², dazu kommen Zehnerpotenzen wie 10³ = 1000.",
 };
 
 const groupOrder = ["rechnen", "zahlen", "groessen", "geometrie"];
@@ -561,8 +561,8 @@ function classPageMeta(grade) {
   const descriptions = {
     1: "Mathe Klasse 1 üben: Zehnerfreunde wie 3 + ___ = 10, Plus und Minus bis 20. Kostenlos online oder als PDF. Ohne Anmeldung.",
     2: "Mathe Klasse 2 üben: Zehner- und Hunderterfreunde wie 30 + ___ = 100, Einmaleins bis 100. Kostenlos online oder als PDF. Ohne Anmeldung.",
-    5: "Mathe Klasse 5 üben: Quadratzahlen bis 12², Brüche, Dezimalzahlen und Prozent. Kostenlos online oder als PDF. Ohne Anmeldung.",
-    6: "Mathe Klasse 6 üben: Quadratzahlen bis 20², Zehnerpotenzen wie 10³, Brüche und Prozent. Kostenlos online oder als PDF. Ohne Anmeldung.",
+    5: "Mathe Klasse 5 üben: Klammern, Rechengesetze, Platzhalter, Brüche erkennen und Quadratzahlen bis 12². Kostenlos online oder als PDF. Ohne Anmeldung.",
+    6: "Mathe Klasse 6 üben: Brüche rechnen, Dezimalzahlen, Prozent, Dreisatz, Quadratzahlen bis 20² und Zehnerpotenzen. Kostenlos online oder als PDF.",
   };
   return {
     title: `Mathe Klasse ${grade} – Übungen online & als PDF`,
@@ -652,10 +652,10 @@ function practiceDescription(grade) {
     return "Übungsaufgaben Klasse 2: Zehner- und Hunderterfreunde wie 30 + ___ = 100. Halbjahr und Themen wählen, online üben oder als PDF drucken.";
   }
   if (grade === 5) {
-    return "Übungsaufgaben Klasse 5: Quadratzahlen bis 12², Brüche und Prozent. Halbjahr und Themen wählen, online üben oder als PDF drucken.";
+    return "Übungsaufgaben Klasse 5: Klammern, Platzhalter, Brüche erkennen und Quadratzahlen bis 12². Halbjahr und Themen wählen, online üben oder als PDF drucken.";
   }
   if (grade === 6) {
-    return "Übungsaufgaben Klasse 6: Quadratzahlen bis 20² und Zehnerpotenzen wie 10³. Halbjahr und Themen wählen, online üben oder als PDF drucken.";
+    return "Übungsaufgaben Klasse 6: Brüche, Dezimalzahlen, Prozent, Dreisatz, Quadratzahlen bis 20² und Zehnerpotenzen. Online üben oder als PDF drucken.";
   }
   return `Mathe-Übungen für Klasse ${grade}: Halbjahr, Anzahl und Themen wählen — online üben oder Arbeitsblatt als PDF zum Ausdrucken.`;
 }

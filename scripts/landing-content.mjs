@@ -34,33 +34,33 @@ export const groupDescriptions = {
   },
   4: {
     rechnen:
-      "Schriftliche Verfahren für Addition, Subtraktion, Multiplikation und Division stehen im Mittelpunkt. Dazu kommen Division mit Rest, Klammern, Rechengesetze, erste Bruchanteile und längere Sachaufgaben mit mehreren Informationen.",
+      "Schriftliche Verfahren für Addition, Subtraktion, Multiplikation und Division stehen im Mittelpunkt. Dazu kommen Division mit Rest, Punkt vor Strich, Rechengesetze, erste Bruchanteile und längere Sachaufgaben mit mehreren Informationen.",
     zahlen:
       "Zahlenräume wachsen weiter, Tabellen und Diagramme werden gelesen und ausgewertet. Kinder lernen, Informationen aus Übersichten zu entnehmen — eine Fähigkeit, die auch in anderen Fächern wichtig wird.",
     groessen:
       "Größen umrechnen wird anspruchsvoller: Liter und Milliliter, Maßstab, Volumen von Würfeln und Quadern, Flächen und Umfang. Viele Aufgaben sind an realen Situationen orientiert.",
     geometrie:
-      "Formen, Körper, Lagebeziehungen, Spiegelachsen und Koordinaten kommen hinzu. Bei den Körpern werden auch Kanten und Flächen gezählt.",
+      "Formen, Körper, Lagebeziehungen und Spiegelachsen kommen hinzu. Bei den Körpern werden neben Ecken auch Kanten und Flächen gezählt.",
   },
   5: {
     rechnen:
-      "Brüche, Dezimalzahlen und Prozent werden eingeführt und miteinander verknüpft. Gleichungen, Dreisatz und der Mittelwert erweitern das Repertoire. Sachaufgaben verlangen oft mehrere Rechenschritte und gutes Lesen.",
+      "Klammern, Punkt vor Strich, Rechengesetze und Platzhalteraufgaben stehen im Mittelpunkt. Dazu werden Bruchanteile und das Erkennen von Brüchen vertieft; Sachaufgaben verlangen oft mehrere Rechenschritte und gutes Lesen.",
     zahlen:
       "Primzahlen, Teilbarkeitsregeln und Quadratzahlen bis 12² festigen das Zahlenverständnis. Überschlagen und sinnvolles Runden bleiben wichtig, um Ergebnisse einzuschätzen.",
     groessen:
       "Maßstab, Flächen, Volumen und Einheitenwechsel werden vertieft. Kinder sollen Größen nicht nur ausrechnen, sondern auch im Kontext verstehen — zum Beispiel bei Karten oder Plänen.",
     geometrie:
-      "Koordinaten, Winkel und Spiegelungen werden präziser. Kinder unterscheiden spitze, rechte und stumpfe Winkel und arbeiten mit einfachen Koordinatensystemen.",
+      "Das Arbeiten im Koordinatensystem kommt neu hinzu: Kinder lesen Punkte ab und tragen sie ein. Außerdem werden Zahlenfolgen und Muster mit größeren Schrittweiten fortgesetzt.",
   },
   6: {
     rechnen:
-      "In Klasse 6 werden Brüche, Dezimalzahlen, Prozent und Dreisatz sicher beherrscht. Negative Zahlen, längere Gleichungen und anspruchsvolle Sachaufgaben bereiten auf die weiterführende Schule vor.",
+      "In Klasse 6 werden das Rechnen mit Brüchen, Dezimalzahlen, Prozent und der Dreisatz geübt. Negative Zahlen, Gleichungen mit x, der Mittelwert und anspruchsvolle Sachaufgaben bereiten auf die weiterführende Schule vor.",
     zahlen:
-      "Quadratzahlen bis 20² und einfache Zehnerpotenzen kommen dazu. Tabellen, Diagramme und der Mittelwert werden vertieft. Genauigkeit und Begründen werden wichtiger als reines Auswendiglernen.",
+      "Quadratzahlen bis 20² und einfache Zehnerpotenzen kommen dazu, ebenso größere Primzahlen und Teilbarkeitsregeln. Genauigkeit und Überschlagen im großen Zahlenraum werden noch wichtiger.",
     groessen:
-      "Komplexere Umrechnungen, Maßstab und räumliche Größen festigen das Gelernte. Viele Aufgaben ähneln schon dem, was in der Sekundarstufe erwartet wird.",
+      "Komplexere Umrechnungen mit Kommazahlen, Maßstab sowie Flächen- und Volumenberechnungen festigen das Gelernte. Viele Aufgaben ähneln schon dem, was in den höheren Jahrgängen erwartet wird.",
     geometrie:
-      "Winkel, Koordinaten, Symmetrie und Flächenberechnungen werden zusammengeführt. Kinder sollen geometrische Zusammenhänge erkennen und begründen können.",
+      "Winkel messen und erkennen (spitz, recht, stumpf) sowie das größere Koordinatensystem stehen im Mittelpunkt. Kinder wenden geometrische Begriffe sicher an.",
   },
 };
 
@@ -78,23 +78,23 @@ export const topicDescriptions = {
   order_ops:
     "Aufgaben mit mehreren Rechenarten, bei denen Punkt vor Strich gilt. Ein Thema, das Eltern oft neu kennenlernen, weil die Reihenfolge klar geregelt ist.",
   brackets:
-    "Klammern bestimmen, welcher Teil zuerst gerechnet wird. Typisch ab Klasse 4 — wichtig für längere Aufgaben und spätere Algebra.",
+    "Klammern bestimmen, welcher Teil zuerst gerechnet wird. Typisch ab Klasse 5 — wichtig für längere Aufgaben und spätere Algebra.",
   laws:
     "Rechengesetze wie Vertauschen, Ausklammern oder die Distributivität — oft mit Beispielen statt trockener Regeln. Hilft beim schnelleren Kopfrechnen.",
   placeholder:
-    "Platzhalteraufgaben bereiten Gleichungen vor: Was muss in die Lücke, damit die Rechnung stimmt? Sehr verbreitet in modernen Lehrwerken.",
+    "Platzhalteraufgaben bereiten Gleichungen vor: Was muss in die Lücke, damit die Rechnung stimmt? Sehr verbreitet in Klasse 5.",
   equations:
-    "Einfache Gleichungen mit einer Unbekannten lösen — zum Beispiel x + 5 = 12. In Klasse 5 und 6 ein fester Bestandteil der Algebra-Vorbereitung.",
+    "Einfache Gleichungen mit einer Unbekannten lösen — zum Beispiel x + 7 = 20. Ab Klasse 6 ein fester Bestandteil der Algebra.",
   fractions_share:
-    "Bruchanteile von Mengen bestimmen — zum Beispiel ein Viertel von 20. Der Einstieg ins Bruchrechnen, oft anschaulich mit „Teilen von etwas“.",
+    "Bruchanteile von Mengen bestimmen — zum Beispiel ein Viertel von 20. Der Einstieg ins Bruchrechnen in Klasse 4 und 5, anschaulich mit „Teilen von etwas“.",
   fractions_read:
-    "Brüche lesen, benennen und auf dem Zahlenstrahl einordnen. Wichtig, bevor gerechnet wird: Kinder sollen Brüche als Teile verstehen.",
+    "Brüche lesen, benennen und an ausgemalten Flächen erkennen. Wichtig in Klasse 5, bevor gerechnet wird: Kinder sollen Brüche als Teile verstehen.",
   fractions:
-    "Rechnen mit Brüchen: erweitern, kürzen, addieren und multiplizieren — je nach Klassenstufe. Ein Kernthema der Jahrgänge 5 und 6.",
+    "Rechnen mit Brüchen: kürzen, addieren, subtrahieren, multiplizieren und dividieren. Ein Kernthema der 6. Klasse.",
   decimals:
-    "Dezimalzahlen lesen, schreiben und rechnen — oft verbunden mit Geld und Größen. Komma-Stellen sind für viele Kinder zunächst ungewohnt.",
+    "Dezimalzahlen lesen, schreiben und rechnen — oft verbunden mit Geld und Größen. In Klasse 6 mit einer und zwei Nachkommastellen.",
   percent:
-    "Prozent verstehen als „von hundert“ — Rabatte, Anteile und einfache Prozentaufgaben. In Klasse 5 und 6 eng mit Brüchen und Dezimalzahlen verknüpft.",
+    "Prozent verstehen als „von hundert“ — Rabatte, Anteile und einfache Prozentaufgaben. In Klasse 6 eng mit Brüchen und Dezimalzahlen verknüpft.",
   proportion:
     "Dreisatz und proportionale Zuordnungen — zum Beispiel: 3 Packungen kosten …, was kosten 7 Packungen? Ein Klassiker, der logisches Denken und Strukturieren übt.",
   mean:
@@ -120,7 +120,7 @@ export const topicDescriptions = {
   estimate:
     "Ergebnisse überschlagen, ohne exakt zu rechnen — zum Beispiel 48 + 31 ≈ 50 + 30. Eine Schlüsselkompetenz, die in der Schule bewusst trainiert wird.",
   divisible:
-    "Teilbarkeit prüfen — zum Beispiel ob eine Zahl durch 3 oder 4 teilbar ist. Ab Klasse 4, wichtig für Brüche und Primzahlen.",
+    "Teilbarkeit prüfen — zum Beispiel ob eine Zahl durch 2, 5, 10 oder später 3, 4 und 9 teilbar ist. Ab Klasse 3, wichtig für Brüche und Primzahlen.",
   roman:
     "Römische Zahlen lesen und schreiben (I, V, X, L …). Kommt in vielen Bundesländern in Klasse 3 oder 4 vor — für Eltern oft ein Überraschungsthema.",
   primes:
@@ -166,7 +166,7 @@ export const topicDescriptions = {
   coordinates:
     "Punkte im Koordinatensystem ablesen und eintragen. Vorbereitung auf Funktionen und analytische Geometrie.",
   angles:
-    "Winkel messen und benennen: spitz, recht, stumpf. Ab Klasse 5 ein eigenständiges Thema mit viel Zeichnen und Messen.",
+    "Winkel messen und benennen: spitz, recht, stumpf. In Klasse 6 ein eigenständiges Thema mit Ablesen und Unterscheiden.",
 };
 
 function pdfPreviewFigure(lazy = false) {
