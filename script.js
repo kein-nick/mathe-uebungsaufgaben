@@ -1449,6 +1449,7 @@ operationList.addEventListener("change", (event) => {
 function snapshotTasks() {
   return [...document.querySelectorAll(".task")].map((row) => {
     const digits = [...row.querySelectorAll(".sum-digit-input")];
+    const carries = [...row.querySelectorAll(".sum-carry-input")];
     const radios = [...row.querySelectorAll("input[type=radio]")];
     const quotientInput = row.querySelector('.answer-input[data-part="q"]');
     const remainderInput = row.querySelector('.answer-input[data-part="r"]');
@@ -1466,6 +1467,7 @@ function snapshotTasks() {
     }
     return {
       stacked: digits.length > 0,
+      carries: carries.map((carry) => carry.value),
       choice: radios.length > 0,
       value,
       notes: notes ? notes.value : "",
@@ -1488,6 +1490,7 @@ function applySnapshot(snapshot) {
       return;
     }
     const digits = [...row.querySelectorAll(".sum-digit-input")];
+    const carries = [...row.querySelectorAll(".sum-carry-input")];
     const radios = [...row.querySelectorAll("input[type=radio]")];
     const quotientInput = row.querySelector('.answer-input[data-part="q"]');
     const remainderInput = row.querySelector('.answer-input[data-part="r"]');
@@ -1504,6 +1507,13 @@ function applySnapshot(snapshot) {
         digit.value = values[digitIndex] ?? "";
         digit.disabled = saved.disabled;
       });
+      if (carries.length) {
+        const carryValues = Array.isArray(saved.carries) ? saved.carries : [];
+        carries.forEach((carry, carryIndex) => {
+          carry.value = carryValues[carryIndex] ?? "";
+          carry.disabled = saved.disabled;
+        });
+      }
     } else if (radios.length) {
       radios.forEach((radio) => {
         radio.checked = radio.value === saved.value;
@@ -1564,6 +1574,27 @@ function operandDigitHtml(number, columns) {
     } else {
       html += `<span class="sum-digit">${digits[index - start]}</span>`;
     }
+  }
+  return html;
+}
+
+function carryDigitHtml(taskIndex, columns, labelNum = taskIndex + 1) {
+  let html = "";
+  for (let index = 0; index < columns; index += 1) {
+    html += `
+      <input
+        class="sum-carry-input"
+        type="text"
+        inputmode="numeric"
+        maxlength="2"
+        name="carry-${taskIndex}-${index}"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+        tabindex="-1"
+        aria-label="Übertrag Stelle ${columns - index} von rechts, Aufgabe ${labelNum}"
+      />
+    `;
   }
   return html;
 }
@@ -1782,6 +1813,10 @@ function setPracticeLocked(locked) {
 
 function stackDigitInputs(row) {
   return [...row.querySelectorAll(".sum-digit-input")];
+}
+
+function stackCarryInputs(row) {
+  return [...row.querySelectorAll(".sum-carry-input")];
 }
 
 function focusTaskEntry(row) {
@@ -2256,17 +2291,25 @@ function createTaskItem(task, index, displayNum, forPdf, allowMinusInput) {
             ? `<span class="sum-op-space"></span>`
             : `<span class="sum-op">${symbols[task.operation]}</span>`;
         return `
-            <div class="sum-row${isLast ? " sum-row-last" : ""}">
+            <div class="sum-row${isLast && forPdf ? " sum-row-last" : ""}">
               ${op}
               ${operandDigitHtml(number, columns)}
             </div>`;
       })
       .join("");
+    const carryRow = forPdf
+      ? ""
+      : `
+            <div class="sum-row sum-row-carry sum-row-last">
+              <span class="sum-carry-label" title="Überträge / Notizen" aria-hidden="true">Ü</span>
+              ${carryDigitHtml(index, columns, displayNum)}
+            </div>`;
     row.classList.add("is-stack");
     row.innerHTML = `
           <span class="task-num">${displayNum}.</span>
           <div class="sum-stack" style="--cols: ${columns}">
             ${operandRows}
+            ${carryRow}
             <div class="sum-row sum-row-answer">
               <span class="sum-op-space"></span>
               ${answerDigitHtml(index, columns, displayNum)}
@@ -3534,7 +3577,7 @@ function markLateIfNeeded(row, target) {
   if (!row || !countdownActive || !countdownExpired || target?.disabled) {
     return;
   }
-  if (target instanceof HTMLTextAreaElement) {
+  if (target instanceof HTMLTextAreaElement || target?.classList?.contains("sum-carry-input")) {
     return;
   }
   row.classList.add("is-late");
@@ -3554,6 +3597,12 @@ blocks.addEventListener("change", (event) => {
 
 blocks.addEventListener("input", (event) => {
   if (!(event.target instanceof HTMLInputElement)) {
+    return;
+  }
+  if (event.target.classList.contains("sum-carry-input")) {
+    if (!event.target.disabled) {
+      event.target.value = event.target.value.replace(/[^0-9+\-.,]/g, "").slice(0, 2);
+    }
     return;
   }
   const row = event.target.closest(".task");
@@ -3586,10 +3635,48 @@ blocks.addEventListener("keydown", (event) => {
 
   const row = event.target.closest(".task");
   const stacked = event.target.classList.contains("sum-digit-input");
+  const isCarry = event.target.classList.contains("sum-carry-input");
+
+  if (isCarry) {
+    const carries = stackCarryInputs(row);
+    const digits = stackDigitInputs(row);
+    const index = carries.indexOf(event.target);
+
+    if (event.key === "ArrowLeft" && index > 0) {
+      event.preventDefault();
+      carries[index - 1].focus();
+      carries[index - 1].select();
+      return;
+    }
+
+    if (event.key === "ArrowRight" && index < carries.length - 1) {
+      event.preventDefault();
+      carries[index + 1].focus();
+      carries[index + 1].select();
+      return;
+    }
+
+    if (event.key === "ArrowDown" || event.key === "Enter") {
+      event.preventDefault();
+      const targetDigit = digits[index] || digits[digits.length - 1];
+      targetDigit?.focus();
+      targetDigit?.select?.();
+      return;
+    }
+    return;
+  }
 
   if (stacked) {
     const digits = stackDigitInputs(row);
+    const carries = stackCarryInputs(row);
     const index = digits.indexOf(event.target);
+
+    if (event.key === "ArrowUp" && carries[index]) {
+      event.preventDefault();
+      carries[index].focus();
+      carries[index].select();
+      return;
+    }
 
     if (event.key === "Backspace") {
       event.preventDefault();

@@ -1264,6 +1264,7 @@ option:disabled {
 
 .worksheet.is-locked .answer-input,
 .worksheet.is-locked .sum-digit-input,
+.worksheet.is-locked .sum-carry-input,
 .worksheet.is-locked .task-notes textarea {
   background: #f3eee3;
   color: var(--muted);
@@ -1310,6 +1311,56 @@ option:disabled {
 .sum-row-last {
   border-bottom: 2px solid var(--ink);
   padding-bottom: 4px;
+}
+
+.sum-row-carry {
+  align-items: center;
+  margin-top: 2px;
+  padding-bottom: 3px;
+}
+
+.sum-carry-label {
+  justify-self: start;
+  font-family: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 0.68em;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--muted);
+  opacity: 0.8;
+  user-select: none;
+}
+
+.task.is-stack .sum-carry-input {
+  box-sizing: border-box;
+  width: 1.45em;
+  height: 1.35em;
+  margin: 0;
+  padding: 0;
+  flex: none;
+  max-width: none;
+  font: inherit;
+  font-size: 0.78em;
+  font-weight: 700;
+  line-height: 1.35em;
+  text-align: center;
+  color: var(--muted);
+  border: 1px dashed #d3c6af;
+  border-radius: 5px;
+  background: #fbf8f1;
+  appearance: none;
+}
+
+.task.is-stack .sum-carry-input:focus {
+  outline: 2px solid var(--grade);
+  outline-offset: 0;
+  border-style: solid;
+  border-color: var(--grade);
+  background: #fff;
+  color: var(--ink);
+}
+
+.task.is-stack .sum-carry-input:disabled {
+  opacity: 0.75;
 }
 
 .sum-op-space {
@@ -4463,7 +4514,13 @@ body.is-times-row .intro .class-nav-grid {
   }
 
   .task-notes,
-  .worksheet.has-notes .task-notes {
+  .worksheet.has-notes .task-notes,
+  .sum-row-carry {
     display: none !important;
+  }
+
+  .sum-row:has(+ .sum-row-carry) {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 4px;
   }
 }
