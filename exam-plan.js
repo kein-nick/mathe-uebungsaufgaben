@@ -138,7 +138,7 @@
         grade: Number(data.g),
         term: Number(data.t) === 1 ? 1 : 2,
         totalDays: Math.min(14, Math.max(2, Number(data.d) || 5)),
-        dailyCount: [10, 15, 20, 30].includes(Number(data.c)) ? Number(data.c) : 20,
+        dailyCount: [20, 30, 40].includes(Number(data.c)) ? Number(data.c) : 30,
         examDate: data.dt || "",
         topicIds: data.tp.filter((id) => Boolean(getTopic(id))),
         currentDay: Math.max(1, Number(data.cd) || 1),
@@ -249,7 +249,10 @@
       daysSelect.value = existing ? String(existing.totalDays) : "5";
     }
     if (dailyCountSelect) {
-      dailyCountSelect.value = existing ? String(existing.dailyCount) : "20";
+      const validDaily = [20, 30, 40].includes(Number(existing?.dailyCount))
+        ? String(existing.dailyCount)
+        : "20";
+      dailyCountSelect.value = validDaily;
     }
     if (dateInput) {
       const minDate = new Date();
@@ -377,9 +380,10 @@
       const created = [];
       const seen = new Set();
 
-      // 1. Zuerst bis zu 4 "Schwesteraufgaben" aus dem Fehler-Pool vom Vortag einstreuen
+      // 1. Zuerst bis zu 25 % (mind. 4, max. 8) "Schwesteraufgaben" aus dem Fehler-Pool vom Vortag einstreuen
       const errorPool = Array.isArray(plan.errorPool) ? plan.errorPool : [];
-      const sisterSlots = Math.min(4, errorPool.length);
+      const maxSisters = Math.max(4, Math.round((plan.dailyCount || 20) * 0.2));
+      const sisterSlots = Math.min(maxSisters, errorPool.length);
       const usedSisterTopics = [];
 
       for (let s = 0; s < sisterSlots; s += 1) {
