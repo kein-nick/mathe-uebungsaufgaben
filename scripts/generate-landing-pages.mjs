@@ -1212,10 +1212,48 @@ function renderHubPage(hub) {
       (grade) =>
         `<a class="grade-btn grade-btn-nav" href="${practiceUrlWithTopics(
           grade,
-          hub.topicIds
+          hub.topicIdsByGrade?.[grade] || hub.topicIds
         )}">Klasse ${grade}</a>`
     )
     .join("\n");
+
+  const mistakesSection = hub.mistakes?.length
+    ? `\n          <section aria-labelledby="hub-mistakes-${hub.slug}">
+            <h2 id="hub-mistakes-${hub.slug}">${escapeHtml(
+              hub.mistakesHeading || "Drei typische Fehler"
+            )}</h2>
+            ${hub.mistakes
+              .map(
+                (item) => `<div class="hub-faq-item">
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.text)}</p>
+          </div>`
+              )
+              .join("\n")}
+          </section>\n`
+    : "";
+
+  const directLinksSection = hub.directLinks?.length
+    ? `\n          <section aria-labelledby="hub-direct-${hub.slug}">
+            <h2 id="hub-direct-${hub.slug}">${escapeHtml(
+              hub.directLinksHeading || "Direkt nach Einzelthema üben"
+            )}</h2>${
+              hub.directLinksIntro
+                ? `\n            <p class="landing-overview-hint">${escapeHtml(hub.directLinksIntro)}</p>`
+                : ""
+            }
+            <ul class="home-topic-hubs">
+              ${hub.directLinks
+                .map(
+                  (link) =>
+                    `<li><a href="${link.href}">${escapeHtml(link.label)}</a>${
+                      link.note ? ` — ${escapeHtml(link.note)}` : ""
+                    }</li>`
+                )
+                .join("\n              ")}
+            </ul>
+          </section>\n`
+    : "";
 
   const faqItems = hub.faqs
     .map(
@@ -1229,6 +1267,8 @@ function renderHubPage(hub) {
   const preferredRelated = {
     "geometrische-koerper": ["geometrie-grundschule"],
     "geometrie-grundschule": ["geometrische-koerper"],
+    rechenregeln: ["schriftlich-rechnen", "plus-minus", "einmaleins"],
+    "groessen-umrechnen": ["uhr-ueben", "geld-rechnen", "dezimalzahlen"],
   };
   const preferred = new Set(preferredRelated[hub.slug] || []);
   const related = [
@@ -1279,7 +1319,7 @@ ${hub.slug === "einmaleins" ? renderEinmaleinsChoices() : ""}
           <section aria-labelledby="hub-why-${hub.slug}">
             <h2 id="hub-why-${hub.slug}">Warum gezielt üben?</h2>
             <p>${escapeHtml(hub.whyPractice)}</p>
-          </section>
+          </section>${mistakesSection}${directLinksSection}
 
           <section aria-labelledby="hub-how-${hub.slug}">
             <h2 id="hub-how-${hub.slug}">So funktioniert’s</h2>

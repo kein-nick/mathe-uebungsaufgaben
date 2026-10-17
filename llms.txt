@@ -38,6 +38,8 @@ Apple-Classroom-Links („Blatt für die Klasse“ ohne Schülerkonto): [Klasse 
   - [9er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=9)
   - [10er-Reihe](https://mathe-testen.de/klasse-2/uebungen?reihe=10)
 - [Schriftlich rechnen](https://mathe-testen.de/schriftlich-rechnen)
+- [Rechenregeln: Punkt vor Strich, Klammern & Rechengesetze](https://mathe-testen.de/rechenregeln): Punkt vor Strich ab Klasse 3 (z. B. 4 + 3 × 5), Rechengesetze wie Vertauschen und Ausmultiplizieren in Klasse 4 und 5, Klammeraufgaben ab Klasse 5 (z. B. (10 + 8) × 9). Mit Erklärung der 3 häufigsten Fehler, Direktlinks je Einzelthema und Übungsblättern online oder als PDF.
+- [Größen umrechnen](https://mathe-testen.de/groessen-umrechnen): Längen (mm, cm, m, km), Gewicht (g, kg, t), Hohlmaße (Liter & Milliliter) sowie Zeit und Kalender für Klasse 2 bis 6. In Klasse 2 Meter und Zentimeter, in Klasse 3 und 4 Millimeter, Gramm/Kilogramm, Liter/Milliliter und Zeiteinheiten, ab Klasse 5 und 6 gemischte Einheiten und Kommazahlen wie 2,5 km = 2 500 m. Mit Merksätzen, typischen Fehlern und Direkteinstieg je Einheit.
 - [Sachaufgaben](https://mathe-testen.de/sachaufgaben)
 - [Brüche](https://mathe-testen.de/brueche)
 - [Dezimalzahlen](https://mathe-testen.de/dezimalzahlen)

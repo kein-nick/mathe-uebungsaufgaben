@@ -426,4 +426,175 @@ export const topicHubs = [
       },
     ],
   },
+  {
+    slug: "rechenregeln",
+    title: "Rechenregeln üben – Punkt vor Strich & Klammern online",
+    h1: "Rechenregeln üben: Punkt vor Strich & Klammern",
+    shortName: "Rechenregeln",
+    whatHeading: "Welche Rechenregeln gelten in der Schule?",
+    metaDescription:
+      "Rechenregeln üben online: Punkt vor Strich, Klammern und Rechengesetze für Klasse 3 bis 6 — kostenlos rechnen oder als PDF drucken, ohne Anmeldung.",
+    topicIds: ["order_ops", "brackets", "laws"],
+    topicIdsByGrade: {
+      3: ["order_ops"],
+      4: ["order_ops", "laws"],
+      5: ["order_ops", "brackets", "laws"],
+      6: ["order_ops", "brackets"],
+    },
+    grades: [3, 4, 5, 6],
+    lead: "Ob 3 + 4 × 5 oder (8 + 2) × 3: Sobald in einer Aufgabe mehrere Rechenarten zusammenkommen, entscheidet die Reihenfolge über das richtige Ergebnis. Mit Punkt vor Strich, Klammern und Rechengesetzen behalten Kinder den Überblick.",
+    whatIs:
+      "Unter Rechenregeln gehören in der Schule drei Bausteine zusammen: Ab Klasse 3 gilt „Punkt vor Strich“ — Mal (×) und Geteilt (:) werden immer vor Plus (+) und Minus (−) gerechnet, etwa bei 4 + 3 × 5 = 4 + 15 = 19. Ab Klasse 4 kommen Rechengesetze wie das Vertauschungs- und Verteilungsgesetz dazu, zum Beispiel 4 × (10 + 3) = 4 × 10 + 4 × 3. Ab Klasse 5 regeln Klammern, welcher Teil zuerst ausgerechnet wird: Was in der Klammer steht, hat immer Vorrang — auch vor Punkt vor Strich.",
+    whyPractice:
+      "Vor Proben in Klasse 3 bis 6 passieren die meisten Fehler nicht beim eigentlichen Addieren oder Malnehmen, sondern weil gewohnheitsmäßig von links nach rechts gerechnet wird. Kurze 10er-Blöcke schulen den Blick dafür, welchen Teil der Aufgabe man zuerst ausrechnet.",
+    mistakesHeading: "Drei typische Fehler bei Punkt vor Strich und Klammern",
+    mistakes: [
+      {
+        title: "1. Trotz Mal oder Geteilt von links nach rechts rechnen",
+        text: "Bei 3 + 4 × 2 wird fälschlich erst 3 + 4 = 7 und dann 7 × 2 = 14 gerechnet. Richtig ist: erst die Punktrechnung 4 × 2 = 8, danach 3 + 8 = 11.",
+      },
+      {
+        title: "2. Zahl vor dem Minuszeichen vertauschen",
+        text: "Bei 20 − 3 × 4 wird zwar 3 × 4 = 12 zuerst berechnet, im zweiten Schritt aber versehentlich 12 − 20 statt 20 − 12 = 8 gerechnet. Die Zahl links vom Minus bleibt vorne stehen.",
+      },
+      {
+        title: "3. Klammer nur halb ausmultiplizieren",
+        text: "Bei (6 + 4) × 3 wird zuerst die Klammer berechnet (10 × 3 = 30). Beim Verteilungsgesetz wie 3 × (10 + 2) muss der Faktor vor der Klammer mit beiden Zahlen in der Klammer malgenommen werden: 3 × 10 + 3 × 2 = 36.",
+      },
+    ],
+    directLinksHeading: "Direkt nach Einzelthema starten",
+    directLinksIntro:
+      "Du möchtest gezielt nur Punkt vor Strich, nur Klammern oder nur Rechengesetze üben? Mit einem Klick öffnet sich das passende Übungsblatt:",
+    directLinks: [
+      {
+        label: "Punkt vor Strich (ab Klasse 3)",
+        href: "/klasse-3/uebungen?themen=order_ops",
+        note: "Mal und Geteilt vor Plus und Minus, z. B. 5 + 6 × 4",
+      },
+      {
+        label: "Rechengesetze (Klasse 4 & 5)",
+        href: "/klasse-4/uebungen?themen=laws",
+        note: "Vertauschen und Ausmultiplizieren, z. B. 4 × (8 + 6) = 4 × 8 + 4 × ___",
+      },
+      {
+        label: "Klammern rechnen (Klasse 5 & 6)",
+        href: "/klasse-5/uebungen?themen=brackets",
+        note: "Klammer zuerst ausrechnen, z. B. (10 + 8) × 9 oder (24 + 12) : 6",
+      },
+      {
+        label: "Punkt vor Strich & Klammern kombiniert (ab Klasse 5)",
+        href: "/klasse-5/uebungen?themen=order_ops,brackets",
+        note: "Gemischte 10er-Blöcke für Klassenarbeiten in Klasse 5 und 6",
+      },
+    ],
+    howItWorks:
+      "Unten wählst du Klasse 3, 4, 5 oder 6 — oder startest oben direkt mit einem Einzelthema. Auf der Übungsseite sind die passenden Rechenregeln der Klassenstufe bereits vorausgewählt (in Klasse 3 Punkt vor Strich, in Klasse 4 zusätzlich Rechengesetze, ab Klasse 5 auch Klammern). Anschließend online mit Sofort-Prüfung lösen oder als PDF samt Lösungsblatt drucken.",
+    forWhom:
+      "Kinder in Klasse 3 bis 6, Eltern beim Üben vor Proben und Lehrkräfte, die schnell ein Arbeitsblatt in 10er-Blöcken brauchen. Kostenlos und ohne Anmeldung.",
+    faqs: [
+      {
+        q: "Was bedeutet Punkt vor Strich einfach erklärt?",
+        a: "Die Rechenzeichen für Mal (· oder ×) und Geteilt (:) bestehen aus Punkten, Plus (+) und Minus (−) aus Strichen. Die Regel „Punkt vor Strich“ besagt: Multiplikation und Division werden immer vor Addition und Subtraktion ausgerechnet.",
+      },
+      {
+        q: "Was gilt zuerst: Klammer oder Punkt vor Strich?",
+        a: "Immer zuerst die Klammer. Erst wird berechnet, was in der Klammer steht, danach gilt Punkt vor Strich und zuletzt wird von links nach rechts gerechnet.",
+      },
+      {
+        q: "Ab welcher Klasse übt man Punkt vor Strich und Klammern?",
+        a: "Punkt vor Strich startet in Klasse 3. In Klasse 4 kommen Rechengesetze zum geschickten Rechnen dazu, und ab Klasse 5 werden Klammeraufgaben mit größeren Zahlen geübt.",
+      },
+    ],
+  },
+  {
+    slug: "groessen-umrechnen",
+    title: "Größen umrechnen üben – Längen, Gewicht & Liter (PDF)",
+    h1: "Größen umrechnen üben",
+    shortName: "Größen umrechnen",
+    whatHeading: "Was bedeutet Größen umrechnen?",
+    metaDescription:
+      "Größen umrechnen üben online: Längen (mm, cm, m, km), Gewicht (g, kg, t), Liter & Milliliter sowie Zeit — kostenlos für Klasse 2 bis 6 oder als PDF.",
+    topicIds: ["length", "length_convert", "weight", "capacity", "time_units", "unit_convert"],
+    topicIdsByGrade: {
+      2: ["length"],
+      3: ["length_convert", "weight", "capacity", "time_units"],
+      4: ["length_convert", "weight", "capacity", "time_units"],
+      5: ["unit_convert"],
+      6: ["unit_convert"],
+    },
+    grades: [2, 3, 4, 5, 6],
+    lead: "Wie viele Zentimeter sind 2 Meter? Wie viele Milliliter fehlen bis zu einem Liter? Größen umrechnen gehört von Klasse 2 bis 6 zu den wichtigsten Themen in Proben und Sachaufgaben — mit festen Umrechnungszahlen lässt es sich sicher trainieren.",
+    whatIs:
+      "Beim Umrechnen von Größen wird derselbe Wert in einer größeren oder kleineren Einheit angegeben. Die wichtigsten Merksätze für die Schule sind: Längen (1 cm = 10 mm, 1 m = 100 cm = 1 000 mm, 1 km = 1 000 m), Gewichte (1 kg = 1 000 g, 1 t = 1 000 kg), Hohlmaße (1 l = 1 000 ml, ½ l = 500 ml, ¼ l = 250 ml) und Zeit (1 Stunde = 60 Minuten, 1 Tag = 24 Stunden, 1 Woche = 7 Tage). In Klasse 2 beginnt es mit ganzen Metern und Zentimetern, in Klasse 3 und 4 kommen Millimeter, Gramm und Kilogramm, Liter und Milliliter sowie Zeiteinheiten dazu, und in Klasse 5 und 6 werden Kilometer, Tonnen und Kommazahlen wie 2,5 km = 2 500 m geübt.",
+    whyPractice:
+      "In Klassenarbeiten scheitern Aufgaben oft nicht am Rechnen selbst, sondern an einer verwechselten Umrechnungszahl — etwa Faktor 100 statt 1 000 bei Kilogramm oder Milliliter. Kurze 10er-Blöcke machen die Umrechnungszahlen zur sicheren Routine.",
+    mistakesHeading: "Drei typische Fehler beim Größen umrechnen",
+    mistakes: [
+      {
+        title: "1. Faktor 100 und Faktor 1 000 verwechseln",
+        text: "Weil 1 m = 100 cm gilt, rechnen viele Kinder auch bei Gewicht oder Hohlmaßen mit 100. Dort gilt aber der Tausenderschritt: 1 kg = 1 000 g, 1 l = 1 000 ml und 1 km = 1 000 m.",
+      },
+      {
+        title: "2. Bei Kommazahlen eine Null vergessen",
+        text: "1,5 km sind nicht 150 m, sondern 1 500 m, weil 0,5 km = 500 m sind. Genauso entsprechen 130 cm genau 1,3 m. Es hilft, sich den halben Kilometer (500 m) oder halben Liter (500 ml) als festen Anker zu merken.",
+      },
+      {
+        title: "3. Zeiteinheiten im Zehnersystem umrechnen",
+        text: "Eine Stunde hat 60 Minuten (nicht 100) und ein Tag hat 24 Stunden. Deshalb sind 2 Stunden = 120 Minuten und 3 Tage = 72 Stunden.",
+      },
+    ],
+    directLinksHeading: "Direkteinstieg nach Einheit",
+    directLinksIntro:
+      "Wähle direkt die Größe aus, die gerade im Unterricht oder für die nächste Probe gebraucht wird:",
+    directLinks: [
+      {
+        label: "Längen cm & m (Klasse 2)",
+        href: "/klasse-2/uebungen?themen=length",
+        note: "Ganze Meter in Zentimeter und umgekehrt, z. B. 2 m = 200 cm",
+      },
+      {
+        label: "Längen mm, cm & m (Klasse 3 & 4)",
+        href: "/klasse-3/uebungen?themen=length_convert",
+        note: "Meter in Millimeter und in Klasse 4 auch Kommazahlen wie 130 cm = 1,3 m",
+      },
+      {
+        label: "Gewicht g & kg (Klasse 3 & 4)",
+        href: "/klasse-3/uebungen?themen=weight",
+        note: "Kilogramm und Gramm sicher im 1 000er-Schritt umrechnen",
+      },
+      {
+        label: "Liter & Milliliter (Klasse 3 & 4)",
+        href: "/klasse-3/uebungen?themen=capacity",
+        note: "Hohlmaße, ¼ l / ½ l / ¾ l und fehlende Milliliter bis zum vollen Liter",
+      },
+      {
+        label: "Zeit & Kalender (Klasse 3 & 4)",
+        href: "/klasse-3/uebungen?themen=time_units",
+        note: "Stunden in Minuten, Wochen in Tage und Tage in Stunden",
+      },
+      {
+        label: "Größen gemischt & Kommazahlen (Klasse 5 & 6)",
+        href: "/klasse-5/uebungen?themen=unit_convert",
+        note: "km/m, t/kg, kg/g und l/ml — in Klasse 6 auch mit Kommazahlen wie 2,5 km = 2 500 m",
+      },
+    ],
+    howItWorks:
+      "Unten wählst du deine Klassenstufe von Klasse 2 bis 6 oder klickst oben direkt auf eine einzelne Einheit. Auf der Übungsseite sind die passenden Größen-Themen bereits vorausgewählt. Du kannst Themen jederzeit an- oder abwählen, online mit direkter Rückmeldung üben oder ein PDF-Arbeitsblatt samt Lösungsblatt ausdrucken.",
+    forWhom:
+      "Kinder in Klasse 2 bis 6, Eltern beim gezielten Üben zu Hause und Lehrkräfte, die Arbeitsblätter zu Längen, Gewichten, Hohlmaßen oder Zeiteinheiten brauchen. Kostenlos und ohne Anmeldung.",
+    faqs: [
+      {
+        q: "Welche Umrechnungszahlen müssen Kinder in der Grundschule kennen?",
+        a: "Die wichtigsten sind: 1 cm = 10 mm, 1 m = 100 cm = 1 000 mm und 1 km = 1 000 m bei Längen; 1 kg = 1 000 g und 1 t = 1 000 kg beim Gewicht; 1 l = 1 000 ml (½ l = 500 ml, ¼ l = 250 ml) bei Hohlmaßen sowie 1 Stunde = 60 Minuten, 1 Tag = 24 Stunden und 1 Woche = 7 Tage bei der Zeit.",
+      },
+      {
+        q: "Kann ich auch nur eine einzelne Einheit wie Liter oder Längen üben?",
+        a: "Ja. Über die Direktlinks auf dieser Seite startest du gezielt nur mit Längen, Gewicht, Liter & Milliliter oder Zeit. Auch auf der Übungsseite kannst du einzelne Themen jederzeit an- oder abwählen.",
+      },
+      {
+        q: "Ab welcher Klasse kommen Kommazahlen beim Größen umrechnen vor?",
+        a: "Erste Kommaschreibweisen kommen in Klasse 4 bei Zentimetern und Metern vor (z. B. 130 cm = 1,3 m). In Klasse 5 und 6 werden Umrechnungen mit Dezimalzahlen bei Kilometern, Kilogramm und Litern vertieft.",
+      },
+    ],
+  },
 ];

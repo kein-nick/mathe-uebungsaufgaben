@@ -1,4 +1,4 @@
-const CACHE_NAME = "mathe-uebungsaufgaben-v129";
+const CACHE_NAME = "mathe-uebungsaufgaben-v130";
 
 const PRECACHE_URLS = [
   "/",
@@ -46,6 +46,8 @@ const PRECACHE_URLS = [
   "/geometrie-grundschule.html",
   "/geometrische-koerper.html",
   "/quadratzahlen.html",
+  "/rechenregeln.html",
+  "/groessen-umrechnen.html",
   "/sitemap.xml",
   "/robots.txt",
   "/icons/icon-192.png",
