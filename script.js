@@ -2486,13 +2486,20 @@ function checkTaskParts(task) {
           : `${symbols[task.operation]} ${formatOperand(number, true)}`
       )
       .join(" ");
-    return { left, answer };
+    return { left, answer, sep: "=" };
   }
-  const prompt = String(task.prompt || "")
+  const rawPrompt = String(task.prompt || "")
     .replace(/\s+/g, " ")
-    .trim()
-    .replace(/\s*=\s*$/, "");
-  return { left: prompt, answer };
+    .trim();
+  if (task.type === "compare") {
+    return { left: rawPrompt, answer, sep: "→" };
+  }
+  if (task.answerLabel) {
+    return { left: rawPrompt.replace(/\s*=\s*$/, ""), answer, sep: "→" };
+  }
+  const hasTrailingEquals = /=\s*$/.test(rawPrompt);
+  const prompt = rawPrompt.replace(/\s*=\s*$/, "");
+  return { left: prompt, answer, sep: hasTrailingEquals ? "=" : "→" };
 }
 
 function showCheckSheet() {
@@ -2521,21 +2528,25 @@ function showCheckSheet() {
       const items = slice.items
         .map(({ task }) => {
           const parts = checkTaskParts(task);
+          const num = displayNum;
           displayNum += 1;
           const left = parts.left
             ? `<span class="check-sheet-prompt">${escapeHtml(parts.left)}</span> `
             : "";
-          return `<li>${left}<span class="check-eq">=</span> <strong>${escapeHtml(parts.answer)}</strong></li>`;
+          return `<li><span class="check-sheet-meta">${num}.</span> ${left}<span class="check-eq">${escapeHtml(parts.sep)}</span> <strong>${escapeHtml(parts.answer)}</strong></li>`;
         })
         .join("");
       return `<article class="check-block"><h3>${escapeHtml(
         blockHeading(sliceTasks, startNum, endNum)
-      )}</h3><ol start="${startNum}">${items}</ol></article>`;
+      )}</h3><ol class="check-sheet-list" start="${startNum}">${items}</ol></article>`;
     })
     .join("");
+  const subline = timesRow
+    ? `${tasks.length} Aufgaben · ${timesRow}er-Reihe`
+    : `${tasks.length} Aufgaben · Klasse ${selectedGrade}, ${selectedTerm}. Halbjahr`;
   section.innerHTML = `
-    <h2>Prüf-Code</h2>
-    <p>Lösungen zu diesem Blatt. ${tasks.length} Aufgaben.</p>
+    <h2>Prüf-Code · Lösungen</h2>
+    <p class="check-sheet-lead">Lösungen zu diesem Arbeitsblatt (${escapeHtml(subline)}).</p>
     <div class="check-blocks">${blockHtml}</div>
   `;
   worksheet.append(section);
