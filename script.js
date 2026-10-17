@@ -2404,8 +2404,8 @@ function loadScriptOnce(src) {
 }
 
 async function ensurePdfLibraries() {
-  await loadScriptOnce("https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js");
-  await loadScriptOnce("https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js");
+  await loadScriptOnce("/vendor/html2canvas.min.js");
+  await loadScriptOnce("/vendor/jspdf.umd.min.js");
   if (typeof window.html2canvas !== "function" || !window.jspdf?.jsPDF) {
     throw new Error("PDF-Bibliotheken nicht bereit");
   }
