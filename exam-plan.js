@@ -46,26 +46,6 @@
   let activeExamSession = null; // { dayIndex, firstCheckDone, checkAttempts, firstTryByTopic, firstTryCorrect, firstTryWrongTasks }
   let userOverrodeDailyCount = false;
 
-  // Zeitintensive Aufgabentypen (Sachaufgaben, schriftliches Rechnen, Dreisatz, Gleichungen, Zahlenmauern)
-  const HEAVY_EFFORT_TOPICS = new Set([
-    "word",
-    "word_times",
-    "written_add",
-    "written_sub",
-    "written_mul",
-    "written_div",
-    "proportionality",
-    "equations",
-    "fraction_ops",
-    "number_wall",
-  ]);
-
-  const DAILY_BASE_LABELS = {
-    20: "20 Aufgaben pro Tag (ca. 15–20 Min.)",
-    30: "30 Aufgaben pro Tag (ca. 20–30 Min.)",
-    40: "40 Aufgaben pro Tag (ca. 30–40 Min.)",
-  };
-
   function getCheckedDialogTopics() {
     if (!topicsListEl) return [];
     return [...topicsListEl.querySelectorAll("input[data-exam-topic]:checked")].map(
@@ -73,7 +53,22 @@
     );
   }
 
-  function computeRecommendedDailyCount(topicIds) {
+  function estimateMinutesForDailyCount(topicIds, dailyCount, grade, term) {
+    if (!topicIds.length) {
+      return Math.round(dailyCount * 0.75);
+    }
+    const avgSec =
+      topicIds.reduce((sum, id) => {
+        const sec =
+          typeof secondsForTopic === "function" ? secondsForTopic(id, grade, term) : 30;
+        return sum + sec;
+      }, 0) / topicIds.length;
+    // Faktor 1.3 berücksichtigt Nachdenken + anschließende Korrekturrunde der 2-Stufen-Prüfung
+    const totalSec = avgSec * dailyCount * 1.3;
+    return Math.max(5, Math.round(totalSec / 60));
+  }
+
+  function computeRecommendedDailyCount(topicIds, grade, term) {
     const count = topicIds.length;
     if (count === 0) {
       return {
@@ -82,66 +77,75 @@
       };
     }
 
-    const heavyCount = topicIds.filter((id) => HEAVY_EFFORT_TOPICS.has(id)).length;
-    // Gewichtete Themen-Last: zeitintensive Themen zählen etwas stärker für die Sitzungsdauer,
-    // aber viele verschiedene Themen erfordern mehr Gesamtaufgaben für eine verlässliche Statistik.
+    const min20 = estimateMinutesForDailyCount(topicIds, 20, grade, term);
+    const min30 = estimateMinutesForDailyCount(topicIds, 30, grade, term);
+    const min40 = estimateMinutesForDailyCount(topicIds, 40, grade, term);
+
+    // 1. Wunsch-Umfang anhand der Themen-Anzahl (damit jedes Thema genug Aufgaben für die Statistik hat):
+    //    1–2 Themen -> 20 Aufgaben | 3–4 Themen -> 30 Aufgaben | ab 5 Themen -> 40 Aufgaben
+    let idealByTopicCount = 30;
     if (count <= 2) {
-      if (count === 2 && heavyCount === 0) {
+      idealByTopicCount = 20;
+    } else if (count <= 4) {
+      idealByTopicCount = 30;
+    } else {
+      idealByTopicCount = 40;
+    }
+
+    // 2. Zeit-Bremse (Deckelung bei zeitintensiven Themen, egal ob 3, 4 oder 5+ Themen):
+    //    Eine tägliche Sitzung sollte im Idealfall ~25 Minuten nicht überschreiten.
+    if (idealByTopicCount === 40 && min40 > 26) {
+      // Wenn 40 Aufgaben länger als ~26 Min. dauern würden, gehe runter auf 30 (oder bei extrem langen Themen sogar auf 20)
+      if (min30 > 27) {
         return {
           recommended: 20,
-          reason: `Empfehlung bei ${count} kompakten Themen: 20 Aufgaben pro Tag (je 10 Aufgaben pro Thema).`,
+          reason: `Empfehlung bei ${count} sehr zeitintensiven Themen: 20 Aufgaben pro Tag (ca. ${min20} Min.), damit das Training nicht zu lang wird.`,
         };
       }
       return {
+        recommended: 30,
+        reason: `Empfehlung bei ${count} Themen (inkl. aufwendiger Aufgaben): 30 Aufgaben pro Tag (ca. ${min30} Min.) statt 40, damit die Übungszeit im Rahmen bleibt.`,
+      };
+    }
+
+    if (idealByTopicCount === 30 && min30 > 26) {
+      // Genau der Fall bei 3 oder 4 Themen mit hohem Zeitbedarf (z. B. Sachaufgaben, Gleichungen, Dreisatz, Schriftlich):
+      return {
         recommended: 20,
-        reason: `Empfehlung bei ${count === 1 ? "1 Thema" : `${count} Themen`}${heavyCount > 0 ? " (inkl. rechenintensiver Aufgaben)" : ""}: 20 Aufgaben pro Tag reichen hier für ein gründliches Training.`,
+        reason: `Empfehlung bei ${count} rechen-/textintensiven Themen: 20 Aufgaben pro Tag (ca. ${min20} Min.), da 30 Aufgaben hier schon rund ${min30} Min. dauern würden.`,
       };
     }
 
-    if (count === 3 && heavyCount >= 2) {
+    // 3. Umgekehrt: Wenn jemand 3–4 sehr schnelle Kopfrechen-/Erkennungsthemen wählt und 30 Aufgaben unter 14 Min. liegen,
+    //    kann bei 4 Themen auch 40 empfohlen werden.
+    if (idealByTopicCount === 30 && count === 4 && min40 <= 20) {
       return {
-        recommended: 20,
-        reason:
-          "Empfehlung bei 3 Themen mit mehreren schriftlichen/Text-Aufgaben: 20 Aufgaben pro Tag halten die Übungszeit gut machbar.",
+        recommended: 40,
+        reason: `Empfehlung bei 4 schnellen Themen: 40 Aufgaben pro Tag (ca. ${min40} Min. · 10 pro Thema).`,
       };
     }
 
-    if (count <= 4) {
-      return {
-        recommended: 30,
-        reason: `Empfehlung bei ${count} Themen: 30 Aufgaben pro Tag, damit jedes Thema mit ca. ${Math.round(30 / count)} Aufgaben pro Tag sauber trainiert wird.`,
-      };
-    }
-
-    if (count >= 5 && heavyCount >= 2) {
-      return {
-        recommended: 30,
-        reason: `Empfehlung bei ${count} Themen (davon ${heavyCount} zeitintensiv wie Schriftlich/Sachaufgaben): 30 Aufgaben pro Tag halten die Übungszeit im Rahmen.`,
-      };
-    }
-
-    if (count >= 5 && heavyCount === 1) {
-      return {
-        recommended: 30,
-        reason: `Empfehlung bei ${count} Themen (inkl. 1 zeitintensiven Thema): 30 Aufgaben pro Tag als gute Balance aus Themenabdeckung und Dauer.`,
-      };
-    }
-
+    const estMin =
+      idealByTopicCount === 20 ? min20 : idealByTopicCount === 30 ? min30 : min40;
+    const perTopic = Math.round(idealByTopicCount / count);
     return {
-      recommended: 40,
-      reason: `Empfehlung bei ${count} kompakten Themen: 40 Aufgaben pro Tag, damit jedes Gebiet genug Aufgaben bekommt.`,
+      recommended: idealByTopicCount,
+      reason: `Empfehlung bei ${count === 1 ? "1 Thema" : `${count} Themen`}: ${idealByTopicCount} Aufgaben pro Tag (ca. ${estMin} Min. · Ø ${perTopic} Aufgaben pro Thema).`,
     };
   }
 
   function syncDailyCountRecommendation() {
     if (!dailyCountSelect) return;
+    const grade = Number(gradeSelect?.value) || selectedGrade || 3;
+    const term = Number(termSelect?.value) === 1 ? 1 : 2;
     const chosen = getCheckedDialogTopics();
-    const { recommended, reason } = computeRecommendedDailyCount(chosen);
+    const { recommended, reason } = computeRecommendedDailyCount(chosen, grade, term);
 
     [...dailyCountSelect.options].forEach((opt) => {
       const val = Number(opt.value);
-      const base = DAILY_BASE_LABELS[val] || opt.textContent;
-      opt.textContent = val === recommended ? `${base} (Empfohlen)` : base;
+      const estMin = estimateMinutesForDailyCount(chosen, val, grade, term);
+      const base = `${val} Aufgaben pro Tag (ca. ${estMin} Min.)`;
+      opt.textContent = val === recommended ? `${base} – Empfohlen` : base;
     });
 
     if (!userOverrodeDailyCount) {
