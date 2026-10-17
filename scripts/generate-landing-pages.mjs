@@ -188,16 +188,16 @@ const NEWS_ITEMS = [
     date: "30. September 2026",
     title: "Liter und Milliliter für Klasse 3 und 4",
     text: "Neue Übungen zu Hohlmaßen: Liter und Milliliter umrechnen, fehlende Mengen ergänzen und einfache Flaschenaufgaben lösen — online oder als PDF.",
-    href: "/klasse-3/uebungen?themen=capacity",
-    linkLabel: "Liter und Milliliter direkt üben",
+    href: "/groessen-umrechnen",
+    linkLabel: "Größen umrechnen üben",
   },
   {
     dateIso: "2026-09-30",
     date: "30. September 2026",
     title: "Zahlenmauern für Klasse 1 bis 3",
     text: "Zahlenmauern gibt es jetzt mit zwei Grundsteinen in Klasse 1 und mit drei Grundsteinen in Klasse 2 und 3. Mal fehlt ein oberer, mal ein unterer Stein.",
-    href: "/klasse-1/uebungen?themen=number_wall",
-    linkLabel: "Zahlenmauern direkt öffnen",
+    href: "/zahlenmauern",
+    linkLabel: "Zahlenmauern & Zahlenfreunde öffnen",
   },
   {
     dateIso: "2026-09-29",
@@ -302,6 +302,7 @@ function renderSiteFooter(current = "", extraItems = []) {
     { href: "/rechenarten", id: "rechenarten", label: "Rechenarten" },
     { href: "/fuer-eltern", id: "eltern", label: "Für Eltern" },
     { href: "/fuer-lehrkraefte", id: "lehrkraefte", label: "Für Lehrkräfte" },
+    { href: "/fuer-schulen", id: "schulen", label: "Für Schulen" },
     { href: "/kontakt", id: "kontakt", label: "Kontakt" },
     { href: "/impressum", id: "impressum", label: "Impressum" },
     { href: "/datenschutz", id: "datenschutz", label: "Datenschutz" },
@@ -906,8 +907,12 @@ function renderTopicOverview(grade) {
                 ? "Zerlegen und Zehnerfreunde"
                 : "Zerlegen, Zehner- und Hunderterfreunde"
               : topic.label;
+          const isActive = active.includes(topic);
+          const targetGrade = isActive ? grade : topic.fromGrade;
+          const targetTerm = isActive ? (isTopicAllowed(topic, grade, 1) ? 1 : 2) : topic.fromTerm;
+          const topicHref = `/klasse-${targetGrade}/uebungen?halbjahr=${targetTerm}&themen=${encodeURIComponent(topic.id)}`;
           return `<li class="landing-topic-detail">
-              <h4>${escapeHtml(cardLabel)}</h4>
+              <h4><a class="text-link" href="${topicHref}">${escapeHtml(cardLabel)}</a></h4>
               <p>${escapeHtml(description)}</p>
 ${note ? `              <p class="hint landing-topic-note">${escapeHtml(note)}</p>\n` : ""}            </li>`;
         })
@@ -978,8 +983,34 @@ function extractAppFragments() {
 
 const { appMain, appDialogs, scripts } = extractAppFragments();
 
+function renderClassHubsSection(grade) {
+  const matchingHubs = topicHubs.filter((hub) => hub.grades.includes(grade));
+  if (!matchingHubs.length) {
+    return "";
+  }
+  const items = matchingHubs
+    .map(
+      (hub) =>
+        `<li><a href="/${hub.slug}">${escapeHtml(hub.shortName)}</a> — ${escapeHtml(
+          hub.metaDescription.split("—")[0].trim().replace(/\.$/, "")
+        )}</li>`
+    )
+    .join("\n              ");
+  return `
+          <section class="landing-class-hubs" aria-labelledby="class-hubs-heading-${grade}">
+            <h2 id="class-hubs-heading-${grade}">Vertiefende Themen-Seiten für Klasse ${grade}</h2>
+            <p class="landing-overview-hint">
+              Zu besonders wichtigen Themen in Klasse ${grade} gibt es eigene Seiten mit Beispielen, typischen Fehlern und direkter Themen-Vorauswahl:
+            </p>
+            <ul class="home-topic-hubs">
+              ${items}
+            </ul>
+          </section>`;
+}
+
 function renderClassPage(grade) {
   const topicOverview = renderTopicOverview(grade);
+  const classHubsSection = renderClassHubsSection(grade);
   const meta = classPageMeta(grade);
 
   return `<!DOCTYPE html>
@@ -1019,10 +1050,10 @@ ${renderOpenGraph(meta)}
             <h2 id="topics-heading-${grade}">Kategorien und Rechenarten in Klasse ${grade}</h2>
             <p class="landing-overview-hint">
               In der Grundschule wird Mathe oft in vier Bereiche gegliedert. Hier siehst du,
-              was dahinter steckt — und welche konkreten Übungstypen es für diese Klasse gibt. <a class="text-link" href="/rechenarten">Alle Klassen im Vergleich</a>
+              was dahinter steckt — ein Klick auf den Namen öffnet direkt das passende Übungsblatt. <a class="text-link" href="/rechenarten">Alle Klassen im Vergleich</a>
             </p>
             ${topicOverview}
-          </section>
+          </section>${classHubsSection}
         </main>
 
         ${renderSiteFooter()}
@@ -1265,18 +1296,38 @@ function renderHubPage(hub) {
     .join("\n");
 
   const preferredRelated = {
-    "geometrische-koerper": ["geometrie-grundschule"],
-    "geometrie-grundschule": ["geometrische-koerper"],
-    rechenregeln: ["schriftlich-rechnen", "plus-minus", "einmaleins"],
-    "groessen-umrechnen": ["uhr-ueben", "geld-rechnen", "dezimalzahlen"],
+    "plus-minus": ["zahlenmauern", "einmaleins", "schriftlich-rechnen", "sachaufgaben", "geld-rechnen", "uhr-ueben"],
+    zahlenmauern: ["plus-minus", "einmaleins", "schriftlich-rechnen", "sachaufgaben", "geld-rechnen", "uhr-ueben"],
+    einmaleins: ["plus-minus", "zahlenmauern", "schriftlich-rechnen", "rechenregeln", "sachaufgaben", "quadratzahlen"],
+    "schriftlich-rechnen": ["rechenregeln", "einmaleins", "plus-minus", "sachaufgaben", "groessen-umrechnen", "brueche"],
+    rechenregeln: ["schriftlich-rechnen", "dreisatz-gleichungen", "quadratzahlen", "einmaleins", "plus-minus", "brueche"],
+    sachaufgaben: ["groessen-umrechnen", "geld-rechnen", "uhr-ueben", "dreisatz-gleichungen", "schriftlich-rechnen", "brueche"],
+    "uhr-ueben": ["groessen-umrechnen", "geld-rechnen", "sachaufgaben", "plus-minus", "zahlenmauern", "einmaleins"],
+    "geld-rechnen": ["groessen-umrechnen", "uhr-ueben", "sachaufgaben", "dezimalzahlen", "plus-minus", "zahlenmauern"],
+    "groessen-umrechnen": ["uhr-ueben", "geld-rechnen", "sachaufgaben", "dezimalzahlen", "brueche", "dreisatz-gleichungen"],
+    brueche: ["dezimalzahlen", "prozent", "dreisatz-gleichungen", "rechenregeln", "groessen-umrechnen", "quadratzahlen"],
+    dezimalzahlen: ["brueche", "prozent", "groessen-umrechnen", "geld-rechnen", "dreisatz-gleichungen", "rechenregeln"],
+    prozent: ["brueche", "dezimalzahlen", "dreisatz-gleichungen", "sachaufgaben", "quadratzahlen", "rechenregeln"],
+    "dreisatz-gleichungen": ["rechenregeln", "brueche", "prozent", "dezimalzahlen", "sachaufgaben", "quadratzahlen"],
+    quadratzahlen: ["rechenregeln", "einmaleins", "dreisatz-gleichungen", "brueche", "dezimalzahlen", "prozent"],
+    "geometrie-grundschule": ["geometrische-koerper", "zahlenmauern", "plus-minus", "groessen-umrechnen", "einmaleins", "rechenregeln"],
+    "geometrische-koerper": ["geometrie-grundschule", "groessen-umrechnen", "sachaufgaben", "einmaleins", "zahlenmauern", "plus-minus"],
   };
-  const preferred = new Set(preferredRelated[hub.slug] || []);
+  const preferredOrder = preferredRelated[hub.slug] || [];
+  const preferredHubs = preferredOrder
+    .map((slug) => topicHubs.find((other) => other.slug === slug))
+    .filter(Boolean);
+  const preferredSet = new Set(preferredOrder);
   const related = [
-    ...topicHubs.filter((other) => preferred.has(other.slug)),
-    ...topicHubs.filter((other) => other.slug !== hub.slug && !preferred.has(other.slug)),
+    ...preferredHubs,
+    ...topicHubs.filter((other) => other.slug !== hub.slug && !preferredSet.has(other.slug)),
   ].slice(0, 6)
     .map((other) => `<li><a href="/${other.slug}">${escapeHtml(other.shortName)}</a></li>`)
     .join("\n");
+
+  const classOverviewLinks = hub.grades
+    .map((grade) => `<a class="text-link" href="/klasse-${grade}">Klasse ${grade}</a>`)
+    .join(" · ");
 
   return `<!DOCTYPE html>
 <html lang="de">
@@ -1353,6 +1404,9 @@ ${hub.slug === "einmaleins" ? renderEinmaleinsChoices() : ""}
           <section aria-labelledby="hub-related-${hub.slug}">
             <h2 id="hub-related-${hub.slug}">Weitere Themen</h2>
             <ul class="hub-related-list">${related}</ul>
+            <p class="landing-overview-hint">
+              Alle Themen der Klassenstufe im Überblick: ${classOverviewLinks} · <a class="text-link" href="/rechenarten">Alle Rechenarten nach Klasse</a>
+            </p>
           </section>
         </main>
 
@@ -1876,13 +1930,19 @@ function renderRechenartenMain() {
         .filter(Boolean)
         .join("\n            ");
 
+      const gradeHubLinks = topicHubs
+        .filter((hub) => hub.grades.includes(grade))
+        .map((hub) => `<a class="text-link" href="/${hub.slug}">${escapeHtml(hub.shortName)}</a>`)
+        .join(" · ");
+
       return `<section class="home-class-card" id="klasse-${grade}" aria-labelledby="rechenarten-klasse-${grade}">
-          <h2 id="rechenarten-klasse-${grade}">Klasse ${grade}</h2>
+          <h2 id="rechenarten-klasse-${grade}"><a class="text-link" href="/klasse-${grade}">Klasse ${grade}</a></h2>
           <p class="home-class-intro">${escapeHtml(classIntros[grade])}</p>
           <div class="home-categories">
             ${groups}
           </div>
-          <p><a class="text-link" href="/klasse-${grade}/uebungen">Übungsaufgaben Klasse ${grade}</a></p>
+          <p class="landing-overview-hint">Vertiefende Themen-Seiten: ${gradeHubLinks}</p>
+          <p><a class="text-link" href="/klasse-${grade}">Übersicht Klasse ${grade}</a> · <a class="text-link" href="/klasse-${grade}/uebungen">Übungsaufgaben Klasse ${grade}</a></p>
         </section>`;
     })
     .join("\n");

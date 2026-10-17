@@ -205,7 +205,7 @@ export const siteFaqs = [
   {
     q: "Kann ich mehrere Rechenarten auf einem Blatt kombinieren?",
     a: "Ja. Du hakt die gewünschten Themen an und stellst pro Rechenart ein, wie viele 10er-Blöcke auf das Blatt kommen — zum Beispiel 20 Plus und 10 Minus, nacheinander.",
-    html: `<p>Ja. Du hakt die gewünschten Themen an und stellst pro Rechenart ein, wie viele 10er-Blöcke auf das Blatt kommen — zum Beispiel 20 Plus und 10 Minus, nacheinander. Themen-Seiten wie <a href="/plus-minus">Plus und Minus</a> oder <a href="/einmaleins">Einmaleins</a> starten mit passender Vorauswahl.</p>`,
+    html: `<p>Ja. Du hakt die gewünschten Themen an und stellst pro Rechenart ein, wie viele 10er-Blöcke auf das Blatt kommen — zum Beispiel 20 Plus und 10 Minus, nacheinander. Themen-Seiten wie <a href="/plus-minus">Plus und Minus</a>, <a href="/zahlenmauern">Zahlenmauern</a>, <a href="/einmaleins">Einmaleins</a>, <a href="/rechenregeln">Rechenregeln</a>, <a href="/groessen-umrechnen">Größen umrechnen</a> oder <a href="/dreisatz-gleichungen">Dreisatz &amp; Gleichungen</a> starten mit passender Vorauswahl.</p>`,
   },
   {
     q: "Gibt es ein Zeitlimit?",
@@ -250,7 +250,7 @@ export const parentsPage = {
     {
       q: "Wie starte ich mit meinem Kind?",
       a: "Auf der Startseite die Klasse wählen, Halbjahr und Themen festlegen, dann „Aufgaben erstellen“. Online rechnen und prüfen lassen oder das Blatt als PDF drucken.",
-      html: `<p>Auf der <a href="/">Startseite</a> die Klasse wählen, Halbjahr und Themen festlegen, dann „Aufgaben erstellen“. Online rechnen und prüfen lassen oder das Blatt als PDF drucken.</p>`,
+      html: `<p>Auf der <a href="/">Startseite</a> die Klasse wählen, Halbjahr und Themen festlegen, dann „Aufgaben erstellen“. Online rechnen und prüfen lassen oder das Blatt als PDF drucken. Wenn ihr ein bestimmtes Thema sucht — etwa <a href="/zahlenmauern">Zahlenmauern &amp; Zahlenfreunde</a>, <a href="/einmaleins">Einmaleins</a>, <a href="/groessen-umrechnen">Größen umrechnen</a>, <a href="/rechenregeln">Punkt vor Strich &amp; Klammern</a> oder <a href="/dreisatz-gleichungen">Dreisatz &amp; Gleichungen</a> — könnt ihr auch direkt über die Themen-Seiten oder die Übersicht <a href="/rechenarten">Alle Rechenarten nach Klasse</a> einsteigen.</p>`,
     },
     {
       q: "Welche Klasse soll ich nehmen?",
