@@ -113,6 +113,14 @@ const STRIPE_SUPPORT_URL = "https://buy.stripe.com/5kQfZacRsbVV6KBdkG1Jm00";
 // Neue Beiträge auch in news.js unter ARTICLES eintragen, sonst fehlt die Zahl am Menüpunkt Neu.
 const NEWS_ITEMS = [
   {
+    dateIso: "2026-10-18",
+    date: "18. Oktober 2026",
+    title: "Mathearbeit vorbereiten: Lernplan bis zum Prüfungstag (Testphase)",
+    text: "Auf den Übungsseiten gibt es jetzt unter der Klassenauswahl den neuen Bereich „Mathearbeit vorbereiten“. Einfach Termin der Klassenarbeit und die gewünschten Themen wählen: Nach einer kurzen Einstufung an Tag 1 passt sich das tägliche Training automatisch an und übt gezielt die Aufgabenarten, bei denen noch Fehler passieren. Am letzten Tag vor der Arbeit gibt es eine Generalprobe mit persönlicher Abschluss-Auswertung.",
+    href: "/klasse-3/uebungen",
+    linkLabel: "Lernplan auf der Übungsseite ausprobieren",
+  },
+  {
     dateIso: "2026-10-17",
     date: "17. Oktober 2026",
     title: "Übertragszeile beim schriftlichen Rechnen online",
@@ -966,7 +974,7 @@ function extractInstallPrompt() {
 
 const installPromptHtml = extractInstallPrompt();
 
-const pwaScripts = `    <script defer src="/news.js?v=10"></script>
+const pwaScripts = `    <script defer src="/news.js?v=11"></script>
     <script defer src="/pwa.js"></script>
     <script>
       window.va =
@@ -992,7 +1000,7 @@ function extractAppFragments() {
   const scripts = `    <script src="/topics.js?v=54"></script>
     <script src="/script.js?v=90"></script>
     <script src="/exam-plan.js?v=5"></script>
-    <script defer src="/news.js?v=10"></script>
+    <script defer src="/news.js?v=11"></script>
     <script defer src="/pwa.js?v=33"></script>
     <script>
       window.va =
