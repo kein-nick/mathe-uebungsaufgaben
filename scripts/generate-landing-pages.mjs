@@ -318,6 +318,8 @@ function renderSiteFooter(current = "", extraItems = []) {
   return `<footer class="site-footer">
           <nav aria-label="Weitere Seiten">
             ${links}
+            <span aria-hidden="true">·</span>
+            <a class="footer-support-link" href="${STRIPE_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">☕ Kaffeekasse</a>
           </nav>
         </footer>`;
 }
@@ -714,7 +716,7 @@ function renderPracticeJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=91" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=92" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -2083,16 +2085,16 @@ const teachersMain = `<main class="legal-page landing-page">
               const headingId = section.id || `teachers-h-${index}`;
               const textHtml = section.text ? `\n            <p>${escapeHtml(section.text)}</p>` : "";
               const extraHtml = section.html ? `\n            ${section.html}` : "";
-              return `<section aria-labelledby="${headingId}">
+              const block = `<section aria-labelledby="${headingId}">
             <h2 id="${headingId}">${escapeHtml(section.heading)}</h2>${textHtml}${extraHtml}
           </section>`;
+              return index === 0 ? `${block}\n          ${renderSupportBox()}` : block;
             })
             .join("\n")}
           ${renderNewsTeaser(
             "Neu für den Unterricht",
             "Neue Aufgabenarten und Verbesserungen, die sich direkt in der Klasse oder zur Vorbereitung einsetzen lassen."
           )}
-          ${renderSupportBox()}
           <p class="page-actions">
             <a class="btn-primary" href="/">Klasse wählen und üben</a>
             <a class="btn-secondary" href="/faq">Zu den häufigen Fragen</a>
@@ -2118,13 +2120,16 @@ console.log("wrote fuer-lehrkraefte.html");
 
 const parentsMain = `<main class="legal-page landing-page">
           <section class="hub-faq">
-            ${renderFaqItems(parentsPage.faqs)}
+            ${renderFaqItems(parentsPage.faqs.slice(0, 2))}
+          </section>
+          ${renderSupportBox()}
+          <section class="hub-faq">
+            ${renderFaqItems(parentsPage.faqs.slice(2))}
           </section>
           ${renderNewsTeaser(
             "Neu beim Üben",
             "Hier findest du neue Übungsmöglichkeiten für zu Hause, jeweils direkt mit der passenden Seite verlinkt."
           )}
-          ${renderSupportBox()}
           <p class="page-actions">
             <a class="btn-primary" href="/">Klasse wählen und üben</a>
             <a class="btn-secondary" href="/faq">Weitere Fragen</a>
