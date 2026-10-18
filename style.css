@@ -4788,6 +4788,15 @@ body.is-times-row .intro .class-nav-grid {
   font-weight: 700;
 }
 
+.exam-plan-date-limit-note {
+  background: #fef7e3;
+  border: 1px solid #e6c677;
+  border-radius: 10px;
+  padding: 8px 10px;
+  margin-top: 6px !important;
+  color: var(--ink) !important;
+}
+
 .exam-plan-topics-header {
   display: flex;
   flex-wrap: wrap;

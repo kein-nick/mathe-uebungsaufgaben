@@ -29,6 +29,7 @@
   const termSelect = document.getElementById("exam-plan-term");
   const daysSelect = document.getElementById("exam-plan-days");
   const dateInput = document.getElementById("exam-plan-date");
+  const dateLimitNote = document.getElementById("exam-plan-date-limit-note");
   const dailyCountSelect = document.getElementById("exam-plan-daily-count");
   const dailyRecHint = document.getElementById("exam-plan-daily-rec-hint");
   const topicsListEl = document.getElementById("exam-plan-topics-list");
@@ -375,6 +376,10 @@
       minDate.setDate(minDate.getDate() + 2);
       dateInput.min = minDate.toISOString().slice(0, 10);
       dateInput.value = existing?.examDate || "";
+    }
+    if (dateLimitNote) {
+      dateLimitNote.classList.add("is-hidden");
+      dateLimitNote.textContent = "";
     }
 
     const pageSelected = selectedTopics();
@@ -1534,11 +1539,21 @@
     if (dateInput) {
       dateInput.value = "";
     }
+    if (dateLimitNote) {
+      dateLimitNote.classList.add("is-hidden");
+      dateLimitNote.textContent = "";
+    }
     updateSubmitButtonLabel();
   });
 
   dateInput?.addEventListener("change", () => {
-    if (!dateInput.value) return;
+    if (!dateInput.value) {
+      if (dateLimitNote) {
+        dateLimitNote.classList.add("is-hidden");
+        dateLimitNote.textContent = "";
+      }
+      return;
+    }
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const examDate = new Date(`${dateInput.value}T00:00:00`);
@@ -1554,6 +1569,15 @@
           daysSelect.append(opt);
         }
         daysSelect.value = String(clamped);
+      }
+      if (dateLimitNote) {
+        if (diffDays > 14) {
+          dateLimitNote.innerHTML = `<strong>Hinweis (${diffDays} Tage bis zur Arbeit):</strong> Ein Trainingsplan umfasst zunächst maximal <strong>14 Übungstage</strong>. Du kannst zwischendurch Pausentage einlegen oder nach Tag&nbsp;14 jederzeit beliebig viele <strong>Zusatz-Tage (Generalproben)</strong> anhängen.`;
+          dateLimitNote.classList.remove("is-hidden");
+        } else {
+          dateLimitNote.classList.add("is-hidden");
+          dateLimitNote.textContent = "";
+        }
       }
       updateSubmitButtonLabel();
     }
