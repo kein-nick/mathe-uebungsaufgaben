@@ -5056,11 +5056,126 @@ body.is-times-row .intro .class-nav-grid {
   align-items: center;
 }
 
+/* Ausführlicher Abschluss-Dialog am letzten Tag */
+.exam-final-dialog-card {
+  width: min(650px, calc(100% - 24px));
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  text-align: left;
+  padding: 26px 26px 22px;
+}
+
+.exam-final-header h2 {
+  font-size: 1.55rem;
+  line-height: 1.25;
+  margin: 4px 0 16px;
+  color: var(--ink);
+}
+
+.exam-final-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.exam-final-stat-box {
+  background: #f6f1e6;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 11px 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.exam-final-stat-num {
+  font-family: "Fraunces", serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--grade);
+}
+
+.exam-final-stat-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.exam-final-body p {
+  margin: 0 0 11px !important;
+  font-size: 0.96rem !important;
+  line-height: 1.5;
+  color: var(--ink) !important;
+}
+
+.exam-final-bullet {
+  border-radius: 12px;
+  padding: 11px 14px;
+  margin-top: 8px !important;
+}
+
+.exam-final-bullet.is-positive {
+  background: var(--correct-bg);
+  border: 1px solid #b7dfc2;
+}
+
+.exam-final-bullet.is-tip {
+  background: #fef7e3;
+  border: 1px solid #e6c677;
+}
+
+.exam-final-topic-chips {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 8px;
+  margin: 14px 0 18px;
+}
+
+.exam-final-topic-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 9px 12px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: #f8f4eb;
+  font-size: 0.85rem;
+}
+
+.exam-final-topic-chip.is-strong {
+  background: var(--correct-bg);
+  border-color: #b7dfc2;
+}
+
+.exam-final-topic-chip.is-focus {
+  background: #fef7e3;
+  border-color: #e6c677;
+}
+
+.exam-final-topic-chip-name {
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.exam-final-topic-chip-val {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.exam-final-actions {
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
 @media (max-width: 640px) {
-  .exam-plan-field-row {
+  .exam-plan-field-row,
+  .exam-final-stats-grid {
     grid-template-columns: 1fr;
   }
-  .exam-plan-dialog-card {
+  .exam-plan-dialog-card,
+  .exam-final-dialog-card {
     padding: 18px 16px;
   }
   .exam-plan-open-btn {

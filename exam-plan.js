@@ -38,6 +38,8 @@
 
   const briefingEl = document.getElementById("exam-day-briefing");
   const summaryEl = document.getElementById("exam-day-summary");
+  const finalDialog = document.getElementById("exam-final-dialog");
+  const finalDialogContent = document.getElementById("exam-final-dialog-content");
 
   if (!entrySection || !dialog) {
     return;
@@ -900,7 +902,8 @@
 
     const nextActionBtn = hasMoreDays
       ? `<button type="button" class="create-btn" id="exam-next-day-btn">Tag ${completedDayRecord.day + 1} von ${plan.totalDays} starten</button>`
-      : `<button type="button" class="create-btn" id="exam-bonus-day-btn">Zusätzliche Generalprobe starten</button>`;
+      : `<button type="button" class="create-btn" id="exam-open-final-report-btn">Abschluss-Bewertung öffnen</button>
+         <button type="button" class="grade-btn" id="exam-bonus-day-btn">Zusätzliche Generalprobe starten</button>`;
 
     summaryEl.innerHTML = `
       <div class="exam-summary-card">
@@ -952,6 +955,13 @@
       });
     }
 
+    const openReportBtn = document.getElementById("exam-open-final-report-btn");
+    if (openReportBtn) {
+      openReportBtn.addEventListener("click", () => {
+        openFinalEvaluationDialog(plan);
+      });
+    }
+
     const copyBtn = document.getElementById("exam-copy-link-btn");
     if (copyBtn) {
       copyBtn.addEventListener("click", () => {
@@ -966,6 +976,263 @@
         }
       });
     }
+  }
+
+  function pickRandomVariant(variants) {
+    if (!Array.isArray(variants) || !variants.length) return "";
+    return variants[Math.floor(Math.random() * variants.length)];
+  }
+
+  function openFinalEvaluationDialog(plan) {
+    if (!finalDialog || !finalDialogContent || !plan) {
+      return false;
+    }
+
+    const history = Array.isArray(plan.daysHistory) ? plan.daysHistory : [];
+    if (!history.length) {
+      return false;
+    }
+
+    let totalFirstTry = 0;
+    let totalTasks = 0;
+    history.forEach((d) => {
+      totalFirstTry += Number(d.firstTryCorrect) || 0;
+      totalTasks += Number(d.total) || 0;
+    });
+    const overallPct = totalTasks > 0 ? Math.round((totalFirstTry / totalTasks) * 100) : 100;
+    const totalCorrected = Math.max(0, totalTasks - totalFirstTry);
+
+    const day1 = history[0];
+    const lastDay = history[history.length - 1];
+    const day1Pct =
+      day1 && day1.total > 0 ? Math.round((day1.firstTryCorrect / day1.total) * 100) : overallPct;
+    const lastDayPct =
+      lastDay && lastDay.total > 0
+        ? Math.round((lastDay.firstTryCorrect / lastDay.total) * 100)
+        : overallPct;
+    const improvementPts = lastDayPct - day1Pct;
+
+    // Themen-Statistik über alle Tage + letzter Stand
+    const topicSummaries = plan.topicIds.map((topicId) => {
+      let c = 0;
+      let t = 0;
+      history.forEach((d) => {
+        const st = d.topicStats?.[topicId];
+        if (st && st.total > 0) {
+          c += Number(st.firstTryCorrect) || 0;
+          t += Number(st.total) || 0;
+        }
+      });
+      const lastSt = lastDay?.topicStats?.[topicId];
+      const overallTopicPct = t > 0 ? Math.round((c / t) * 100) : 100;
+      const lastTopicPct =
+        lastSt && lastSt.total > 0
+          ? Math.round((lastSt.firstTryCorrect / lastSt.total) * 100)
+          : overallTopicPct;
+      return {
+        id: topicId,
+        label: topicDisplayName(topicId, plan.grade),
+        overallPct: overallTopicPct,
+        lastPct: lastTopicPct,
+        correct: c,
+        total: t,
+      };
+    });
+
+    const strongTopics = topicSummaries.filter((ts) => ts.lastPct >= 90 || ts.overallPct >= 88);
+    const mediumTopics = topicSummaries.filter(
+      (ts) => !strongTopics.includes(ts) && (ts.lastPct >= 75 || ts.overallPct >= 75)
+    );
+    const shakyTopics = topicSummaries.filter(
+      (ts) => !strongTopics.includes(ts) && !mediumTopics.includes(ts)
+    );
+
+    // 1. Leistungs-Stufe bestimmen & zufällige Überschrift + Hauptbewertung wählen
+    let tierBadge = "";
+    let headline = "";
+    let introText = "";
+
+    if (overallPct === 100) {
+      tierBadge = "Auszeichnung · 100 % Fehlerfrei";
+      headline = pickRandomVariant([
+        `Absolute Spitzenklasse! ${totalTasks} von ${totalTasks} Aufgaben sofort richtig!`,
+        `Ein perfekter Durchmarsch — 100 % an allen ${history.length} Tagen!`,
+        `Meisterleistung für Klasse ${plan.grade}: Kein einziger Fehler im 1. Versuch!`,
+        `Note 1 mit Sternchen: Du hast den gesamten Trainingsplan fehlerfrei geknackt!`,
+      ]);
+      introText = pickRandomVariant([
+        `Über alle ${history.length} Trainingstage hinweg hast du jede einzelne der <strong>${totalTasks} Aufgaben</strong> direkt beim ersten Prüfen richtig gelöst. Mehr Sicherheit vor einer Mathe-Arbeit geht gar nicht!`,
+        `Du hast an ${history.length} Tagen insgesamt <strong>${totalTasks} Aufgaben</strong> gerechnet und dabei keinen einzigen Erstversuch-Fehler gemacht. Dein Kopf ist für die Klassenarbeit bestens gerüstet.`,
+        `Von Tag 1 bis zum Finale an Tag ${history.length} lag deine Trefferquote durchgehend bei <strong>100&nbsp;%</strong>. Du beherrschst alle gewählten Themen im Schlaf!`,
+      ]);
+    } else if (overallPct >= 90 || (lastDayPct >= 92 && overallPct >= 84)) {
+      tierBadge = "Prüfungsreife · Sehr sicher";
+      headline = pickRandomVariant([
+        `Top vorbereitet! Die Mathe-Arbeit kann kommen (${overallPct} % Gesamtquote)!`,
+        `Richtig starker Endspurt — du gehst mit Bestform in die Arbeit!`,
+        `Klasse Leistung über ${history.length} Tage: Du bist bereit für eine super Note!`,
+        `Fast fehlerfrei durchs Ziel: Dein Training hat sich voll ausgezahlt!`,
+      ]);
+      introText = pickRandomVariant([
+        `Von insgesamt <strong>${totalTasks} Aufgaben</strong> an ${history.length} Tagen hattest du <strong>${totalFirstTry} direkt im 1.&nbsp;Versuch richtig (${overallPct}&nbsp;%)</strong> und hast alle ${totalCorrected} kleinen Wackler sofort selbst korrigiert.`,
+        `Mit einer Erstversuch-Quote von <strong>${overallPct}&nbsp;%</strong> (und starken <strong>${lastDayPct}&nbsp;%</strong> am letzten Trainingstag) liegst du deutlich über der 85-%-Sicherheitslinie für die Mathe-Arbeit.`,
+        `Du hast über ${history.length} Tage hinweg hochkonzentriert gearbeitet: <strong>${totalFirstTry} von ${totalTasks} Aufgaben</strong> saßen auf Anhieb, und den Rest hast du im zweiten Schritt sicher gelöst.`,
+      ]);
+    } else if (overallPct >= 78 || lastDayPct >= 82) {
+      tierBadge = "Gute Basis · Solide vorbereitet";
+      headline = pickRandomVariant([
+        `Gute Arbeit an allen ${history.length} Tagen (${overallPct} % direkt richtig)!`,
+        `Fleißig durchgezogen — du hast dir ein starkes Polster erarbeitet!`,
+        `Training erfolgreich beendet: Du bist auf einem richtig guten Weg!`,
+        `Alle ${totalTasks} Aufgaben gemeistert — dein Einsatz zahlt sich aus!`,
+      ]);
+      introText = pickRandomVariant([
+        `Du hast an ${history.length} Tagen insgesamt <strong>${totalTasks} Aufgaben</strong> durchgearbeitet. <strong>${totalFirstTry} davon (${overallPct}&nbsp;%)</strong> klappten sofort beim ersten Prüfen, und alle ${totalCorrected} Fehler hast du hartnäckig verbessert.`,
+        `Besonders wichtig: Du hast keine einzige Aufgabe offengelassen, sondern alle ${totalCorrected} Wackler im zweiten Anlauf selbstständig gelöst. Genau daraus lernt man vor einer Arbeit am meisten!`,
+        `Mit <strong>${overallPct}&nbsp;%</strong> im ersten Versuch (und <strong>${lastDayPct}&nbsp;%</strong> am Schlusstag) hast du dir ein solides Fundament für die Klassenarbeit geschaffen.`,
+      ]);
+    } else {
+      tierBadge = "Dranbleiben lohnt sich · Viel dazugelernt";
+      headline = pickRandomVariant([
+        `Stark gekämpft! Alle ${history.length} Trainingstage komplett durchgezogen!`,
+        `Großartiger Durchhaltewille bei ${totalTasks} gerechneten Aufgaben!`,
+        `Du hast nicht aufgegeben und jede einzelne Aufgabe bis zum Ende gelöst!`,
+      ]);
+      introText = pickRandomVariant([
+        `Im 1. Versuch waren <strong>${totalFirstTry} von ${totalTasks} Aufgaben (${overallPct}&nbsp;%)</strong> direkt richtig — aber das Wichtigste ist: Du hast alle <strong>${totalCorrected} schwierigen Aufgaben</strong> in der Korrekturrunde selbst geknackt!`,
+        `Manche Themen waren noch knifflig, aber du hast dich durch volle <strong>${totalTasks} Aufgaben</strong> gebissen und am Ende jedes Blatt auf 100&nbsp;% gebracht. Das bringt dir wichtige Punkte in der Arbeit!`,
+      ]);
+    }
+
+    // 2. Entwicklungs-/Trend-Satz (variiert nach Verlauf Tag 1 -> Letzter Tag)
+    let trendText = "";
+    if (improvementPts >= 10) {
+      trendText = pickRandomVariant([
+        `<strong>Starke Steigerung:</strong> Von Tag&nbsp;1 (${day1Pct}&nbsp;%) bis heute (${lastDayPct}&nbsp;%) hast du dich um satte <strong>+${improvementPts}&nbsp;Prozentpunkte</strong> gesteigert!`,
+        `<strong>Deine Kurve zeigt steil nach oben:</strong> Am ersten Tag lagst du noch bei ${day1Pct}&nbsp;%, heute beim Finale bei starken <strong>${lastDayPct}&nbsp;%</strong> (+${improvementPts}&nbsp;%).`,
+        `<strong>Man sieht deinen Lernfortschritt sofort:</strong> Durch das gezielte Wiederholen der Fehler bist du von ${day1Pct}&nbsp;% an Tag&nbsp;1 auf <strong>${lastDayPct}&nbsp;%</strong> am Schlusstag geklettert.`,
+      ]);
+    } else if (lastDayPct >= 90 && day1Pct >= 88) {
+      trendText = pickRandomVariant([
+        `<strong>Konstant auf Top-Niveau:</strong> Du bist schon stark gestartet (${day1Pct}&nbsp;%) und hast diese Form bis zum letzten Tag (${lastDayPct}&nbsp;%) eiskalt gehalten.`,
+        `<strong>Verlässliche Sicherheit:</strong> Über alle ${history.length} Tage gab es keinen Einbruch — du rechnest konstant auf sehr hohem Niveau.`,
+      ]);
+    } else {
+      trendText = pickRandomVariant([
+        `<strong>Schlusstag-Bilanz:</strong> Heute im Abschlusstest hast du <strong>${lastDay?.firstTryCorrect || 0} von ${lastDay?.total || 0} Aufgaben (${lastDayPct}&nbsp;%)</strong> sofort im ersten Anlauf gelöst.`,
+        `<strong>Generalprobe gemeistert:</strong> Am heutigen letzten Tag lag deine Erstversuch-Quote bei <strong>${lastDayPct}&nbsp;%</strong>.`,
+      ]);
+    }
+
+    // 3. Themen-Detailanalyse (Stärken vs. worauf man in der Arbeit achten sollte)
+    let topicsAnalysisHtml = "";
+    if (strongTopics.length > 0) {
+      const names = strongTopics.map((t) => `<strong>${escapeHtml(t.label)}</strong> (${t.lastPct}&nbsp;%)`).join(", ");
+      const strongIntro = pickRandomVariant([
+        `Deine absoluten Bank-Themen für die Arbeit sind ${names} — hier holst du dir die sicheren Punkte.`,
+        `Richtig stark sitzt inzwischen ${names}. Diese Aufgaben kannst du in der Arbeit mit vollem Selbstvertrauen zuerst lösen!`,
+        `Grünes Licht bei ${names}: Hier warst du zuletzt extrem treffsicher.`,
+      ]);
+      topicsAnalysisHtml += `<p class="exam-final-bullet is-positive">${strongIntro}</p>`;
+    }
+
+    if (shakyTopics.length > 0) {
+      const names = shakyTopics.map((t) => `<strong>${escapeHtml(t.label)}</strong>`).join(" und ");
+      const shakyAdvice = pickRandomVariant([
+        `Kleiner Tipp für die Arbeit: Nimm dir bei ${names} bewusst 10 Sekunden mehr Zeit zum genauen Hinschauen und rechne am Ende noch einmal kurz die Probe.`,
+        `Augenmerk für den Prüfungstag: Bei ${names} passieren im 1. Versuch noch die meisten Flüchtigkeitsfehler — lies dort die Zahlen besonders ruhig.`,
+        `Falls du vor der Arbeit noch 10 Minuten übrig hast, schau dir vor allem noch ein paar Aufgaben zu ${names} an, dort steckt noch das größte Punkte-Potenzial.`,
+      ]);
+      topicsAnalysisHtml += `<p class="exam-final-bullet is-tip">${shakyAdvice}</p>`;
+    } else if (mediumTopics.length > 0) {
+      const names = mediumTopics.map((t) => `<strong>${escapeHtml(t.label)}</strong> (${t.lastPct}&nbsp;%)`).join(" und ");
+      const medAdvice = pickRandomVariant([
+        `Bei ${names} bist du schon nah an der Bestmarke — wenn du in der Arbeit ruhig kontrollierst, sind auch dort 100&nbsp;% drin!`,
+        `Gute Entwicklung bei ${names}: Achte in der Arbeit einfach auf sauberes Übertragen der Zahlen, dann klappt das fehlerfrei.`,
+      ]);
+      topicsAnalysisHtml += `<p class="exam-final-bullet is-tip">${medAdvice}</p>`;
+    } else {
+      const allStrongTip = pickRandomVariant([
+        `In keinem einzigen Thema gibt es mehr eine echte Schwachstelle. Lies in der Arbeit trotzdem jede Aufgabe bis zum Ende, damit keine Leichtsinnsfehler passieren!`,
+        `Alle gewählten Themen liegen im grünen Bereich. Geh ausgeschlafen und entspannt in die Arbeit — du kannst das!`,
+      ]);
+      topicsAnalysisHtml += `<p class="exam-final-bullet is-positive">${allStrongTip}</p>`;
+    }
+
+    const topicBadgesHtml = topicSummaries
+      .map((ts) => {
+        const cls =
+          ts.lastPct >= 90 ? "is-strong" : ts.lastPct >= 78 ? "is-solid" : "is-focus";
+        return `
+          <div class="exam-final-topic-chip ${cls}">
+            <span class="exam-final-topic-chip-name">${escapeHtml(ts.label)}</span>
+            <span class="exam-final-topic-chip-val">Gesamt: ${ts.overallPct}% · Finale: <strong>${ts.lastPct}%</strong></span>
+          </div>
+        `;
+      })
+      .join("");
+
+    finalDialogContent.innerHTML = `
+      <div class="exam-final-header">
+        <span class="exam-plan-kicker">${escapeHtml(tierBadge)}</span>
+        <h2 id="exam-final-title">${escapeHtml(headline)}</h2>
+      </div>
+
+      <div class="exam-final-stats-grid">
+        <div class="exam-final-stat-box">
+          <span class="exam-final-stat-num">${overallPct}&nbsp;%</span>
+          <span class="exam-final-stat-label">Erstversuch-Quote (${totalFirstTry}/${totalTasks})</span>
+        </div>
+        <div class="exam-final-stat-box">
+          <span class="exam-final-stat-num">${lastDayPct}&nbsp;%</span>
+          <span class="exam-final-stat-label">Generalprobe (Tag ${history.length})</span>
+        </div>
+        <div class="exam-final-stat-box">
+          <span class="exam-final-stat-num">100&nbsp;%</span>
+          <span class="exam-final-stat-label">Nach Korrektur gelöst</span>
+        </div>
+      </div>
+
+      <div class="exam-final-body">
+        <p>${introText}</p>
+        <p>${trendText}</p>
+        ${topicsAnalysisHtml}
+      </div>
+
+      <div class="exam-final-topic-chips">
+        ${topicBadgesHtml}
+      </div>
+
+      <div class="dialog-actions exam-final-actions">
+        <button type="button" class="grade-btn" id="exam-final-extra-day-btn">Noch 1 Zusatz-Tag anhängen</button>
+        <button type="button" class="create-btn" id="exam-final-close-btn">Alles klar — viel Erfolg!</button>
+      </div>
+    `;
+
+    finalDialog.showModal();
+    if (typeof prefersReducedMotion === "function" && !prefersReducedMotion() && typeof startFireworks === "function") {
+      startFireworks();
+    }
+
+    document.getElementById("exam-final-close-btn")?.addEventListener("click", () => {
+      if (typeof stopFireworks === "function") stopFireworks();
+      finalDialog.close();
+      scrollToNext(summaryEl || worksheet, "start");
+    });
+
+    document.getElementById("exam-final-extra-day-btn")?.addEventListener("click", () => {
+      if (typeof stopFireworks === "function") stopFireworks();
+      finalDialog.close();
+      const latestPlan = loadExamPlan();
+      if (latestPlan) {
+        latestPlan.totalDays += 1;
+        latestPlan.currentDay = latestPlan.totalDays;
+        saveExamPlan(latestPlan);
+        startExamTrainingDay(latestPlan);
+      }
+    });
+
+    return true;
   }
 
   function startExamTrainingDay(plan) {
@@ -1145,6 +1412,12 @@
     renderDaySummaryCard(plan, completedDayRecord);
 
     statusEl.textContent = `Klasse! Tag ${completedDayRecord.day} von ${plan.totalDays} ist komplett gelöst (${completedDayRecord.firstTryCorrect}/${completedDayRecord.total} im 1. Versuch richtig). Unten siehst du dein Tages-Fazit und deine Lernkurve.`;
+
+    // Wenn der letzte Tag des Trainingsplans erreicht und gelöst wurde, öffne das ausführliche Abschluss-Fenster!
+    if (completedDayRecord.day >= plan.totalDays) {
+      return openFinalEvaluationDialog(plan);
+    }
+    return false;
   };
 
   function renderEntryBanner() {

@@ -3576,7 +3576,16 @@ checkBtn.addEventListener("click", () => {
     freezeTimer();
     updateProgress();
     if (typeof window.onExamPlanCheckEvaluated === "function") {
-      window.onExamPlanCheckEvaluated({ rows, correct, checked, allSolved: true });
+      const handledModal = window.onExamPlanCheckEvaluated({
+        rows,
+        correct,
+        checked,
+        allSolved: true,
+      });
+      if (handledModal) {
+        celebrated = true;
+        return;
+      }
     }
     if (!celebrated) {
       celebrated = true;
