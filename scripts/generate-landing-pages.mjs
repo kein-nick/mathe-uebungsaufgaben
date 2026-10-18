@@ -109,6 +109,7 @@ function escapeHtml(text) {
 const SITE_URL = "https://mathe-testen.de";
 const SITE_NAME = "Mathematik Übungsaufgaben";
 const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
+const STRIPE_SUPPORT_URL = "https://buy.stripe.com/5kQfZacRsbVV6KBdkG1Jm00";
 // Neue Beiträge auch in news.js unter ARTICLES eintragen, sonst fehlt die Zahl am Menüpunkt Neu.
 const NEWS_ITEMS = [
   {
@@ -510,6 +511,27 @@ function renderNewsTeaser(heading, intro) {
           </section>`;
 }
 
+function renderSupportBox() {
+  return `<section class="support-card" aria-labelledby="support-card-heading">
+            <div class="support-card-content">
+              <span class="support-card-kicker">Freiwillige Kaffeekasse</span>
+              <h2 id="support-card-heading">mathe-testen.de kostenlos &amp; werbefrei halten</h2>
+              <p>Alle Übungen, Lernpläne und PDF-Arbeitsblätter sind frei zugänglich — ohne Abo, ohne Werbung und ohne Anmeldung. Wenn euch die Seite im Alltag oder Unterricht hilft, freuen wir uns über einen kleinen Beitrag in die Kaffeekasse.</p>
+            </div>
+            <div class="support-card-action">
+              <a class="support-btn" href="${STRIPE_SUPPORT_URL}" target="_blank" rel="noopener noreferrer">
+                <svg class="support-btn-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 8h1a4 4 0 1 1 0 8h-1" />
+                  <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" />
+                  <path d="M8.5 13.2c0-1 .8-1.7 1.7-1.7.6 0 1.2.3 1.5.8.3-.5.9-.8 1.5-.8.9 0 1.7.7 1.7 1.7 0 1.5-3.2 3.3-3.2 3.3s-3.2-1.8-3.2-3.3Z" fill="currentColor" stroke="none" />
+                </svg>
+                <span>Kaffeekasse unterstützen</span>
+              </a>
+              <span class="support-card-sub">Freier Betrag · Karte, Apple Pay, Google Pay &amp; Wero</span>
+            </div>
+          </section>`;
+}
+
 function renderInfoPage({ current, title, description, url, h1, lead, jsonLd, mainHtml, crumb }) {
   const meta = { title, description, url, imageAlt: title };
   return `<!DOCTYPE html>
@@ -692,7 +714,7 @@ function renderPracticeJsonLd(grade) {
 function renderHeadAssets(cssPath = "/style.css") {
   const versionedCss = cssPath.includes("?")
     ? cssPath
-    : `${cssPath}${cssPath.includes("style.css") ? "?v=89" : ""}`;
+    : `${cssPath}${cssPath.includes("style.css") ? "?v=91" : ""}`;
   return `    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="${versionedCss}" as="style" />
@@ -2070,6 +2092,7 @@ const teachersMain = `<main class="legal-page landing-page">
             "Neu für den Unterricht",
             "Neue Aufgabenarten und Verbesserungen, die sich direkt in der Klasse oder zur Vorbereitung einsetzen lassen."
           )}
+          ${renderSupportBox()}
           <p class="page-actions">
             <a class="btn-primary" href="/">Klasse wählen und üben</a>
             <a class="btn-secondary" href="/faq">Zu den häufigen Fragen</a>
@@ -2101,6 +2124,7 @@ const parentsMain = `<main class="legal-page landing-page">
             "Neu beim Üben",
             "Hier findest du neue Übungsmöglichkeiten für zu Hause, jeweils direkt mit der passenden Seite verlinkt."
           )}
+          ${renderSupportBox()}
           <p class="page-actions">
             <a class="btn-primary" href="/">Klasse wählen und üben</a>
             <a class="btn-secondary" href="/faq">Weitere Fragen</a>
@@ -2135,6 +2159,7 @@ const contactMain = `<main class="legal-page landing-page">
             <a class="btn-primary email-protected" href="#" data-keep-label data-u="a29udGFrdA==" data-d="bWF0aGUtdGVzdGVuLmRl">E-Mail schreiben</a>
           </p>
           <p class="hint">Die Adresse lautet <span class="email-protected" data-u="a29udGFrdA==" data-d="bWF0aGUtdGVzdGVuLmRl">kontakt [at] mathe-testen.de</span>.</p>
+          ${renderSupportBox()}
         </main>`;
 
 fs.writeFileSync(
