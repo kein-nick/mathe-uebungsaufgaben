@@ -391,6 +391,37 @@
     dialog.showModal();
   }
 
+  function countConsecutive100PctDays(history, topicId) {
+    if (!Array.isArray(history) || !history.length) {
+      return 0;
+    }
+    let streak = 0;
+    for (let i = history.length - 1; i >= 0; i -= 1) {
+      const st = history[i]?.topicStats?.[topicId];
+      if (!st || !(st.total > 0)) {
+        break;
+      }
+      if (st.firstTryCorrect === st.total) {
+        streak += 1;
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }
+
+  function isEveryTopicAllDays100Pct(history, topicIds) {
+    if (!Array.isArray(history) || !history.length) {
+      return false;
+    }
+    return history.every((dayEntry) =>
+      topicIds.every((id) => {
+        const st = dayEntry?.topicStats?.[id];
+        return st && st.total > 0 && st.firstTryCorrect === st.total;
+      })
+    );
+  }
+
   function computeAdaptiveTopicQuotas(plan, dayNumber) {
     const topicIds = plan.topicIds.filter((id) => {
       const topic = getTopic(id);
@@ -401,10 +432,8 @@
       return [];
     }
 
-    const prevDay =
-      plan.daysHistory && plan.daysHistory.length
-        ? plan.daysHistory[plan.daysHistory.length - 1]
-        : null;
+    const history = Array.isArray(plan.daysHistory) ? plan.daysHistory : [];
+    const prevDay = history.length ? history[history.length - 1] : null;
 
     // Tag 1: Gleichmäßige Verteilung (Diagnose-Check)
     if (dayNumber <= 1 || !prevDay || !prevDay.topicStats) {
@@ -415,64 +444,137 @@
       return list;
     }
 
-    // Tag 2..N: Gewichtung nach Fehlerquote im Erstversuch der bisherigen Tage
-    const cumulativeStats = {};
-    topicIds.forEach((id) => {
-      cumulativeStats[id] = { correct: 0, total: 0 };
-    });
-    (plan.daysHistory || []).forEach((dayEntry) => {
-      if (!dayEntry.topicStats) return;
-      for (const [id, st] of Object.entries(dayEntry.topicStats)) {
-        if (!cumulativeStats[id]) {
-          cumulativeStats[id] = { correct: 0, total: 0 };
-        }
-        cumulativeStats[id].correct += Number(st.firstTryCorrect) || 0;
-        cumulativeStats[id].total += Number(st.total) || 0;
-      }
-    });
+    // Normal-Anteil pro Thema (z. B. 30 / 4 = 7.5 -> 8 Aufgaben)
+    const baseShare = totalCount / topicIds.length;
+    const minRetention = Math.max(2, Math.round(baseShare * 0.35)); // z. B. bei 8 -> 3, bei 10 -> 4, bei 6 -> 2
+    const oneTime100Cap = Math.max(minRetention + 1, Math.round(baseShare * 0.62)); // z. B. bei 8 -> 5, bei 10 -> 6, bei 6 -> 4
 
-    const isFinalDay = dayNumber >= plan.totalDays;
-    const weights = topicIds.map((id) => {
-      const st = cumulativeStats[id];
+    // Kumulierte Statistik + Streak für jedes Thema ermitteln
+    const topicMeta = topicIds.map((id) => {
+      let cumCorrect = 0;
+      let cumTotal = 0;
+      history.forEach((dayEntry) => {
+        const st = dayEntry?.topicStats?.[id];
+        if (st && st.total > 0) {
+          cumCorrect += Number(st.firstTryCorrect) || 0;
+          cumTotal += Number(st.total) || 0;
+        }
+      });
       const prevSt = prevDay.topicStats?.[id];
-      const overallAcc = st && st.total > 0 ? st.correct / st.total : 0.7;
+      const overallAcc = cumTotal > 0 ? cumCorrect / cumTotal : 0.7;
       const prevAcc =
         prevSt && prevSt.total > 0 ? prevSt.firstTryCorrect / prevSt.total : overallAcc;
-      const blendedErrorRate = 1 - (prevAcc * 0.65 + overallAcc * 0.35);
-      // Am letzten Tag (Generalprobe) etwas ausgewogener, an Aufbautagen starker Fokus auf Wackelkandidaten
-      const factor = isFinalDay ? 1.8 : 2.8;
+      const streak100 = countConsecutive100PctDays(history, id);
+      const blendedErrorRate = Math.max(0, 1 - (prevAcc * 0.7 + overallAcc * 0.3));
+
       return {
         id,
-        weight: Math.max(0.8, 1 + factor * blendedErrorRate),
+        prevAcc,
+        overallAcc,
+        streak100,
+        blendedErrorRate,
       };
     });
 
-    const sumWeights = weights.reduce((acc, item) => acc + item.weight, 0);
+    // Sonderfall "Meister-Bonus": JEDES Thema war an ALLEN bisherigen Tagen bei exakt 100 %!
+    // Nur in diesem Fall wird die Gesamt-Aufgabenanzahl des Tages als Belohnung reduziert.
+    if (isEveryTopicAllDays100Pct(history, topicIds)) {
+      const counts = {};
+      topicMeta.forEach((m) => {
+        counts[m.id] = m.streak100 >= 2 ? minRetention : oneTime100Cap;
+      });
+      const planArray = [];
+      topicIds.forEach((id) => {
+        for (let i = 0; i < counts[id]; i += 1) {
+          planArray.push(id);
+        }
+      });
+      return planArray;
+    }
+
+    // Regulärer Fall: Mindestens ein Thema war nicht durchgehend bei 100 %.
+    // Die Gesamtzahl bleibt strikt bei totalCount (20, 30 oder 40).
+    // 1. Themen mit 100 %-Streak bekommen ihren reduzierten Fest-Anteil (z. B. 8 -> 5 -> 3),
+    //    solange mindestens ein anderes Thema noch < 100 % am Vortag hatte.
+    const nonPerfectTopics = topicMeta.filter((m) => m.streak100 === 0);
     const counts = {};
     let assigned = 0;
 
-    // Jedes Thema bekommt mindestens 2 Aufgaben zum Wachhalten (falls genug Gesamtaufgaben)
-    const minPerTopic = totalCount >= topicIds.length * 2 ? 2 : 1;
-    weights.forEach((item) => {
-      counts[item.id] = minPerTopic;
-      assigned += minPerTopic;
-    });
+    if (nonPerfectTopics.length > 0) {
+      // Alle Themen mit 100 % am Vortag werden gedeckelt (1x 100% -> ~62%, >=2x 100% -> ~35%)
+      topicMeta.forEach((m) => {
+        if (m.streak100 >= 2) {
+          counts[m.id] = minRetention;
+          assigned += minRetention;
+        } else if (m.streak100 === 1) {
+          counts[m.id] = oneTime100Cap;
+          assigned += oneTime100Cap;
+        }
+      });
 
-    const remaining = Math.max(0, totalCount - assigned);
-    const fractional = weights.map((item) => {
-      const exact = (item.weight / sumWeights) * remaining;
-      const floor = Math.floor(exact);
-      counts[item.id] += floor;
-      assigned += floor;
-      return { id: item.id, rem: exact - floor };
-    });
+      // Die übrigen Aufgaben (inkl. der eingesparten aus den 100%-Themen!) werden auf die Themen < 100 % verteilt
+      const remaining = Math.max(0, totalCount - assigned);
+      const minForNonPerfect = Math.min(
+        Math.max(3, Math.floor(baseShare * 0.7)),
+        Math.floor(remaining / nonPerfectTopics.length)
+      );
 
-    fractional.sort((a, b) => b.rem - a.rem);
-    let idx = 0;
-    while (assigned < totalCount && fractional.length > 0) {
-      counts[fractional[idx % fractional.length].id] += 1;
-      assigned += 1;
-      idx += 1;
+      nonPerfectTopics.forEach((m) => {
+        counts[m.id] = minForNonPerfect;
+        assigned += minForNonPerfect;
+      });
+
+      const poolToDistribute = Math.max(0, totalCount - assigned);
+      // Gewichtung unter den Nicht-100%-Themen stark nach Fehlerquote
+      const weights = nonPerfectTopics.map((m) => ({
+        id: m.id,
+        weight: 0.4 + 3.6 * m.blendedErrorRate,
+      }));
+      const sumWeights = weights.reduce((acc, item) => acc + item.weight, 0) || 1;
+
+      const fractional = weights.map((item) => {
+        const exact = (item.weight / sumWeights) * poolToDistribute;
+        const floor = Math.floor(exact);
+        counts[item.id] += floor;
+        assigned += floor;
+        return { id: item.id, rem: exact - floor };
+      });
+
+      fractional.sort((a, b) => b.rem - a.rem);
+      let idx = 0;
+      while (assigned < totalCount && fractional.length > 0) {
+        counts[fractional[idx % fractional.length].id] += 1;
+        assigned += 1;
+        idx += 1;
+      }
+    } else {
+      // Alle Themen hatten gestern 100 %, aber an einem früheren Tag gab es noch < 100 % (also noch kein durchgehender 100%-Durchmarsch):
+      // Themen mit längerer 100%-Serie bekommen weniger als Themen, die erst gestern zum ersten Mal 100% hatten,
+      // aber die Gesamtsumme bleibt bei totalCount.
+      const weights = topicMeta.map((m) => ({
+        id: m.id,
+        weight: (m.streak100 >= 2 ? 0.55 : 1.0) + 2.5 * (1 - m.overallAcc),
+      }));
+      const sumWeights = weights.reduce((acc, item) => acc + item.weight, 0) || 1;
+      topicMeta.forEach((m) => {
+        counts[m.id] = minRetention;
+        assigned += minRetention;
+      });
+      const remaining = Math.max(0, totalCount - assigned);
+      const fractional = weights.map((item) => {
+        const exact = (item.weight / sumWeights) * remaining;
+        const floor = Math.floor(exact);
+        counts[item.id] += floor;
+        assigned += floor;
+        return { id: item.id, rem: exact - floor };
+      });
+      fractional.sort((a, b) => b.rem - a.rem);
+      let idx = 0;
+      while (assigned < totalCount && fractional.length > 0) {
+        counts[fractional[idx % fractional.length].id] += 1;
+        assigned += 1;
+        idx += 1;
+      }
     }
 
     // Themen-Plan-Array erstellen (nach Themen gruppiert für saubere Aufgabenblöcke)
@@ -494,15 +596,19 @@
       const created = [];
       const seen = new Set();
 
-      // 1. Zuerst bis zu 25 % (mind. 4, max. 8) "Schwesteraufgaben" aus dem Fehler-Pool vom Vortag einstreuen
+      // 1. Zuerst bis zu 25 % (mind. 4, max. 8) "Schwesteraufgaben" aus dem Fehler-Pool vom Vortag einstreuen,
+      //    aber immer nur so viele, wie für dieses Thema im heutigen Kontingent (remainingPlan) auch vorgesehen sind!
+      const remainingPlan = [...planTopicList];
       const errorPool = Array.isArray(plan.errorPool) ? plan.errorPool : [];
       const maxSisters = Math.max(4, Math.round((plan.dailyCount || 20) * 0.2));
       const sisterSlots = Math.min(maxSisters, errorPool.length);
-      const usedSisterTopics = [];
 
       for (let s = 0; s < sisterSlots; s += 1) {
         const errItem = errorPool[s];
         if (!errItem || !getTopic(errItem.type)) continue;
+        const pos = remainingPlan.indexOf(errItem.type);
+        if (pos < 0) continue; // Verhindert, dass ein anderes Thema ungewollt gekürzt wird!
+
         for (let attempt = 0; attempt < 40; attempt += 1) {
           const candidate = generateTask(plan.grade, plan.term, errItem.type, negativesAllowed());
           const key = taskKey(candidate);
@@ -510,22 +616,11 @@
             seen.add(key);
             candidate.isSisterTask = true;
             created.push(candidate);
-            usedSisterTopics.push(errItem.type);
+            remainingPlan.splice(pos, 1);
             break;
           }
         }
       }
-
-      // Reduziere die reguläre Themenliste um bereits erzeugte Schwesteraufgaben
-      const remainingPlan = [...planTopicList];
-      usedSisterTopics.forEach((topicId) => {
-        const pos = remainingPlan.indexOf(topicId);
-        if (pos >= 0) {
-          remainingPlan.splice(pos, 1);
-        } else {
-          remainingPlan.pop();
-        }
-      });
 
       // 2. Schwierigkeits-Steigerung über die Tage:
       // An Tag 1 im 2. Halbjahr starten die ersten ~40 % der Aufgaben zum Warmwerden im 1.-Halbjahr-Zahlenraum
@@ -605,10 +700,17 @@
         headline = `Tag ${dayNumber} von ${plan.totalDays}: Gezieltes Aufbautraining`;
       }
 
-      if (strongest && weakest && strongest.id !== weakest.id && weakest.acc < 85) {
-        explanation = `Am letzten Trainingstag lief <strong>${escapeHtml(strongest.label)}</strong> schon richtig stark (<strong>${strongest.acc}&nbsp;%</strong> direkt im 1.&nbsp;Versuch richtig) — davon sind heute nur wenige Aufgaben zum Wachhalten dabei. Bei <strong>${escapeHtml(weakest.label)}</strong> (${weakest.acc}&nbsp;% im 1.&nbsp;Versuch) gab es noch ein paar Wackler, deshalb üben wir das heute ausführlicher mit frischen Zahlen.`;
+      if (isEveryTopicAllDays100Pct(plan.daysHistory, plan.topicIds)) {
+        headline = `Tag ${dayNumber} von ${plan.totalDays}: Meister-Bonus (bisher 100 % fehlerfrei!)`;
+        explanation = `Wahnsinn — du hattest bisher an jedem einzelnen Tag in <strong>allen Themen 100&nbsp;% im 1.&nbsp;Versuch richtig</strong>! Als Belohnung ist dein heutiges Übungsblatt auf <strong>${dayTasks.length} statt ${plan.dailyCount} Aufgaben</strong> verkürzt, damit du die Themen nur noch locker wachhältst.`;
+      } else if (strongest && weakest && strongest.id !== weakest.id && strongest.acc === 100 && weakest.acc < 100) {
+        const strongCount = topicCounts[strongest.id] || 0;
+        const weakCount = topicCounts[weakest.id] || 0;
+        explanation = `Bei <strong>${escapeHtml(strongest.label)}</strong> hattest du zuletzt <strong>100&nbsp;%</strong> direkt im 1.&nbsp;Versuch richtig — deshalb sind davon heute nur noch <strong>${strongCount}&nbsp;Aufgaben</strong> zum Wachhalten dabei. Die gesparten Aufgaben gehen in <strong>${escapeHtml(weakest.label)}</strong> (heute <strong>${weakCount}&nbsp;Aufgaben</strong>, zuletzt ${weakest.acc}&nbsp;%), damit auch das bis zur Arbeit auf 100&nbsp;% kommt!`;
+      } else if (strongest && weakest && strongest.id !== weakest.id && weakest.acc < 85) {
+        explanation = `Am letzten Trainingstag lief <strong>${escapeHtml(strongest.label)}</strong> schon richtig gut (<strong>${strongest.acc}&nbsp;%</strong> direkt im 1.&nbsp;Versuch richtig). Bei <strong>${escapeHtml(weakest.label)}</strong> (${weakest.acc}&nbsp;% im 1.&nbsp;Versuch) gab es noch ein paar Wackler, deshalb üben wir das heute ausführlicher mit frischen Zahlen.`;
       } else if (strongest && weakest && weakest.acc >= 85) {
-        explanation = `Stark! Du hattest zuletzt in allen Themen schon mindestens 85&nbsp;% direkt im 1.&nbsp;Versuch richtig. Heute trainierst du eine ausgewogene Mischung auf vollem Prüfungs-Niveau, damit für die Mathe-Arbeit alles sicher sitzt.`;
+        explanation = `Stark! Du hattest zuletzt in allen Themen schon mindestens 85&nbsp;% direkt im 1.&nbsp;Versuch richtig. Heute trainierst du auf vollem Prüfungs-Niveau Richtung 100&nbsp;%, damit für die Mathe-Arbeit alles sicher sitzt.`;
       } else {
         explanation = `Heute wiederholen wir deine Themen aus der Mathe-Arbeit mit neuen Zahlen und etwas höherem Anspruch, damit du Schritt für Schritt sicherer wirst.`;
       }
