@@ -4533,12 +4533,14 @@ body.is-times-row .intro .class-nav-grid {
    ========================================================================== */
 
 .exam-plan-entry {
+  position: relative;
   background: linear-gradient(135deg, #fffdf8 0%, #f4efe2 100%);
   border: 2px solid #c5b69c;
   border-radius: 18px;
   padding: 18px 20px;
   margin-bottom: 18px;
   box-shadow: var(--shadow);
+  overflow: hidden;
 }
 
 .exam-plan-entry-main {
@@ -4551,6 +4553,13 @@ body.is-times-row .intro .class-nav-grid {
 
 .exam-plan-entry-text {
   flex: 1 1 260px;
+}
+
+.exam-plan-kicker-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
 }
 
 .exam-plan-kicker {
@@ -4566,6 +4575,41 @@ body.is-times-row .intro .class-nav-grid {
   margin-bottom: 6px;
 }
 
+.exam-plan-kicker-row .exam-plan-kicker {
+  margin-bottom: 0;
+}
+
+/* Roter Stempel "TESTPHASE" im mittleren/oberen Bereich */
+.exam-plan-stamp-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  padding: 2px 8px 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.exam-plan-stamp {
+  display: inline-block;
+  font-family: "Fraunces", serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #b42318;
+  border: 3px solid #b42318;
+  border-radius: 8px;
+  padding: 5px 14px 4px;
+  transform: rotate(-8deg);
+  opacity: 0.86;
+  background: rgba(255, 245, 245, 0.72);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(180, 35, 24, 0.32),
+    0 2px 6px rgba(180, 35, 24, 0.1);
+  text-shadow: 0 0 1px rgba(180, 35, 24, 0.25);
+}
+
 .exam-plan-entry-title {
   font-family: "Fraunces", serif;
   font-size: 1.25rem;
@@ -4578,6 +4622,24 @@ body.is-times-row .intro .class-nav-grid {
   font-size: 0.94rem;
   color: var(--muted);
   line-height: 1.45;
+}
+
+.exam-plan-beta-note {
+  margin: 7px 0 0 !important;
+  font-size: 0.83rem !important;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.exam-plan-beta-note a {
+  color: #b42318;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.exam-plan-beta-note a:hover {
+  color: var(--ink);
 }
 
 .exam-plan-open-btn {
@@ -5186,6 +5248,15 @@ body.is-times-row .intro .class-nav-grid {
   .exam-plan-dialog-card,
   .exam-final-dialog-card {
     padding: 18px 16px;
+  }
+  .exam-plan-stamp-wrap {
+    justify-content: flex-start;
+    padding: 0;
+  }
+  .exam-plan-stamp {
+    font-size: 0.9rem;
+    padding: 4px 11px 3px;
+    transform: rotate(-5deg);
   }
   .exam-plan-open-btn {
     width: 100%;
