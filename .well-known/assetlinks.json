@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "de.mathetesten.app",
+      "sha256_cert_fingerprints": [
+        "B5:4B:D0:00:6A:B8:7A:65:4D:A5:01:FC:A1:BA:B0:08:B8:38:05:B8:1A:46:AE:18:D7:98:9B:2B:84:EF:13:FB"
+      ]
+    }
+  }
+]
