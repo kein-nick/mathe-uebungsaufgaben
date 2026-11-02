@@ -5,7 +5,9 @@
       "namespace": "android_app",
       "package_name": "de.mathetesten.app",
       "sha256_cert_fingerprints": [
-        "B5:4B:D0:00:6A:B8:7A:65:4D:A5:01:FC:A1:BA:B0:08:B8:38:05:B8:1A:46:AE:18:D7:98:9B:2B:84:EF:13:FB"
+        "B5:4B:D0:00:6A:B8:7A:65:4D:A5:01:FC:A1:BA:B0:08:B8:38:05:B8:1A:46:AE:18:D7:98:9B:2B:84:EF:13:FB",
+        "B3:A1:DF:7E:3B:92:8A:F3:9D:BC:CC:F1:11:FA:22:1A:80:91:11:5C:27:80:5A:20:46:A5:2B:1D:19:B2:C8:0E",
+        "A4:1E:96:13:3A:79:91:3A:DB:E6:75:A2:ED:24:E8:60:CD:5C:12:8D:F3:4B:34:B8:50:F3:87:5B:AC:D7:12:CD"
       ]
     }
   }
