@@ -318,7 +318,7 @@ export const teachersPage = {
     {
       id: "teachers-h-4",
       heading: "In Katalogen gelistet",
-      html: `<p>Die Seite ist im <a class="text-link" href="https://www.bildungsserver.de/onlineressource.html?onlineressourcen_id=67289">Deutschen Bildungsserver</a>, in der Bildungsmediathek <a class="text-link" href="https://mundo.schule/details/SODIX-0001167761">MUNDO</a>, im <a class="text-link" href="https://grundschullernportal.zum.de/wiki/Mathe-testen.de">ZUM-Grundschullernportal</a> und im Linkportal von <a class="text-link" href="https://www.4teachers.de">4teachers</a> eingetragen.</p>`,
+      html: `<p>Die Seite ist im <a class="text-link" href="https://www.bildungsserver.de/onlineressource.html?onlineressourcen_id=67289">Deutschen Bildungsserver</a>, in der Bildungsmediathek <a class="text-link" href="https://mundo.schule/details/SODIX-0001167761">MUNDO</a>, im <a class="text-link" href="https://grundschullernportal.zum.de/wiki/Mathe-testen.de">ZUM-Grundschullernportal</a> und im Linkportal von <a class="text-link" href="https://www.4teachers.de">4teachers</a> eingetragen. Zusätzlich wurde sie vom fragFINN-Team geprüft und für den geschützten Surfraum der Kindersuchmaschine <a class="text-link" href="https://www.fragfinn.de" target="_blank" rel="noopener noreferrer">fragFINN.de</a> freigegeben.</p>`,
     },
     {
       id: "teachers-h-schulen",

@@ -2290,7 +2290,7 @@ option:disabled {
 .fragfinn-badge {
   display: flex;
   gap: 16px;
-  align-items: center;
+  align-items: flex-start;
   margin: 0 0 22px;
   padding: 14px 16px;
   border: 1px solid var(--line);
@@ -2314,6 +2314,12 @@ option:disabled {
 .fragfinn-badge a {
   color: var(--grade);
   font-weight: 700;
+}
+
+@media (min-width: 640px) {
+  .fragfinn-badge {
+    align-items: center;
+  }
 }
 
 .site-footer nav {
