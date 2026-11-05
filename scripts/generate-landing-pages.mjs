@@ -324,6 +324,11 @@ function renderSiteFooter(current = "", extraItems = []) {
     })
     .join("");
   return `<footer class="site-footer">
+          <p class="footer-trust">
+            <a class="footer-fragfinn" href="https://www.fragfinn.de" target="_blank" rel="noopener noreferrer">
+              <img src="/icons/fragfinn-gecheckt.png" width="72" height="72" alt="Kindersuchmaschine fragFINN" loading="lazy" decoding="async" />
+            </a>
+          </p>
           <nav aria-label="Weitere Seiten">
             ${links}
             <span aria-hidden="true">·</span>

@@ -2270,6 +2270,52 @@ option:disabled {
   font-size: 0.95rem;
 }
 
+.site-footer .footer-trust {
+  margin: 0 0 14px;
+}
+
+.site-footer .footer-fragfinn {
+  display: inline-flex;
+  line-height: 0;
+  border-radius: 50%;
+  outline-offset: 3px;
+}
+
+.site-footer .footer-fragfinn img {
+  width: 72px;
+  height: 72px;
+  display: block;
+}
+
+.fragfinn-badge {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin: 0 0 22px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--paper) 88%, #d7ebe4);
+}
+
+.fragfinn-badge img {
+  width: 88px;
+  height: 88px;
+  flex: 0 0 auto;
+}
+
+.fragfinn-badge p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+.fragfinn-badge a {
+  color: var(--grade);
+  font-weight: 700;
+}
+
 .site-footer nav {
   display: flex;
   flex-wrap: wrap;
